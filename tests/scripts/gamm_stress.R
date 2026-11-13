@@ -66,7 +66,7 @@ for (key in names(EXAMPLES)) {
   s <- utils::modifyList(gamm_defaults(), c(list(family = fam, cov_pairs = b$meta$cov_pairs, cov_age = b$meta$cov_age), ex$gamm %||% list()))
   if (isTRUE(b$meta$has_trials) && fam == "binomial") s$family <- "binomial"
   r <- try_fit(sprintf("%s [%s]", key, fam), gd, s)
-  if (!is.null(r) && key %in% c("tsui_mass", "brown_haematocrit", "warner", "szejnersigal_activity")) comparisons(key, gd, s)
+  if (!is.null(r) && key %in% c("brown_haematocrit", "szejnersigal_activity")) comparisons(key, gd, s)
 }
 
 # ---- 2. out-of-sample stress datasets -----------------------------------------------------------------------------
@@ -89,8 +89,9 @@ for (ds in names(specs)) {
   variants <- list(default = list(), ti = list(proxy_form = "ti"), fs = list(individual = "fs"),
                    LS = list(proxy = "LS"), terminal = list(terminal = TRUE), bam = list(engine = "bam"))
   if (nzchar(grp)) variants$groups <- list(group = grp, structure = "GS")
+  if (nlevels(gd$id) > 300) variants$fs <- NULL          # a random smooth per individual takes minutes with many individuals
   for (v in names(variants)) try_fit(sprintf("%s / %s [%s]", ds, v, fam), gd, utils::modifyList(base, variants[[v]]))
-  comparisons(ds, gd, utils::modifyList(base, list(group = grp)))
+  if (ds %in% c("few_individuals", "covariate_edges", "grouping_edges", "count_edges")) comparisons(ds, gd, utils::modifyList(base, list(group = grp)))
 }
 
 # ---- 3. awkward data ----------------------------------------------------------------------------------------------

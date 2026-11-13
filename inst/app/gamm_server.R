@@ -81,6 +81,7 @@ output$gamm_individual_note <- renderUI({
   gd <- safe_get(gamm_gd()); if (is.null(gd) || !nrow(gd)) return(NULL)
   per <- table(gd$id)
   msg <- if (identical(input$gamm_individual, "fs") && stats::median(per) < 4) "Most individuals have fewer than 4 records: a random smooth per individual is poorly supported; prefer a random intercept and slope."
+         else if (identical(input$gamm_individual, "fs") && length(per) > 300) sprintf("A random smooth for each of %s individuals can take several minutes to fit (and longer in the comparisons).", format(length(per), big.mark = ","))
          else if (identical(input$gamm_individual, "none")) "Without an individual random effect, repeated records are treated as independent and intervals are too narrow."
          else if (mean(per >= 3) >= 0.5 && length(per) >= 30) "Many individuals have 3 or more records: consider also a random slope or smooth, and compare the curves."
          else NULL
