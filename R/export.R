@@ -517,6 +517,7 @@ script_header <- function(entries, packages = "ggplot2") {
 # ---------------------------------------------------------------------------
 METHODS_REFS <- c(
   wood2017 = "Wood, S. N. 2017. Generalized additive models: an introduction with R, 2nd edn. Chapman and Hall/CRC.",
+  woodscheipl2020 = "Wood, S. and Scheipl, F. 2020. gamm4: generalized additive mixed models using mgcv and lme4. R package.",
   simpson2018 = "Simpson, G. L. 2018. Modelling palaeoecological time series using generalised additive models. Frontiers in Ecology and Evolution 6: 149.",
   pedersen2019 = "Pedersen, E. J., Miller, D. L., Simpson, G. L. and Ross, N. 2019. Hierarchical generalized additive models in ecology: an introduction with mgcv. PeerJ 7: e6876.",
   sanghvi = "Sanghvi, K., Ivimey-Cook, E. R., Bouwhuis, S., Sepil, I. and van de Pol, M. 2026. A comparison of methods to assess selective disappearance and quantify ageing. EcoEvoRxiv.",
@@ -683,8 +684,11 @@ methods_text <- function(entries) {
         if (has("GAMM selective disappearance")) " Forms of each proxy (none, linear, smooth and age-dependent) were compared by AIC under maximum likelihood on the same records." else "",
         if (has("GAMM derivatives")) " Ageing was located from the first derivative of the population curve (random effects set to zero), with simultaneous 95% intervals from 2,000 draws of the coefficients (Simpson 2018); ages where the interval excluded zero were treated as periods of significant change, and the peak and onset of the final decline were given 95% limits from 1,000 draws." else "",
         if (has("GAMM checks")) " Basis dimensions were checked with k-index tests, concurvity between fixed terms was inspected, and residuals were checked against fitted values, age and simulated (randomised quantile) residuals." else "",
-        if (has("GAMM against polynomials")) " The smooth was compared with linear, quadratic and cubic functions of age by AIC." else ""))
-      refs <- c(refs, "wood2017", if (nzchar(g$group %||% "")) "pedersen2019", if (has("GAMM derivatives")) "simpson2018")
+        if (has("GAMM against polynomials")) " The smooth was compared with linear, quadratic and cubic functions of age by AIC." else "",
+        if (any(grepl("gamm4", unlist(lapply(pick("GAMM"), function(x) x$text)), fixed = TRUE)))
+          " Because the data had more than 300 random-effect levels, model comparisons were fitted with gamm4 (Wood and Scheipl 2020), which compares models by the marginal likelihood of the lme4 representation; the age-dependent proxy form was then a varying-coefficient smooth, s(age, by = proxy), and group structures GS and S were not fitted." else ""))
+      refs <- c(refs, "wood2017", if (nzchar(g$group %||% "")) "pedersen2019", if (has("GAMM derivatives")) "simpson2018",
+                if (identical(g$engine_used, "gamm4") || any(grepl("gamm4", unlist(lapply(pick("GAMM"), function(x) x$text)), fixed = TRUE))) "woodscheipl2020")
     }
   }
   checks <- c(if (has("Residual checks for")) "simulation-based residual checks (DHARMa; Hartig 2022)",

@@ -53,7 +53,21 @@ rebuilt and corrected.
   - GAMMs against GLMMs on simulated data through the real engines (`tests/scripts/gamm_vs_glmm.R`, tier 10);
   - stress and break tests on every example, every out-of-sample dataset and 31 awkward datasets
     (`tests/scripts/gamm_stress.R`).
-* mgcv is an optional package; gamm4 is no longer needed.
+* **Fast comparisons.** Above 300 random-effect levels, the proxy, group and polynomial comparisons are fitted with
+  gamm4 (lme4's sparse random effects): the haematocrit proxy comparison went from about 30 minutes to 10 s. The
+  age-dependent proxy form is then `s(age, by = proxy)`, and group structures GS and S are not fitted.
+  - A note under each comparison button says when this will happen. A pop-up explains the switch the first time
+    (what changes, why, and how to use mgcv instead), and a note stays with the results.
+  - The methods draft records the method used.
+  - In simulations, fast mode flagged age-dependent selective disappearance that was not there in 1.9% of datasets,
+    against 11% for mgcv with `ti()`. Both had 100% power.
+* **Guidance.**
+  - A "How do I choose the GAMM?" panel.
+  - A hint under the proxy settings.
+  - A "Suggested next steps" card after each fit.
+* **Varying-coefficient proxy form** `s(age, by = proxy)`, the smooth analogue of Model 4, as a choice on the Fit
+  tab.
+* mgcv is an optional package, and gamm4 is optional for large data.
 
 # disappR 0.24.9
 

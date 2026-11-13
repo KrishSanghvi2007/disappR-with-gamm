@@ -76,6 +76,7 @@ gamm_tab_ui <- function() {
           box(width = 5, title = info_title("Does selective disappearance or appearance shape the curve?", "gamm_proxy"), status = "info", solidHeader = TRUE,
             h5(strong("Proxy terms in the fitted model")), tableOutput("gamm_proxy_terms_table"),
             actionButton("gamm_run_proxy", "Compare proxy forms (ML, same records)", class = "btn-default", icon = icon("scale-balanced")),
+            uiOutput("gamm_engine_note_proxy"),
             uiOutput("gamm_proxy_verdict"),
             uiOutput("gamm_proxy_tables"),
             save_button("save_gamm_proxy")),
@@ -91,6 +92,7 @@ gamm_tab_ui <- function() {
           box(width = 12, title = info_title("Do groups age differently?", "gamm_groups"), status = "info", solidHeader = TRUE,
             uiOutput("gamm_groups_note"),
             actionButton("gamm_run_groups", "Compare group structures (ML, same records)", class = "btn-default", icon = icon("layer-group")),
+            uiOutput("gamm_engine_note_groups"),
             uiOutput("gamm_groups_verdict"),
             fluidRow(
               column(6, tableOutput("gamm_groups_table"),
@@ -117,6 +119,7 @@ gamm_tab_ui <- function() {
         fluidRow(
           box(width = 12, title = info_title("Is a smooth better than a polynomial?", "gamm_poly"), status = "info", solidHeader = TRUE,
             actionButton("gamm_run_poly", "Compare with linear, quadratic and cubic age", class = "btn-default"),
+            uiOutput("gamm_engine_note_poly"),
             tableOutput("gamm_poly_table"),
             save_button("save_gamm_poly"))
         )

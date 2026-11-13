@@ -310,6 +310,7 @@ observeEvent(input$gamm_run_poly, disappr_guard("input$gamm_run_poly", {
   res <- withProgress(message = "Fitting linear, quadratic and cubic age", value = 0.3, gamm_run("gamm_parametric_reference", list(gd = gd, s = gamm_settings())))
   if (is.data.frame(res)) attr(res, "signature") <- gamm_sig()
   gamm_poly_store(res)
+  if (is.data.frame(res) && identical(attr(res, "engine"), "gamm4")) gamm_fast_disclaimer()
 }))
 output$gamm_poly_table <- renderTable({
   z <- gamm_poly_store()
@@ -317,6 +318,11 @@ output$gamm_poly_table <- renderTable({
   shiny::validate(shiny::need(is.data.frame(z), z$message %||% "The comparison could not be run."))
   z
 }, striped = TRUE, spacing = "xs")
+output$gamm_engine_note_poly <- renderUI({
+  z <- gamm_poly_store()
+  if (is.data.frame(z) && identical(attr(z, "engine"), "gamm4")) return(gamm_fast_box())
+  gamm_engine_note("poly")
+})
 
 # ---- selective disappearance --------------------------------------------------------------------------------------
 output$gamm_proxy_terms_table <- renderTable({
@@ -335,12 +341,14 @@ observeEvent(input$gamm_run_proxy, disappr_guard("input$gamm_run_proxy", {
   res$signature <- gamm_sig()
   gamm_proxy_store(res)
   if (!isTRUE(res$ok)) notify(res$message, type = "warning", duration = 8)
+  if (isTRUE(res$fast)) gamm_fast_disclaimer()
 }))
 output$gamm_proxy_verdict <- renderUI({
   z <- gamm_proxy_store()
   if (is.null(z) || !isTRUE(z$ok)) return(NULL)
   tagList(
     if (!identical(z$signature, gamm_sig())) div(class = "caution-box", "Settings changed since this comparison: run it again."),
+    if (isTRUE(z$fast)) gamm_fast_box(),
     lapply(names(z$texts), function(p) div(class = "diagnosis-card", style = "border-left: 5px solid #35637A; margin-top:8px;",
                                            div(class = "diagnosis-detail", z$texts[[p]]))))
 })
@@ -388,6 +396,7 @@ observeEvent(input$gamm_run_groups, disappr_guard("input$gamm_run_groups", {
   res$signature <- gamm_sig()
   gamm_groups_store(res)
   if (!isTRUE(res$ok)) notify(res$message, type = "warning", duration = 8)
+  if (isTRUE(res$fast)) gamm_fast_disclaimer()
 }))
 gamm_groups_res <- reactive({
   z <- gamm_groups_store()
@@ -398,6 +407,7 @@ gamm_groups_res <- reactive({
 output$gamm_groups_verdict <- renderUI({
   z <- safe_get(gamm_groups_res()); if (is.null(z)) return(NULL)
   tagList(if (!identical(z$signature, gamm_sig())) div(class = "caution-box", "Settings changed since this comparison: run it again."),
+          if (isTRUE(z$fast)) gamm_fast_box(),
           div(class = "diagnosis-card", style = "border-left: 5px solid #35637A; margin-top:8px;", div(class = "diagnosis-detail", z$verdict)))
 })
 output$gamm_groups_table <- renderTable(gamm_groups_res()$table, striped = TRUE, spacing = "xs")
@@ -554,3 +564,49 @@ output$gamm_next_ui <- renderUI({
       div(class = "diagnosis-title", "Suggested next steps"),
       lapply(utils::head(nxt, 4), function(x) div(class = "diagnosis-detail", x)))
 })
+
+# ---- disclaimer when comparisons switch to gamm4 (more than GAMM_FAST_LEVELS random-effect levels) -----------------
+# Before a comparison: a note under its button says which method it will use. After one fitted with gamm4: a pop-up
+# the first time in a session (a short notification afterwards), and a note kept above the results.
+gamm_fast_plan <- reactive({
+  gd <- safe_get(gamm_gd()); s <- gamm_settings()
+  if (is.null(gd) || !nrow(gd)) return(NULL)
+  lv <- safe_get(gamm_re_levels(gd, s)) %||% NA_real_
+  list(levels = lv,
+       proxy = identical(safe_get(gamm_set_engine(gd, s, lapply(c("none", "linear", "smooth", "vc"), function(fm) list(proxy_form = fm, afr_form = fm)), fast_ok = TRUE)), "gamm4"),
+       groups = nzchar(s$group) && identical(safe_get(gamm_set_engine(gd, s, lapply(c("G", "GI", "I"), function(st) list(structure = st)), fast_ok = TRUE)), "gamm4"),
+       poly = identical(safe_get(gamm_set_engine(gd, s, list(list()), fast_ok = TRUE)), "gamm4"))
+})
+gamm_engine_note <- function(which) {
+  pl <- safe_get(gamm_fast_plan()); if (is.null(pl) || !isTRUE(pl[[which]])) return(NULL)
+  p(class = "small-note", style = "color:#B35806;", icon("bolt"),
+    sprintf(" %s random-effect levels: this comparison will be fitted with gamm4, a faster method for many random-effect levels. Results can differ from mgcv; see the note that appears with the results.",
+            format(pl$levels, big.mark = ",")))
+}
+output$gamm_engine_note_proxy <- renderUI(if (is.null(gamm_proxy_store())) gamm_engine_note("proxy") else NULL)
+output$gamm_engine_note_groups <- renderUI(if (is.null(gamm_groups_store())) gamm_engine_note("groups") else NULL)
+gamm_fast_text <- function() {
+  lv <- safe_get(gamm_fast_plan()$levels) %||% NA_real_
+  tagList(
+    p(sprintf("Your data have %s random-effect levels (individuals plus mapped random terms such as year, cohort or observer). With more than %d, comparing models with mgcv can take tens of minutes, so this comparison was fitted with gamm4, which handles random effects much faster.",
+              if (is.finite(lv)) format(lv, big.mark = ",") else "many", GAMM_FAST_LEVELS)),
+    p(strong("What this changes")),
+    tags$ul(
+      tags$li("Models are compared by gamm4's likelihood, which is more cautious about extra smooth terms. In our simulations it rarely flagged age-dependent selective disappearance that was not there (about 2% of datasets, against 11% with mgcv) and found real effects as often."),
+      tags$li("The age-dependent proxy form is s(age, by = proxy): the age curve tilts linearly with the proxy, rather than changing shape freely as with ti(age, proxy)."),
+      tags$li("Group structures GS and S cannot be fitted with gamm4 and are left out; G, GI and I are compared.")),
+    p("Results can therefore differ from an mgcv comparison of the same data. To use mgcv anyway, choose the bam engine under Advanced options on the Fit tab (this can be slow). The methods draft records which method was used."))
+}
+gamm_fast_box <- function() div(class = "caution-box", style = "margin-top:8px;", icon("bolt"),
+  " Fitted with gamm4 (fast method for many random-effect levels): models compared by gamm4's likelihood; the age-dependent form is s(age, by = proxy); group structures GS and S not fitted. Results can differ from mgcv. ",
+  actionLink("gamm_fast_more", "Why?"))
+gamm_fast_seen <- reactiveVal(FALSE)
+gamm_fast_disclaimer <- function() {
+  if (!is.function(session$sendNotification)) return(invisible(NULL))            # not under testServer()
+  if (!isTRUE(gamm_fast_seen())) {
+    gamm_fast_seen(TRUE)
+    showModal(modalDialog(title = "This comparison used a faster method (gamm4)", gamm_fast_text(), easyClose = TRUE,
+                          footer = modalButton("OK, understood")))
+  } else notify("Fitted with gamm4 (many random-effect levels): see the note above the results.", duration = 6)
+}
+observeEvent(input$gamm_fast_more, showModal(modalDialog(title = "Why gamm4 was used", gamm_fast_text(), easyClose = TRUE, footer = modalButton("Close"))))

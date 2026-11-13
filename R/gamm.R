@@ -765,6 +765,7 @@ gamm_group_comparison <- function(gd, s, progress = NULL) {
   verdict <- if (identical(close, "G") || (best == "G")) "One curve (G) is best supported: no clear evidence that the groups age differently."
              else if ("G" %in% close) sprintf("%s is best supported, but G (one curve) is within 2 AIC: weak evidence that the groups age differently.", best)
              else sprintf("%s is best supported and G is more than 2 AIC worse: the groups appear to age differently.", best)
+  if (fast) verdict <- paste(verdict, "(Fitted with gamm4 because of the many random-effect levels; structures GS and S need mgcv and were not fitted.)")
   list(ok = TRUE, table = tab, differences = diff_tab, reference = if (isTRUE(od$ok)) levels(od$data$.grp_o)[[1]] else "",
        lrt = gamm_lrt(fits$G, fits$I, "G (one shape) vs I (a curve per group)"), verdict = verdict, n = sum(rows), engine = s$engine, fast = fast)
 }
@@ -844,7 +845,9 @@ gamm_parametric_reference <- function(gd, s) {
   rows <- gamm_common_rows(gd, lapply(polys, function(p) gamm_formula(s, gd, age_poly = p)), s$family)
   fits <- lapply(polys, function(p) gamm_fit(gd, s, method = "ML", age_poly = p, rows = rows))
   tab <- gamm_compare_table(fits, names(polys))
-  tab[order(tab$AIC), c("Model", "AIC", "dAIC", "Weight", "edf"), drop = FALSE]
+  out <- tab[order(tab$AIC), c("Model", "AIC", "dAIC", "Weight", "edf"), drop = FALSE]
+  attr(out, "engine") <- s$engine
+  out
 }
 
 # Random-effect standard deviations (mgcv::gam.vcomp).

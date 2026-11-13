@@ -21,7 +21,7 @@ touch <- function(output_env, names) {
 
 # outputs the server defines (0.24.6: five names of removed outputs dropped; audit Part H checks this list)
 # step 7 (GAMM) outputs, defined in inst/app/gamm_server.R
-gamm_outputs <- c("gamm_data_note", "gamm_proxy_hint", "gamm_next_ui", "gamm_family_hint", "gamm_individual_note", "gamm_group_ui", "gamm_truth_ui", "gamm_formula_ui",
+gamm_outputs <- c("gamm_data_note", "gamm_engine_note_proxy", "gamm_engine_note_groups", "gamm_engine_note_poly", "gamm_proxy_hint", "gamm_next_ui", "gamm_family_hint", "gamm_individual_note", "gamm_group_ui", "gamm_truth_ui", "gamm_formula_ui",
                   "gamm_reading_ui", "gamm_cautions_ui", "gamm_curve_plot", "gamm_support_plot", "gamm_deriv_plot", "gamm_periods_table",
                   "gamm_peak_table", "gamm_fit_stats", "gamm_smooth_table", "gamm_param_table", "gamm_kcheck_table", "gamm_concurvity_table",
                   "gamm_resid_note", "gamm_resid_plot", "gamm_poly_table", "gamm_proxy_terms_table", "gamm_proxy_verdict", "gamm_proxy_tables",
@@ -114,6 +114,20 @@ shiny::testServer(app, {
     if (!grepl("generalized additive mixed models", mt)) problems <<- c(problems, paste("GAMM methods paragraph missing:", substr(mt, 1, 200)))
     gcode <- tryCatch(paste(gamm_code(gamm_store()), collapse = "\n"), error = function(e) "")
     if (inherits(tryCatch(parse(text = gcode), error = function(e) e), "error")) problems <<- c(problems, "GAMM R code does not parse")
+    # fast mode (gamm4) for comparisons, forced here: the notes and the disclaimer must render, and the results say so
+    Sys.setenv(DISAPPR_GAMM_FAST_LEVELS = "0")
+    session$setInputs(gamm_structure = "I")
+    touch(output, c("gamm_engine_note_proxy", "gamm_engine_note_groups", "gamm_engine_note_poly"))
+    session$setInputs(gamm_run_proxy = 2, gamm_run_groups = 2, gamm_run_poly = 2, gamm_fast_more = 1)
+    touch(output, c("gamm_proxy_verdict", "gamm_proxy_tables", "gamm_groups_verdict", "gamm_groups_table", "gamm_engine_note_poly", "gamm_poly_table"))
+    if (!isTRUE(gamm_proxy_store()$fast)) problems <<- c(problems, "fast mode: the proxy comparison did not use gamm4")
+    if (!isTRUE(gamm_groups_store()$fast)) problems <<- c(problems, "fast mode: the group comparison did not use gamm4")
+    if (!identical(attr(gamm_poly_store(), "engine"), "gamm4")) problems <<- c(problems, "fast mode: the polynomial comparison did not use gamm4")
+    if (!grepl("gamm4", paste(capture.output(print(output$gamm_proxy_verdict)), collapse = " "))) problems <<- c(problems, "fast mode: no note with the proxy results")
+    session$setInputs(save_gamm_proxy = 2)
+    mt <- tryCatch(paste(methods_text(Filter(function(e) startsWith(e$section, "7"), saved_results()))$paragraphs, collapse = " "), error = function(e) "")
+    if (!grepl("gamm4", mt, fixed = TRUE)) problems <<- c(problems, "fast mode: the methods draft does not mention gamm4")
+    Sys.unsetenv("DISAPPR_GAMM_FAST_LEVELS")
     # every individual option and family that suits the data, and the groups switched off
     for (ind in c("rs", "fs")) {
       session$setInputs(gamm_individual = ind, gamm_group = "", gamm_proxy_form = "linear", gamm_terminal = FALSE, gamm_fit = 10 + match(ind, c("rs", "fs")))
