@@ -320,7 +320,7 @@ output$gamm_poly_table <- renderTable({
 }, striped = TRUE, spacing = "xs")
 output$gamm_engine_note_poly <- renderUI({
   z <- gamm_poly_store()
-  if (is.data.frame(z) && identical(attr(z, "engine"), "gamm4")) return(gamm_fast_box())
+  if (is.data.frame(z) && identical(attr(z, "engine"), "gamm4") && identical(attr(z, "signature"), gamm_sig())) return(gamm_fast_box())
   gamm_engine_note("poly")
 })
 
@@ -596,8 +596,10 @@ gamm_engine_note <- function(which) {
     sprintf(" %s random-effect levels: this comparison will be fitted with gamm4, a faster method for many random-effect levels. Results can differ from mgcv; see the note that appears with the results.",
             format(pl$levels, big.mark = ",")))
 }
-output$gamm_engine_note_proxy <- renderUI(if (is.null(gamm_proxy_store())) gamm_engine_note("proxy") else NULL)
-output$gamm_engine_note_groups <- renderUI(if (is.null(gamm_groups_store())) gamm_engine_note("groups") else NULL)
+# shown until a comparison is run, and again once its results are out of date (data or settings changed)
+gamm_note_due <- function(z) is.null(z) || !identical(z$signature, gamm_sig())
+output$gamm_engine_note_proxy <- renderUI(if (gamm_note_due(gamm_proxy_store())) gamm_engine_note("proxy") else NULL)
+output$gamm_engine_note_groups <- renderUI(if (gamm_note_due(gamm_groups_store())) gamm_engine_note("groups") else NULL)
 gamm_fast_text <- function() {
   lv <- safe_get(gamm_fast_plan()$levels) %||% NA_real_
   tagList(
