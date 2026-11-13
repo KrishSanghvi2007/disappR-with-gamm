@@ -1,1 +1,32 @@
 == 1. Bundled examples (published family; published GAMM settings where the example gives them)
+  fly [nb]                                                   ok    9.2s  bam, 1901 rec, 648 ind, s(age) edf 2.83 
+  bichet [gaussian]                                          ok    6.2s  gam, 1023 rec, 396 ind, s(age) edf 1.00 
+  bichet_marmot [poisson]                                    ok    0.1s  gam, 169 rec, 52 ind, s(age) edf 4.43 
+  moullec_swift [gaussian]                                   ok    0.9s  bam, 2069 rec, 542 ind, s(age) edf 7.38 
+  pasztor_apollo [gaussian]                                  ok    3.9s  bam, 3150 rec, 1179 ind, s(age) edf 7.21 
+  wynn [gaussian]                                            ok    3.5s  gam, 2689 rec, 77 ind, s(age) edf 1.01 
+  sanghvi_female [nb]                                        ok    2.7s  bam, 5997 rec, 637 ind, s(age) edf 6.37 
+  allain [poisson]                                           ok    0.7s  gam, 481 rec, 194 ind, s(age) edf 4.81 
+  bouwhuis [gaussian]                                        ok  104.4s  gamm4, 7126 rec, 4848 ind, s(age) edf 4.21 
+  warner [gaussian]                                          ok    0.6s  bam, 1839 rec, 547 ind, s(age) edf 4.85 
+  mckennaell_breeding [binomial]                             ok    6.6s  bam, 3173 rec, 762 ind, s(age) edf 2.28 
+  mckennaell_weight [gaussian]                               ok    0.8s  bam, 2317 rec, 649 ind, s(age) edf 2.92 
+  szejnersigal_activity [gaussian]                           ok    0.2s  gam, 414 rec, 77 ind, s(age) edf 6.50 
+  tsui_mass [gaussian]                                       ok    4.8s  bam, 2559 rec, 1172 ind, s(age) edf 3.03 
+  brown_haematocrit [gaussian]                               ok    4.7s  bam, 1379 rec, 730 ind, s(age) edf 7.81 
+
+== 2. Out-of-sample datasets (tests/stress_data)
+  wild_bird_annual / default [poisson]                       ok    2.9s  bam, 2124 rec, 736 ind, s(age) edf 4.05 
+  wild_bird_annual / ti [poisson]                            ok    3.3s  bam, 2124 rec, 736 ind, s(age) edf 3.65 
+  wild_bird_annual / LS [poisson]                            ok    2.3s  bam, 1914 rec, 671 ind, s(age) edf 3.87 
+  wild_bird_annual / terminal [poisson]                      ok    3.3s  bam, 2124 rec, 736 ind, s(age) edf 4.01 
+  wild_bird_annual / bam [poisson]                           ok    3.0s  bam, 2124 rec, 736 ind, s(age) edf 4.05 
+  wild_bird_annual / groups [poisson]                        ok    3.8s  bam, 2124 rec, 736 ind, s(age) edf 6.04 
+  mammal_irregular_days / default [gaussian]                 ok    0.1s  bam, 8855 rec, 250 ind, s(age) edf 8.67 
+  mammal_irregular_days / ti [gaussian]                      ok    0.2s  bam, 8855 rec, 250 ind, s(age) edf 8.66 
+  mammal_irregular_days / fs [gaussian]                      ok    4.4s  bam, 8855 rec, 250 ind, s(age) edf 8.67 
+  mammal_irregular_days / LS [gaussian]                      ok    0.1s  bam, 7545 rec, 207 ind, s(age) edf 8.65 
+  mammal_irregular_days / terminal [gaussian]                ok    0.1s  bam, 8855 rec, 250 ind, s(age) edf 8.67 
+  mammal_irregular_days / bam [gaussian]                     ok    0.1s  bam, 8855 rec, 250 ind, s(age) edf 8.67 
+  ages_from_dates / default [gaussian]                       ok    1.6s  gam, 1399 rec, 299 ind, s(age) edf 8.66 
+  ages_from_dates / ti [gaussian]                            ok    4.1s  gam, 1399 rec, 299 ind, s(age) edf 8.65 

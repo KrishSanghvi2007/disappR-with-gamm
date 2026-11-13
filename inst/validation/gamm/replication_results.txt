@@ -2,3 +2,17 @@
 Published (paper, Results and Table 2): body mass declines with age; onset of decline 4.7 years (limits 1-8.5) from the
 derivative of the age smooth; lifespan fitted as a linear term; age x lifespan interaction significant for body mass;
 model choice among G, GS and S by AIC (delta < 4). Authors' code: model1.R (Zenodo 10.5281/zenodo.21101620).
+(a) Authors' specification, mgcv::gam REML: 2560 records, 1172 birds (122 s)
+  s(age_year)                                    edf   3.05   stat    4.46   p 0.002
+  lifespan (per year): 0.0252 (SE 0.0055), p <0.001
+(b) disappR engine (proxy = known lifespan, linear; same covariates and random terms): 2559 records, 1172 birds (6 s)
+  formula: trait ~ s(age, bs = "tp", k = 15) + LS + cv_RightTarsus_z + cv_newstat + cv_SexEstimate + cv_CatchTime_mins + cv_avg_invert + s(id, bs = "re") + s(re_birthyear, bs = "re") + s(re_Observer, bs = "re")
+  s(age)                                         edf   3.03   stat    4.50   p 0.002
+  lifespan (per year): 0.0244 (SE 0.0055), p <0.001
+  periods of significant change (95% intervals) simultaneous: none | pointwise: decline 8.62-12.2
+  peak 4.87 [3.01–7.48]; onset of final decline 4.87 [3.47–14.8]
+  difference in s(age) edf between (a) and (b): -0.016
+  (one record differs: its Observer is blank, which disappR treats as missing and the authors' factor() kept as a level;
+   the engine chose mgcv::bam because there are more than 400 birds)
+  cautions: 
+(a) Authors' G / GS / S formulas (bam fREML) by AIC: G 4.3, GS 4.5, S 0.0
