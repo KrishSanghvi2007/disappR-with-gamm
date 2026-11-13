@@ -18,7 +18,7 @@ suppressPackageStartupMessages({
 options(stringsAsFactors = FALSE)
 options(shiny.maxRequestSize = 50 * 1024^2)   # uploads up to 50 MB: the one place this limit is set
 
-DISAPPR_ENGINE_FILES <- c("utils.R", "provenance.R", "simulation.R", "import.R", "validation.R", "data-preparation.R", "formulas.R", "model-fit.R", "model-comparison.R", "diagnostics.R", "trajectories.R", "disappearance.R", "missingness.R", "interpretation.R", "effects.R", "evidence.R", "ui-helpers.R", "export.R")
+DISAPPR_ENGINE_FILES <- c("utils.R", "provenance.R", "simulation.R", "import.R", "validation.R", "data-preparation.R", "formulas.R", "model-fit.R", "model-comparison.R", "diagnostics.R", "trajectories.R", "disappearance.R", "missingness.R", "interpretation.R", "effects.R", "evidence.R", "ui-helpers.R", "export.R", "gamm.R")
 .disappr_app_env <- environment()
 .disappr_engine_dir <- if (all(file.exists(file.path("..", "..", "R", DISAPPR_ENGINE_FILES)))) {
   file.path("..", "..", "R")

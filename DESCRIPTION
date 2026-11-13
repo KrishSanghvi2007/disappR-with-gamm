@@ -39,6 +39,8 @@ Suggests:
     glmmTMB,
     lmerTest,
     nlme,
+    mgcv,
+    gamm4,
     performance,
     see,
     codetools,
@@ -64,6 +66,7 @@ Collate:
     'evidence.R'
     'ui-helpers.R'
     'export.R'
+    'gamm.R'
     'api.R'
     'run_app.R'
 Config/testthat/edition: 3

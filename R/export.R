@@ -516,6 +516,8 @@ script_header <- function(entries, packages = "ggplot2") {
 # what was actually done; results saved under different data or settings are flagged as conflicts.
 # ---------------------------------------------------------------------------
 METHODS_REFS <- c(
+  wood2017 = "Wood, S. N. 2017. Generalized additive models: an introduction with R, 2nd edn. Chapman and Hall/CRC.",
+  pedersen2019 = "Pedersen, E. J., Miller, D. L., Simpson, G. L. and Ross, N. 2019. Hierarchical generalized additive models in ecology: an introduction with mgcv. PeerJ 7: e6876.",
   sanghvi = "Sanghvi, K., Ivimey-Cook, E. R., Bouwhuis, S., Sepil, I. and van de Pol, M. 2026. A comparison of methods to assess selective disappearance and quantify ageing. EcoEvoRxiv.",
   disappr = "Sanghvi, K. and Ivimey-Cook, E. R. 2026. disappR: a shiny app to model ageing and selective [dis]appearance. R package.",
   vdpv = "van de Pol, M. and Verhulst, S. 2006. Age-dependent traits: a new statistical model to separate within- and between-individual effects. American Naturalist 167: 766-773.",
@@ -652,6 +654,27 @@ methods_text <- function(entries) {
     paras <- c(paras, paste0("We correlated each individual's predicted random effects from ", e$methods$blup_model %||% "Model 1",
                              " with its ALR, AFR and known lifespan; as predicted random effects are shrunk and their uncertainty ignored, these correlations are descriptive (Hadfield et al. 2010)."))
     refs <- c(refs, "hadfield")
+  }
+  # GAMM layer (0.23.0): one paragraph describing the settings in force when the GAMM result was saved
+  if (has("GAMM")) {
+    e <- pick("GAMM")[[1]]
+    g <- e$methods$gamm
+    if (is.list(g)) {
+      ind <- switch(g$individual %||% "ri", rs = "individual random intercepts and slopes", fs = "a penalised random smooth of age for each individual",
+                    none = "no individual random effect", "individual random intercepts")
+      prox <- function(p, form) switch(form %||% "none", linear = paste(p, "as a linear term"), smooth = paste(p, "as a smooth term"),
+                                       ti = paste0(p, " as a smooth term with a tensor-product interaction with age, ti(age, ", p, ")"), NULL)
+      px <- c(if (!identical(g$proxy %||% "none", "none")) prox(g$proxy, g$proxy_form), prox("AFR", g$afr_form))
+      grp <- if (nzchar(g$group %||% "")) paste0(" Group-specific trajectories (", g$group, ") were modelled as structure ", g$structure_used,
+                                                   " and structures G, GS, GI, S and I were compared by AIC under maximum likelihood (Pedersen et al. 2019).") else ""
+      paras <- c(paras, paste0(
+        "As a complementary, non-parametric analysis we fitted generalized additive mixed models with mgcv (Wood 2017): a penalised ",
+        g$bs, " smooth of age (basis dimension ", g$k, ") with ", ind, ", a ", gamm_family_label(g$family), " error distribution and smoothing parameters estimated by ",
+        g$method_used, ".", if (length(px)) paste0(" Selective disappearance and appearance were modelled through ", and_list(px), ".") else "",
+        grp, if (has("GAMM derivatives")) " Ageing was located from the first derivative of the population curve, with 95% intervals from the coefficients' covariance matrix; periods where the interval excluded zero were treated as significant change." else "",
+        if (has("GAMM checks")) " Basis dimensions were checked with k-index tests and concurvity was inspected." else ""))
+      refs <- c(refs, "wood2017", if (nzchar(g$group %||% "")) "pedersen2019")
+    }
   }
   checks <- c(if (has("Residual checks for")) "simulation-based residual checks (DHARMa; Hartig 2022)",
               if (has("performance checks for")) "checks of model assumptions (performance; Luedecke et al. 2021)",

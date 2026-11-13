@@ -1,0 +1,2641 @@
+shape,selection,sampling,approach,best,agedep,err,peak_err,fun
+quadratic,none,complete,GLMM-Q,M1,False,0.009849849549148982,,
+quadratic,none,complete,GLMM-F,M1,False,0.009849849549148982,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.01626539396472042,,
+quadratic,none,complete,GLMM-Q,M2,False,0.004184795651781542,,
+quadratic,none,complete,GLMM-F,M2,False,0.004184795651781542,,Quadratic
+quadratic,none,complete,GAMM,M2,False,0.010457745739621518,,
+quadratic,none,complete,GLMM-Q,M1,False,0.010706547613506978,,
+quadratic,none,complete,GLMM-F,M1,False,0.010706547613506978,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.02435792852563333,,
+quadratic,none,complete,GLMM-Q,M1,False,0.005295447241609539,,
+quadratic,none,complete,GLMM-F,M1,False,0.005295447241609539,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.008750816243440632,,
+quadratic,none,complete,GLMM-Q,M2,False,0.031244518242507208,,
+quadratic,none,complete,GLMM-F,M2,False,0.031244518242507208,,Quadratic
+quadratic,none,complete,GAMM,M2,False,0.03537578003968104,,
+quadratic,none,complete,GLMM-Q,M1,False,0.0254733489997494,,
+quadratic,none,complete,GLMM-F,M1,False,0.0254733489997494,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.03874823995946682,,
+quadratic,none,complete,GLMM-Q,M2,False,0.010793785906531319,,
+quadratic,none,complete,GLMM-F,M2,False,0.010793785906531319,,Quadratic
+quadratic,none,complete,GAMM,M2,False,0.01688980639466876,,
+quadratic,none,complete,GLMM-Q,M1,False,0.00980657273891457,,
+quadratic,none,complete,GLMM-F,M1,False,0.00980657273891457,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.01576329224422736,,
+quadratic,none,complete,GLMM-Q,M1,False,0.0160488159553016,,
+quadratic,none,complete,GLMM-F,M1,False,0.0160488159553016,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.019283110312766673,,
+quadratic,none,complete,GLMM-Q,M1,False,0.010968124489405713,,
+quadratic,none,complete,GLMM-F,M1,False,0.010968124489405713,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.0166969216162434,,
+quadratic,none,complete,GLMM-Q,M1,False,0.00974351345699235,,
+quadratic,none,complete,GLMM-F,M1,False,0.00974351345699235,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.027467210134074823,,
+quadratic,none,complete,GLMM-Q,M4,False,0.017259806767074216,,
+quadratic,none,complete,GLMM-F,M1,False,0.021829895718197045,,Cubic
+quadratic,none,complete,GAMM,M1,False,0.028267581608315516,,
+quadratic,none,complete,GLMM-Q,M1,False,0.016717750837428717,,
+quadratic,none,complete,GLMM-F,M1,False,0.016717750837428717,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.020559110558045667,,
+quadratic,none,complete,GLMM-Q,M1,False,0.007039716930845469,,
+quadratic,none,complete,GLMM-F,M1,False,0.007039716930845469,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.01524955075329438,,
+quadratic,none,complete,GLMM-Q,M1,False,0.006930571413027195,,
+quadratic,none,complete,GLMM-F,M1,False,0.006930571413027195,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.021246959670833326,,
+quadratic,none,complete,GLMM-Q,M4,True,0.01340787398440442,,
+quadratic,none,complete,GLMM-F,M4,True,0.01340787398440442,,Quadratic
+quadratic,none,complete,GAMM,M4,True,0.010497936816292462,,
+quadratic,none,complete,GLMM-Q,M1,False,0.011354689420484884,,
+quadratic,none,complete,GLMM-F,M1,False,0.021340178555836607,,Cubic
+quadratic,none,complete,GAMM,M1,False,0.022457599116265374,,
+quadratic,none,complete,GLMM-Q,M1,False,0.00925888255790724,,
+quadratic,none,complete,GLMM-F,M1,False,0.028150394876835797,,Cubic
+quadratic,none,complete,GAMM,M1,False,0.03165346830721045,,
+quadratic,none,complete,GLMM-Q,M2,False,0.018207498772533064,,
+quadratic,none,complete,GLMM-F,M2,False,0.018207498772533064,,Quadratic
+quadratic,none,complete,GAMM,M2,False,0.034096373991154436,,
+quadratic,none,complete,GLMM-Q,M1,False,0.011267926722975764,,
+quadratic,none,complete,GLMM-F,M1,False,0.011267926722975764,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.012007766921924939,,
+quadratic,none,complete,GLMM-Q,M1,False,0.021615939556250657,,
+quadratic,none,complete,GLMM-F,M1,False,0.021615939556250657,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.01828231838588804,,
+quadratic,none,complete,GLMM-Q,M1,False,0.021498090429986925,,
+quadratic,none,complete,GLMM-F,M1,False,0.03243131257457419,,Cubic
+quadratic,none,complete,GAMM,M1,False,0.03897219160039631,,
+quadratic,none,complete,GLMM-Q,M1,False,0.01564645307782134,,
+quadratic,none,complete,GLMM-F,M1,False,0.01564645307782134,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.029595222473011433,,
+quadratic,none,complete,GLMM-Q,M1,False,0.013381762770450967,,
+quadratic,none,complete,GLMM-F,M1,False,0.013381762770450967,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.01319884824889707,,
+quadratic,none,complete,GLMM-Q,M1,False,0.005035962198573749,,
+quadratic,none,complete,GLMM-F,M1,False,0.005035962198573749,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.013279899753983877,,
+quadratic,none,complete,GLMM-Q,M2,False,0.018184650942658583,,
+quadratic,none,complete,GLMM-F,M2,False,0.018184650942658583,,Quadratic
+quadratic,none,complete,GAMM,M2,False,0.026501647437981193,,
+quadratic,none,complete,GLMM-Q,M1,False,0.014178740778436677,,
+quadratic,none,complete,GLMM-F,M1,False,0.019393038330649058,,Cubic
+quadratic,none,complete,GAMM,M1,False,0.022490820799195517,,
+quadratic,none,complete,GLMM-Q,M2,False,0.03420378899435742,,
+quadratic,none,complete,GLMM-F,M2,False,0.04367013605214681,,Cubic
+quadratic,none,complete,GAMM,M2,False,0.0396400203807189,,
+quadratic,none,complete,GLMM-Q,M1,False,0.009795405324259128,,
+quadratic,none,complete,GLMM-F,M1,False,0.009795405324259128,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.006931431018778131,,
+quadratic,none,complete,GLMM-Q,M1,False,0.01631348562150265,,
+quadratic,none,complete,GLMM-F,M1,False,0.01631348562150265,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.02183058177588768,,
+quadratic,none,complete,GLMM-Q,M1,False,0.01136192835631821,,
+quadratic,none,complete,GLMM-F,M1,False,0.01136192835631821,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.010956114872086968,,
+quadratic,none,complete,GLMM-Q,M1,False,0.012864881676353194,,
+quadratic,none,complete,GLMM-F,M1,False,0.012864881676353194,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.015906994269528404,,
+quadratic,none,complete,GLMM-Q,M1,False,0.008722622851143788,,
+quadratic,none,complete,GLMM-F,M1,False,0.008722622851143788,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.017872355594867845,,
+quadratic,none,complete,GLMM-Q,M1,False,0.030618690040328134,,
+quadratic,none,complete,GLMM-F,M1,False,0.030618690040328134,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.044015927821078014,,
+quadratic,none,complete,GLMM-Q,M4,True,0.029578063569135792,,
+quadratic,none,complete,GLMM-F,M1,False,0.03388384200253238,,Cubic
+quadratic,none,complete,GAMM,M1,False,0.051631776945667625,,
+quadratic,none,complete,GLMM-Q,M1,False,0.008908649462359548,,
+quadratic,none,complete,GLMM-F,M1,False,0.008908649462359548,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.0125819838100495,,
+quadratic,none,complete,GLMM-Q,M1,False,0.017450907190869183,,
+quadratic,none,complete,GLMM-F,M1,False,0.017450907190869183,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.01398712498842799,,
+quadratic,none,complete,GLMM-Q,M1,False,0.020453976090285958,,
+quadratic,none,complete,GLMM-F,M1,False,0.0289598605121656,,Cubic
+quadratic,none,complete,GAMM,M1,False,0.03328711032098086,,
+quadratic,none,complete,GLMM-Q,M2,False,0.03161672076993221,,
+quadratic,none,complete,GLMM-F,M2,False,0.03161672076993221,,Quadratic
+quadratic,none,complete,GAMM,M2,False,0.03616751472308215,,
+quadratic,none,complete,GLMM-Q,M1,False,0.016708822973995452,,
+quadratic,none,complete,GLMM-F,M1,False,0.016708822973995452,,Quadratic
+quadratic,none,complete,GAMM,M1,False,0.02035884889298915,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.008069884183559839,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.008069884183559839,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.014400846772085626,,
+quadratic,age-independent,complete,GLMM-Q,M4,False,0.023830071267120185,,
+quadratic,age-independent,complete,GLMM-F,M4,False,0.023830071267120185,,Quadratic
+quadratic,age-independent,complete,GAMM,M4,False,0.015612868256700588,,
+quadratic,age-independent,complete,GLMM-Q,M4,True,0.012322973617271558,,
+quadratic,age-independent,complete,GLMM-F,M4,True,0.012322973617271558,,Quadratic
+quadratic,age-independent,complete,GAMM,M4,True,0.016984673936177915,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.02185069849420922,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.03356021788184453,,Cubic
+quadratic,age-independent,complete,GAMM,M2,False,0.03642643744099492,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.006988597905426268,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.006988597905426268,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.018760123164403023,,
+quadratic,age-independent,complete,GLMM-Q,M4,False,0.029369356972306936,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.025541844541767757,,Cubic
+quadratic,age-independent,complete,GAMM,M2,False,0.03089888650845396,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.007826180649430697,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.007826180649430697,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.009701817618888322,,
+quadratic,age-independent,complete,GLMM-Q,M4,True,0.02179467163286782,,
+quadratic,age-independent,complete,GLMM-F,M4,True,0.018305387119725052,,Cubic
+quadratic,age-independent,complete,GAMM,M2,False,0.011618060012401552,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.007880318954438957,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.007880318954438957,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.02030784806749985,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.013418831247823131,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.013418831247823131,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.020512249396277573,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.006741897722843868,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.006741897722843868,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.013405024194757078,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.01285671579325816,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.01285671579325816,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.020151609933771544,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.012861263929822099,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.012861263929822099,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.0188100115263473,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.007838790221092722,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.007838790221092722,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.007251397515058529,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.01915791646028285,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.01915791646028285,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.01995669096641001,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.0046532287267871215,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.027461469906427113,,Cubic
+quadratic,age-independent,complete,GAMM,M2,False,0.026731636031675943,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.004913049288469763,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.004913049288469763,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.016021232463039627,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.0065119471738510825,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.0065119471738510825,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.0306003536522129,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.005247435998294473,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.005247435998294473,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.005077714944864004,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.007124094595131084,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.015815150508333542,,Cubic
+quadratic,age-independent,complete,GAMM,M2,False,0.015721806854057496,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.008837989299083988,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.008837989299083988,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.0043317853956993365,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.024945721300878382,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.024945721300878382,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.03255705599512335,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.009324118054238027,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.009324118054238027,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.012102791791682905,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.006151555832932273,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.006151555832932273,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.02508558576519336,,
+quadratic,age-independent,complete,GLMM-Q,M4,False,0.03744661345901255,,
+quadratic,age-independent,complete,GLMM-F,M4,False,0.03744661345901255,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.029579552364532417,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.0030072392369711706,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.014292936627740262,,Cubic
+quadratic,age-independent,complete,GAMM,M2,False,0.01604187532176592,,
+quadratic,age-independent,complete,GLMM-Q,M4,True,0.018747638967918315,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.012113712881404679,,Cubic
+quadratic,age-independent,complete,GAMM,M2,False,0.011867366065595677,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.012283032563550378,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.012283032563550378,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.01595281738662304,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.016671346052735958,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.016671346052735958,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.040702688408359576,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.006937908243925951,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.006937908243925951,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.008464081020558147,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.018961611144126044,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.018961611144126044,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.017516380001157673,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.01827339379977214,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.01827339379977214,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.022237604508473945,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.00361711086963848,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.00361711086963848,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.00681836595814943,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.0027987495230361228,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.01929267570843608,,Cubic
+quadratic,age-independent,complete,GAMM,M2,False,0.014166914321142116,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.008776668289760285,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.008776668289760285,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.013413538244785035,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.022409243003931635,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.024715600406539504,,Cubic
+quadratic,age-independent,complete,GAMM,M2,False,0.026999284291844724,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.038110721404889726,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.044052728122998715,,Cubic
+quadratic,age-independent,complete,GAMM,M2,False,0.04712983884535731,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.005548375996658786,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.005548375996658786,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.023656884109249064,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.012449486232654091,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.022113144176827037,,Cubic
+quadratic,age-independent,complete,GAMM,M2,False,0.02680063526495789,,
+quadratic,age-independent,complete,GLMM-Q,M2,False,0.004773500333612208,,
+quadratic,age-independent,complete,GLMM-F,M2,False,0.004773500333612208,,Quadratic
+quadratic,age-independent,complete,GAMM,M2,False,0.007032709380653965,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.0434844798016648,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.04552306323719265,,Cubic
+quadratic,age-dependent,complete,GAMM,M4,True,0.04604893904714142,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.01558932194179663,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.02432852479983196,,Cubic
+quadratic,age-dependent,complete,GAMM,M4,True,0.029838345183694392,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.0411481139463183,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.0411481139463183,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.0411884054770997,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.04330328183454662,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.04887760203566954,,Cubic
+quadratic,age-dependent,complete,GAMM,M4,True,0.04909238824946789,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.0337785929201841,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.0337785929201841,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.03710981341500679,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.01725903154480692,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.016199962234187595,,Cubic
+quadratic,age-dependent,complete,GAMM,M4,True,0.023183474824177628,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.03189821819910342,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.03354784360912112,,Cubic
+quadratic,age-dependent,complete,GAMM,M4,True,0.03391997328928203,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.056922380834357064,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.056922380834357064,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.061979879514008025,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.016865392686176494,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.016865392686176494,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.015188375711271148,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.027401124275421865,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.030972847052890475,,Cubic
+quadratic,age-dependent,complete,GAMM,M4,True,0.03314957030318921,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.030123726643723335,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.030123726643723335,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.035270002942718794,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.04492931942499519,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.04492931942499519,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.05795126350272661,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.06316495417708172,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.06316495417708172,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.06595559446369938,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.03736380160589077,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.043296722603547215,,Cubic
+quadratic,age-dependent,complete,GAMM,M4,True,0.047026127905099725,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.04031328989561919,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.04031328989561919,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.04769428065649524,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.053477957340283114,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.053477957340283114,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.051620065899553765,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.06226846545214914,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.06226846545214914,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.0677230748343015,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.04425321728186596,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.04425321728186596,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.04860881796869574,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.05564579332386141,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.05564579332386141,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.05113237212401369,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.03366590826720574,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.03366590826720574,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.04350817327492701,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.045244338285904406,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.045244338285904406,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.05068784202040869,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.0565199674088992,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.0565199674088992,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.06312014492470709,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.05527309934257769,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.04949555365689907,,Cubic
+quadratic,age-dependent,complete,GAMM,M4,True,0.0562439676925283,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.06349786701965819,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.06349786701965819,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.06560166274397021,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.038988355675043426,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.03861706226977441,,Cubic
+quadratic,age-dependent,complete,GAMM,M4,True,0.043819617229498675,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.04306057293202688,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.04306057293202688,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.04397189091988918,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.011449263005869122,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.019396817251804022,,Cubic
+quadratic,age-dependent,complete,GAMM,M4,True,0.023365210550315943,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.03994738213760718,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.03994738213760718,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.05408704888840927,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.031174383360093975,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.031174383360093975,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.039651200907496194,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.05758369237480054,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.05758369237480054,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.0532927845957466,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.033873077237048646,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.033873077237048646,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.04232957106989806,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.02141189114362956,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.02141189114362956,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.027508842036100642,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.03829166927308991,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.037227293390641396,,Cubic
+quadratic,age-dependent,complete,GAMM,M4,True,0.03519849156680313,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.04061980670075187,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.034032223669731666,,Cubic
+quadratic,age-dependent,complete,GAMM,M4,True,0.03665306327478218,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.06541858169111997,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.06541858169111997,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.06744102064205389,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.050667702046609295,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.050667702046609295,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.05255063888291683,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.02555306653140782,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.02951313727974638,,Cubic
+quadratic,age-dependent,complete,GAMM,M4,True,0.03470875669745701,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.045939920732432346,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.045939920732432346,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.047444527437334794,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.033635824737929934,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.03578772273626883,,Cubic
+quadratic,age-dependent,complete,GAMM,M4,True,0.04002932057847746,,
+quadratic,age-dependent,complete,GLMM-Q,M4,True,0.05203842425176885,,
+quadratic,age-dependent,complete,GLMM-F,M4,True,0.05203842425176885,,Quadratic
+quadratic,age-dependent,complete,GAMM,M4,True,0.058214267337506176,,
+cubic,none,complete,GLMM-Q,M4,True,0.3624797160783769,0.7627118644067794,
+cubic,none,complete,GLMM-F,M1,False,0.18563805162882008,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.221754284616316,0.45762711864406747,
+cubic,none,complete,GLMM-Q,M4,True,0.28622983143628183,0.30508474576271194,
+cubic,none,complete,GLMM-F,M1,False,0.22750479516880504,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.21540813298050884,0.0,
+cubic,none,complete,GLMM-Q,M4,True,0.2674556194170795,0.7627118644067794,
+cubic,none,complete,GLMM-F,M1,False,0.19497609081050943,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.18192682645123445,0.0,
+cubic,none,complete,GLMM-Q,M4,True,0.25414201661802743,0.45762711864406747,
+cubic,none,complete,GLMM-F,M1,False,0.06632154724815965,0.0,Cubic
+cubic,none,complete,GAMM,M1,False,0.11554974260028657,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.23392022327678477,0.610169491525423,
+cubic,none,complete,GLMM-F,M1,False,0.17136353645987198,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.21462410592281558,0.45762711864406747,
+cubic,none,complete,GLMM-Q,M4,True,0.2537175816962205,0.30508474576271194,
+cubic,none,complete,GLMM-F,M1,False,0.13033528650911713,0.0,Cubic
+cubic,none,complete,GAMM,M1,False,0.13458377780052727,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.3163261594100931,0.15254237288135553,
+cubic,none,complete,GLMM-F,M1,False,0.1784323709673995,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.19910132249352605,0.45762711864406747,
+cubic,none,complete,GLMM-Q,M4,True,0.24680437970557972,0.45762711864406747,
+cubic,none,complete,GLMM-F,M1,False,0.051562446364671354,0.0,Cubic
+cubic,none,complete,GAMM,M1,False,0.06059039966312354,0.0,
+cubic,none,complete,GLMM-Q,M4,True,0.24316186962837794,0.45762711864406747,
+cubic,none,complete,GLMM-F,M4,True,0.15386006005177125,0.0,Cubic
+cubic,none,complete,GAMM,M1,False,0.08332859076158823,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.3047346863502373,0.7627118644067794,
+cubic,none,complete,GLMM-F,M1,False,0.11603504750635583,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.18310626893038737,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.24084828034695796,0.610169491525423,
+cubic,none,complete,GLMM-F,M1,False,0.09590258907278042,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.10871425554783919,0.30508474576271194,
+cubic,none,complete,GLMM-Q,M4,True,0.23420758919234919,0.610169491525423,
+cubic,none,complete,GLMM-F,M1,False,0.16293580941207667,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M4,False,0.11536190114403723,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.31728277531049764,0.15254237288135553,
+cubic,none,complete,GLMM-F,M1,False,0.12552567343825505,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.15165322171203302,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.2930431511590709,0.7627118644067794,
+cubic,none,complete,GLMM-F,M1,False,0.17390007289142292,0.30508474576271194,Cubic
+cubic,none,complete,GAMM,M1,False,0.2519446184522928,0.4576271186440679,
+cubic,none,complete,GLMM-Q,M4,True,0.2676124535283298,0.30508474576271194,
+cubic,none,complete,GLMM-F,M1,False,0.11664349251091533,0.0,Cubic
+cubic,none,complete,GAMM,M1,False,0.2021626235517963,0.4576271186440679,
+cubic,none,complete,GLMM-Q,M4,True,0.23009807753596986,0.610169491525423,
+cubic,none,complete,GLMM-F,M1,False,0.08417217252261021,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.15703298885553682,0.30508474576271194,
+cubic,none,complete,GLMM-Q,M4,True,0.238420427750294,0.610169491525423,
+cubic,none,complete,GLMM-F,M1,False,0.06111558712937978,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.12442852145848371,0.45762711864406747,
+cubic,none,complete,GLMM-Q,M4,True,0.30911526032456577,0.7627118644067794,
+cubic,none,complete,GLMM-F,M1,False,0.1700310012556907,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.1985251619152032,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.26404589710183535,0.3389830508474567,
+cubic,none,complete,GLMM-F,M2,False,0.0427798599889732,0.0,Cubic
+cubic,none,complete,GAMM,M2,False,0.06233061699080818,0.0,
+cubic,none,complete,GLMM-Q,M4,True,0.25355311049066975,0.7627118644067794,
+cubic,none,complete,GLMM-F,M1,False,0.16303200933251144,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.2451005514116942,0.30508474576271194,
+cubic,none,complete,GLMM-Q,M4,True,0.32159365649626975,0.3389830508474567,
+cubic,none,complete,GLMM-F,M1,False,0.07116379306588189,0.0,Cubic
+cubic,none,complete,GAMM,M1,False,0.1383079262209624,0.0,
+cubic,none,complete,GLMM-Q,M4,True,0.25531850287481606,0.45762711864406747,
+cubic,none,complete,GLMM-F,M4,False,0.09775291950373638,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M4,False,0.09397993362412893,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.29947177230276933,0.45762711864406747,
+cubic,none,complete,GLMM-F,M1,False,0.05302098568703752,0.0,Cubic
+cubic,none,complete,GAMM,M1,False,0.13165755160872442,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.31130738057011914,0.7627118644067794,
+cubic,none,complete,GLMM-F,M1,False,0.21828069977003495,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.3577434128647471,1.8305084745762707,
+cubic,none,complete,GLMM-Q,M4,True,0.25324926509436385,0.610169491525423,
+cubic,none,complete,GLMM-F,M2,False,0.11515403672580364,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M2,False,0.16618308824873873,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.31197603727043705,0.45762711864406747,
+cubic,none,complete,GLMM-F,M1,False,0.06122878178047764,0.0,Cubic
+cubic,none,complete,GAMM,M1,False,0.14973252727560182,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.24333051792553093,0.610169491525423,
+cubic,none,complete,GLMM-F,M1,False,0.08992238876311173,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.24122805963973462,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.2655660001938139,0.30508474576271194,
+cubic,none,complete,GLMM-F,M1,False,0.13045671654171734,0.0,Cubic
+cubic,none,complete,GAMM,M1,False,0.18001073870383139,0.30508474576271194,
+cubic,none,complete,GLMM-Q,M4,True,0.23100378601521465,0.610169491525423,
+cubic,none,complete,GLMM-F,M1,False,0.07884159828615432,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.1594321394429597,0.45762711864406747,
+cubic,none,complete,GLMM-Q,M4,True,0.2754805239476932,0.30508474576271194,
+cubic,none,complete,GLMM-F,M1,False,0.15639010028240485,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.21090752346070507,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.23089452862649465,0.45762711864406747,
+cubic,none,complete,GLMM-F,M1,False,0.03843038366626519,0.0,Cubic
+cubic,none,complete,GAMM,M1,False,0.09333211865785461,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.2829747565645088,0.7627118644067794,
+cubic,none,complete,GLMM-F,M1,False,0.1273931252086151,0.30508474576271194,Cubic
+cubic,none,complete,GAMM,M1,False,0.1863290468807706,0.30508474576271194,
+cubic,none,complete,GLMM-Q,M4,True,0.23244557563664234,0.610169491525423,
+cubic,none,complete,GLMM-F,M1,False,0.09004153567818685,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.20583607404959395,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.31861496353492286,0.30508474576271194,
+cubic,none,complete,GLMM-F,M1,False,0.10292662231571442,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.09867337507257132,0.15254237288135553,
+cubic,none,complete,GLMM-Q,M4,True,0.22620814147576535,0.45762711864406747,
+cubic,none,complete,GLMM-F,M1,False,0.011915887376317392,0.0,Cubic
+cubic,none,complete,GAMM,M1,False,0.09189176819928309,0.30508474576271194,
+cubic,none,complete,GLMM-Q,M4,True,0.4910762077262054,1.0677966101694913,
+cubic,none,complete,GLMM-F,M1,False,0.2844149547305322,0.45762711864406747,Cubic
+cubic,none,complete,GAMM,M1,False,0.2936351463866595,0.610169491525423,
+cubic,none,complete,GLMM-Q,M4,True,0.28380227158232846,0.45762711864406747,
+cubic,none,complete,GLMM-F,M1,False,0.06389464811721657,0.0,Cubic
+cubic,none,complete,GAMM,M1,False,0.12206459582212455,0.0,
+cubic,none,complete,GLMM-Q,M4,True,0.23907144264438132,0.45762711864406747,
+cubic,none,complete,GLMM-F,M1,False,0.05184356338165003,0.0,Cubic
+cubic,none,complete,GAMM,M1,False,0.10316574329637952,0.45762711864406747,
+cubic,none,complete,GLMM-Q,M4,True,0.30802568967417965,0.15254237288135553,
+cubic,none,complete,GLMM-F,M1,False,0.22546684275792295,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M1,False,0.1983616830116985,0.0,
+cubic,none,complete,GLMM-Q,M4,True,0.3184821025893578,0.15254237288135553,
+cubic,none,complete,GLMM-F,M2,False,0.21450521029921713,0.15254237288135553,Cubic
+cubic,none,complete,GAMM,M2,False,0.20273374889255805,0.0,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2630791338991409,0.7627118644067794,
+cubic,age-independent,complete,GLMM-F,M4,False,0.2033017851750455,0.45762711864406747,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.16667169849419378,0.30508474576271194,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.23603018262031625,0.610169491525423,
+cubic,age-independent,complete,GLMM-F,M4,False,0.11570771769851047,0.30508474576271194,Cubic
+cubic,age-independent,complete,GAMM,M4,False,0.14056967394092804,0.45762711864406747,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2954404832650518,0.45762711864406747,
+cubic,age-independent,complete,GLMM-F,M2,False,0.14090590011518006,0.0,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.13664002360152255,0.0,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2595545575872943,0.45762711864406747,
+cubic,age-independent,complete,GLMM-F,M2,False,0.11928476983807015,0.0,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.13832738882112705,0.30508474576271194,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.25238277026986583,0.610169491525423,
+cubic,age-independent,complete,GLMM-F,M2,False,0.11502541975659908,0.15254237288135553,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.11684816502483092,0.30508474576271194,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.33796542177312844,0.610169491525423,
+cubic,age-independent,complete,GLMM-F,M2,False,0.18814043755775323,0.15254237288135553,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.17392963466709566,0.30508474576271194,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2825522902373033,0.7627118644067794,
+cubic,age-independent,complete,GLMM-F,M2,False,0.19065244221613845,0.30508474576271194,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.2042504551504539,0.15254237288135553,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2569377556017798,0.45762711864406747,
+cubic,age-independent,complete,GLMM-F,M2,False,0.040934182157402035,0.0,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.13650296039439377,0.30508474576271194,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.27297359919816216,0.30508474576271194,
+cubic,age-independent,complete,GLMM-F,M2,False,0.13533892581923956,0.0,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.1348115799318608,0.15254237288135553,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2800919334338402,0.7627118644067794,
+cubic,age-independent,complete,GLMM-F,M2,False,0.14625886143669603,0.30508474576271194,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.21914276854294018,0.30508474576271194,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.3274869688056769,0.7627118644067794,
+cubic,age-independent,complete,GLMM-F,M4,True,0.22036038875757544,0.15254237288135553,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.20896368406153787,0.15254237288135553,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.24636329703851093,0.30508474576271194,
+cubic,age-independent,complete,GLMM-F,M2,False,0.08889044755572297,0.0,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.13761733322271855,0.15254237288135553,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2649600090854398,0.30508474576271194,
+cubic,age-independent,complete,GLMM-F,M2,False,0.11113055994285481,0.0,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.11237883409412104,0.0,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2811311534297429,0.30508474576271194,
+cubic,age-independent,complete,GLMM-F,M2,False,0.2729782358237888,0.15254237288135553,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.3161474407711505,0.4576271186440679,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2678942709550549,0.30508474576271194,
+cubic,age-independent,complete,GLMM-F,M2,False,0.1490340442734501,0.0,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.22557442209766443,0.15254237288135553,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2430289726051749,0.45762711864406747,
+cubic,age-independent,complete,GLMM-F,M2,False,0.04415398635676946,0.15254237288135553,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.0352174546504989,0.0,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2940292837927598,0.7627118644067794,
+cubic,age-independent,complete,GLMM-F,M2,False,0.0973525592070443,0.15254237288135553,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.10456169043008921,0.15254237288135553,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2474530328278212,0.30508474576271194,
+cubic,age-independent,complete,GLMM-F,M2,False,0.08954751085122908,0.0,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.1405067403372535,0.0,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.24691703677284027,0.7627118644067794,
+cubic,age-independent,complete,GLMM-F,M2,False,0.15241744182420483,0.15254237288135553,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.20432084078978782,0.30508474576271194,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.3307648285317047,0.15254237288135553,
+cubic,age-independent,complete,GLMM-F,M2,False,0.16285676118336725,0.15254237288135553,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.17849367115858894,0.30508474576271194,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.22670719535947842,0.45762711864406747,
+cubic,age-independent,complete,GLMM-F,M2,False,0.08455473327590549,0.0,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.08760145694926055,0.15254237288135553,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.34673135693142665,0.30508474576271194,
+cubic,age-independent,complete,GLMM-F,M2,False,0.11579891759255968,0.15254237288135553,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.18059175983659123,0.0,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.32047281375184783,0.16949152542372925,
+cubic,age-independent,complete,GLMM-F,M4,False,0.15670400476050897,0.0,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.19148460149998925,0.3389830508474567,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.3168359147442359,0.15254237288135553,
+cubic,age-independent,complete,GLMM-F,M2,False,0.217999645100082,0.30508474576271194,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.19503083899826923,0.15254237288135553,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2555936674469743,0.45762711864406747,
+cubic,age-independent,complete,GLMM-F,M2,False,0.011512951686276501,0.0,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.11407158523025711,0.45762711864406747,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2315878825652326,0.610169491525423,
+cubic,age-independent,complete,GLMM-F,M2,False,0.027241819114481366,0.15254237288135553,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.07475682083364887,0.15254237288135553,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.22918638934585553,0.610169491525423,
+cubic,age-independent,complete,GLMM-F,M2,False,0.053959466778979934,0.15254237288135553,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.1340469740142059,0.45762711864406747,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.3280527507241687,0.610169491525423,
+cubic,age-independent,complete,GLMM-F,M2,False,0.04644252547259186,0.15254237288135553,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.07190278700736309,0.15254237288135553,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2669465878797518,0.6779661016949152,
+cubic,age-independent,complete,GLMM-F,M2,False,0.11899533589348345,0.16949152542372836,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.16785650461815518,0.508474576271186,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.29684671415718983,0.7627118644067794,
+cubic,age-independent,complete,GLMM-F,M2,False,0.11829603789302744,0.30508474576271194,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.14535138347778764,0.0,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.24987193864293383,0.7627118644067794,
+cubic,age-independent,complete,GLMM-F,M2,False,0.17116900297432658,0.15254237288135553,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.28956702154554603,0.610169491525423,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2276335995671503,0.610169491525423,
+cubic,age-independent,complete,GLMM-F,M2,False,0.05339514596488119,0.15254237288135553,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.1101224849383591,0.15254237288135553,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2528275756466522,0.45762711864406747,
+cubic,age-independent,complete,GLMM-F,M4,True,0.2874005459927429,0.0,Cubic
+cubic,age-independent,complete,GAMM,M4,True,0.2694002267415861,0.0,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2676272472862749,0.45762711864406747,
+cubic,age-independent,complete,GLMM-F,M4,False,0.0791146459280725,0.15254237288135553,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.11626205839299607,0.30508474576271194,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.33440445738710106,0.9152542372881358,
+cubic,age-independent,complete,GLMM-F,M2,False,0.22298985005349603,0.30508474576271194,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.2560363980287314,0.45762711864406747,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.23621543637572276,0.610169491525423,
+cubic,age-independent,complete,GLMM-F,M2,False,0.1071618132566308,0.0,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.13775792706118595,0.15254237288135553,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.3191287041059526,0.7627118644067794,
+cubic,age-independent,complete,GLMM-F,M4,False,0.15818190446108651,0.0,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.14887115422014074,0.0,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.22540655707108018,0.45762711864406747,
+cubic,age-independent,complete,GLMM-F,M4,False,0.10117935573817263,0.30508474576271194,Cubic
+cubic,age-independent,complete,GAMM,M4,False,0.16241231528019623,0.610169491525423,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.2343518753239043,0.45762711864406747,
+cubic,age-independent,complete,GLMM-F,M2,False,0.15725729677019307,0.0,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.13556639047376018,0.15254237288135553,
+cubic,age-independent,complete,GLMM-Q,M4,True,0.40477750460073647,0.30508474576271194,
+cubic,age-independent,complete,GLMM-F,M4,False,0.3645857847133118,0.0,Cubic
+cubic,age-independent,complete,GAMM,M2,False,0.23683439227256842,0.0,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.3370832822327323,0.9152542372881358,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.31664627570953546,0.45762711864406747,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.30276116046957996,0.45762711864406747,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.47695189332890203,1.0677966101694913,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.37435843291961046,0.610169491525423,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.40753311927592156,0.9152542372881358,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.26596230782709107,0.610169491525423,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.035382147785438196,0.15254237288135553,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.10234070425106256,0.15254237288135553,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.5856995592265493,1.2203389830508478,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.48694841197831046,0.610169491525423,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.5257629188400583,0.45762711864406747,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.4887702179123654,1.1627118644067744,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.409981790336675,0.16610169491525273,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.3695603217164798,0.33220338983050635,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.33224609324296306,0.7627118644067794,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.17673484750137974,0.0,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.17699254908646636,0.45762711864406747,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.2319017926901418,0.610169491525423,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.10520972283771045,0.15254237288135553,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.11489831806510283,0.15254237288135553,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.41011515163897877,1.0677966101694913,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.27667680441230813,0.30508474576271194,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.3201274052606217,0.30508474576271194,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.29178268082013986,0.7627118644067794,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.11514141323166921,0.0,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.15054031303861798,0.15254237288135553,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.49089453691388835,1.0677966101694913,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.4772353286601762,0.610169491525423,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.49130129305783304,0.610169491525423,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.49639400360815505,0.8135593220338979,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.3166021910575264,0.1355932203389827,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.36535059905144557,0.2711864406779654,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.3942119533349584,0.9152542372881358,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.24804163097938686,0.30508474576271194,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.2701257324366385,0.610169491525423,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.45980705515362075,0.9152542372881358,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.3851035394182495,0.30508474576271194,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.3929779603521429,0.610169491525423,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.32179117296189313,0.610169491525423,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.17546734447400586,0.0,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.20394108973238861,0.15254237288135553,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.6481862893218983,1.3728813559322033,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.48478065556353,0.45762711864406747,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.482762686289369,0.7627118644067794,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.5102223459315568,1.0677966101694913,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.44526599715341836,0.610169491525423,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.46874418775383353,0.0,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.4424286433929797,1.0677966101694913,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.3609251495446211,0.45762711864406747,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.3181711925442787,0.45762711864406747,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.4640760834979069,1.0677966101694913,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.4266203356561773,0.30508474576271194,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.3660374274385526,0.610169491525423,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.5649658692813166,1.2203389830508478,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.3953447516700183,0.30508474576271194,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.42011603439845296,0.45762711864406747,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.44647998602408595,1.1864406779661012,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.4285103962884553,0.8474576271186436,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.4431147083654454,0.8474576271186436,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.4765638219517014,1.0677966101694913,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.41866560765488703,0.610169491525423,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.43195485778329173,0.610169491525423,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.3944019265901641,0.9152542372881358,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.3021479386914392,0.45762711864406747,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.32726831882977864,0.610169491525423,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.4480970362807449,0.9152542372881358,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.2828995326636884,0.15254237288135553,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.27193933866363806,0.610169491525423,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.39841113924280774,1.0677966101694913,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.3627138569084469,0.7627118644067794,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.40580454132663896,0.45762711864406747,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.3792681693455102,0.9152542372881358,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.23476039725088083,0.15254237288135553,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.21528771271081198,0.0,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.38243393796720854,0.9152542372881358,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.20787444183719156,0.30508474576271194,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.29098633423540443,0.45762711864406747,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.4533006419126535,1.0677966101694913,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.38643736828472375,0.610169491525423,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.3878205423739918,0.610169491525423,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.39248659892103277,0.9152542372881358,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.31657845973858384,0.45762711864406747,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.31503189239692686,0.9152542372881358,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.6340539062066749,1.5254237288135588,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.6128804768241195,0.6779661016949152,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.5614864019398459,1.1864406779661012,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.5044406149161335,1.0677966101694913,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.40099590626913906,0.45762711864406747,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.39456999652145264,0.610169491525423,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.4669740457478942,1.0677966101694913,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.3603944513441071,0.45762711864406747,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.4516048114891865,0.30508474576271194,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.6265996830186129,1.3728813559322033,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.5474536576496014,0.610169491525423,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.561310044253385,0.610169491525423,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.39986831254115524,1.0677966101694913,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.3030327511888878,0.30508474576271194,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.30996871540410087,0.15254237288135553,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.3054220209344662,0.610169491525423,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.16498762638920175,0.30508474576271194,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.21590415596858664,0.610169491525423,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.3188359210685658,0.9152542372881358,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.23555629058379882,0.45762711864406747,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.242703438351132,0.45762711864406747,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.3328608698538978,1.016949152542372,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.23707440064688257,0.3389830508474567,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.21907591171197086,0.3389830508474567,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.4006553620076266,0.9152542372881358,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.29912746465306156,0.15254237288135553,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.30256461361352055,0.15254237288135553,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.5834887275971529,1.2203389830508478,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.44655076613891737,0.45762711864406747,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.42603177968059225,0.4576271186440679,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.48101525512884463,1.0677966101694913,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.36212274914485915,0.45762711864406747,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.43260382716012186,0.30508474576271194,
+cubic,age-dependent,complete,GLMM-Q,M4,True,0.4067092100247406,0.9152542372881358,
+cubic,age-dependent,complete,GLMM-F,M4,True,0.2565575182837021,0.15254237288135553,Cubic
+cubic,age-dependent,complete,GAMM,M4,True,0.2554389399387818,0.610169491525423,
+plateau,none,complete,GLMM-Q,M4,True,0.14953493359040387,,
+plateau,none,complete,GLMM-F,M1,False,0.0879091394949234,,Cubic
+plateau,none,complete,GAMM,M1,False,0.06641485009092161,,
+plateau,none,complete,GLMM-Q,M4,True,0.17867369905616354,,
+plateau,none,complete,GLMM-F,M4,True,0.06981650446024336,,Cubic
+plateau,none,complete,GAMM,M1,False,0.09375779271113031,,
+plateau,none,complete,GLMM-Q,M4,True,0.15040767901696267,,
+plateau,none,complete,GLMM-F,M4,True,0.0784783455923723,,Cubic
+plateau,none,complete,GAMM,M1,False,0.05690855449466906,,
+plateau,none,complete,GLMM-Q,M4,True,0.1455927735732385,,
+plateau,none,complete,GLMM-F,M1,False,0.07726871513003777,,Cubic
+plateau,none,complete,GAMM,M1,False,0.08592766428733595,,
+plateau,none,complete,GLMM-Q,M4,True,0.14984992964049382,,
+plateau,none,complete,GLMM-F,M1,False,0.12713986687088044,,Asymptotic exponential
+plateau,none,complete,GAMM,M1,False,0.08240369485633241,,
+plateau,none,complete,GLMM-Q,M4,True,0.15441839396836887,,
+plateau,none,complete,GLMM-F,M2,False,0.1396495808308501,,Asymptotic exponential
+plateau,none,complete,GAMM,M1,False,0.0843562248557095,,
+plateau,none,complete,GLMM-Q,M4,True,0.1690208572639954,,
+plateau,none,complete,GLMM-F,M4,True,0.055552320939869566,,Cubic
+plateau,none,complete,GAMM,M1,False,0.05630510419715045,,
+plateau,none,complete,GLMM-Q,M4,True,0.1452889093039623,,
+plateau,none,complete,GLMM-F,M4,True,0.04641756156704305,,Cubic
+plateau,none,complete,GAMM,M1,False,0.05857224199871791,,
+plateau,none,complete,GLMM-Q,M4,True,0.14948584214365443,,
+plateau,none,complete,GLMM-F,M4,True,0.06720760558220218,,Cubic
+plateau,none,complete,GAMM,M1,False,0.07111466378674147,,
+plateau,none,complete,GLMM-Q,M4,True,0.17131426038357472,,
+plateau,none,complete,GLMM-F,M4,True,0.08397270265343824,,Cubic
+plateau,none,complete,GAMM,M1,False,0.07817331675221656,,
+plateau,none,complete,GLMM-Q,M4,True,0.15681258121548042,,
+plateau,none,complete,GLMM-F,M1,False,0.09666298865846187,,Cubic
+plateau,none,complete,GAMM,M1,False,0.07856437947773252,,
+plateau,none,complete,GLMM-Q,M4,True,0.19285445136573837,,
+plateau,none,complete,GLMM-F,M4,True,0.09562115941352002,,Cubic
+plateau,none,complete,GAMM,M1,False,0.08860157617001509,,
+plateau,none,complete,GLMM-Q,M4,True,0.15422211935041932,,
+plateau,none,complete,GLMM-F,M1,False,0.08454272447897723,,Cubic
+plateau,none,complete,GAMM,M1,False,0.06867177365595646,,
+plateau,none,complete,GLMM-Q,M4,True,0.1489084118084556,,
+plateau,none,complete,GLMM-F,M1,False,0.11201838433802716,,Cubic
+plateau,none,complete,GAMM,M1,False,0.09732382191743276,,
+plateau,none,complete,GLMM-Q,M4,True,0.1480273714673014,,
+plateau,none,complete,GLMM-F,M1,False,0.07751651656435746,,Cubic
+plateau,none,complete,GAMM,M1,False,0.061448955912189684,,
+plateau,none,complete,GLMM-Q,M4,True,0.14843302161035743,,
+plateau,none,complete,GLMM-F,M4,False,0.06543536461263381,,Cubic
+plateau,none,complete,GAMM,M1,False,0.04138908235488984,,
+plateau,none,complete,GLMM-Q,M4,True,0.1959657906873358,,
+plateau,none,complete,GLMM-F,M4,False,0.1051224406964065,,Cubic
+plateau,none,complete,GAMM,M1,False,0.12080723095938795,,
+plateau,none,complete,GLMM-Q,M4,True,0.1613650502839807,,
+plateau,none,complete,GLMM-F,M1,False,0.076645580814095,,Cubic
+plateau,none,complete,GAMM,M1,False,0.044436005399852006,,
+plateau,none,complete,GLMM-Q,M4,True,0.15385150651443708,,
+plateau,none,complete,GLMM-F,M4,True,0.04218880999578247,,Cubic
+plateau,none,complete,GAMM,M1,False,0.05855030813357724,,
+plateau,none,complete,GLMM-Q,M4,True,0.14513210431997714,,
+plateau,none,complete,GLMM-F,M1,False,0.06725957400748156,,Cubic
+plateau,none,complete,GAMM,M1,False,0.07492599641317349,,
+plateau,none,complete,GLMM-Q,M4,True,0.15164407511484954,,
+plateau,none,complete,GLMM-F,M4,True,0.06942081805281787,,Cubic
+plateau,none,complete,GAMM,M1,False,0.06858781365722551,,
+plateau,none,complete,GLMM-Q,M4,True,0.1623900030096231,,
+plateau,none,complete,GLMM-F,M1,False,0.13923661570369403,,Asymptotic exponential
+plateau,none,complete,GAMM,M1,False,0.03816579527297987,,
+plateau,none,complete,GLMM-Q,M4,True,0.17589609770424341,,
+plateau,none,complete,GLMM-F,M4,True,0.0758627448770153,,Cubic
+plateau,none,complete,GAMM,M1,False,0.08217723744718587,,
+plateau,none,complete,GLMM-Q,M4,True,0.15803513562641072,,
+plateau,none,complete,GLMM-F,M4,True,0.04938693490882414,,Cubic
+plateau,none,complete,GAMM,M1,False,0.04890514833964791,,
+plateau,none,complete,GLMM-Q,M4,True,0.15752752700966316,,
+plateau,none,complete,GLMM-F,M4,True,0.06702300321274483,,Cubic
+plateau,none,complete,GAMM,M1,False,0.05517137466478605,,
+plateau,none,complete,GLMM-Q,M4,True,0.14427635878649542,,
+plateau,none,complete,GLMM-F,M1,False,0.06654965433446292,,Cubic
+plateau,none,complete,GAMM,M1,False,0.0390639319921947,,
+plateau,none,complete,GLMM-Q,M4,True,0.1844637881290896,,
+plateau,none,complete,GLMM-F,M1,False,0.12059834587153026,,Cubic
+plateau,none,complete,GAMM,M1,False,0.07131669026151471,,
+plateau,none,complete,GLMM-Q,M4,True,0.15791941613385,,
+plateau,none,complete,GLMM-F,M4,True,0.05636864199306066,,Cubic
+plateau,none,complete,GAMM,M1,False,0.06667956085803783,,
+plateau,none,complete,GLMM-Q,M4,True,0.14564262518320115,,
+plateau,none,complete,GLMM-F,M1,False,0.07559841488504526,,Cubic
+plateau,none,complete,GAMM,M1,False,0.05982471573632674,,
+plateau,none,complete,GLMM-Q,M4,True,0.14435846427494803,,
+plateau,none,complete,GLMM-F,M1,False,0.06879277370394046,,Cubic
+plateau,none,complete,GAMM,M1,False,0.05879288420061501,,
+plateau,none,complete,GLMM-Q,M4,True,0.20222023798144725,,
+plateau,none,complete,GLMM-F,M2,False,0.14787823342640338,,Cubic
+plateau,none,complete,GAMM,M2,False,0.10379434354542566,,
+plateau,none,complete,GLMM-Q,M4,True,0.14793767307890457,,
+plateau,none,complete,GLMM-F,M1,False,0.09066040300667065,,Cubic
+plateau,none,complete,GAMM,M1,False,0.056015977366357605,,
+plateau,none,complete,GLMM-Q,M4,True,0.1800990912914846,,
+plateau,none,complete,GLMM-F,M1,False,0.13188494500734665,,Cubic
+plateau,none,complete,GAMM,M1,False,0.1076955672654145,,
+plateau,none,complete,GLMM-Q,M4,True,0.161482817878066,,
+plateau,none,complete,GLMM-F,M1,False,0.13996870983592344,,Asymptotic exponential
+plateau,none,complete,GAMM,M1,False,0.06325691913055927,,
+plateau,none,complete,GLMM-Q,M4,True,0.15183932058733007,,
+plateau,none,complete,GLMM-F,M1,False,0.09470376153936443,,Cubic
+plateau,none,complete,GAMM,M1,False,0.058394853590919935,,
+plateau,none,complete,GLMM-Q,M4,True,0.18144002576152415,,
+plateau,none,complete,GLMM-F,M4,True,0.08085186975749979,,Cubic
+plateau,none,complete,GAMM,M2,False,0.08034034421107693,,
+plateau,none,complete,GLMM-Q,M4,True,0.1622464779839113,,
+plateau,none,complete,GLMM-F,M4,True,0.05770042001207233,,Cubic
+plateau,none,complete,GAMM,M1,False,0.06986598969575562,,
+plateau,none,complete,GLMM-Q,M4,True,0.17524955435568412,,
+plateau,none,complete,GLMM-F,M1,False,0.11590202348911148,,Cubic
+plateau,none,complete,GAMM,M1,False,0.07546233699646988,,
+plateau,none,complete,GLMM-Q,M4,True,0.17493919570594374,,
+plateau,none,complete,GLMM-F,M4,True,0.0736063054147532,,Cubic
+plateau,none,complete,GAMM,M1,False,0.0710532352508241,,
+plateau,none,complete,GLMM-Q,M4,True,0.15275322536279565,,
+plateau,none,complete,GLMM-F,M1,False,0.0741585589959346,,Cubic
+plateau,none,complete,GAMM,M1,False,0.06562332288281202,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.1435876622853457,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.13832346827054282,,Asymptotic exponential
+plateau,age-independent,complete,GAMM,M2,False,0.08322729425423554,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.14361685558419912,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.05797379435350678,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.05045809954701497,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.1497109839631188,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.09111958943394685,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.05259236468867562,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.14742401542448766,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.08221876359565722,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.08093397072378146,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.14598810031024848,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.08975475080827967,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.08977966755639682,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.14395617474857325,,
+plateau,age-independent,complete,GLMM-F,M4,False,0.08797352458966007,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.05287724469249405,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.15636336721813887,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.06154639597233737,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.05298492280416941,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.1867438365280274,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.06724185512949674,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.07174106800872923,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.1490673651398048,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.1434196205108971,,Asymptotic exponential
+plateau,age-independent,complete,GAMM,M2,False,0.059425936854846415,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.1446865255913997,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.07464394203579723,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.06467202861257178,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.1588007562935925,,
+plateau,age-independent,complete,GLMM-F,M4,False,0.07399463753437656,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.09301836044108477,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.15652810767368655,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.1033729018737978,,Cubic
+plateau,age-independent,complete,GAMM,M4,True,0.05711547014819018,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.14997203476623236,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.08035420807942566,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.03668275522937241,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.17112163513451292,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.08889673713960089,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.03658415744124002,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.1660713538295574,,
+plateau,age-independent,complete,GLMM-F,M4,False,0.08722727270639338,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.07153211157583785,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.16071934300030535,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.09505356524896368,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.059236865069028345,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.15138328835544576,,
+plateau,age-independent,complete,GLMM-F,M4,False,0.12891963727325517,,Asymptotic exponential
+plateau,age-independent,complete,GAMM,M2,False,0.07726293924183714,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.1746581782753727,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.10559409589646417,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.07829549508549244,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.15341355141720373,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.0905106053116317,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.051933483095108895,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.16357201828205062,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.10391158131274607,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.07446600441389961,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.1891902353878757,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.0497775801213313,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.04357115630167818,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.1568423702749189,,
+plateau,age-independent,complete,GLMM-F,M4,False,0.05276584048733867,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.03687886300373379,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.15109197868456573,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.09670648439015679,,Cubic
+plateau,age-independent,complete,GAMM,M4,False,0.062383281031688415,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.15603700802385653,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.07524035621091488,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.049542578352440005,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.17614271876926454,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.14428486112751956,,Cubic
+plateau,age-independent,complete,GAMM,M4,False,0.10134068047959115,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.14410328766764888,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.06478676548177667,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.07279610928154691,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.15923371961637167,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.07240516530797712,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.052660004563732564,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.17046749589861118,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.1409059237554966,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.0927570395138466,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.15570415335185736,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.0614641173477067,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.048686495136490836,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.20073062923579912,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.10286331940390542,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.09938573036120182,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.20811463125397772,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.10017496865521125,,Cubic
+plateau,age-independent,complete,GAMM,M4,False,0.1322586087707683,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.17715642378688096,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.09233127587685454,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.08473050729990067,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.15539729235597088,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.13622210557115172,,Asymptotic exponential
+plateau,age-independent,complete,GAMM,M2,False,0.07107572233914179,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.16189236959282136,,
+plateau,age-independent,complete,GLMM-F,M4,False,0.0912062718577971,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.0849932428320619,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.16999104510365554,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.12315821037065731,,Cubic
+plateau,age-independent,complete,GAMM,M4,False,0.1457942770533635,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.14368537925200325,,
+plateau,age-independent,complete,GLMM-F,M4,False,0.0717386372358353,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.04832940418968238,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.144919015072812,,
+plateau,age-independent,complete,GLMM-F,M2,False,0.07802246156675566,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.06831805171831651,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.1438164756959277,,
+plateau,age-independent,complete,GLMM-F,M4,False,0.05530163164339199,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.05619998808202493,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.17006022454670575,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.1060571467801842,,Cubic
+plateau,age-independent,complete,GAMM,M4,False,0.07579109113877003,,
+plateau,age-independent,complete,GLMM-Q,M4,True,0.19334611403218774,,
+plateau,age-independent,complete,GLMM-F,M4,True,0.09463261393557973,,Cubic
+plateau,age-independent,complete,GAMM,M2,False,0.06639643872498338,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.20769544395996395,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.11374256061251137,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.11914694716409556,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.21791901490770027,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.13722064011268112,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.148841728325019,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.21000723260905008,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.11354839407784553,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.13324812457664262,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.22479273365154603,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.32660494764994347,,Logarithmic
+plateau,age-dependent,complete,GAMM,M4,True,0.1646168413819574,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.18097936746562407,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.1004953357694127,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.1061241681437663,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.2098268925963407,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.13369025653766478,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.14390321753769558,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.2085719561487281,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.16996064862532073,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.18420727487317534,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.22042108885852346,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.27609168522026684,,Logarithmic
+plateau,age-dependent,complete,GAMM,M4,True,0.1425632262947828,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.21888338002060367,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.15500720839169335,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.1456284907845759,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.20151113201267826,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.23908517401078558,,Logarithmic
+plateau,age-dependent,complete,GAMM,M4,True,0.10587905249215568,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.22461553714888452,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.24163552953648643,,Logarithmic
+plateau,age-dependent,complete,GAMM,M4,True,0.13080162410015903,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.23139975902754462,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.17585824477686657,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.1806873022100312,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.19221853552955415,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.15745572682969666,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.14310481012339618,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.2520519014696908,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.25366495627361846,,Logarithmic
+plateau,age-dependent,complete,GAMM,M4,True,0.17665201828533886,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.2775802531506145,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.2097638413947743,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.22082453593089754,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.18100994954180855,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.06848064024942944,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.09694461830569985,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.25069130118170496,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.17443025520657365,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.18458056303351852,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.23819567375393894,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.253713407347012,,Logarithmic
+plateau,age-dependent,complete,GAMM,M4,True,0.19705594804541207,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.18619686363165,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.12473398523479019,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.089923101828974,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.1937666751215439,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.13014536727049605,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.1222749183920176,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.22972321923035574,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.15608012529690182,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.16640731389992408,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.20558073790818399,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.2432139505479426,,Logarithmic
+plateau,age-dependent,complete,GAMM,M4,True,0.11130017731405696,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.19039394653144742,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.10248019440347277,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.10030355393201827,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.21496045529782443,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.14813604615861753,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.14918830096509694,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.1917517824795841,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.2568074075315218,,Logarithmic
+plateau,age-dependent,complete,GAMM,M4,True,0.1286467699750981,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.21671074630240858,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.10235410826982377,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.11498406225478823,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.23077549659851296,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.2352308239410476,,Logarithmic
+plateau,age-dependent,complete,GAMM,M4,True,0.13247936627797108,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.15858188468318116,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.05166556788276573,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.1272547217403456,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.23504959072446002,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.2746762621800942,,Logarithmic
+plateau,age-dependent,complete,GAMM,M4,True,0.16447531711991933,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.22854908415213568,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.18213837535221375,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.17658756806249454,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.25299670311597394,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.15622526697754183,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.17034400430141775,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.20323674001655898,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.12844801943647516,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.13007407982027053,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.12453167737304512,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.05627297542915007,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.049326399382441745,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.16880792036217196,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.062276185989613764,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.06587759561618665,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.17831245631096498,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.05307687845454763,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.06316569254120014,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.20310554321637447,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.09155581414904983,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.09670812458035163,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.16681986756642742,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.22772249656544144,,Logarithmic
+plateau,age-dependent,complete,GAMM,M4,True,0.08725174451791964,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.16298417597120907,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.07169575242166581,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.07729003679121108,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.22058036258456176,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.14922328676692584,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.15823634057203073,,
+plateau,age-dependent,complete,GLMM-Q,M4,True,0.18502885792214196,,
+plateau,age-dependent,complete,GLMM-F,M4,True,0.0697548368233821,,Cubic
+plateau,age-dependent,complete,GAMM,M4,True,0.07907917525828181,,
+threshold,none,complete,GLMM-Q,M4,True,0.18004986862421984,,
+threshold,none,complete,GLMM-F,M4,True,0.13350299983443165,0.0,Cubic
+threshold,none,complete,GAMM,M1,False,0.0796434275517465,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.21457579841951613,,
+threshold,none,complete,GLMM-F,M4,True,0.13811705910075972,0.0,Cubic
+threshold,none,complete,GAMM,M1,False,0.08621114045656583,0.30508474576271283,
+threshold,none,complete,GLMM-Q,M4,True,0.20895167614221405,,
+threshold,none,complete,GLMM-F,M1,False,0.16902241879338645,0.15254237288135641,Cubic
+threshold,none,complete,GAMM,M1,False,0.0654814940346048,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.17864755426987644,,
+threshold,none,complete,GLMM-F,M4,False,0.13844229993009,0.30508474576271283,Cubic
+threshold,none,complete,GAMM,M2,False,0.0672064622633087,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.22587515261792127,,
+threshold,none,complete,GLMM-F,M4,True,0.16613839999177468,0.30508474576271283,Cubic
+threshold,none,complete,GAMM,M1,False,0.07771764628049563,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.18213504801668862,,
+threshold,none,complete,GLMM-F,M4,True,0.15206944123459756,0.15254237288135641,Cubic
+threshold,none,complete,GAMM,M1,False,0.12999926770617806,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.23838761002822484,0.7627118644067803,
+threshold,none,complete,GLMM-F,M4,True,0.15237295209922655,0.30508474576271283,Cubic
+threshold,none,complete,GAMM,M1,False,0.058287969602949234,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.16176396909783777,,
+threshold,none,complete,GLMM-F,M4,True,0.10562019166111986,0.15254237288135641,Cubic
+threshold,none,complete,GAMM,M1,False,0.06981688492308774,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.21565883002127936,,
+threshold,none,complete,GLMM-F,M4,True,0.14134536468578182,0.0,Cubic
+threshold,none,complete,GAMM,M1,False,0.0988845335055603,0.45762711864406747,
+threshold,none,complete,GLMM-Q,M4,True,0.14323356982184102,,
+threshold,none,complete,GLMM-F,M4,False,0.12125210654748193,0.15254237288135641,Cubic
+threshold,none,complete,GAMM,M1,False,0.10819539051875796,0.30508474576271283,
+threshold,none,complete,GLMM-Q,M4,True,0.17764272028241695,,
+threshold,none,complete,GLMM-F,M4,True,0.12225845645871418,0.15254237288135641,Cubic
+threshold,none,complete,GAMM,M1,False,0.05932275505565386,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.17205803927055577,,
+threshold,none,complete,GLMM-F,M1,False,0.1279857956402488,0.45762711864406747,Cubic
+threshold,none,complete,GAMM,M1,False,0.0733608849642399,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.16673379267078278,,
+threshold,none,complete,GLMM-F,M4,True,0.12981075262195768,0.0,Cubic
+threshold,none,complete,GAMM,M4,False,0.09112845078862708,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.16891624122544271,,
+threshold,none,complete,GLMM-F,M4,True,0.12451191114888477,0.15254237288135641,Cubic
+threshold,none,complete,GAMM,M2,False,0.07678671406200784,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.16193377274566711,,
+threshold,none,complete,GLMM-F,M4,True,0.12426624766051576,0.15254237288135641,Cubic
+threshold,none,complete,GAMM,M1,False,0.09820093392329396,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.18972391177626907,,
+threshold,none,complete,GLMM-F,M4,True,0.11890096670455776,0.0,Cubic
+threshold,none,complete,GAMM,M1,False,0.07176616179121754,0.30508474576271283,
+threshold,none,complete,GLMM-Q,M4,True,0.1587666252506937,,
+threshold,none,complete,GLMM-F,M4,True,0.11356897116615033,0.15254237288135641,Cubic
+threshold,none,complete,GAMM,M1,False,0.0923235656370007,0.30508474576271283,
+threshold,none,complete,GLMM-Q,M4,True,0.15846059421332498,,
+threshold,none,complete,GLMM-F,M4,True,0.09988709041348291,0.30508474576271283,Cubic
+threshold,none,complete,GAMM,M1,False,0.08875277916736331,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.16242017849526522,,
+threshold,none,complete,GLMM-F,M4,True,0.10624855335915821,0.15254237288135641,Cubic
+threshold,none,complete,GAMM,M1,False,0.059764917358222536,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.25019783315553146,1.186440677966102,
+threshold,none,complete,GLMM-F,M4,True,0.13488749101329844,0.16949152542372836,Cubic
+threshold,none,complete,GAMM,M1,False,0.09780620644434376,0.3389830508474585,
+threshold,none,complete,GLMM-Q,M4,True,0.1867674857668222,,
+threshold,none,complete,GLMM-F,M1,False,0.14290005313344067,0.30508474576271283,Cubic
+threshold,none,complete,GAMM,M1,False,0.07344706962649925,0.0,
+threshold,none,complete,GLMM-Q,M4,True,0.17933070526574055,,
+threshold,none,complete,GLMM-F,M4,True,0.11790709861943464,0.0,Cubic
+threshold,none,complete,GAMM,M2,False,0.07750980005996366,0.30508474576271283,
+threshold,none,complete,GLMM-Q,M4,True,0.17523678888380523,,
+threshold,none,complete,GLMM-F,M4,False,0.1306727160750823,0.15254237288135641,Cubic
+threshold,none,complete,GAMM,M1,False,0.0849355689469858,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.19994677695771973,,
+threshold,none,complete,GLMM-F,M4,True,0.12760519852243885,0.15254237288135641,Cubic
+threshold,none,complete,GAMM,M2,False,0.07041450179318298,0.30508474576271283,
+threshold,none,complete,GLMM-Q,M4,True,0.20303995213688042,,
+threshold,none,complete,GLMM-F,M1,False,0.17312588787255673,,Cubic
+threshold,none,complete,GAMM,M1,False,0.12101819223337075,,
+threshold,none,complete,GLMM-Q,M4,True,0.17258112646537482,,
+threshold,none,complete,GLMM-F,M1,False,0.11451509027622139,0.30508474576271283,Cubic
+threshold,none,complete,GAMM,M1,False,0.12394719132772361,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.16984724307044294,,
+threshold,none,complete,GLMM-F,M1,False,0.1366051928126519,0.30508474576271283,Cubic
+threshold,none,complete,GAMM,M1,False,0.08092085481766187,0.0,
+threshold,none,complete,GLMM-Q,M4,True,0.1793275889813395,,
+threshold,none,complete,GLMM-F,M1,False,0.13754287524508496,0.15254237288135641,Cubic
+threshold,none,complete,GAMM,M1,False,0.09348415088502092,0.0,
+threshold,none,complete,GLMM-Q,M4,True,0.16154358775400648,,
+threshold,none,complete,GLMM-F,M1,False,0.14280295627057163,0.30508474576271283,Cubic
+threshold,none,complete,GAMM,M1,False,0.08460896815731746,0.0,
+threshold,none,complete,GLMM-Q,M4,True,0.20329734866653432,,
+threshold,none,complete,GLMM-F,M4,True,0.12784183036649951,0.15254237288135641,Cubic
+threshold,none,complete,GAMM,M1,False,0.05659032632832731,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.20916360030253903,,
+threshold,none,complete,GLMM-F,M4,True,0.1441404389014438,0.30508474576271283,Cubic
+threshold,none,complete,GAMM,M1,False,0.0913355866706271,0.30508474576271283,
+threshold,none,complete,GLMM-Q,M4,True,0.20679511877622792,,
+threshold,none,complete,GLMM-F,M4,True,0.1461635284494222,0.30508474576271283,Cubic
+threshold,none,complete,GAMM,M1,False,0.07511515159972183,0.30508474576271283,
+threshold,none,complete,GLMM-Q,M4,True,0.18043835765119196,,
+threshold,none,complete,GLMM-F,M4,False,0.12232257664910567,0.0,Cubic
+threshold,none,complete,GAMM,M2,False,0.07147467697075863,0.30508474576271283,
+threshold,none,complete,GLMM-Q,M4,True,0.1924430412344141,,
+threshold,none,complete,GLMM-F,M4,True,0.13341573976979546,0.15254237288135641,Cubic
+threshold,none,complete,GAMM,M1,False,0.06538780710726848,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.20473740581903732,,
+threshold,none,complete,GLMM-F,M4,True,0.1232986309268089,0.0,Cubic
+threshold,none,complete,GAMM,M1,False,0.07375327288418117,0.0,
+threshold,none,complete,GLMM-Q,M4,True,0.1560140742274547,,
+threshold,none,complete,GLMM-F,M4,True,0.099240462065547,0.30508474576271283,Cubic
+threshold,none,complete,GAMM,M1,False,0.05092120498796505,0.0,
+threshold,none,complete,GLMM-Q,M4,True,0.18865836575068065,,
+threshold,none,complete,GLMM-F,M1,False,0.14733379932231064,0.15254237288135641,Cubic
+threshold,none,complete,GAMM,M1,False,0.07016939119712978,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.18539771963409488,,
+threshold,none,complete,GLMM-F,M4,True,0.13189087899041502,0.30508474576271283,Cubic
+threshold,none,complete,GAMM,M1,False,0.0671228890939694,0.15254237288135641,
+threshold,none,complete,GLMM-Q,M4,True,0.2489718771413253,0.6779661016949152,
+threshold,none,complete,GLMM-F,M4,True,0.13591426519094496,0.16949152542372836,Cubic
+threshold,none,complete,GAMM,M1,False,0.07447574025730072,0.3389830508474585,
+threshold,none,complete,GLMM-Q,M4,True,0.212241999333455,0.7627118644067803,
+threshold,none,complete,GLMM-F,M4,True,0.14553497807319263,0.30508474576271283,Cubic
+threshold,none,complete,GAMM,M2,False,0.07339043008405136,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.25319332796748667,1.016949152542372,
+threshold,age-independent,complete,GLMM-F,M4,True,0.15244590252801174,0.0,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.11002677763532094,0.0,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.19098280173862145,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.13620371689101507,0.30508474576271283,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.1010992941567996,0.30508474576271283,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.2118948239838468,0.7627118644067803,
+threshold,age-independent,complete,GLMM-F,M4,True,0.15703608976817376,0.30508474576271283,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.09841401388597655,0.30508474576271283,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.18493712607877663,,
+threshold,age-independent,complete,GLMM-F,M2,False,0.12730924506723298,0.0,Cubic
+threshold,age-independent,complete,GAMM,M4,False,0.07036216683295364,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.17714639018789738,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.13231498392943128,0.30508474576271283,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.06382274826301018,0.30508474576271283,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.20887696739117584,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.13313612988793908,0.15254237288135641,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.0773264264734119,0.30508474576271283,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.20093785401054481,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.1276988771701368,0.0,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.07441235186158937,0.0,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.20322384138121327,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.14648047031835418,0.30508474576271283,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.08923614672601415,0.30508474576271283,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.1559409313533521,,
+threshold,age-independent,complete,GLMM-F,M2,False,0.10459610894820393,0.30508474576271283,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.06854874847642824,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.14970369883614773,,
+threshold,age-independent,complete,GLMM-F,M4,False,0.11444376761700496,0.0,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.05951245430215476,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.19706238895731648,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.118208035652545,0.15254237288135641,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.05841227197258808,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.19398086434169953,,
+threshold,age-independent,complete,GLMM-F,M2,False,0.13926504900593503,0.15254237288135641,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.07052550139128738,0.0,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.2323506429260788,0.6101694915254239,
+threshold,age-independent,complete,GLMM-F,M4,True,0.1575367584622143,0.30508474576271283,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.08313949240713432,0.30508474576271283,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.2356524838427202,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.16720577175655807,0.15254237288135641,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.11889247099641409,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.23266088795971224,0.7627118644067803,
+threshold,age-independent,complete,GLMM-F,M4,True,0.14383944243052477,0.30508474576271283,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.08255269339705998,0.30508474576271283,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.1721375889513403,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.12170820134203088,0.0,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.10522213570181638,0.30508474576271283,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.19668901820539947,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.11825881573882092,0.15254237288135641,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.1037201261021231,0.30508474576271283,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.1925663394590456,,
+threshold,age-independent,complete,GLMM-F,M2,False,0.13753001663973136,0.15254237288135641,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.0571313456099236,0.0,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.2158187899231233,0.9152542372881367,
+threshold,age-independent,complete,GLMM-F,M4,True,0.14376933206837184,0.30508474576271283,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.09533263164820582,0.30508474576271283,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.20435661540737862,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.13167519094563235,0.15254237288135641,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.05031832746825097,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.25446613180117844,1.6949152542372872,
+threshold,age-independent,complete,GLMM-F,M4,True,0.14278082618703003,0.0,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.07642003257198673,0.0,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.2282879511731912,0.7627118644067803,
+threshold,age-independent,complete,GLMM-F,M4,True,0.1474268004824269,0.30508474576271283,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.10001018675723576,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.15421694751812842,,
+threshold,age-independent,complete,GLMM-F,M4,False,0.11550153288423512,0.15254237288135641,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.08973752116897728,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.2506476446397748,1.3559322033898304,
+threshold,age-independent,complete,GLMM-F,M2,False,0.16470280901183634,0.16949152542372836,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.08654518435309796,0.0,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.16364723115086058,,
+threshold,age-independent,complete,GLMM-F,M4,False,0.11245830807191504,0.15254237288135641,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.06204086939098776,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.17464762088721264,,
+threshold,age-independent,complete,GLMM-F,M4,False,0.12119303544227919,0.0,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.06121456668705165,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.21157375865039182,0.9152542372881367,
+threshold,age-independent,complete,GLMM-F,M4,True,0.1450412866677139,0.30508474576271283,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.07688783159278219,0.30508474576271283,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.2237231268549786,0.7627118644067803,
+threshold,age-independent,complete,GLMM-F,M4,True,0.13892776201142124,0.30508474576271283,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.0763580106885926,0.30508474576271283,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.18830955471311403,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.11387557982991862,0.15254237288135641,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.06313649981716904,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.2374990871073882,0.30508474576271283,
+threshold,age-independent,complete,GLMM-F,M4,True,0.16359135873836955,0.45762711864406747,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.09067154549275437,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.2319885777042703,0.45762711864406747,
+threshold,age-independent,complete,GLMM-F,M4,True,0.1666891213114162,0.15254237288135641,Cubic
+threshold,age-independent,complete,GAMM,M4,True,0.107329873578146,0.30508474576271283,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.20232277591280523,,
+threshold,age-independent,complete,GLMM-F,M4,False,0.15127107585081565,0.30508474576271283,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.08121453324427057,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.17606481086320072,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.11658334127649779,0.15254237288135641,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.07713655753539692,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.14816234217539268,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.09931910258045232,0.45762711864406747,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.07453449439492538,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.19698831057137883,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.140296164673193,0.30508474576271283,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.1099014908346289,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.18300715365228967,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.12143646698904387,0.0,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.0743233948443148,0.30508474576271283,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.18206204480434962,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.13009804211275355,0.30508474576271283,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.05087992549014025,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.20100101199329296,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.12156525105596508,0.0,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.0655888710458765,0.15254237288135641,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.24896312927468003,0.8474576271186436,
+threshold,age-independent,complete,GLMM-F,M4,True,0.14770750964882487,0.16949152542372836,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.09942928044673206,0.0,
+threshold,age-independent,complete,GLMM-Q,M4,True,0.1785810201135709,,
+threshold,age-independent,complete,GLMM-F,M4,True,0.1395259550339323,0.15254237288135641,Cubic
+threshold,age-independent,complete,GAMM,M2,False,0.09443009323367303,0.30508474576271283,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.1724530968081856,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.12093195245096153,0.0,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.07882401268833471,0.30508474576271283,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.16825264877886117,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.15010650354283234,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.154830851222987,0.15254237288135641,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.178726255471315,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.16534462028926528,0.0,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.17236658811572433,0.15254237288135641,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.17856460377875596,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.14658767382152021,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.11051452786954795,0.15254237288135641,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.19833965542889306,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.16948288142797058,0.0,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.1461258949573884,0.0,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.20018668168750514,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.14499687435652645,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.11081121336432714,0.15254237288135641,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.1915235773856668,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.17948547788964306,0.0,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.17792692737674917,0.15254237288135641,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.19920588255139465,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.16292978754028334,0.0,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.14763128335909054,0.30508474576271283,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.17320168556699128,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.1539627413654042,0.30508474576271283,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.14134448139995098,0.0,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.2731825286317244,1.186440677966102,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.18410036170602256,0.0,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.16974295455839436,0.16949152542372836,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.17064656370275563,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.15047089484150106,0.0,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.1269752853941406,0.15254237288135641,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.15972386933297836,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.13985404019137573,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.13505897785857351,0.30508474576271283,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.20903313252188588,0.9152542372881367,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.1650613002452109,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.12390125021166992,0.0,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.1402447107124191,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.1428125423059646,,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.10914257953760882,0.0,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.186940880393913,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.1510599174227171,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.12499143828529087,0.0,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.1978399710489486,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.16933662122689921,0.30508474576271283,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.13325397402367017,0.15254237288135641,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.19175749464093989,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.14367870067530975,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.09497799071478581,0.15254237288135641,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.18748472206126165,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.18167125144436397,0.0,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.15652494479637727,0.0,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.2924288414434982,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.206730548022365,0.16949152542372836,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.20855235253450585,0.0,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.1639166910259564,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.14198846845291666,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.15603742848370292,0.15254237288135641,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.1867101379177961,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.15178981789494153,0.0,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.12604784822470022,0.0,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.17404123825680198,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.11206882563846925,0.0,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.09246498106471927,0.15254237288135641,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.14831994251937075,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.12432167533398965,0.30508474576271283,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.1063023232099816,0.30508474576271283,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.1791412306644452,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.15376282748846143,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.13251277877824427,0.15254237288135641,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.1667435133793846,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.11842480920826891,0.0,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.09211039655584904,0.30508474576271283,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.17354958311320537,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.13605059502524555,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.1260442120575917,0.0,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.27426083498862863,1.5254237288135588,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.19777602001955172,0.0,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.17000501603675844,0.16949152542372836,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.17352272783201353,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.14475078633997687,0.0,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.10642654617019709,0.15254237288135641,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.20151330455976507,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.1518932567106495,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.08692615878568513,0.30508474576271283,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.1689564013167565,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.1358005515803538,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.11524222740948672,0.30508474576271283,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.18358168484859103,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.1319625725345928,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.11659683484023822,0.0,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.16080881465835364,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.12622842650961288,0.30508474576271283,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.12488648399032101,0.0,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.1556122677143613,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.11463448082666083,0.45762711864406747,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.0905038076589006,0.0,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.2036476027657526,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.14120665472020524,0.30508474576271283,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.07332219506583286,0.30508474576271283,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.16274165277933195,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.13790565240629357,0.0,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.08880402531075966,0.15254237288135641,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.12583073364270422,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.10921681913984406,,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.06889113899403891,,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.16956535029031022,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.151926554940497,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.13520402785923727,0.15254237288135641,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.1801414936762884,,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.17403986809703395,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.1617555762870055,0.0,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.20858741905556197,0.7627118644067803,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.15700715912782617,0.15254237288135641,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.08596100520175418,0.15254237288135641,
+threshold,age-dependent,complete,GLMM-Q,M4,True,0.2301129885323391,0.45762711864406747,
+threshold,age-dependent,complete,GLMM-F,M4,True,0.17461883133348705,0.45762711864406747,Cubic
+threshold,age-dependent,complete,GAMM,M4,True,0.10843050094698044,0.30508474576271283,
+logarithmic,none,complete,GLMM-Q,M4,True,0.1091449417872081,,
+logarithmic,none,complete,GLMM-F,M1,False,0.016967690918646645,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.03719231415897669,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.1099684910439966,,
+logarithmic,none,complete,GLMM-F,M4,True,0.014638025173064171,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.03671139939828955,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.11383936933108185,,
+logarithmic,none,complete,GLMM-F,M1,False,0.010153240272775928,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.048634291688653714,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10340955005715678,,
+logarithmic,none,complete,GLMM-F,M2,False,0.020198259077013184,,Logarithmic
+logarithmic,none,complete,GAMM,M2,False,0.038802882583929235,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10257606783122102,,
+logarithmic,none,complete,GLMM-F,M4,True,0.014549694479921637,,Logarithmic
+logarithmic,none,complete,GAMM,M2,False,0.05160794721444427,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.12294912351233071,,
+logarithmic,none,complete,GLMM-F,M1,False,0.03681922115558359,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.050171908353565435,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10202342876399918,,
+logarithmic,none,complete,GLMM-F,M1,False,0.038977418438460476,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.037785482542779594,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10459243169082773,,
+logarithmic,none,complete,GLMM-F,M1,False,0.00962019424278324,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.06656137428078805,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.12011633008934222,,
+logarithmic,none,complete,GLMM-F,M4,True,0.0035576246348371678,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.0405008556442669,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.1051516076575746,,
+logarithmic,none,complete,GLMM-F,M1,False,0.012685731520413622,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.03843143089054392,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.1040849381367388,,
+logarithmic,none,complete,GLMM-F,M1,False,0.029458724661202983,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.04337738162444936,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10751934289404434,,
+logarithmic,none,complete,GLMM-F,M1,False,0.018697257927054546,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.03996128233927164,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10699347105220104,,
+logarithmic,none,complete,GLMM-F,M2,False,0.014680795188672931,,Logarithmic
+logarithmic,none,complete,GAMM,M2,False,0.03726955396418305,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.1261465293498784,,
+logarithmic,none,complete,GLMM-F,M1,False,2.796653943365685e-05,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.04241661169238476,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.13490301671294225,,
+logarithmic,none,complete,GLMM-F,M1,False,0.04778420232834133,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.076591713246822,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10305264152011875,,
+logarithmic,none,complete,GLMM-F,M1,False,0.00077836494020758,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.033943742299131933,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.11998810163059509,,
+logarithmic,none,complete,GLMM-F,M1,False,0.025062123842094365,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.06749522763139183,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.11379635704038926,,
+logarithmic,none,complete,GLMM-F,M1,False,0.005186301915063631,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.06602679499096976,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10179944191646091,,
+logarithmic,none,complete,GLMM-F,M1,False,0.02873538570827164,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.052802768318397954,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10398361617545006,,
+logarithmic,none,complete,GLMM-F,M1,False,0.008702691802073193,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.0346861740302472,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10786791973082306,,
+logarithmic,none,complete,GLMM-F,M2,False,0.015135419104601455,,Logarithmic
+logarithmic,none,complete,GAMM,M2,False,0.03855598980929878,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.11875458065002781,,
+logarithmic,none,complete,GLMM-F,M2,False,0.01789240561678667,,Logarithmic
+logarithmic,none,complete,GAMM,M2,False,0.0509261946654622,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10155670158305219,,
+logarithmic,none,complete,GLMM-F,M1,False,0.011754565396379549,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.041440382049071196,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.11490180203831991,,
+logarithmic,none,complete,GLMM-F,M2,False,0.011231558429858474,,Logarithmic
+logarithmic,none,complete,GAMM,M2,False,0.06290068944890957,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10110414512719947,,
+logarithmic,none,complete,GLMM-F,M2,False,0.044717757296751606,,Logarithmic
+logarithmic,none,complete,GAMM,M2,False,0.036775204777782115,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10136082993204995,,
+logarithmic,none,complete,GLMM-F,M1,False,0.04483834512458683,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.05052128620532452,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.11616001102503666,,
+logarithmic,none,complete,GLMM-F,M4,True,0.024079002149115892,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.06914569688349957,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10338954714900746,,
+logarithmic,none,complete,GLMM-F,M1,False,0.019820946737098426,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.04030580287029294,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.11221640604510355,,
+logarithmic,none,complete,GLMM-F,M1,False,0.029817768379111063,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.0467104858116454,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.11549787439575969,,
+logarithmic,none,complete,GLMM-F,M1,False,0.009252431455981371,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.04976319803865487,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.12921990650923804,,
+logarithmic,none,complete,GLMM-F,M1,False,0.022080223759783177,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.057468861826685744,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.11222761161582179,,
+logarithmic,none,complete,GLMM-F,M1,False,0.0006955136273094475,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.04364439228473841,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.11329373080789497,,
+logarithmic,none,complete,GLMM-F,M1,False,0.01375078299831166,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.06066328216028631,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10119425574680362,,
+logarithmic,none,complete,GLMM-F,M1,False,0.029241412539896986,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.05122510594972987,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10820814265206415,,
+logarithmic,none,complete,GLMM-F,M1,False,0.056698652569457816,,Cubic
+logarithmic,none,complete,GAMM,M1,False,0.04389823532445869,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10820989082803888,,
+logarithmic,none,complete,GLMM-F,M1,False,0.003874807193568137,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.06039292614809948,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.10990997657155661,,
+logarithmic,none,complete,GLMM-F,M1,False,0.07836418852961646,,Cubic
+logarithmic,none,complete,GAMM,M1,False,0.07335279300388503,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.1046452364787164,,
+logarithmic,none,complete,GLMM-F,M2,False,0.005774172142044229,,Logarithmic
+logarithmic,none,complete,GAMM,M2,False,0.061846089338658025,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.11525931977162833,,
+logarithmic,none,complete,GLMM-F,M1,False,0.010774956297052562,,Logarithmic
+logarithmic,none,complete,GAMM,M1,False,0.045907286582581246,,
+logarithmic,none,complete,GLMM-Q,M4,True,0.13729293158634276,,
+logarithmic,none,complete,GLMM-F,M2,False,0.03994849538219428,,Logarithmic
+logarithmic,none,complete,GAMM,M2,False,0.09811467932902117,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.11565492668450757,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.006024241617032563,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.03691010155256696,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.10490714464502542,,
+logarithmic,age-independent,complete,GLMM-F,M4,True,0.014858289600981013,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M4,True,0.06493339519628612,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.11575627859790863,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.03013100712478172,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.057901889254111924,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.11908250448075117,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.01859213361037642,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.05927394717100807,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.101185008421718,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.057550111092450604,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.07124999200761782,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.10840898293181424,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.004471320709324047,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.0540685257771575,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.11692151604689621,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.013896525189640222,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.05115337244048122,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.11933523331251203,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.015004894345647514,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.05629897828815198,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.10104728388296322,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.0196998691457357,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.051550744435744186,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.10508805246155462,,
+logarithmic,age-independent,complete,GLMM-F,M4,False,0.010498979456421151,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.06369451430767264,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.11494035682703434,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.000842228458227899,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M4,False,0.05515471958946003,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.11577191851201074,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.08179351234673081,,Cubic
+logarithmic,age-independent,complete,GAMM,M2,False,0.08039587944718092,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.11900858665580041,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.012284031267548734,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.06799184649786416,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.1354463518865434,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.03684752152946603,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.07447007256003066,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.11920575358701153,,
+logarithmic,age-independent,complete,GLMM-F,M4,False,0.021511837387053492,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.05957304847823093,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.10329077090048903,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.02910430489079834,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.03175331519409461,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.12495214595763951,,
+logarithmic,age-independent,complete,GLMM-F,M4,False,0.0291337442315965,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M4,False,0.055562982707721024,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.12011425937294176,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.02843368179145986,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.056951264160683454,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.10595821527849275,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.027789736585232098,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.04579366306170601,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.10545498676268998,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.03457622755680147,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.05900885552525363,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.10015695141750534,,
+logarithmic,age-independent,complete,GLMM-F,M4,False,0.03763472852032587,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.03867179166584382,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.10288621545629636,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.01869532340007936,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.04567716172068759,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.11688813030219428,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.020194211663328826,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.07107347268937536,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.10714326904924426,,
+logarithmic,age-independent,complete,GLMM-F,M4,True,0.004752470576613538,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.03870703451347646,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.11325730910876076,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.020523506281257122,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.08133601589207547,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.10533284878588076,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.02144919540587068,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.0467211550854753,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.11770815474200902,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.002647232078653764,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.056470877708821886,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.12087395190712155,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.02898083155983706,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.06402329135338547,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.1114444906710542,,
+logarithmic,age-independent,complete,GLMM-F,M4,False,0.00026254676568378304,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.03956093211015182,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.14947555645434693,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.05655367899495654,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.08217946158884963,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.11846347636496887,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.0009709176620638184,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.04889814620848886,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.12046673622386815,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.08182024410492919,,Cubic
+logarithmic,age-independent,complete,GAMM,M2,False,0.06978006386942501,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.10392883443747904,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.004224461520395283,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.054467463359273306,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.10536778778425221,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.02772511023086212,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.053712861520514917,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.10157888146016711,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.019334502157415386,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.058251488850022924,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.12573075652492138,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.001606913411944122,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.05432875750305975,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.1151174432395763,,
+logarithmic,age-independent,complete,GLMM-F,M4,False,0.0015943392432931358,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.029760822834274905,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.14647093714775072,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.03313217911322071,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.07337438258098165,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.11015528526363656,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.009015055747968513,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.047271701422907625,,
+logarithmic,age-independent,complete,GLMM-Q,M4,True,0.1002115598934938,,
+logarithmic,age-independent,complete,GLMM-F,M2,False,0.02860515999613562,,Logarithmic
+logarithmic,age-independent,complete,GAMM,M2,False,0.051267873131820726,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.16274820411046192,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.09605420004631139,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.10939079979081982,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.19502776118424212,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.1403839233918731,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.13829497390847265,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.1955102539396878,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.156264712059972,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.15526606723565775,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.1792756107355299,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.12654355158429406,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.12653088088700504,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.12240500775877443,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.07033612936562926,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.07012627747015464,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.16909786332828444,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.10779798787899487,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.1100529858686175,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.14191111257300176,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.10084511426159318,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.09285487089201762,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.12620072037047925,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.07559152172027432,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.09561970009892054,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.1276954531814553,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.06939462889576632,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.08617841722598599,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.12660176927943342,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.07306869593334855,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.057067871934873005,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.12210142143140659,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.0741972369652107,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.0793619038600599,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.13651400821130905,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.09150689778572982,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.09473019639119074,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.15211247871395625,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.08463088408813121,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.10455166513944977,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.14768813876347633,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.07713209214242206,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.0746176100896848,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.14618443495335603,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.0917902012990315,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.09071425879893304,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.12918441231529212,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.07971801082631058,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.07121801558134246,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.12588081991872052,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.06686584313264216,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.07656510709015792,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.1334885545896216,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.07845350486697152,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.0811185782247156,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.15012100854415253,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.1229380548176239,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.11559435137334599,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.1556176283573436,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.09304919487029556,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.10264929150863085,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.12113128184580876,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.06504454804699197,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.07438127670772464,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.13195071334481998,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.07716020693026858,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.06976536509085647,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.13382424054645461,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.0724220244082498,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.07646270747145546,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.14375295873042576,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.06670427975074457,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.07289652981993558,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.1324089647170902,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.08842317988421469,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.09800774612128203,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.13921936682327918,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.07100341833032166,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.06365582583845943,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.1612943774784233,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.11644825745380388,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.1203741007111417,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.1546366310148087,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.09408232549367185,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.09862223521908033,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.11553525171139097,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.04294840973198764,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.04634813202878176,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.12081644284050252,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.07421057870134463,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.0649758317497243,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.1283079486993354,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.08959582923853089,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.07400063109395727,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.1263325172892988,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.0867165062390978,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.08034617294284264,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.13177720709641544,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.0672506626910034,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.06528071218591118,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.1629720989914179,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.11547909844455591,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.1181243775329451,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.12802565802148416,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.07672596849008491,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.07608215464111664,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.14279115539046847,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.08824412576070521,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.08411794396519606,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.17862364007041254,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.13821061137790178,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.1280807769485219,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.14348469973302466,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.0847600182802343,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.08379414103959582,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.1583331107540623,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.10779193431611174,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.10700142238591202,,
+logarithmic,age-dependent,complete,GLMM-Q,M4,True,0.17959613870120958,,
+logarithmic,age-dependent,complete,GLMM-F,M4,True,0.1394360976535098,,Cubic
+logarithmic,age-dependent,complete,GAMM,M4,True,0.14285678134318575,,
+late collapse,none,complete,GLMM-Q,M1,False,0.7009333214597143,,
+late collapse,none,complete,GLMM-F,M1,False,0.7009333214597143,,Quadratic
+late collapse,none,complete,GAMM,M1,False,0.3508660500745363,,
+late collapse,none,complete,GLMM-Q,M4,True,1.2729478999218828,,
+late collapse,none,complete,GLMM-F,M1,False,0.5781934984021296,,Cubic
+late collapse,none,complete,GAMM,M4,True,0.7459190081002963,,
+late collapse,none,complete,GLMM-Q,M1,False,0.6573784557373777,,
+late collapse,none,complete,GLMM-F,M1,False,0.6573784557373777,,Quadratic
+late collapse,none,complete,GAMM,M1,False,0.5884373049755265,,
+late collapse,none,complete,GLMM-Q,M1,False,0.8910723232035126,,
+late collapse,none,complete,GLMM-F,M1,False,0.9863706733914275,,Linear
+late collapse,none,complete,GAMM,M1,False,0.9863695219212896,,
+late collapse,none,complete,GLMM-Q,M1,False,0.8040777868115412,,
+late collapse,none,complete,GLMM-F,M1,False,0.30943489242632954,,Cubic
+late collapse,none,complete,GAMM,M1,False,0.5909940498777992,,
+late collapse,none,complete,GLMM-Q,M1,False,0.6438542377970571,,
+late collapse,none,complete,GLMM-F,M1,False,0.5905923264476051,,Cubic
+late collapse,none,complete,GAMM,M1,False,0.31278323288206566,,
+late collapse,none,complete,GLMM-Q,M4,True,1.6837738100803226,,
+late collapse,none,complete,GLMM-F,M4,True,1.8576436496137012,,Cubic
+late collapse,none,complete,GAMM,M4,True,1.489843394636143,,
+late collapse,none,complete,GLMM-Q,M2,False,0.5534149570541554,,
+late collapse,none,complete,GLMM-F,M2,False,0.5534149570541554,,Quadratic
+late collapse,none,complete,GAMM,M2,False,0.6424554314819027,,
+late collapse,none,complete,GLMM-Q,M1,False,1.383893754562732,,
+late collapse,none,complete,GLMM-F,M1,False,1.6340233728011493,,Linear
+late collapse,none,complete,GAMM,M1,False,1.6340176434946918,,
+late collapse,none,complete,GLMM-Q,M1,False,0.46720943040352825,,
+late collapse,none,complete,GLMM-F,M1,False,0.46720943040352825,,Quadratic
+late collapse,none,complete,GAMM,M1,False,0.2239639868072401,,
+late collapse,none,complete,GLMM-Q,M1,False,0.6558777101378117,,
+late collapse,none,complete,GLMM-F,M1,False,0.9719615838730715,,Linear
+late collapse,none,complete,GAMM,M1,False,0.9719607271051504,,
+late collapse,none,complete,GLMM-Q,M4,True,1.048169760634638,,
+late collapse,none,complete,GLMM-F,M1,False,0.9947039233583289,,Cubic
+late collapse,none,complete,GAMM,M1,False,0.6725944256601363,,
+late collapse,none,complete,GLMM-Q,M4,True,0.7538152410942671,,
+late collapse,none,complete,GLMM-F,M1,False,1.139366647215627,,Cubic
+late collapse,none,complete,GAMM,M4,False,1.3124945028863153,,
+late collapse,none,complete,GLMM-Q,M1,False,1.2698280814460308,,
+late collapse,none,complete,GLMM-F,M1,False,1.2698280814460308,,Quadratic
+late collapse,none,complete,GAMM,M1,False,1.1629366685929872,,
+late collapse,none,complete,GLMM-Q,M1,False,0.3201949200559272,,
+late collapse,none,complete,GLMM-F,M1,False,0.3201949200559272,,Quadratic
+late collapse,none,complete,GAMM,M1,False,0.41344542300115583,,
+late collapse,none,complete,GLMM-Q,M1,False,0.6126480743372913,,
+late collapse,none,complete,GLMM-F,M1,False,0.36618259277379517,,Cubic
+late collapse,none,complete,GAMM,M4,True,0.4184470277651055,,
+late collapse,none,complete,GLMM-Q,M1,False,0.517608341521833,,
+late collapse,none,complete,GLMM-F,M1,False,1.4699573740446972,,Cubic
+late collapse,none,complete,GAMM,M1,False,1.142223062612983,,
+late collapse,none,complete,GLMM-Q,M2,False,0.8713722418314357,,
+late collapse,none,complete,GLMM-F,M2,False,0.6469868076765828,,Cubic
+late collapse,none,complete,GAMM,M2,False,0.5452866624669568,,
+late collapse,none,complete,GLMM-Q,M4,True,0.937419045626875,,
+late collapse,none,complete,GLMM-F,M1,False,0.5128975005376154,,Cubic
+late collapse,none,complete,GAMM,M4,True,0.7129424715042655,,
+late collapse,none,complete,GLMM-Q,M4,True,2.062410667079507,,
+late collapse,none,complete,GLMM-F,M1,False,1.7823047547376538,,Cubic
+late collapse,none,complete,GAMM,M4,False,1.927935216857121,,
+late collapse,none,complete,GLMM-Q,M4,True,0.13460521733314257,,
+late collapse,none,complete,GLMM-F,M1,False,0.4769455785167285,,Cubic
+late collapse,none,complete,GAMM,M1,False,0.8940394715436469,,
+late collapse,none,complete,GLMM-Q,M2,False,0.9049348470740197,,
+late collapse,none,complete,GLMM-F,M2,False,0.9049348470740197,,Quadratic
+late collapse,none,complete,GAMM,M2,False,1.215445057285973,,
+late collapse,none,complete,GLMM-Q,M1,False,1.1523268689515986,,
+late collapse,none,complete,GLMM-F,M1,False,0.8943906857892159,,Cubic
+late collapse,none,complete,GAMM,M1,False,0.8195757717610284,,
+late collapse,none,complete,GLMM-Q,M4,False,0.7899309873305201,,
+late collapse,none,complete,GLMM-F,M1,False,1.2224524209977012,,Cubic
+late collapse,none,complete,GAMM,M1,False,1.3590108148720879,,
+late collapse,none,complete,GLMM-Q,M1,False,0.6668300979235167,,
+late collapse,none,complete,GLMM-F,M1,False,0.9396977086937938,,Linear
+late collapse,none,complete,GAMM,M1,False,0.9396971755386291,,
+late collapse,none,complete,GLMM-Q,M1,False,0.6426186712571126,,
+late collapse,none,complete,GLMM-F,M1,False,0.7298754629843333,,Cubic
+late collapse,none,complete,GAMM,M1,False,0.6570517174882663,,
+late collapse,none,complete,GLMM-Q,M4,False,1.226105849818164,,
+late collapse,none,complete,GLMM-F,M1,False,1.4753380363551833,,Cubic
+late collapse,none,complete,GAMM,M1,False,1.2689371280779231,,
+late collapse,none,complete,GLMM-Q,M1,False,1.80017253372577,,
+late collapse,none,complete,GLMM-F,M1,False,1.80017253372577,,Quadratic
+late collapse,none,complete,GAMM,M1,False,1.658342753751262,,
+late collapse,none,complete,GLMM-Q,M1,False,0.8320286387835516,,
+late collapse,none,complete,GLMM-F,M1,False,1.0457026484048304,,Cubic
+late collapse,none,complete,GAMM,M1,False,0.9886093385749295,,
+late collapse,none,complete,GLMM-Q,M4,True,1.1367149079694325,,
+late collapse,none,complete,GLMM-F,M1,False,1.105582418717262,,Cubic
+late collapse,none,complete,GAMM,M1,False,1.1456542782210095,,
+late collapse,none,complete,GLMM-Q,M1,False,0.830064442819696,,
+late collapse,none,complete,GLMM-F,M1,False,0.3878945381998397,,Cubic
+late collapse,none,complete,GAMM,M1,False,0.6546895021398746,,
+late collapse,none,complete,GLMM-Q,M1,False,0.6494303581868817,,
+late collapse,none,complete,GLMM-F,M1,False,0.6494303581868817,,Quadratic
+late collapse,none,complete,GAMM,M1,False,0.4545669594503663,,
+late collapse,none,complete,GLMM-Q,M1,False,0.786325169089507,,
+late collapse,none,complete,GLMM-F,M1,False,0.786325169089507,,Quadratic
+late collapse,none,complete,GAMM,M4,True,0.8427223055602284,,
+late collapse,none,complete,GLMM-Q,M4,False,0.5490902388898009,,
+late collapse,none,complete,GLMM-F,M2,False,0.7688055741170203,,Cubic
+late collapse,none,complete,GAMM,M2,False,0.7011193207692871,,
+late collapse,none,complete,GLMM-Q,M1,False,0.8993470458669448,,
+late collapse,none,complete,GLMM-F,M1,False,0.45754335908464533,,Cubic
+late collapse,none,complete,GAMM,M1,False,0.7762687006819687,,
+late collapse,none,complete,GLMM-Q,M1,False,0.5978738654357095,,
+late collapse,none,complete,GLMM-F,M1,False,0.5978738654357095,,Quadratic
+late collapse,none,complete,GAMM,M1,False,1.086140117901661,,
+late collapse,none,complete,GLMM-Q,M4,True,1.700101043943535,,
+late collapse,none,complete,GLMM-F,M4,True,1.7962576585471197,,Cubic
+late collapse,none,complete,GAMM,M4,True,1.237875879624167,,
+late collapse,none,complete,GLMM-Q,M1,False,1.3358390346134428,,
+late collapse,none,complete,GLMM-F,M1,False,0.7519837670928607,,Cubic
+late collapse,none,complete,GAMM,M1,False,1.2923619736267473,,
+late collapse,none,complete,GLMM-Q,M4,False,0.6858817009447413,,
+late collapse,none,complete,GLMM-F,M4,True,0.7322845464040147,,Cubic
+late collapse,none,complete,GAMM,M4,True,0.4746335767394673,,
+late collapse,none,complete,GLMM-Q,M1,False,1.1857446870855717,,
+late collapse,none,complete,GLMM-F,M1,False,1.3898890203092684,,Linear
+late collapse,none,complete,GAMM,M1,False,1.3898887297896854,,
+late collapse,age-independent,complete,GLMM-Q,M4,True,0.9048767281277322,,
+late collapse,age-independent,complete,GLMM-F,M4,True,1.1811418087083487,,Cubic
+late collapse,age-independent,complete,GAMM,M4,True,1.1069437956244146,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,1.4288681214922359,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.6281571559508968,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,0.7159231088001153,,
+late collapse,age-independent,complete,GLMM-Q,M4,False,1.2588290238872657,,
+late collapse,age-independent,complete,GLMM-F,M2,False,1.2773607640376687,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,0.9769837330411318,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.7173361372787707,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.7330534146205097,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,0.7228188540401205,,
+late collapse,age-independent,complete,GLMM-Q,M4,True,1.9437866244066844,,
+late collapse,age-independent,complete,GLMM-F,M2,False,1.9470337491688678,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,1.9957603328773403,,
+late collapse,age-independent,complete,GLMM-Q,M4,False,1.1418800389499262,,
+late collapse,age-independent,complete,GLMM-F,M2,False,1.2071128896679129,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,1.2398430726450516,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.8061585504024664,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.8061585504024664,,Quadratic
+late collapse,age-independent,complete,GAMM,M2,False,0.5209617725020557,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.2733933921890312,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.6507597032289041,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,0.1542966614269708,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,1.246669442138406,,
+late collapse,age-independent,complete,GLMM-F,M2,False,1.246669442138406,,Quadratic
+late collapse,age-independent,complete,GAMM,M2,False,1.0075089496926828,,
+late collapse,age-independent,complete,GLMM-Q,M4,False,0.4922592362507194,,
+late collapse,age-independent,complete,GLMM-F,M4,False,0.4922592362507194,,Quadratic
+late collapse,age-independent,complete,GAMM,M4,True,0.4405906708629292,,
+late collapse,age-independent,complete,GLMM-Q,M4,True,0.7672513847808555,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.4044838463173779,,Cubic
+late collapse,age-independent,complete,GAMM,M4,True,0.7079929678788409,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,1.1408621022584031,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.48783883376518267,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,0.8486390993914809,,
+late collapse,age-independent,complete,GLMM-Q,M4,True,0.8983509333866787,,
+late collapse,age-independent,complete,GLMM-F,M2,False,1.352557003479622,,Cubic
+late collapse,age-independent,complete,GAMM,M4,False,1.08885143172557,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.6882076446647124,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.7962460432553946,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,0.5480221843040415,,
+late collapse,age-independent,complete,GLMM-Q,M4,True,1.1399488172255738,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.8268510624294008,,Cubic
+late collapse,age-independent,complete,GAMM,M4,False,0.5773011166291244,,
+late collapse,age-independent,complete,GLMM-Q,M4,False,0.47194132536001765,,
+late collapse,age-independent,complete,GLMM-F,M4,False,0.47194132536001765,,Quadratic
+late collapse,age-independent,complete,GAMM,M4,True,0.5270451314833117,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.6528656003519828,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.6528656003519828,,Quadratic
+late collapse,age-independent,complete,GAMM,M2,False,0.5909834717219121,,
+late collapse,age-independent,complete,GLMM-Q,M4,True,0.9627895507262592,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.5089925537326785,,Cubic
+late collapse,age-independent,complete,GAMM,M4,True,0.8799641430507059,,
+late collapse,age-independent,complete,GLMM-Q,M4,True,1.5390472841094296,,
+late collapse,age-independent,complete,GLMM-F,M4,True,1.2748744970077512,,Cubic
+late collapse,age-independent,complete,GAMM,M4,True,1.0947376790347354,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.8794577497789848,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.3300309569659211,,Cubic
+late collapse,age-independent,complete,GAMM,M4,True,0.4818198171743549,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.3092919598161472,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.3092919598161472,,Quadratic
+late collapse,age-independent,complete,GAMM,M2,False,0.41873340359254274,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,1.1300277198986788,,
+late collapse,age-independent,complete,GLMM-F,M2,False,1.1300277198986788,,Quadratic
+late collapse,age-independent,complete,GAMM,M2,False,1.1581203821185815,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.48245555117482486,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.5501397906360412,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,0.13552831785043098,,
+late collapse,age-independent,complete,GLMM-Q,M4,False,1.3064326384246534,,
+late collapse,age-independent,complete,GLMM-F,M2,False,1.1321315483363255,,Cubic
+late collapse,age-independent,complete,GAMM,M4,False,1.3703289286538873,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.6031397655862845,,
+late collapse,age-independent,complete,GLMM-F,M4,True,0.9310834437410229,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,1.3480810877104874,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.9488518464027169,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.9488518464027169,,Quadratic
+late collapse,age-independent,complete,GAMM,M2,False,1.1052701623112209,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.34783243271582287,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.34783243271582287,,Quadratic
+late collapse,age-independent,complete,GAMM,M2,False,0.25127994391639147,,
+late collapse,age-independent,complete,GLMM-Q,M4,False,0.3463153180087883,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.5061325784506675,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,0.35320824332008716,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.6048735133224716,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.6048735133224716,,Quadratic
+late collapse,age-independent,complete,GAMM,M2,False,0.5318691646417073,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.27209453991408356,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.4761111019275131,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,0.13477041156736527,,
+late collapse,age-independent,complete,GLMM-Q,M4,True,0.9332765603619114,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.834428427711893,,Cubic
+late collapse,age-independent,complete,GAMM,M4,False,0.4756498585440848,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.6861788406474131,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.6861788406474131,,Quadratic
+late collapse,age-independent,complete,GAMM,M2,False,0.5393400535152496,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.7666970392321806,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.5296025215346575,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,0.4018823578335876,,
+late collapse,age-independent,complete,GLMM-Q,M4,False,0.7923123339434273,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.8501409231822143,,Cubic
+late collapse,age-independent,complete,GAMM,M4,False,0.6308691845752354,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,1.011152836625426,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.4145911029459098,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,0.739008735716096,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.8832728420222118,,
+late collapse,age-independent,complete,GLMM-F,M4,True,1.0869742736023602,,Cubic
+late collapse,age-independent,complete,GAMM,M4,True,0.9607212765310162,,
+late collapse,age-independent,complete,GLMM-Q,M4,False,0.28827422375402795,,
+late collapse,age-independent,complete,GLMM-F,M4,False,0.28827422375402795,,Quadratic
+late collapse,age-independent,complete,GAMM,M4,True,0.44804224538428483,,
+late collapse,age-independent,complete,GLMM-Q,M4,True,0.9247671311384508,,
+late collapse,age-independent,complete,GLMM-F,M4,True,0.9847324839308907,,Cubic
+late collapse,age-independent,complete,GAMM,M4,True,0.6475961915156213,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,1.1792995385070315,,
+late collapse,age-independent,complete,GLMM-F,M2,False,0.9379633249114656,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,0.9065664348119262,,
+late collapse,age-independent,complete,GLMM-Q,M2,False,0.9605344469912082,,
+late collapse,age-independent,complete,GLMM-F,M2,False,1.0344158632689506,,Cubic
+late collapse,age-independent,complete,GAMM,M2,False,0.7608132518098909,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.70790177105459,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.70790177105459,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,2.8108189266671135,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,3.070201332702458,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,3.070201332702458,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,3.227740491189537,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.8423602877933845,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.8423602877933845,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,2.859082155879739,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.8658857745032456,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.8658857745032456,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,2.716946233200397,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.347986619573488,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.347986619573488,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,2.125440343936469,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,0.3438514014839344,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,0.3438514014839344,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,0.5245052464386707,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,3.357768800569715,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,3.357768800569715,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,3.2707944294984794,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.3140007972490726,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.3140007972490726,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,2.36042659103419,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,3.63971470724902,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,3.7477944625868505,,Cubic
+late collapse,age-dependent,complete,GAMM,M4,True,3.5436194271832733,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,0.7247291560623391,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,0.985499954129772,,Cubic
+late collapse,age-dependent,complete,GAMM,M4,True,0.671028828016913,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.8380950170459034,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.8380950170459034,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,2.295722889272358,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.452877119122794,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.452877119122794,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,2.274925095538851,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,3.0957355079612294,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,3.507487979547719,,Cubic
+late collapse,age-dependent,complete,GAMM,M4,True,3.335816016692069,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,3.0962806377113146,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,3.0962806377113146,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,2.5453853307524312,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,1.8406807387398998,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,1.8406807387398998,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,1.8048667678543848,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.8665479724208223,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.7935704342693155,,Cubic
+late collapse,age-dependent,complete,GAMM,M4,True,2.7495799957569065,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,3.401655398350738,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,3.401655398350738,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,3.5770750357825913,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,3.361269376109899,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,3.361269376109899,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,2.8352582119225045,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,1.330774836092936,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,1.330774836092936,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,1.319893075734365,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,1.2140758332365869,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,1.2140758332365869,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,0.9778387616190817,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,1.0292534667778803,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,1.0292534667778803,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,1.056370602543661,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.6357860396809,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.4274239457221576,,Cubic
+late collapse,age-dependent,complete,GAMM,M4,True,2.261252302096088,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,1.915476676152991,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,1.915476676152991,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,1.8463623366207356,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.303384911717412,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.303384911717412,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,2.112207086377093,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.352476813517718,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.352476813517718,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,2.3025087751346716,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.027147280618574,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.027147280618574,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,1.931239844132332,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,3.2576799541901926,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,3.2576799541901926,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,3.2742704566984187,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,1.358595064534646,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,1.358595064534646,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,1.3210671166313588,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,1.5763376854817739,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,1.6449766720632084,,Cubic
+late collapse,age-dependent,complete,GAMM,M4,True,1.4326269618124452,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,1.6875847633033483,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,1.6875847633033483,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,1.6637558866390465,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,1.0902862314948232,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,1.0902862314948232,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,1.152668442371161,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,1.5298075839332324,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,1.5298075839332324,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,1.4900521945796878,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.6317636622936287,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.6317636622936287,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,2.6570235245976157,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,1.58023217637902,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,1.58023217637902,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,1.697866634936891,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.138088962767072,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.138088962767072,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,1.8500363916802438,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,1.9204253697706004,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,1.9204253697706004,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,1.5385094897332283,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.9884901911485233,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.7341463004475686,,Cubic
+late collapse,age-dependent,complete,GAMM,M4,True,2.4574568658814844,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,1.789678647684502,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,1.789678647684502,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,1.7115044329181897,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,1.7000442186587057,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,1.7000442186587057,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,1.5459145286901976,,
+late collapse,age-dependent,complete,GLMM-Q,M4,True,2.7181741998358295,,
+late collapse,age-dependent,complete,GLMM-F,M4,True,2.7181741998358295,,Quadratic
+late collapse,age-dependent,complete,GAMM,M4,True,2.5997258361186564,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.029748256509412065,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.029748256509412065,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.03782570509935264,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.015201771030182646,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.015201771030182646,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.028634888712396847,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.011963207893620844,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.011963207893620844,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.03130874186405751,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.0064292122260996044,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.027920362281377602,,Cubic
+quadratic,none,30% missing,GAMM,M1,False,0.030116296387503464,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.0066196551947233125,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.0066196551947233125,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.04153021088219135,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.025342754406285264,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.025342754406285264,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.02039732984506506,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.028203616161973408,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.015515437093221259,,Cubic
+quadratic,none,30% missing,GAMM,M1,False,0.026325648547908555,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.009659771672007456,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.009659771672007456,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.018378189803066453,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.003954102774829787,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.003954102774829787,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.019220523107481704,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.0057022662277735,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.0211892978037339,,Cubic
+quadratic,none,30% missing,GAMM,M1,False,0.032063665782679725,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.01245204235174793,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.01245204235174793,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.016706732841654966,,
+quadratic,none,30% missing,GLMM-Q,M2,False,0.011943524489615186,,
+quadratic,none,30% missing,GLMM-F,M2,False,0.011943524489615186,,Quadratic
+quadratic,none,30% missing,GAMM,M2,False,0.026559157484927803,,
+quadratic,none,30% missing,GLMM-Q,M2,False,0.013585628647482534,,
+quadratic,none,30% missing,GLMM-F,M2,False,0.013585628647482534,,Quadratic
+quadratic,none,30% missing,GAMM,M2,False,0.012553679635048418,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.012821352395166918,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.021487158439819756,,Cubic
+quadratic,none,30% missing,GAMM,M1,False,0.016537318387288974,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.006332776905474669,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.006332776905474669,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.016583996534068023,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.0029949633017985287,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.0029949633017985287,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.015389933184631208,,
+quadratic,none,30% missing,GLMM-Q,M2,False,0.012516322523945888,,
+quadratic,none,30% missing,GLMM-F,M2,False,0.012516322523945888,,Quadratic
+quadratic,none,30% missing,GAMM,M2,False,0.0183037455482891,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.01113632649280191,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.019391939631976596,,Cubic
+quadratic,none,30% missing,GAMM,M1,False,0.019839026216144244,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.003123618657542934,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.003123618657542934,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.00860282270963498,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.0028083300360659306,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.0028083300360659306,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.016596506714562906,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.015444820507178285,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.015444820507178285,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.025866515489031554,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.01579417453375991,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.01579417453375991,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.02284985825398211,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.017483768775328264,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.017483768775328264,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.02481973084180225,,
+quadratic,none,30% missing,GLMM-Q,M2,False,0.011695440282534358,,
+quadratic,none,30% missing,GLMM-F,M2,False,0.011695440282534358,,Quadratic
+quadratic,none,30% missing,GAMM,M2,False,0.012944190412465707,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.008359913335228052,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.008359913335228052,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.01969213529145168,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.028417676133327848,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.028417676133327848,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.040396132325370045,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.013137292409125628,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.013137292409125628,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.016449239008890018,,
+quadratic,none,30% missing,GLMM-Q,M4,True,0.03900827272451424,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.025064368316218343,,Cubic
+quadratic,none,30% missing,GAMM,M1,False,0.030303908893816983,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.018679743356202004,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.018679743356202004,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.02688372289045656,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.013796369528474461,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.013796369528474461,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.02249826128882631,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.0076637803464567845,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.0076637803464567845,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.022211167858296684,,
+quadratic,none,30% missing,GLMM-Q,M2,False,0.019036980240412085,,
+quadratic,none,30% missing,GLMM-F,M2,False,0.019036980240412085,,Quadratic
+quadratic,none,30% missing,GAMM,M2,False,0.03856378283049439,,
+quadratic,none,30% missing,GLMM-Q,M4,True,0.038841982272921495,,
+quadratic,none,30% missing,GLMM-F,M4,True,0.037907394486600195,,Cubic
+quadratic,none,30% missing,GAMM,M4,True,0.04116361325233303,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.011595377600587648,,
+quadratic,none,30% missing,GLMM-F,M4,True,0.02330393582347023,,Cubic
+quadratic,none,30% missing,GAMM,M1,False,0.02578270180143705,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.011116619902658343,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.011116619902658343,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.016330996188555436,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.013128313931187262,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.024712671611291648,,Cubic
+quadratic,none,30% missing,GAMM,M1,False,0.025750011846814948,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.020341768980994518,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.020341768980994518,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.028585966503327287,,
+quadratic,none,30% missing,GLMM-Q,M2,False,0.004550736135773905,,
+quadratic,none,30% missing,GLMM-F,M2,False,0.004550736135773905,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.030936011094191824,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.013161469493658666,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.013161469493658666,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.014515907695100564,,
+quadratic,none,30% missing,GLMM-Q,M1,False,0.009105881538029605,,
+quadratic,none,30% missing,GLMM-F,M1,False,0.009105881538029605,,Quadratic
+quadratic,none,30% missing,GAMM,M1,False,0.009565881023319005,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.060512409297069074,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.060512409297069074,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.06533694303826569,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.0238998259559211,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.022778271347321556,,Cubic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.023837197614990986,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.030015167170520527,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.030015167170520527,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.040029220697052746,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.015249513020066366,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.015249513020066366,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.003924034415547584,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.029053775818336573,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.029720421762213938,,Cubic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.02711516455833943,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.0612220181408092,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.0612220181408092,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.058914023254177564,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.018907063163814297,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.022482411722108422,,Cubic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.02614946111959235,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.0387608984456472,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.0387608984456472,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.044849914432431796,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.008855837141256422,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.008855837141256422,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.021315123404079515,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.0334325810574416,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.0334325810574416,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.02786645765079227,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.021353877601513138,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.021353877601513138,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.02237620432410051,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.03076321051282438,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.03076321051282438,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.036976067516610936,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.04880916298259419,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.041898557135249564,,Cubic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.05430819191254341,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.022265049684167277,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.022265049684167277,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.026781645066393755,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.06045645111965547,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.05841186705615458,,Cubic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.06297975363985304,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.03564453668829565,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.03564453668829565,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.03034356592215251,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.05079606207892194,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.05079606207892194,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.06276783289966871,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.06141495816385136,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.06141495816385136,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.0637320948344147,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.04037117327544224,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.05001793156395793,,Cubic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.05099449131264747,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.05444731132134193,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.05444731132134193,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.051843924461655845,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.05258955113357385,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.05258955113357385,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.05477288606996804,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.024009527369444623,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.024009527369444623,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.027478143972492656,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.04532465395969695,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.04532465395969695,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.048519572798813894,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.026691540913527545,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.026691540913527545,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.02300848939669937,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.03438577122012576,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.03438577122012576,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.030409886417176124,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.062022462832691194,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.0592082613952714,,Cubic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.06341899136904235,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.043892748483512885,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.04062610014009614,,Cubic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.05018583734374381,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.042259731707664984,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.0424771971640129,,Cubic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.03936504555406828,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.04728067025978072,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.04728067025978072,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.06032017330992891,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.04118086136809712,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.04118086136809712,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.04518504904204334,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.03494637376982546,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.03494637376982546,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.04077103666842618,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.04921439596646492,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.04921439596646492,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.04821099196302953,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.04589309409078941,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.0513261560288893,,Cubic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.05847936839122519,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.03067803867051988,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.03067803867051988,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.029855300149504854,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.02279364291479689,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.02279364291479689,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.0363731799919182,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.058517991077796705,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.058517991077796705,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.06576357735186861,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.047529194911655394,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.047529194911655394,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.055764666150735775,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.05991518063445586,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.05991518063445586,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.06107580364764674,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.07379566355386132,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.07221472490649543,,Cubic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.07201410593418238,,
+quadratic,age-dependent,30% missing,GLMM-Q,M4,True,0.017730130736193665,,
+quadratic,age-dependent,30% missing,GLMM-F,M4,True,0.017730130736193665,,Quadratic
+quadratic,age-dependent,30% missing,GAMM,M4,True,0.024648149944025897,,
+threshold,none,30% missing,GLMM-Q,M4,True,0.2103957523100202,,
+threshold,none,30% missing,GLMM-F,M4,True,0.14535842589344553,0.30508474576271283,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.08799792662492105,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.15024306088606118,,
+threshold,none,30% missing,GLMM-F,M1,False,0.1345220132793431,0.0,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.12268663878199389,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.17061554585839495,,
+threshold,none,30% missing,GLMM-F,M4,True,0.11266825456631763,0.0,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.08244849384577488,0.0,
+threshold,none,30% missing,GLMM-Q,M4,True,0.1609738124099909,,
+threshold,none,30% missing,GLMM-F,M4,False,0.11443962773866655,0.0,Cubic
+threshold,none,30% missing,GAMM,M2,False,0.07040444467401995,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.18556088562573222,,
+threshold,none,30% missing,GLMM-F,M4,True,0.11375679000333705,0.0,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.06145069928290377,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.16072174009508733,,
+threshold,none,30% missing,GLMM-F,M4,True,0.10519860092152813,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.06417013749324738,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.25295342425158923,,
+threshold,none,30% missing,GLMM-F,M1,False,0.1945975559045497,0.30508474576271283,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.1420673271012444,0.0,
+threshold,none,30% missing,GLMM-Q,M4,True,0.2117116440031947,,
+threshold,none,30% missing,GLMM-F,M4,True,0.1473595127746558,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.1436354896675216,0.6101694915254239,
+threshold,none,30% missing,GLMM-Q,M4,True,0.16185353147406098,,
+threshold,none,30% missing,GLMM-F,M4,True,0.12898338292975944,0.0,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.08311650335852347,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.15097158077448683,,
+threshold,none,30% missing,GLMM-F,M4,True,0.14252677911217085,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.09981843178822516,0.30508474576271283,
+threshold,none,30% missing,GLMM-Q,M4,True,0.16322196021525393,,
+threshold,none,30% missing,GLMM-F,M1,False,0.12725294738516496,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.10954910018907964,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.19914951962822383,,
+threshold,none,30% missing,GLMM-F,M4,True,0.13208680425909675,0.30508474576271283,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.08421309001321378,0.30508474576271283,
+threshold,none,30% missing,GLMM-Q,M4,True,0.1434323678537138,,
+threshold,none,30% missing,GLMM-F,M1,False,0.11978101690588655,0.0,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.05061802092741212,0.0,
+threshold,none,30% missing,GLMM-Q,M4,True,0.18789864885212867,,
+threshold,none,30% missing,GLMM-F,M4,True,0.13644019269516472,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.07605129288841075,0.0,
+threshold,none,30% missing,GLMM-Q,M4,True,0.18850761399994204,,
+threshold,none,30% missing,GLMM-F,M4,True,0.11951577008152164,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.09616176354933378,0.30508474576271283,
+threshold,none,30% missing,GLMM-Q,M4,True,0.21751028074515324,,
+threshold,none,30% missing,GLMM-F,M4,True,0.15110343502865187,0.30508474576271283,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.07091244865676836,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.16209043150989874,,
+threshold,none,30% missing,GLMM-F,M1,False,0.15716583432014,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.08842060339991009,0.0,
+threshold,none,30% missing,GLMM-Q,M4,True,0.18400106734923635,,
+threshold,none,30% missing,GLMM-F,M4,True,0.15760939345969188,0.45762711864406747,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.10580134355392498,0.45762711864406747,
+threshold,none,30% missing,GLMM-Q,M4,True,0.16288659350419787,,
+threshold,none,30% missing,GLMM-F,M4,True,0.10733613653544746,0.30508474576271283,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.05395889668831103,0.0,
+threshold,none,30% missing,GLMM-Q,M4,True,0.16182393810688703,,
+threshold,none,30% missing,GLMM-F,M4,False,0.13930717156543834,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.08340533536981702,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.16644357239327398,,
+threshold,none,30% missing,GLMM-F,M4,True,0.12462721707372357,0.0,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.06781453242755421,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.18112597184081208,,
+threshold,none,30% missing,GLMM-F,M4,True,0.12589939946393644,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.07517705419085673,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.19127985220084118,,
+threshold,none,30% missing,GLMM-F,M4,True,0.137511799022262,0.0,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.09600603599593618,0.30508474576271283,
+threshold,none,30% missing,GLMM-Q,M4,True,0.20706499355753985,,
+threshold,none,30% missing,GLMM-F,M4,True,0.1369129011406385,0.30508474576271283,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.07391059139327216,0.30508474576271283,
+threshold,none,30% missing,GLMM-Q,M4,True,0.22495921457167017,0.7627118644067803,
+threshold,none,30% missing,GLMM-F,M4,True,0.15760794569712586,0.30508474576271283,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.07862943643456599,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.21407890025845955,,
+threshold,none,30% missing,GLMM-F,M4,True,0.1485014693982721,0.30508474576271283,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.06716785689953515,0.30508474576271283,
+threshold,none,30% missing,GLMM-Q,M4,True,0.15952441129632794,,
+threshold,none,30% missing,GLMM-F,M4,True,0.12223189476423717,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.10220663722802288,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.15234903166400926,,
+threshold,none,30% missing,GLMM-F,M1,False,0.11110343849249474,0.30508474576271283,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.09014988983160495,0.0,
+threshold,none,30% missing,GLMM-Q,M4,True,0.19227791854756823,,
+threshold,none,30% missing,GLMM-F,M4,True,0.11869111338844661,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.08474109932489192,0.30508474576271283,
+threshold,none,30% missing,GLMM-Q,M4,True,0.18360718105533494,,
+threshold,none,30% missing,GLMM-F,M1,False,0.135673638131543,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.06603103344638395,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.14305257750588257,,
+threshold,none,30% missing,GLMM-F,M4,True,0.11938733600843819,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M2,False,0.09603848525425983,0.0,
+threshold,none,30% missing,GLMM-Q,M4,True,0.19126338198012927,,
+threshold,none,30% missing,GLMM-F,M2,False,0.13809556466710363,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M2,False,0.07138699680489406,0.0,
+threshold,none,30% missing,GLMM-Q,M4,True,0.16001454682449406,,
+threshold,none,30% missing,GLMM-F,M4,True,0.10226750427011735,0.30508474576271283,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.04914221284551815,0.0,
+threshold,none,30% missing,GLMM-Q,M4,True,0.16759519126770853,,
+threshold,none,30% missing,GLMM-F,M1,False,0.1179042877714169,0.45762711864406747,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.07637528373110042,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.17513179989196426,,
+threshold,none,30% missing,GLMM-F,M4,True,0.14780512241652743,0.30508474576271283,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.09469118664288993,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.156968256375617,,
+threshold,none,30% missing,GLMM-F,M1,False,0.1492500349248172,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.07430647860578699,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.22439224102269967,0.7627118644067803,
+threshold,none,30% missing,GLMM-F,M4,True,0.14423833148667017,0.30508474576271283,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.07009995457584514,0.15254237288135641,
+threshold,none,30% missing,GLMM-Q,M4,True,0.1938772534126568,,
+threshold,none,30% missing,GLMM-F,M4,True,0.1502486478330642,0.15254237288135641,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.11929864912526623,0.30508474576271283,
+threshold,none,30% missing,GLMM-Q,M4,True,0.20260898414250073,,
+threshold,none,30% missing,GLMM-F,M4,True,0.15894129996028322,0.45762711864406747,Cubic
+threshold,none,30% missing,GAMM,M1,False,0.08114190535219247,0.30508474576271283,
+threshold,none,30% missing,GLMM-Q,M4,True,0.23098051502987987,,
+threshold,none,30% missing,GLMM-F,M4,False,0.1679376830327648,0.30508474576271283,Cubic
+threshold,none,30% missing,GAMM,M2,False,0.11919752670660953,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.13823878786908858,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.10458623592175167,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.06871838596861544,0.0,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.1791300329961778,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.14591014935494578,0.30508474576271283,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.09926328573896229,0.30508474576271283,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.18704253467499515,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.1573707452846611,0.0,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.10300354820754727,0.0,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.1489491723793047,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.1094180097728438,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.07329018186579421,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.18129893909308117,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.13074612884736794,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.06706321612426201,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.18204990737766735,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.16503206492616052,0.30508474576271283,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.11008943175185779,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.16137516502922145,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.12468203555059829,0.45762711864406747,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.12236365227187569,0.7627118644067803,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.18730085433726615,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.18358048665025872,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.16133441223132888,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.1668119012958965,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.16206866217333551,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.13190196464815648,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.1622836545885876,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.1429803472798194,0.45762711864406747,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.10148608559044099,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.17259448614566034,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.14841907575933905,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.14744566110005686,0.30508474576271283,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.15769026719363857,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.12400871160544705,0.0,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.1730491187030014,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.19277879873019066,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.13729506976179626,0.30508474576271283,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.07937848239003356,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.19368291458844603,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.195198579697064,0.0,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.1719372876734596,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.14994902763816978,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.13434836975132686,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.09272736492411268,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.14528486025204698,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.13021015765866048,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.12984556910934159,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.1685043362007046,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.13873490025873178,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.10706513395675618,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.1523218355403551,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.10736790152732112,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.06316016031242416,0.0,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.147439140370876,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.17855969197371838,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.19312280745762966,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.17826058319970522,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.11701028374381146,0.0,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.06920472156151472,0.0,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.18823819900214078,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.1726571803159013,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.1437886667329768,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.13032311010360717,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.11076456464107062,,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.06009643991309395,,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.1544255205178068,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.13098690703493426,,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.09821230006086079,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.1684694573798103,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.16084242991641912,0.0,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.13206785604958354,0.0,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.15554336739013985,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.13363422808834594,0.45762711864406747,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.12480969408517024,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.14824911341121483,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.12253389666247187,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.11036089343576667,0.0,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.15405717096910707,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.14385127675666468,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.14270741807851495,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.1532518334929524,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.1462396407371397,0.6101694915254239,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.12833972919941922,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.15472081839682464,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.12511411855039356,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.09038777147915805,0.0,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.1653296154267656,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.13235508854495615,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.10357995288172109,0.30508474576271283,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.14810621877424004,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.12558353205606018,0.0,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.07053850440129157,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.16675478021484225,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.137934624818863,0.7627118644067803,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.11465595617082638,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.18315222260741137,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.11968159248513072,0.0,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.08687672712280131,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.17689847849960671,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.18287210886336852,0.0,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.165964754739255,0.0,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.14237349954632478,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.140430589158666,0.30508474576271283,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.1329822791167795,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.14210557042317443,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.13852497032796535,0.30508474576271283,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.1468390973156846,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.14428083688525473,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.11691727823303201,0.6101694915254239,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.09542513689684598,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.2068456581094626,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.1523541976079821,0.30508474576271283,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.07573008227076497,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.1723548526634741,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.13246966331942245,0.30508474576271283,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.08386589679251011,0.15254237288135641,
+threshold,age-dependent,30% missing,GLMM-Q,M4,True,0.1666719605573498,,
+threshold,age-dependent,30% missing,GLMM-F,M4,True,0.13053451369203228,0.15254237288135641,Cubic
+threshold,age-dependent,30% missing,GAMM,M4,True,0.1317053778508185,0.0,

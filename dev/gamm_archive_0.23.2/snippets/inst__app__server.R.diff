@@ -1,0 +1,325 @@
+--- a/inst/app/server.R
++++ b/inst/app/server.R
+@@ -3438,6 +3438,12 @@
+     "Coefficients of",
+     "Peak age and onset",
+     "Among-individual covariance",
++    "GAMM trajectory",
++    "GAMM derivatives",
++    "GAMM checks",
++    "GAMM group comparison",
++    "GAMM selective disappearance",
++    "GAMM against polynomials",
+     "Residual checks for",
+     "performance checks for",
+     "Error-family check with",
+@@ -4176,6 +4182,8 @@
+                        disp = z$null_model$disp %||% "constant")
+     }
+     if (length(input$blup_model)) ctx$blup_model <- model_label(input$blup_model)
++    g <- gamm_store()
++    if (is.list(g) && isTRUE(g$ok)) ctx$gamm <- c(g$settings, list(method_used = g$method, structure_used = g$structure, n = g$n, n_ind = g$n_ind))
+     ctx
+   }
+   methods_seen <- new.env()
+@@ -4225,4 +4233,300 @@
+                    "REFERENCES", z$references), con)
+     }
+   )
++  # ======================================================================
++  # 0.23.0: GAMM layer. Independent: it reads dat(), meta() and data_sig(), writes only its own outputs and saved
++  # results, and changes nothing used by steps 1-6.
++  # ======================================================================
++  gamm_gd <- reactive(gamm_data(dat(), meta()))
++  output$gamm_group_ui <- renderUI({
++    gd <- safe_get(gamm_gd()); m <- safe_get(meta())
++    ch <- if (is.null(gd) || is.null(m)) character(0) else gamm_group_choices(m, gd)
++    tagList(
++      selectInput("gamm_group", "Compare groups (optional)", c("(none)" = "", ch), isolate(input$gamm_group) %||% ""),
++      conditionalPanel("input.gamm_group != ''",
++        selectInput("gamm_structure", "Group smooths", GAMM_STRUCTURES, isolate(input$gamm_structure) %||% "I")))
++  })
++  gamm_settings <- reactive({
++    s <- gamm_defaults()
++    s$engine <- input$gamm_engine %||% s$engine
++    s$method <- input$gamm_method %||% "REML"
++    s$family <- input$gamm_family %||% "gaussian"
++    s$bs <- input$gamm_bs %||% "tp"
++    s$k <- num_input(input$gamm_k, 10)
++    s$m <- num_input(input$gamm_m, NA_real_)
++    s$knots <- input$gamm_knots %||% ""
++    s$select <- isTRUE(input$gamm_select)
++    s$individual <- input$gamm_individual %||% "ri"
++    s$group <- input$gamm_group %||% ""
++    s$structure <- if (nzchar(s$group)) input$gamm_structure %||% "I" else "G"
++    s$proxy <- input$gamm_proxy %||% "ALR"
++    s$proxy_form <- if (identical(s$proxy, "none")) "none" else input$gamm_proxy_form %||% "linear"
++    s$afr_form <- input$gamm_afr_form %||% "none"
++    s$covars <- !identical(input$gamm_covars, FALSE)
++    s$random <- !identical(input$gamm_random, FALSE)
++    s
++  })
++  gamm_sig <- reactive(paste(safe_get(data_sig()) %||% "", paste(unlist(gamm_settings()), collapse = "|")))
++  gamm_store <- reactiveVal(NULL)
++  observeEvent(input$gamm_fit, disappr_guard("input$gamm_fit", {
++    gd <- safe_get(gamm_gd())
++    if (is.null(gd) || !nrow(gd)) { notify("The data are not ready: check the Data tab.", type = "error"); return(invisible(NULL)) }
++    s <- gamm_settings()
++    r <- withProgress(message = "Fitting the GAMM", value = 0.4, gamm_fit(gd, s))
++    r$signature <- gamm_sig()
++    gamm_store(r)
++    gamm_groups_store(NULL); gamm_proxy_store(NULL); gamm_poly_store(NULL)
++    if (!isTRUE(r$ok)) notify(r$message, type = "error", duration = 8)
++  }))
++  gamm_res <- reactive({
++    r <- gamm_store()
++    shiny::validate(shiny::need(!is.null(r), "Choose the settings and press 'Fit GAMM'."))
++    shiny::validate(shiny::need(isTRUE(r$ok), r$message %||% "The GAMM could not be fitted."))
++    r
++  })
++  output$gamm_formula_ui <- renderUI({
++    r <- gamm_store()
++    if (is.null(r)) return(NULL)
++    stale <- !identical(r$signature, gamm_sig())
++    tagList(
++      if (stale) p(class = "small-note", style = "color:#A50026;", "Settings changed since the fit: press 'Fit GAMM' again."),
++      if (isTRUE(r$ok)) div(class = "small-note", style = "margin-top:6px;",
++                            p(sprintf("%s records, %s individuals; %.1f s.", format(r$n, big.mark = ","), format(r$n_ind, big.mark = ","), r$seconds)),
++                            tags$code(r$formula)))
++  })
++  gamm_kc <- reactive(gamm_kcheck(gamm_res()))
++  gamm_cc <- reactive(gamm_concurvity(gamm_res()))
++  output$gamm_cautions_ui <- renderUI({
++    r <- safe_get(gamm_res())
++    if (is.null(r)) return(NULL)
++    cau <- gamm_cautions(r, safe_get(gamm_kc()) %||% data.frame(), safe_get(gamm_cc()) %||% data.frame())
++    if (!length(cau)) return(NULL)
++    div(class = "diagnosis-card", style = "border-left: 5px solid #B35806;",
++        div(class = "diagnosis-title", badge("caution"), " Check before interpreting"),
++        lapply(cau, function(x) div(class = "diagnosis-detail", x)))
++  })
++  gamm_curve_df <- reactive(gamm_curve(gamm_res()))
++  gamm_level_of <- function(r) {
++    grp <- r$settings$group %||% ""
++    if (nzchar(grp) && !identical(r$structure, "G") && grp %in% names(r$data)) as.character(r$data[[grp]]) else rep("All", nrow(r$data))
++  }
++  gamm_curve_obj <- reactive({
++    r <- gamm_res(); cv <- gamm_curve_df()
++    dd <- r$data
++    dd$level <- gamm_level_of(r)
++    by_grp <- length(unique(cv$level)) > 1
++    p <- ggplot(cv, aes(age, fit, colour = level, fill = level))
++    if (isTRUE(input$gamm_show_points)) p <- p + geom_point(data = dd, aes(age, trait, colour = level), inherit.aes = FALSE, alpha = 0.15, size = 0.8)
++    if (isTRUE(input$gamm_show_means)) {
++      om <- stats::aggregate(trait ~ age + level, data = dd, FUN = mean)
++      p <- p + geom_point(data = om, aes(age, trait, colour = level), inherit.aes = FALSE, shape = 21, fill = NA, size = 2)
++    }
++    p <- p + geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.18, colour = NA) + geom_line(linewidth = 1.1) +
++      labs(x = "Age", y = "Trait (population curve)", colour = NULL, fill = NULL,
++           subtitle = paste0(gamm_family_label(r$settings$family), "; ", r$structure, if (by_grp) paste0(" by ", r$settings$group) else "")) +
++      theme_disappR(13)
++    if (!by_grp) p <- p + theme(legend.position = "none")
++    p
++  })
++  output$gamm_curve_plot <- renderPlot(gamm_curve_obj())
++  gamm_deriv_df <- reactive(gamm_derivative(gamm_res()))
++  gamm_sim <- reactive(identical(input$gamm_interval, "simultaneous"))
++  gamm_deriv_obj <- reactive({
++    dv <- gamm_deriv_df()
++    sim <- gamm_sim()
++    dv$lo <- if (sim) dv$lower_sim else dv$lower
++    dv$hi <- if (sim) dv$upper_sim else dv$upper
++    dv$sig <- ifelse(dv$hi < 0, "Significant decline", ifelse(dv$lo > 0, "Significant increase", "No clear change"))
++    by_grp <- length(unique(dv$level)) > 1
++    p <- ggplot(dv, aes(age, derivative)) + geom_hline(yintercept = 0, linetype = 2, colour = "grey50") +
++      geom_ribbon(aes(ymin = lo, ymax = hi, group = level), fill = "grey70", alpha = 0.4) +
++      geom_line(aes(group = level), colour = "grey30") +
++      geom_point(data = dv[dv$sig != "No clear change", , drop = FALSE], aes(colour = sig), size = 1) +
++      scale_colour_manual(values = c("Significant decline" = "#A50026", "Significant increase" = "#313695"), name = NULL) +
++      labs(x = "Age", y = "Slope of the population curve (link scale)") + theme_disappR(13)
++    if (by_grp) p <- p + facet_wrap(~level)
++    p
++  })
++  output$gamm_deriv_plot <- renderPlot(gamm_deriv_obj())
++  gamm_periods_df <- reactive({
++    pr <- gamm_periods(gamm_deriv_df(), simultaneous = gamm_sim())
++    if (!nrow(pr)) return(data.frame(Note = "No period of significant change."))
++    pr
++  })
++  output$gamm_periods_table <- renderTable(gamm_periods_df(), striped = TRUE, spacing = "xs")
++  gamm_peak_df <- reactive(gamm_peak_onset(gamm_res()))
++  output$gamm_peak_table <- renderTable(gamm_peak_df(), striped = TRUE, spacing = "xs")
++  gamm_tabs <- reactive(gamm_tables(gamm_res()))
++  output$gamm_fit_stats <- renderUI({
++    tb <- gamm_tabs()
++    p(class = "small-note", sprintf("Deviance explained %.1f%%; adjusted R\u00b2 %s; AIC %s; n = %s.", 100 * tb$dev_expl,
++                                    format_num(tb$r_sq %||% NA_real_), format_num(tb$aic), format(tb$n, big.mark = ",")))
++  })
++  fmt_p_col <- function(x) { if ("P" %in% names(x)) x$P <- vapply(x$P, format_p, character(1)); x }
++  output$gamm_smooth_table <- renderTable({
++    st <- gamm_tabs()$smooth
++    if (!nrow(st)) return(data.frame(Note = "No smooth terms."))
++    fmt_p_col(st)
++  }, striped = TRUE, spacing = "xs")
++  output$gamm_param_table <- renderTable(fmt_p_col(gamm_tabs()$parametric), striped = TRUE, spacing = "xs")
++  output$gamm_kcheck_table <- renderTable({
++    kc <- gamm_kc()
++    if (!nrow(kc)) return(data.frame(Note = "No basis check available for this model."))
++    fmt_p_col(kc)
++  }, striped = TRUE, spacing = "xs")
++  output$gamm_concurvity_table <- renderTable({
++    cc <- gamm_cc()
++    if (!nrow(cc)) return(data.frame(Note = "No concurvity available for this model."))
++    cc
++  }, striped = TRUE, spacing = "xs")
++  output$gamm_resid_plot <- renderPlot({
++    rr <- gamm_residuals(gamm_res())
++    qq <- stats::qqnorm(rr$residual, plot.it = FALSE)
++    long <- rbind(data.frame(panel = "Residuals against fitted values", x = rr$fitted, y = rr$residual),
++                  data.frame(panel = "Normal quantile plot", x = qq$x, y = qq$y))
++    ggplot(long, aes(x, y)) + geom_point(alpha = 0.3, size = 0.9, colour = "#35637A") +
++      geom_hline(data = data.frame(panel = "Residuals against fitted values", y0 = 0), aes(yintercept = y0), linetype = 2) +
++      geom_abline(data = data.frame(panel = "Normal quantile plot", a = 0, b = stats::sd(rr$residual)), aes(intercept = a, slope = b), linetype = 2) +
++      facet_wrap(~panel, scales = "free") + labs(x = NULL, y = NULL) + theme_disappR(12)
++  })
++  # ---- groups
++  gamm_groups_store <- reactiveVal(NULL)
++  output$gamm_groups_note <- renderUI({
++    s <- gamm_settings()
++    if (!nzchar(s$group)) return(p(class = "small-note", "Choose 'Compare groups' in the model settings to compare trajectories between groups."))
++    NULL
++  })
++  observeEvent(input$gamm_run_groups, disappr_guard("input$gamm_run_groups", {
++    gd <- safe_get(gamm_gd()); s <- gamm_settings()
++    if (is.null(gd) || !nzchar(s$group)) { notify("Choose a grouping variable first.", type = "warning"); return(invisible(NULL)) }
++    res <- run_with_progress("Comparing group structures", function(pr) gamm_group_comparison(gd, s, progress = pr))
++    res$signature <- gamm_sig()
++    gamm_groups_store(res)
++  }))
++  gamm_groups_res <- reactive({
++    z <- gamm_groups_store()
++    shiny::validate(shiny::need(!is.null(z), "Press 'Compare group structures'."))
++    shiny::validate(shiny::need(isTRUE(z$ok), z$message %||% "Not available."))
++    z
++  })
++  output$gamm_groups_table <- renderTable(gamm_groups_res()$table, striped = TRUE, spacing = "xs")
++  output$gamm_diff_test_table <- renderTable({
++    z <- gamm_groups_res()
++    if (!nrow(z$differences)) return(data.frame(Note = "Difference smooths could not be fitted."))
++    x <- fmt_p_col(z$differences)
++    x$Smooth <- paste0(x$Smooth, " (reference: ", z$reference, ")")
++    x
++  }, striped = TRUE, spacing = "xs")
++  output$gamm_lrt_table <- renderTable({
++    z <- gamm_groups_res()
++    if (is.null(z$lrt)) return(NULL)
++    fmt_p_col(z$lrt)
++  }, striped = TRUE, spacing = "xs")
++  gamm_diff_df <- reactive(gamm_difference(gamm_res()))
++  gamm_diff_obj <- reactive({
++    dfm <- gamm_diff_df()
++    shiny::validate(shiny::need(nrow(dfm) > 0, "Fit the model with a group structure (GS, GI, S or I) to draw the differences between groups."))
++    sim <- gamm_sim()
++    dfm$lo <- if (sim) dfm$lower_sim else dfm$lower
++    dfm$hi <- if (sim) dfm$upper_sim else dfm$upper
++    ggplot(dfm, aes(age, diff)) + geom_hline(yintercept = 0, linetype = 2, colour = "grey50") +
++      geom_ribbon(aes(ymin = lo, ymax = hi), fill = "grey70", alpha = 0.4) + geom_line(colour = "grey20") +
++      facet_wrap(~pair) + labs(x = "Age", y = "Difference between group curves (link scale)") + theme_disappR(12)
++  })
++  output$gamm_diff_plot <- renderPlot(gamm_diff_obj())
++  # ---- selective disappearance and appearance
++  gamm_proxy_store <- reactiveVal(NULL)
++  output$gamm_proxy_terms_table <- renderTable({
++    pt <- gamm_proxy_terms(gamm_res())
++    rows <- rbind(if (nrow(pt$parametric)) data.frame(Term = pt$parametric$Term, `Estimate or edf` = pt$parametric$Estimate, P = pt$parametric$P, check.names = FALSE),
++                  if (nrow(pt$smooth)) data.frame(Term = pt$smooth$Smooth, `Estimate or edf` = pt$smooth$edf, P = pt$smooth$P, check.names = FALSE))
++    if (is.null(rows) || !nrow(rows)) return(data.frame(Note = "The fitted model has no lifespan or AFR term."))
++    fmt_p_col(rows)
++  }, striped = TRUE, spacing = "xs")
++  observeEvent(input$gamm_run_proxy, disappr_guard("input$gamm_run_proxy", {
++    gd <- safe_get(gamm_gd()); s <- gamm_settings()
++    if (is.null(gd) || identical(s$proxy, "none")) { notify("Choose ALR or lifespan as the proxy first.", type = "warning"); return(invisible(NULL)) }
++    res <- run_with_progress("Comparing proxy forms", function(pr) gamm_proxy_comparison(gd, s, progress = pr))
++    gamm_proxy_store(res)
++  }))
++  output$gamm_proxy_table <- renderTable({
++    z <- gamm_proxy_store()
++    shiny::validate(shiny::need(!is.null(z), "Press the button to compare the proxy forms (fitted by ML)."))
++    z$table
++  }, striped = TRUE, spacing = "xs")
++  output$gamm_proxy_lrt <- renderTable({
++    z <- gamm_proxy_store()
++    if (is.null(z) || is.null(z$lrt)) return(NULL)
++    fmt_p_col(z$lrt)
++  }, striped = TRUE, spacing = "xs")
++  # ---- polynomial reference
++  gamm_poly_store <- reactiveVal(NULL)
++  observeEvent(input$gamm_run_poly, disappr_guard("input$gamm_run_poly", {
++    gd <- safe_get(gamm_gd())
++    if (is.null(gd)) return(invisible(NULL))
++    res <- withProgress(message = "Fitting polynomial references", value = 0.4, gamm_parametric_reference(gd, gamm_settings()))
++    gamm_poly_store(res)
++  }))
++  output$gamm_poly_table <- renderTable({
++    z <- gamm_poly_store()
++    shiny::validate(shiny::need(!is.null(z), "Press the button to compare the smooth with polynomial age (fitted by ML)."))
++    z
++  }, striped = TRUE, spacing = "xs")
++  # ---- individuals
++  output$gamm_vcomp_table <- renderTable({
++    vc <- gamm_vcomp(gamm_res())
++    if (!nrow(vc)) return(data.frame(Note = "No random-effect variances for this model."))
++    vc
++  }, striped = TRUE, spacing = "xs")
++  output$gamm_indiv_plot <- renderPlot({
++    r <- gamm_res()
++    ic <- gamm_individual_curves(r)
++    shiny::validate(shiny::need(nrow(ic) > 0, "No individual has three or more records: individual curves need more records per individual."))
++    pts <- r$data[as.character(r$data$id) %in% unique(ic$id), , drop = FALSE]
++    ggplot(ic, aes(age, fit)) + geom_point(data = pts, aes(age, trait), inherit.aes = FALSE, alpha = 0.5, size = 1, colour = "#35637A") +
++      geom_line(colour = "black") + facet_wrap(~id) + labs(x = "Age", y = "Trait (fitted for the individual)") + theme_disappR(11)
++  })
++  output$gamm_code <- renderText(paste(gamm_code(gamm_res()), collapse = "\n"))
++  # ---- saving to the summary
++  gamm_desc <- function(r) {
++    s <- r$settings
++    sprintf("%s GAMM (%s), %s basis, k = %s, %s; individual effects: %s; proxy: %s (%s); AFR: %s; groups: %s.",
++            gamm_family_label(s$family), s$engine, s$bs, s$k, r$method, names(GAMM_INDIVIDUAL)[GAMM_INDIVIDUAL == s$individual],
++            s$proxy, s$proxy_form, s$afr_form, if (nzchar(s$group)) paste(s$group, r$structure) else "none")
++  }
++  observeEvent(input$save_gamm_curve, disappr_guard("input$save_gamm_curve", {
++    r <- safe_get(gamm_res()); pl <- safe_get(gamm_curve_obj())
++    if (is.null(r) || is.null(pl)) return(nothing_to_save("Fit a GAMM first."))
++    add_saved("7 GAMM", "GAMM trajectory", text = c(gamm_desc(r), r$formula), plots = list(pl))
++  }))
++  observeEvent(input$save_gamm_deriv, disappr_guard("input$save_gamm_deriv", {
++    r <- safe_get(gamm_res()); pl <- safe_get(gamm_deriv_obj())
++    if (is.null(r) || is.null(pl)) return(nothing_to_save("Fit a GAMM first."))
++    add_saved("7 GAMM", "GAMM derivatives, peak and onset", text = paste("Intervals:", if (gamm_sim()) "simultaneous 95%" else "pointwise 95%"),
++              tables = list(`Periods of significant change` = safe_get(gamm_periods_df()), `Peak and onset` = safe_get(gamm_peak_df())), plots = list(pl))
++  }))
++  observeEvent(input$save_gamm_check, disappr_guard("input$save_gamm_check", {
++    r <- safe_get(gamm_res())
++    if (is.null(r)) return(nothing_to_save("Fit a GAMM first."))
++    tb <- gamm_tabs()
++    add_saved("7 GAMM", "GAMM checks", text = gamm_cautions(r, gamm_kc(), gamm_cc()),
++              tables = list(`Smooth terms` = fmt_p_col(tb$smooth), `Parametric terms` = fmt_p_col(tb$parametric),
++                            `Basis dimension check` = gamm_kc(), Concurvity = gamm_cc()))
++  }))
++  observeEvent(input$save_gamm_groups, disappr_guard("input$save_gamm_groups", {
++    z <- safe_get(gamm_groups_res())
++    if (is.null(z)) return(nothing_to_save("Compare group structures first."))
++    add_saved("7 GAMM", "GAMM group comparison", tables = list(`Group structures (ML)` = z$table, `Difference smooths` = fmt_p_col(z$differences)),
++              plots = Filter(Negate(is.null), list(safe_get(gamm_diff_obj()))))
++  }))
++  observeEvent(input$save_gamm_proxy, disappr_guard("input$save_gamm_proxy", {
++    z <- gamm_proxy_store()
++    if (is.null(z)) return(nothing_to_save("Compare the proxy forms first."))
++    add_saved("7 GAMM", "GAMM selective disappearance", tables = list(`Proxy forms (ML)` = z$table))
++  }))
++  observeEvent(input$save_gamm_poly, disappr_guard("input$save_gamm_poly", {
++    z <- gamm_poly_store()
++    if (is.null(z)) return(nothing_to_save("Compare with polynomial age first."))
++    add_saved("7 GAMM", "GAMM against polynomials", tables = list(`Smooth against polynomial age (ML)` = z))
++  }))
+ }

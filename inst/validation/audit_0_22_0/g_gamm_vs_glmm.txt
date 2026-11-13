@@ -1,0 +1,161 @@
+== G1 the review's findings, fixed in 0.23.1
+PASS 1 the random-slope warning reads the fitted structure
+PASS 2 the suggested analysis offers Model 6 only with a known lifespan
+PASS 3 the bootstrap caution prints the number that refitted
+PASS 4 the checksum is of the file the app loaded
+PASS 5 one upload limit, set in one place
+PASS 6 the random-slope support check covers the _all structures
+PASS 7 no message says duplicates were averaged
+PASS 8 the mean-age note is for Models 3 and 5 only
+PASS 9 the model script is written as UTF-8
+PASS 10 the layout test skips without the app sources
+PASS unused server code removed (summary_parts, overview_text, d45)
+PASS automatic checks cached by signature
+PASS exported scripts use the public reader
+PASS model names from one source
+PASS stale 'moved verbatim' headers gone
+PASS .Rhistory removed and ignored
+
+== G2 simulations: GLMM-Q (quadratic), GLMM-F (function chosen by AIC) and GAMM on the same datasets
+   880 datasets, 85 s
+        shape       selection    sampling approach   M1   M2    M4  agedep  shape_err  peak_err
+        cubic   age-dependent    complete     GAMM  0.0  0.0 100.0   100.0       0.34      0.47
+        cubic   age-dependent    complete   GLMM-F  0.0  0.0 100.0   100.0       0.33      0.38
+        cubic   age-dependent    complete   GLMM-Q  0.0  0.0 100.0   100.0       0.44      1.00
+        cubic age-independent    complete     GAMM  0.0 92.5   7.5     2.5       0.16      0.23
+        cubic age-independent    complete   GLMM-F  0.0 77.5  22.5     5.0       0.14      0.13
+        cubic age-independent    complete   GLMM-Q  0.0  0.0 100.0   100.0       0.28      0.52
+        cubic            none    complete     GAMM 87.5  7.5   5.0     0.0       0.17      0.26
+        cubic            none    complete   GLMM-F 87.5  7.5   5.0     2.5       0.12      0.11
+        cubic            none    complete   GLMM-Q  0.0  0.0 100.0   100.0       0.28      0.51
+late collapse   age-dependent    complete     GAMM  0.0  0.0 100.0   100.0       2.14       NaN
+late collapse   age-dependent    complete   GLMM-F  0.0  0.0 100.0   100.0       2.26       NaN
+late collapse   age-dependent    complete   GLMM-Q  0.0  0.0 100.0   100.0       2.25       NaN
+late collapse age-independent    complete     GAMM  0.0 62.5  37.5    25.0       0.74       NaN
+late collapse age-independent    complete   GLMM-F  0.0 80.0  20.0    12.5       0.80       NaN
+late collapse age-independent    complete   GLMM-Q  0.0 57.5  42.5    22.5       0.85       NaN
+late collapse            none    complete     GAMM 67.5 10.0  22.5    17.5       0.92       NaN
+late collapse            none    complete   GLMM-F 82.5 10.0   7.5     7.5       0.92       NaN
+late collapse            none    complete   GLMM-Q 60.0  7.5  32.5    22.5       0.92       NaN
+  logarithmic   age-dependent    complete     GAMM  0.0  0.0 100.0   100.0       0.09       NaN
+  logarithmic   age-dependent    complete   GLMM-F  0.0  0.0 100.0   100.0       0.09       NaN
+  logarithmic   age-dependent    complete   GLMM-Q  0.0  0.0 100.0   100.0       0.14       NaN
+  logarithmic age-independent    complete     GAMM  0.0 92.5   7.5     2.5       0.06       NaN
+  logarithmic age-independent    complete   GLMM-F  0.0 80.0  20.0     5.0       0.02       NaN
+  logarithmic age-independent    complete   GLMM-Q  0.0  0.0 100.0   100.0       0.11       NaN
+  logarithmic            none    complete     GAMM 77.5 22.5   0.0     0.0       0.05       NaN
+  logarithmic            none    complete   GLMM-F 70.0 20.0  10.0    10.0       0.02       NaN
+  logarithmic            none    complete   GLMM-Q  0.0  0.0 100.0   100.0       0.11       NaN
+      plateau   age-dependent    complete     GAMM  0.0  0.0 100.0   100.0       0.13       NaN
+      plateau   age-dependent    complete   GLMM-F  0.0  0.0 100.0   100.0       0.16       NaN
+      plateau   age-dependent    complete   GLMM-Q  0.0  0.0 100.0   100.0       0.21       NaN
+      plateau age-independent    complete     GAMM  0.0 85.0  15.0     2.5       0.07       NaN
+      plateau age-independent    complete   GLMM-F  0.0 40.0  60.0    40.0       0.09       NaN
+      plateau age-independent    complete   GLMM-Q  0.0  0.0 100.0   100.0       0.16       NaN
+      plateau            none    complete     GAMM 95.0  5.0   0.0     0.0       0.07       NaN
+      plateau            none    complete   GLMM-F 50.0  5.0  45.0    40.0       0.09       NaN
+      plateau            none    complete   GLMM-Q  0.0  0.0 100.0   100.0       0.16       NaN
+    quadratic   age-dependent 30% missing     GAMM  0.0  0.0 100.0   100.0       0.04       NaN
+    quadratic   age-dependent 30% missing   GLMM-F  0.0  0.0 100.0   100.0       0.04       NaN
+    quadratic   age-dependent 30% missing   GLMM-Q  0.0  0.0 100.0   100.0       0.04       NaN
+    quadratic   age-dependent    complete     GAMM  0.0  0.0 100.0   100.0       0.05       NaN
+    quadratic   age-dependent    complete   GLMM-F  0.0  0.0 100.0   100.0       0.04       NaN
+    quadratic   age-dependent    complete   GLMM-Q  0.0  0.0 100.0   100.0       0.04       NaN
+    quadratic age-independent    complete     GAMM  0.0 95.0   5.0     2.5       0.02       NaN
+    quadratic age-independent    complete   GLMM-F  0.0 90.0  10.0     5.0       0.01       NaN
+    quadratic age-independent    complete   GLMM-Q  0.0 85.0  15.0     7.5       0.01       NaN
+    quadratic            none 30% missing     GAMM 85.0 12.5   2.5     2.5       0.02       NaN
+    quadratic            none 30% missing   GLMM-F 80.0 15.0   5.0     5.0       0.02       NaN
+    quadratic            none 30% missing   GLMM-Q 80.0 15.0   5.0     5.0       0.01       NaN
+    quadratic            none    complete     GAMM 80.0 17.5   2.5     2.5       0.02       NaN
+    quadratic            none    complete   GLMM-F 80.0 17.5   2.5     2.5       0.02       NaN
+    quadratic            none    complete   GLMM-Q 75.0 17.5   7.5     5.0       0.02       NaN
+    threshold   age-dependent 30% missing     GAMM  0.0  0.0 100.0   100.0       0.11      0.14
+    threshold   age-dependent 30% missing   GLMM-F  0.0  0.0 100.0   100.0       0.14      0.21
+    threshold   age-dependent 30% missing   GLMM-Q  0.0  0.0 100.0   100.0       0.16       NaN
+    threshold   age-dependent    complete     GAMM  0.0  0.0 100.0   100.0       0.12      0.14
+    threshold   age-dependent    complete   GLMM-F  0.0  0.0 100.0   100.0       0.15      0.13
+    threshold   age-dependent    complete   GLMM-Q  0.0  0.0 100.0   100.0       0.19      0.97
+    threshold age-independent    complete     GAMM  0.0 95.0   5.0     2.5       0.08      0.18
+    threshold age-independent    complete   GLMM-F  0.0 12.5  87.5    75.0       0.14      0.19
+    threshold age-independent    complete   GLMM-Q  0.0  0.0 100.0   100.0       0.20      0.86
+    threshold            none 30% missing     GAMM 90.0 10.0   0.0     0.0       0.09      0.17
+    threshold            none 30% missing   GLMM-F 22.5  2.5  75.0    67.5       0.14      0.19
+    threshold            none 30% missing   GLMM-Q  0.0  0.0 100.0   100.0       0.18      0.76
+    threshold            none    complete     GAMM 82.5 15.0   2.5     0.0       0.08      0.18
+    threshold            none    complete   GLMM-F 22.5  0.0  77.5    67.5       0.13      0.18
+    threshold            none    complete   GLMM-Q  0.0  0.0 100.0   100.0       0.19      0.85
+
+   Age-dependent selection declared (M4 better than M2 by > 2 AIC), all shapes and sampling:
+   GLMM-Q   none:  66.6%   age-independent:  71.7%   age-dependent (power): 100.0%   mean shape error 0.316
+   GLMM-F   none:  25.3%   age-independent:  23.8%   age-dependent (power): 100.0%   mean shape error 0.266
+   GAMM     none:   2.8%   age-independent:   6.2%   age-dependent (power): 100.0%   mean shape error 0.254
+PASS G2 the GAMM makes fewer false age-dependent calls than the quadratic GLMM when there is no selection: 2.8% vs 66.6%
+PASS G2 the GAMM keeps power to detect age-dependent selection (>= 80%): 100.0%
+PASS G2 the GAMM recovers the true trajectory shape at least as well as the quadratic GLMM on average: 0.254 vs 0.316
+
+   Most frequent best model per scenario:
+approach                                  GAMM GLMM-F GLMM-Q
+shape         selection       sampling                      
+cubic         age-dependent   complete      M4     M4     M4
+              age-independent complete      M2     M2     M4
+              none            complete      M1     M1     M4
+late collapse age-dependent   complete      M4     M4     M4
+              age-independent complete      M2     M2     M2
+              none            complete      M1     M1     M1
+logarithmic   age-dependent   complete      M4     M4     M4
+              age-independent complete      M2     M2     M4
+              none            complete      M1     M1     M4
+plateau       age-dependent   complete      M4     M4     M4
+              age-independent complete      M2     M4     M4
+              none            complete      M1     M1     M4
+quadratic     age-dependent   30% missing   M4     M4     M4
+                              complete      M4     M4     M4
+              age-independent complete      M2     M2     M2
+              none            30% missing   M1     M1     M1
+                              complete      M1     M1     M1
+threshold     age-dependent   30% missing   M4     M4     M4
+                              complete      M4     M4     M4
+              age-independent complete      M2     M4     M4
+              none            30% missing   M1     M4     M4
+                              complete      M1     M4     M4
+
+== G3 empirical examples (Gaussian traits)
+   bichet                 done (1023 records)
+   moullec_swift          done (2072 records)
+   pasztor_apollo         done (3173 records)
+   wynn                   done (2689 records)
+   bouwhuis               done (7126 records)
+   warner                 done (1928 records)
+   mckennaell_weight      done (2317 records)
+   szejnersigal_activity  done (808 records)
+              example    n  individuals GLMM_Q                      GLMM_F GAMM  agedep_Q  agedep_F  agedep_GAMM
+               bichet 1023          396     M4            M1 (Logarithmic)   M1      True     False        False
+        moullec_swift 2072          543     M4                  M4 (Cubic)   M1      True      True        False
+       pasztor_apollo 3173         1190     M4                  M4 (Cubic)   M4      True      True         True
+                 wynn 2689           78     M1 M1 (Asymptotic exponential)   M1     False     False        False
+             bouwhuis 7126         4848     M4                  M1 (Cubic)   M1      True     False        False
+               warner 1928          555     M4                  M4 (Cubic)   M4      True      True         True
+    mckennaell_weight 2317          649     M2              M2 (Quadratic)   M2     False     False        False
+szejnersigal_activity  808          184     M4              M4 (Quadratic)   M4      True      True         True
+              example  curve_diff_Q  curve_diff_F  peak_Q  peak_F  peak_GAMM
+               bichet          2.35          0.39     NaN     NaN        NaN
+        moullec_swift          0.31          0.28     NaN     NaN        NaN
+       pasztor_apollo          0.13          0.09     NaN     NaN        NaN
+                 wynn          0.30          0.56     NaN     NaN        NaN
+             bouwhuis          0.23          0.11     NaN     NaN        NaN
+               warner          0.03          0.03     NaN     NaN        NaN
+    mckennaell_weight          0.11          0.11     NaN     NaN        NaN
+szejnersigal_activity          0.50          0.50   18.86   18.86      20.02
+              example                       dAIC_Q                   dAIC_GAMM
+               bichet    M1 +3.5, M2 +5.3, M4 +0.0   M1 +0.0, M2 +1.8, M4 +2.6
+        moullec_swift  M1 +31.8, M2 +32.2, M4 +0.0   M1 +0.0, M2 +0.4, M4 +3.6
+       pasztor_apollo M1 +105.7, M2 +28.2, M4 +0.0  M1 +83.8, M2 +2.3, M4 +0.0
+                 wynn    M1 +0.0, M2 +0.3, M4 +2.8   M1 +0.0, M2 +0.4, M4 +3.7
+             bouwhuis  M1 +13.8, M2 +15.5, M4 +0.0   M1 +0.0, M2 +1.5, M4 +4.5
+               warner  M1 +19.9, M2 +21.7, M4 +0.0   M1 +2.8, M2 +4.6, M4 +0.0
+    mckennaell_weight    M1 +0.7, M2 +0.0, M4 +3.4   M1 +0.7, M2 +0.0, M4 +3.5
+szejnersigal_activity  M1 +51.0, M2 +41.5, M4 +0.0 M1 +56.6, M2 +46.9, M4 +0.0
+PASS G3 every Gaussian example ran through all three approaches: 8 of 8
+
+0 failure(s)

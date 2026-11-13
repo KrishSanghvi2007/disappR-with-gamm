@@ -1,0 +1,25 @@
+== F1 independence
+PASS every output the layer writes is its own (gamm_*)
+PASS every reactive the layer defines is its own (gamm_*): gamm_cc, gamm_curve_df, gamm_curve_obj, gamm_deriv_df, gamm_deriv_obj, gamm_diff_df, gamm_diff_obj, gamm_gd, gamm_groups_res, gamm_groups_store, gamm_kc, gamm_peak_df, gamm_periods_df, gamm_poly_store, gamm_proxy_store, gamm_res, gamm_settings, gamm_sig, gamm_sim, gamm_store, gamm_tabs
+PASS the layer sets no reactive value outside itself: function, null, return
+PASS the only shared things the layer reads are dat(), meta() and data_sig(): dat, data_sig, meta
+   lines added before the layer relative to /tmp/v0228/disappR-main: 8; outside the save order and methods context: 0
+PASS every id in the GAMM tab is its own (gamm_* or save_gamm_*)
+
+== F2 wiring
+PASS every GAMM input is read by the server
+PASS every GAMM output placed in the UI is defined, and vice versa: UI only: []; server only: []
+PASS every help key of the tab exists: gamm_check, gamm_curve, gamm_deriv, gamm_groups, gamm_indiv, gamm_poly, gamm_proxy, gamm_resid, gamm_settings, peak_onset
+
+== F3 engine names
+PASS the engine defines only gamm_/GAMM_ names (39)
+PASS no other engine file defines a gamm_ name
+
+== F4 the derivative method against the truth (penalised B-splines, 300 datasets)
+   pointwise coverage of the true slope 0.943 (average over ages); simultaneous coverage of the whole slope curve 0.937
+   datasets where a simultaneous 'significant decline' was called at an age where the true slope is positive: 0 of 300
+PASS F4 pointwise intervals cover the true slope about 95% of the time (0.90-0.99)
+PASS F4 simultaneous bands cover the whole true slope curve at least 90% of the time
+PASS F4 declines are almost never called where the trait truly rises (<= 2%)
+
+0 failure(s)

@@ -1,0 +1,19 @@
+--- a/.github/workflows/script-tiers.yaml
++++ b/.github/workflows/script-tiers.yaml
+@@ -1,5 +1,5 @@
+-# The script test tiers (smoke, robustness, app server, stress, empirical, sweep, complex scenarios) through
+-# tests/scripts/run_all.R: weekly, and on demand from the Actions tab (0.23.2; code review).
++# The script test tiers (smoke, robustness, app server, stress, empirical, sweep, complex scenarios, GAMMs against
++# GLMMs) through tests/scripts/run_all.R: weekly, and on demand from the Actions tab (0.23.2; code review).
+ on:
+   schedule:
+     - cron: '0 3 * * 1'
+@@ -24,7 +24,7 @@
+           use-public-rspm: true
+       - uses: r-lib/actions/setup-r-dependencies@v2
+         with:
+-          extra-packages: any::callr, any::pkgload
++          extra-packages: any::callr, any::pkgload, any::mgcv, any::gamm4
+           needs: check
+       - name: Run every tier
+         run: Rscript tests/scripts/run_all.R

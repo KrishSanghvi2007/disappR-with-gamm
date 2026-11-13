@@ -1,0 +1,9 @@
+example,n,individuals,ages,GLMM_Q,GLMM_F,GAMM,agedep_Q,agedep_F,agedep_GAMM,curve_diff_Q,curve_diff_F,peak_Q,peak_F,peak_GAMM,dAIC_Q,dAIC_GAMM
+bichet,1023,396,24,M4,M1 (Logarithmic),M1,True,False,False,2.3524266937222595,0.3854845825242902,,,,"M1 +3.5, M2 +5.3, M4 +0.0","M1 +0.0, M2 +1.8, M4 +2.6"
+moullec_swift,2072,543,18,M4,M4 (Cubic),M1,True,True,False,0.3104021015117459,0.275178087704453,,,,"M1 +31.8, M2 +32.2, M4 +0.0","M1 +0.0, M2 +0.4, M4 +3.6"
+pasztor_apollo,3173,1190,26,M4,M4 (Cubic),M4,True,True,True,0.12891010735831335,0.08852490415183105,,,,"M1 +105.7, M2 +28.2, M4 +0.0","M1 +83.8, M2 +2.3, M4 +0.0"
+wynn,2689,78,18,M1,M1 (Asymptotic exponential),M1,False,False,False,0.29599222728083413,0.5611191274173727,,,,"M1 +0.0, M2 +0.3, M4 +2.8","M1 +0.0, M2 +0.4, M4 +3.7"
+bouwhuis,7126,4848,9,M4,M1 (Cubic),M1,True,False,False,0.2299832319915816,0.10945497142302667,,,,"M1 +13.8, M2 +15.5, M4 +0.0","M1 +0.0, M2 +1.5, M4 +4.5"
+warner,1928,555,15,M4,M4 (Cubic),M4,True,True,True,0.03166032220530492,0.03326613701566511,,,,"M1 +19.9, M2 +21.7, M4 +0.0","M1 +2.8, M2 +4.6, M4 +0.0"
+mckennaell_weight,2317,649,10,M2,M2 (Quadratic),M2,False,False,False,0.10885887037638992,0.10885887037638992,,,,"M1 +0.7, M2 +0.0, M4 +3.4","M1 +0.7, M2 +0.0, M4 +3.5"
+szejnersigal_activity,808,184,9,M4,M4 (Quadratic),M4,True,True,True,0.49717364146821813,0.49717364146821813,18.864406779661017,18.864406779661017,20.016949152542374,"M1 +51.0, M2 +41.5, M4 +0.0","M1 +56.6, M2 +46.9, M4 +0.0"

@@ -1,0 +1,18 @@
+--- a/tests/scripts/run_all.R
++++ b/tests/scripts/run_all.R
+@@ -8,6 +8,7 @@
+ #   6 empirical replication and simulations        tests/scripts/stress_empirical.R
+ #   7 sweep of the 0.20.9-0.20.19 changes          tests/scripts/sweep_0_20.R
+ #   8 complex scenarios (0.22.7)                   tests/scripts/complex_scenarios.R
++#   9 GAMMs against GLMMs (0.23.1)                 tests/scripts/gamm_vs_glmm.R
+ # Each tier runs in a fresh R process; the script exits with status 1 if any tier fails.
+ # From an R console (RStudio included), with the working directory at the package root:
+ #   source("tests/scripts/run_all.R")
+@@ -35,6 +36,7 @@
+ res["empirical"] <- run("6 empirical and simulations", "tests/scripts/stress_empirical.R")
+ res["sweep"] <- run("7 sweep of the 0.20.9-0.20.19 changes", "tests/scripts/sweep_0_20.R")
+ res["complex"] <- run("8 complex scenarios", "tests/scripts/complex_scenarios.R")
++res["gamm_vs_glmm"] <- run("9 GAMMs against GLMMs", "tests/scripts/gamm_vs_glmm.R")
+ cat("\nSummary:", paste(names(res), ifelse(res, "passed", "FAILED"), sep = ": ", collapse = "; "), "\n")
+ if (!all(res)) {
+   if (interactive()) stop("Some test tiers failed: ", paste(names(res)[!res], collapse = ", "), call. = FALSE)

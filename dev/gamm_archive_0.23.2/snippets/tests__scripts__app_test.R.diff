@@ -1,0 +1,13 @@
+--- a/tests/scripts/app_test.R
++++ b/tests/scripts/app_test.R
+@@ -19,7 +19,9 @@
+   }
+ }
+ 
+-all_outputs <- c("package_status", "toy_status", "mapping_ui", "censor_value_ui", "data_metrics", "integrity_table",
++all_outputs <- c("gamm_group_ui", "gamm_formula_ui", "gamm_cautions_ui", "gamm_curve_plot", "gamm_deriv_plot",
++                 "gamm_periods_table", "gamm_peak_table", "gamm_groups_note", "gamm_proxy_table", "gamm_poly_table",
++                 "package_status", "toy_status", "mapping_ui", "censor_value_ui", "data_metrics", "integrity_table",
+                  "visual_scale_advice", "a3_cap_warning", "model_rowset_warning", "coef_re_flags",
+                  "integrity_extra", "dist_var_ui", "dist_plot", "data_preview",
+                  "visual_proxy_ui", "a1_plot", "bin_diff_plot", "a2_plot", "toy_card_visual",

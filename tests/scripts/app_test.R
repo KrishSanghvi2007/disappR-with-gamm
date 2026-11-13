@@ -20,7 +20,9 @@ touch <- function(output_env, names) {
 }
 
 # outputs the server defines (0.24.6: five names of removed outputs dropped; audit Part H checks this list)
-all_outputs <- c("store_plot_pick_ui", "store_pred_plot", "trait_ages_note", "toy_status", "mapping_ui", "censor_value_ui", "data_metrics", "integrity_table",
+all_outputs <- c("gamm_group_ui", "gamm_formula_ui", "gamm_cautions_ui", "gamm_curve_plot", "gamm_deriv_plot",
+                 "gamm_periods_table", "gamm_peak_table", "gamm_groups_note", "gamm_proxy_table", "gamm_poly_table",
+                 "store_plot_pick_ui", "store_pred_plot", "trait_ages_note", "toy_status", "mapping_ui", "censor_value_ui", "data_metrics", "integrity_table",
                  "visual_scale_advice", "a3_cap_warning", "model_rowset_warning", "coef_re_flags",
                  "integrity_extra", "dist_var_ui", "dist_plot", "data_preview",
                  "visual_proxy_ui", "a1_plot", "bin_diff_plot", "a2_plot", "toy_card_visual",
