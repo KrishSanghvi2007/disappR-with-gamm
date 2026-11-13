@@ -7,6 +7,8 @@ GAMM_TIMEOUT <- 300   # seconds before a GAMM fit or comparison running in a sep
 
 gamm_gd <- reactive(gamm_data(dat(), meta()))
 gamm_pretty <- function(x) {
+  x <- sub("^s\\(id\\)$", "s(id): individual random intercept", x); x <- sub("^s\\(id,\\.age_c\\)$", "s(id, age): individual random slope", x)
+  x <- sub("^s\\(age,id\\)$", "s(age, id): individual random smooths", x)
   x <- gsub("\\bcv_", "", x); x <- gsub("\\bre_", "", x)
   x <- gsub(".terminal", "terminal record ", x, fixed = TRUE); x <- gsub(".age_c", "age (centred)", x, fixed = TRUE)
   x
@@ -49,10 +51,16 @@ output$gamm_data_note <- renderUI({
       if (isTRUE(m$entry_mapped)) "from its column" else "is each individual's first recorded age",
       if (isTRUE(m$has_trials)) sprintf(" Binomial trials: column %s.", m$trials_col) else "")))
 })
-# Suggest the error family when the data change (from the data-integrity check of step 1); the user can override it.
+# Suggest the error family (from the data-integrity check of step 1) and the individual random effects when the data
+# change; the user can override both. As on the Modelling tab (0.24.8), random slopes are the default only when the data
+# support them well; bundled examples keep their published settings (see the end of this file).
 observeEvent(data_sig(), disappr_guard("gamm family suggestion", {
   fam <- safe_get(integrity()$family$family)
   if (!is.null(fam)) updateSelectInput(session, "gamm_family", selected = gamm_suggest_family(fam))
+  if (!identical(input$data_source, "example")) {
+    rs <- safe_get(default_random_structure(dat()))
+    if (!is.null(rs)) updateSelectInput(session, "gamm_individual", selected = if (identical(rs, "none")) "ri" else "rs")
+  }
 }), ignoreInit = FALSE)
 output$gamm_family_hint <- renderUI({
   fam <- safe_get(integrity()$family$family); m <- safe_get(meta())
@@ -350,8 +358,10 @@ gamm_naive_obj <- reactive({
   nc$lo <- if (sim) nc$lower_sim else nc$lower
   nc$hi <- if (sim) nc$upper_sim else nc$upper
   cols <- c("Without proxy terms (population curve)" = "#B35806", "With proxy terms (within-individual curve)" = "#35637A")
-  p <- ggplot(nc, aes(age, fit, colour = model, fill = model)) + geom_ribbon(aes(ymin = lo, ymax = hi), alpha = 0.15, colour = NA) +
+  nc$model <- factor(nc$model, levels = names(cols))
+  p <- ggplot(nc, aes(age, fit, colour = model, fill = model, linetype = model)) + geom_ribbon(aes(ymin = lo, ymax = hi), alpha = 0.15, colour = NA) +
     geom_line(linewidth = 1.1) + scale_colour_manual(values = cols, name = NULL) + scale_fill_manual(values = cols, name = NULL) +
+    scale_linetype_manual(values = c(1, 2), name = NULL) +
     labs(x = "Age", y = "Trait (population curve)") + theme_disappR(13)
   if (length(unique(nc$level)) > 1) p <- p + facet_wrap(~level)
   p

@@ -16,9 +16,13 @@ show_smooth <- function(label, fit, lab) { x <- row_of(fit, lab); line(sprintf("
 app_prep <- function(d, map) standardise_data(d, utils::modifyList(example_map(), map))
 onset_of <- function(r) { po <- gamm_peak_onset(r, n_draws = 1000); po }
 periods_txt <- function(r) {
-  pr <- gamm_periods(gamm_derivative(r), simultaneous = TRUE)
-  if (!nrow(pr)) return("none")
-  paste(sprintf("%s%s %s-%s", ifelse(pr$Group == "All", "", paste0(pr$Group, ": ")), pr$Change, format_num(pr$From, 3), format_num(pr$To, 3)), collapse = "; ")
+  dv <- gamm_derivative(r)
+  one <- function(sim) {
+    pr <- gamm_periods(dv, simultaneous = sim)
+    if (!nrow(pr)) return("none")
+    paste(sprintf("%s%s %s-%s", ifelse(pr$Group == "All", "", paste0(pr$Group, ": ")), pr$Change, format_num(pr$From, 3), format_num(pr$To, 3)), collapse = "; ")
+  }
+  sprintf("simultaneous: %s | pointwise: %s", one(TRUE), one(FALSE))
 }
 safe <- function(label, expr) tryCatch(expr, error = function(e) { errors <<- c(errors, paste(label, conditionMessage(e))); NULL })
 
@@ -54,9 +58,11 @@ if (!is.null(bt)) {
     show_smooth("s(age)", r$fit, "s(age)")
     pt <- summary(r$fit)$p.table
     line(sprintf("  lifespan (per year): %.4f (SE %.4f), p %s", pt["LS", 1], pt["LS", 2], format_p(pt["LS", 4])))
-    line("  periods of significant change (simultaneous 95%): ", periods_txt(r))
+    line("  periods of significant change (95% intervals) ", periods_txt(r))
     po <- onset_of(r); line(sprintf("  peak %s [%s]; onset of final decline %s [%s]", po[["Peak age"]], po[["Peak 95% CI"]], po[["Onset of final decline"]], po[["Onset 95% CI"]]))
     if (!is.null(bm_g)) line(sprintf("  difference in s(age) edf between (a) and (b): %.3f", summary(r$fit)$s.table["s(age)", 1] - summary(bm_g)$s.table["s(age_year)", 1]))
+    line("  (one record differs: its Observer is blank, which disappR treats as missing and the authors' factor() kept as a level;")
+    line("   the engine chose mgcv::bam because there are more than 400 birds)")
     line("  cautions: ", paste(gamm_cautions(r, gd = gd), collapse = " | "))
   } else if (!is.null(r)) errors <- c(errors, paste("Tsui app fit:", r$message))
   # sex: the authors' G, GS and S (factor-smooth 'fs' for sex) compared by REML AIC, against the app's five structures by ML
@@ -107,7 +113,7 @@ if (!is.null(bp)) {
     line(sprintf("(b) disappR engine, as published (no lifespan term): %d records, %d birds", r$n, r$n_ind))
     line("  formula: ", r$formula)
     show_smooth("s(age)", r$fit, "s(age)")
-    line("  periods of significant change (simultaneous 95%): ", periods_txt(r))
+    line("  periods of significant change (95% intervals) ", periods_txt(r))
     po <- onset_of(r); line(sprintf("  peak %s [%s]", po[["Peak age"]], po[["Peak 95% CI"]]))
   } else if (!is.null(r)) errors <- c(errors, paste("Brown app:", r$message))
   r2 <- safe("Brown app ALR", gamm_fit(gd, utils::modifyList(s0, list(proxy = "ALR", proxy_form = "linear"))))

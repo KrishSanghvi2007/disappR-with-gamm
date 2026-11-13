@@ -1,3 +1,60 @@
+# disappR 0.25.0
+
+**Step 7: GAMMs.** Generalized additive mixed models of ageing (mgcv), as a new, optional step after the summary. It
+reads the data mapped on the Data tab and changes nothing in steps 1-6. It returns the GAMM layer held back in 0.24.0,
+rebuilt and corrected.
+
+* **What it does.**
+  - A penalised smooth of age, with individual random intercepts, uncorrelated intercepts and slopes (centred age),
+    or a random smooth per individual. Mapped random intercepts (year, cohort, observer) and covariates are included,
+    as are covariate interactions; numeric covariates can enter as smooths.
+  - Selective disappearance through ALR or known lifespan, and selective appearance through AFR, each linear, smooth or
+    age-dependent (`ti(age, proxy)`). An optional terminal-record effect.
+  - Nine families: Gaussian, Gaussian with variance changing with age (gaulss), Gamma, beta, Poisson, negative binomial,
+    zero-inflated Poisson, Tweedie and binomial. `gam` or `bam` is chosen automatically by data size. Optional AR1
+    errors.
+  - Sub-tabs:
+    - **Fit:** the population curve with simultaneous or pointwise intervals, the number of individuals at each age,
+      the true curve for simulated data, a plain-language reading and automatic cautions.
+    - **Ageing rate:** the first derivative, periods of significant change, and peak and onset with limits from
+      1,000 draws.
+    - **Selective disappearance:** none, linear, smooth and age-dependent proxy forms compared by AIC; the curve with
+      and without proxy terms; curves for short-lived, median and long-lived individuals when the proxy is
+      age-dependent.
+    - **Groups:** Pedersen et al.'s (2019) G, GS, GI, S and I, difference smooths and difference curves.
+    - **Checks:** k-check, concurvity between fixed terms, residuals against fitted values and age, simulated quantile
+      residuals, lag-1 autocorrelation, and a comparison with polynomial age.
+    - **Individuals.**
+    - **R code**, with the model's data to download.
+  - Results save to the summary with explicit verdicts, and the methods draft describes them.
+* **Corrections to the 0.23 layer.**
+  - Model comparisons now fit every model to the same records. Before, records of individuals with an unknown lifespan
+    were dropped from some models and not others, so AICs compared different data.
+  - Every group structure now includes the group main effect. Before, the one-curve model G had none, so groups that
+    differed only in level were reported as ageing differently.
+  - Groups are fixed effects (`sz`, `by` and linked smooths), no longer `fs` random smooths estimated from two or three
+    levels.
+  - Covariates and random terms that do not vary are left out with a note. Before, a one-level covariate made every fit
+    fail.
+  - Intervals include smoothing-parameter uncertainty. Concurvity is measured between fixed terms only (a proxy is
+    always fully concurved with the individual random intercept).
+  - Tweedie works without mgcv attached.
+  - Fits run in a separate R process with a time limit (callr).
+  - The likelihood-ratio tests between proxy forms were dropped: with penalised random effects their deviance
+    differences can be negative.
+* **Shared code.** GAMM settings no longer enter the fingerprints of step 1-6 saved results, so changing a GAMM
+  setting never makes a step 1-6 result look new.
+* **New examples.**
+  - Tsui et al. 2026 (Seychelles warbler body mass; Zenodo, CC BY 4.0).
+  - Brown et al. 2021 (Seychelles warbler haematocrit; Dryad, CC0).
+  - Both carry their published GAMM settings, applied on the GAMM tab when the example is chosen.
+* **Validation** (`inst/validation/gamm/`):
+  - replication of both studies from the authors' code;
+  - GAMMs against GLMMs on simulated data through the real engines (`tests/scripts/gamm_vs_glmm.R`, tier 10);
+  - stress and break tests on every example, every out-of-sample dataset and 31 awkward datasets
+    (`tests/scripts/gamm_stress.R`).
+* mgcv is an optional package; gamm4 is no longer needed.
+
 # disappR 0.24.9
 
 * Test fix: a unit test still expected the old wording of the random-term advice ("without random slopes"); it now

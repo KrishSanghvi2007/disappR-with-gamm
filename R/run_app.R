@@ -24,7 +24,7 @@ run_app <- function(...) {
   }
   optional <- c(glmmTMB = "count, proportion and binary traits", lmerTest = "Gaussian p-values", nlme = "the exponential ageing function",
                 DHARMa = "residual checks", performance = "model diagnostics", see = "diagnostic plots", codetools = "R code export",
-                callr = "running step 4 in a separate R process")
+                callr = "running step 4 and the GAMMs in a separate R process", mgcv = "GAMMs (step 7)")
   absent <- names(optional)[!vapply(names(optional), requireNamespace, logical(1), quietly = TRUE)]
   if (length(absent)) {
     message("Optional packages not installed (", paste(paste0(absent, ": ", optional[absent]), collapse = "; "),

@@ -1,1 +1,2 @@
 == 1. Bundled examples (suggested family; published GAMM settings where the example gives them)
+  fly [nb]                                                   ok    8.9s  bam, 1901 rec, 648 ind, s(age) edf 2.83 

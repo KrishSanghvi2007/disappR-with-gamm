@@ -17,7 +17,7 @@ finish <- function(fails, message_ok, message_bad) {
 
 suppressWarnings(suppressMessages(library(callr)))
 pkg <- normalizePath(".")
-suggests <- c("glmmTMB", "DHARMa", "performance", "see", "callr", "lmerTest", "nlme")
+suggests <- c("glmmTMB", "DHARMa", "performance", "see", "callr", "lmerTest", "nlme", "mgcv")
 suggests <- suggests[vapply(suggests, requireNamespace, logical(1), quietly = TRUE)]
 
 probe <- function(hidden) {

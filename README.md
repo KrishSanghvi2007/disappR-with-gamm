@@ -49,11 +49,41 @@ exported as R code.
 - **Teaching simulations.** Generate data with a known true trajectory, choosing
   the ageing shape, the sampling design and the type and strength of selection,
   and see how close each model gets to the truth.
-- **13 published datasets** from 12 studies of laboratory and wild populations,
+- **15 published datasets** from 14 studies of laboratory and wild populations,
   each set up to follow its paper (the great tit data open on laying date).
 - **Reproducible output.** Downloadable R code for every section, HTML and text
   reports, the analysis data, and a reproducibility bundle of every setting used.
 - **Runs locally.** Your data never leave your machine.
+
+## Step 7: GAMMs (smooth models of ageing)
+
+An optional seventh step fits generalized additive mixed models (GAMMs, with
+`mgcv`) to the same data. The ageing trajectory is a smooth curve whose shape the
+data choose, rather than a function you pick. It reads the data mapped on the Data
+tab and changes nothing in steps 1-6.
+
+- **Model:**
+  - a smooth of age;
+  - individual random intercepts, slopes or smooths;
+  - mapped random intercepts and covariates;
+  - ALR, lifespan and AFR as linear, smooth or age-dependent (`ti(age, proxy)`) terms;
+  - an optional terminal-record effect;
+  - nine error families, with `gam` or `bam` chosen by data size.
+- **Results:**
+  - the population curve with simultaneous intervals;
+  - where the trait changes significantly with age, from the derivative;
+  - peak and onset of decline;
+  - how far the proxy terms move the curve;
+  - Pedersen et al.'s (2019) group structures for sex or treatment;
+  - basis, concurvity and residual checks;
+  - R code to reproduce the fit.
+- **Examples:** Tsui et al. (2026) and Brown et al. (2021) open with their
+  published GAMM settings. `inst/validation/gamm/` replicates both from the
+  authors' code.
+
+GAMMs with many individuals are much faster with an optimised BLAS (for example
+OpenBLAS on Linux, or the Accelerate BLAS that R for macOS can use). The app
+switches to `mgcv::bam` automatically for large data.
 
 ## Installation
 
@@ -70,7 +100,7 @@ still runs with fewer analyses, and the *Start here* page lists any that are
 missing, apart from `callr`, which `run_app()` reports in the R console.
 
 ```r
-install.packages(c("glmmTMB", "lmerTest", "nlme", "DHARMa", "performance", "see", "codetools", "callr"))
+install.packages(c("glmmTMB", "lmerTest", "nlme", "DHARMa", "performance", "see", "codetools", "callr", "mgcv"))
 ```
 
 | Package | Enables |
@@ -81,7 +111,8 @@ install.packages(c("glmmTMB", "lmerTest", "nlme", "DHARMa", "performance", "see"
 | `DHARMa` | Simulation-based residual checks |
 | `performance`, `see` | Model diagnostics and their plots |
 | `codetools` | Exported R code |
-| `callr` | Runs the trajectory fits in a separate R process, so a failure there cannot stop the app |
+| `callr` | Runs the trajectory fits and GAMMs in a separate R process, so a failure there cannot stop the app |
+| `mgcv` | Step 7: GAMMs |
 
 ## Usage
 
@@ -103,8 +134,9 @@ shiny::runApp("path/to/disappR/inst/app")
 
 ## Basic workflow
 
-The app is laid out as six numbered steps in the left-hand sidebar. You can move
-between them freely, but each builds on the one before.
+The app is laid out as six numbered steps in the left-hand sidebar, plus an
+optional seventh (GAMMs; see above). You can move between them freely, but each
+builds on the one before.
 
 **Start here.** An overview of the problem and the workflow. Under *Choose how
 to start*, the three buttons take you to the Data step with simulated data (where

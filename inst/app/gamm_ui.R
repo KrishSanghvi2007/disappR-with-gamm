@@ -78,7 +78,7 @@ gamm_tab_ui <- function() {
             uiOutput("gamm_proxy_tables"),
             save_button("save_gamm_proxy")),
           box(width = 7, title = "How far do the proxy terms move the curve?", status = "info", solidHeader = TRUE,
-            p(class = "small-note", "The population curve without any ALR, lifespan or AFR term (what a naive analysis shows) and the fitted model's curve, on the same records. A gap means that which individuals remain at each age shapes the naive curve."),
+            p(class = "small-note", "The population curve without any ALR, lifespan or AFR term (what a naive analysis shows) and the fitted model's curve, on the same records. A gap means that which individuals remain at each age shapes the naive curve. With a random intercept for each individual and many records per individual, a linear proxy changes the curve little, because the individual intercepts already absorb differences in level; an age-dependent proxy (or random slopes) is what removes a distortion of shape."),
             plotOutput("gamm_naive_plot", height = 380),
             look_for("whether the two curves differ in shape (age-dependent selective disappearance) or only in level (age-independent)."))
         )

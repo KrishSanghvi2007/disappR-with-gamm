@@ -284,7 +284,7 @@ ui <- dashboardPage(
                 actionButton("journey_analyse", "Upload my data", class = "btn-default btn-block-space")))
             ),
             tags$hr(),
-            h4(strong("The six steps")),
+            h4(strong("The steps")),
             fluidRow(
               column(6,
                 div(class = "step-card", div(class = "step-kicker", "1 \u00b7 Data"),
@@ -306,7 +306,10 @@ ui <- dashboardPage(
                     div(class = "step-text", "Fit ten models that account for different types of selective process; choose error families, random terms and covariates; compare model AICs and age predictions, with diagnostics of model fit.")),
                 div(class = "step-card", div(class = "step-kicker", "6 \u00b7 Summary and report"),
                     div(class = "step-title", "Collect and export results"),
-                    div(class = "step-text", "Every 'Save to summary' result is gathered here with an automatic, cautious overview, and exported as an HTML or text report."))
+                    div(class = "step-text", "Every 'Save to summary' result is gathered here with an automatic, cautious overview, and exported as an HTML or text report.")),
+                div(class = "step-card", div(class = "step-kicker", "7 \u00b7 GAMMs (optional)"),
+                    div(class = "step-title", "Let the data choose the shape of ageing"),
+                    div(class = "step-text", "Generalized additive mixed models: a smooth curve of age with individual random effects and ALR, lifespan or AFR terms; where the trait rises and falls, whether groups age differently, and whether the smooth agrees with the parametric models. Needs the mgcv package."))
               )
             )
           )

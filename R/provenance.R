@@ -10,7 +10,8 @@ OPTIONAL_PACKAGES <- c(
   nlme = "the population a\u00b7exp(b\u00b7age) model",
   performance = "performance-based model checks",
   see = "plots for the performance checks",
-  codetools = "complete helper functions in exported code")
+  codetools = "complete helper functions in exported code",
+  mgcv = "generalized additive mixed models (step 7: GAMMs)")
 
 package_version_or_na <- function(p) {
   if (!nzchar(system.file(package = p))) return(NA_character_)
@@ -92,7 +93,7 @@ analysis_provenance <- function(res, meta = NULL) {
     x[, !vapply(x, is.list, logical(1)), drop = FALSE]
   } else data.frame()
   ids <- if (is.data.frame(d) && "id" %in% names(d)) sort(unique(as.character(d$id))) else character(0)
-  pkgs <- c("lme4", "glmmTMB", "lmerTest", "DHARMa", "nlme", "ggplot2", "shiny", "Matrix", "TMB")
+  pkgs <- c("lme4", "glmmTMB", "lmerTest", "DHARMa", "nlme", "mgcv", "ggplot2", "shiny", "Matrix", "TMB")
   blas <- tryCatch({
     si <- utils::sessionInfo()
     c(BLAS = si$BLAS %||% NA_character_, LAPACK = si$LAPACK %||% NA_character_)

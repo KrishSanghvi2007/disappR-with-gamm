@@ -396,7 +396,7 @@ gamm_concurvity <- function(r) {
     others <- setdiff(fixed, t)
     j <- others[[which.max(est[others, t])]]
     data.frame(Term = t, `Most similar term` = if (identical(j, "para")) "parametric terms" else j,
-               Estimate = est[j, t], Worst = wst[j, t], check.names = FALSE, stringsAsFactors = FALSE)
+               Estimate = round(est[j, t], 3), Worst = round(wst[j, t], 3), check.names = FALSE, stringsAsFactors = FALSE)
   })
   out <- do.call(rbind, rows)
   out$Flag <- ifelse(out$Estimate > 0.8, "high", "")
@@ -448,8 +448,9 @@ gamm_lp <- function(r, nd) {
   X <- stats::predict(r$fit, newdata = nd, type = "lpmatrix")
   lpi <- attr(X, "lpi")
   cols <- if (is.null(lpi)) seq_len(ncol(X)) else lpi[[1]]
-  rs <- gamm_random_smooths(r$fit)
-  X[, rs$cols] <- 0
+  # Random-effect columns are zero on the population curve, so they are dropped rather than zeroed: the result is the
+  # same, and draws from the covariance matrix no longer scale with the number of individuals (thousands of columns).
+  cols <- setdiff(cols, gamm_random_smooths(r$fit)$cols)
   V <- gamm_vcov(r$fit)
   list(X = X[, cols, drop = FALSE], b = stats::coef(r$fit)[cols], V = V[cols, cols, drop = FALSE])
 }
@@ -741,8 +742,8 @@ gamm_vcomp <- function(r) {
 gamm_individual_curves <- function(r, n_ind = 12, seed = 1L) {
   dd <- r$data
   set.seed(seed)
-  ids <- levels(dd$id)
-  ids <- ids[vapply(ids, function(i) sum(dd$id == i) >= 3, logical(1))]
+  per <- table(dd$id)
+  ids <- names(per)[per >= 3]
   if (!length(ids)) return(data.frame())
   pick <- sample(ids, min(n_ind, length(ids)))
   do.call(rbind, lapply(pick, function(i) {
