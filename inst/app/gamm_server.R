@@ -43,7 +43,7 @@ output$gamm_data_note <- renderUI({
     fluidRow(
       metric_card("Records", format(nrow(gd), big.mark = ",")),
       metric_card("Individuals", format(nlevels(gd$id), big.mark = ",")),
-      metric_card("Ages", sprintf("%s–%s", format_num(min(gd$age)), format_num(max(gd$age))), sprintf("%d distinct", length(unique(gd$age)))),
+      metric_card("Ages", sprintf("%s\u2013%s", format_num(min(gd$age)), format_num(max(gd$age))), sprintf("%d distinct", length(unique(gd$age)))),
       metric_card("Records per individual", format_num(stats::median(table(gd$id)), 2), "median")),
     p(class = "small-note", sprintf("The GAMM uses the data mapped on the Data tab. ALR %s; known lifespan %s; AFR %s.%s",
       if (isTRUE(m$alr_mapped)) "from its column" else "is each individual's last recorded age",
@@ -90,7 +90,7 @@ output$gamm_individual_note <- renderUI({
 output$gamm_group_ui <- renderUI({
   gd <- safe_get(gamm_gd()); m <- safe_get(meta())
   ch <- if (is.null(gd) || is.null(m)) character(0) else gamm_group_choices(m, gd)
-  if (!length(ch)) return(p(class = "small-note", "Curves per group: map a categorical covariate (such as sex) with 2–8 levels on the Data tab."))
+  if (!length(ch)) return(p(class = "small-note", "Curves per group: map a categorical covariate (such as sex) with 2\u20138 levels on the Data tab."))
   tagList(
     selectInput("gamm_group", "Separate curves for a group (optional)", c("(none)" = "", ch), isolate(input$gamm_group) %||% ""),
     conditionalPanel("input.gamm_group != ''",
@@ -257,7 +257,7 @@ output$gamm_peak_table <- renderTable(gamm_peak_df(), striped = TRUE, spacing = 
 gamm_tabs <- reactive(gamm_tables(gamm_res()))
 output$gamm_fit_stats <- renderUI({
   tb <- gamm_tabs()
-  p(class = "small-note", sprintf("Deviance explained %s; adjusted R² %s; AIC %s; %s records.", if (is.finite(tb$dev_expl)) sprintf("%.1f%%", 100 * tb$dev_expl) else "not available (gamm4)",
+  p(class = "small-note", sprintf("Deviance explained %s; adjusted R\u00b2 %s; AIC %s; %s records.", if (is.finite(tb$dev_expl)) sprintf("%.1f%%", 100 * tb$dev_expl) else "not available (gamm4)",
                                   format_num(tb$r_sq %||% NA_real_), format_num(tb$aic), format(tb$n, big.mark = ",")))
 })
 output$gamm_smooth_table <- renderTable({

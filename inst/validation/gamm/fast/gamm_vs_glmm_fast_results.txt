@@ -87,3 +87,10 @@ disappR 0.25.0 starting from /home/user/disappR-with-gamm
   moullec_swift          GLMM quadratic: M4 (age-dependent) | GLMM Cubic: M4 (age-dependent) | GAMM: M1
   pasztor_apollo         GLMM quadratic: M4 (age-dependent) | GLMM Cubic: M4 (age-dependent) | GAMM: M2
   wynn                   GLMM quadratic: M1 | GLMM Asymptotic exponential: M1 | GAMM: M1
+  bouwhuis               GLMM quadratic: M4 (age-dependent) | GLMM Cubic: M1 | GAMM: M1
+  warner                 GLMM quadratic: M4 (age-dependent) | GLMM Cubic: M4 (age-dependent) | GAMM: M4 (age-dependent)
+  mckennaell_weight      GLMM quadratic: M2 | GLMM Quadratic: M2 | GAMM: M2
+  szejnersigal_activity  GLMM quadratic: M4 (age-dependent) | GLMM Quadratic: M4 (age-dependent) | GAMM: M4 (age-dependent)
+
+No errors.
+FASTSIM EXIT 0

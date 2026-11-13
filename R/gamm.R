@@ -667,7 +667,7 @@ gamm_peak_onset <- function(r, n_draws = 1000, n = 150, seed = 1L) {
       t <- curve_turning_points(ages, sims[, j])
       c(t$peak, as.numeric(t$peak_interior), t$onset, as.numeric(identical(t$onset_type, "interior")))
     }, numeric(4))
-    q <- function(v) if (length(v) >= 20) paste0(format_num(stats::quantile(v, 0.025)), "–", format_num(stats::quantile(v, 0.975))) else ""
+    q <- function(v) if (length(v) >= 20) paste0(format_num(stats::quantile(v, 0.025)), "\u2013", format_num(stats::quantile(v, 0.975))) else ""
     data.frame(Group = if (is.null(lv)) "All" else as.character(lv),
                `Peak age` = if (isTRUE(tp$peak_interior)) format_num(tp$peak) else "none within the sampled ages",
                `Peak 95% CI` = if (isTRUE(tp$peak_interior)) q(tps[1, tps[2, ] == 1]) else "",
@@ -699,7 +699,7 @@ gamm_difference <- function(r, n = 150) {
     d <- as.numeric(D %*% La$b)
     se <- sqrt(pmax(rowSums((D %*% La$V) * D), 0))
     crit <- gamm_crit(D, La$V, se)
-    data.frame(age = ages, pair = paste(pr[[1]], "−", pr[[2]]), diff = d, lower = d - 1.96 * se, upper = d + 1.96 * se,
+    data.frame(age = ages, pair = paste(pr[[1]], "\u2212", pr[[2]]), diff = d, lower = d - 1.96 * se, upper = d + 1.96 * se,
                lower_sim = d - crit * se, upper_sim = d + crit * se, stringsAsFactors = FALSE)
   }))
 }
