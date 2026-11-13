@@ -579,7 +579,7 @@ gamm_fast_plan <- reactive({
 })
 gamm_engine_note <- function(which) {
   pl <- safe_get(gamm_fast_plan()); if (is.null(pl)) return(NULL)
-  if (!isTRUE(pl[[which]]) && is.finite(pl$levels) && pl$levels > GAMM_FAST_LEVELS && identical(gamm_settings()$engine, "auto")) {
+  if (!isTRUE(pl[[which]]) && is.finite(pl$levels) && pl$levels > gamm_fast_threshold() && identical(gamm_settings()$engine, "auto")) {
     s <- gamm_settings()
     why <- c(if (identical(s$proxy_form, "ti") || identical(s$afr_form, "ti")) "an age-dependent proxy smooth in both (ti)",
              if (s$individual %in% c("fs")) "a random smooth per individual",
@@ -602,7 +602,7 @@ gamm_fast_text <- function() {
   lv <- safe_get(gamm_fast_plan()$levels) %||% NA_real_
   tagList(
     p(sprintf("Your data have %s random-effect levels (individuals plus mapped random terms such as year, cohort or observer). With more than %d, comparing models with mgcv can take tens of minutes, so this comparison was fitted with gamm4, which handles random effects much faster.",
-              if (is.finite(lv)) format(lv, big.mark = ",") else "many", GAMM_FAST_LEVELS)),
+              if (is.finite(lv)) format(lv, big.mark = ",") else "many", as.integer(GAMM_FAST_LEVELS))),
     p(strong("What this changes")),
     tags$ul(
       tags$li("Models are compared by gamm4's likelihood, which is more cautious about extra smooth terms. In our simulations it rarely flagged age-dependent selective disappearance that was not there (about 2% of datasets, against 11% with mgcv) and found real effects as often."),

@@ -284,6 +284,13 @@ gamm_re_levels <- function(gd, s) {
   length(unique(gd$id[keep])) + sum(vapply(ut$re, function(v) length(unique(gd[[v]][keep])), numeric(1)))
 }
 
+# Random-effect levels above which comparisons use gamm4 (GAMM_FAST_LEVELS; the environment variable
+# DISAPPR_GAMM_FAST_LEVELS overrides it for validation runs and tests).
+gamm_fast_threshold <- function() {
+  x <- suppressWarnings(as.numeric(Sys.getenv("DISAPPR_GAMM_FAST_LEVELS", GAMM_FAST_LEVELS)))
+  if (length(x) == 1 && is.finite(x)) x else GAMM_FAST_LEVELS
+}
+
 # One engine for every model of a comparison, so that their AICs are comparable: gamm4 only if all the models allow it.
 # fast_ok: comparisons (fitted by ML) use gamm4 from GAMM_FAST_LEVELS random-effect levels, not only from GAMM_G4_IND
 # individuals.
@@ -296,8 +303,7 @@ gamm_set_engine <- function(gd, s, specs, fast_ok = FALSE) {
   e <- s$engine %||% "auto"
   if (identical(e, "gamm4") && !all_g4) return("bam")
   if (identical(e, "auto")) {
-    fast_at <- suppressWarnings(as.numeric(Sys.getenv("DISAPPR_GAMM_FAST_LEVELS", GAMM_FAST_LEVELS)))   # for validation runs
-    if (all_g4 && (n_ind > GAMM_G4_IND || (isTRUE(fast_ok) && gamm_re_levels(gd, s) > fast_at))) return("gamm4")
+    if (all_g4 && (n_ind > GAMM_G4_IND || (isTRUE(fast_ok) && gamm_re_levels(gd, s) > gamm_fast_threshold()))) return("gamm4")
     return(if (n > GAMM_BAM_ROWS || n_ind > GAMM_BAM_IND) "bam" else "gam")
   }
   e
