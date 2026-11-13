@@ -72,3 +72,35 @@ These figures are for the great tit example: 7,126 records from 4,848 birds.
 
 All timings are from a 4-core container with OpenBLAS. R's reference BLAS, the default on Windows, is several
 times slower for these models.
+
+## Test results on the final code
+
+| Tier | Result |
+|---|---|
+| Unit tests, GAMM (`tests/testthat/test-gamm.R`) | all pass (73 expectations) |
+| App server test (`tests/scripts/app_test.R`) | all outputs render; GAMM fit, three comparisons, six saves; methods paragraph; changing a GAMM setting no longer alters the fingerprint of a step-5 result |
+| Stress and break tests (`stress_results.txt`) | 144 fits succeed, 40 return an intended plain message, no error escapes the engine |
+| Replication (`replication_results.txt`) | runs without errors; results above |
+| Full unit suite | passes except `test-combinations.R:142` (a beta-binomial cubic fit with an invalid Hessian in step 5) |
+
+The `test-combinations.R:142` failure also occurs on unmodified 0.24.9 in this environment (glmmTMB 1.1.15.2,
+OpenBLAS), so it predates the GAMM step.
+
+The break tests found and fixed these engine bugs:
+
+- `bam` failed on small data with random effects (an mgcv quirk). Such fits now use `gam`.
+- Extremely large traits gave an mgcv error. They now get a message to rescale.
+- Data with a single individual gave a contrasts error. They now get a plain message.
+- `gamm4` reports deviance explained as `numeric(0)`, which broke the reading and the comparison tables.
+- A `chol` error escaped mgcv's random-effect tests in `summary()`.
+
+## Known limitations
+
+- **ML comparisons with many random-effect levels are slow.** Proxy forms, group structures and polynomials are all
+  compared by ML, and ML in mgcv cannot use `bam`'s discretisation. The haematocrit example (730 birds, 747 breed
+  groups) took around 30 minutes for the eight proxy models on this container. In the app, a comparison running
+  longer than 300 seconds is stopped with a message.
+- **Age-dependent proxy terms need mgcv.** With more than 1,500 individuals they are left out of the proxy
+  comparison, because gamm4 cannot fit `ti()`.
+- **False positives.** The rule that ΔAIC > 2 declares age-dependent selective disappearance gives about 11% false
+  positives in the simulations.
