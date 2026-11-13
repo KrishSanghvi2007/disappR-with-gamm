@@ -1,0 +1,42 @@
+---
+title: "The disappR workflow"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{The disappR workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Workflow
+
+| Tab | What it does |
+|---|---|
+| 1 · Data | Simulated (five ageing forms; none / age-independent / age-dependent / both selective disappearance and appearance), fruit-fly or uploaded data; column mapping, continuous and categorical covariates and their interactions (covariate × age or covariate × covariate), nested grouping and additional random intercepts, censoring, AFR (age at first observation), optional subset; distribution plot, preview and **data-integrity checks** |
+| 2 · Visual diagnosis | One shared settings row (grouping variable, bins, panels, trait scale) with figure-specific settings above each figure: trait trajectories within ALR / mean age / LS / AFR bins, differences between consecutive bins with trend lines, the trait against the same variable within age bins with a coefficient table, and the disappearance diagnostics (trait before death, selection differentials by age, disappearance hazard) |
+| 3 · Missingness and proxies | Expected-occasion grid (with a caveat for irregular sampling), missingness by age and by variable, drivers of missingness, ALR/mean age vs LS, LS − ALR gaps, proxy guidance (ALR vs mean age) |
+| 4 · Individual and population trajectories | Individual parametric fits (including a non-linear exponential) with data-support metrics, a button to use the chosen function in the mixed models, mean-of-coefficients and mean-of-functions trajectories, function comparison across individuals, and the population-level ageing-function comparison |
+| 5 · Modelling | Full-width settings with one row per model (tick box, "i" with the model's meaning and exact specification, and a menu to add terms to that model); Models 1–10 with Gaussian / count families, random slopes, fit validity, predictions, coefficients in original units, interpretation, consistency checks, DHARMa and performance diagnostics, and downloadable R code for the models and the figure |
+| 6 · Summary and report | Saved results from every tab ("Save to summary"), cautious automatic overview, HTML and text reports |
+
+## Reading the figures
+
+* **Trait against age by lifespan bin** overlays the observed mean of the trait at each age across every individual, as grey circles sized by the number of individuals, so the bins can be read against the data behind them.
+* **The gap figure** can hide its points ("Show individual points") to leave the trend lines, and weights them by inverse variance on request.
+* **The average within-individual trajectory** draws the typical individual (mean of coefficients) and, where they differ, the population average (mean of individual curves), which can be switched off. On the log scale the two always differ, because the curve is exp(...) of a function that is linear in its coefficients.
+* **Trait scale:** a box beside the bin settings says whether the trait looks continuous or like counts and whether the chosen scale suits it. On the wrong scale the differences between groups can shrink, vanish or reverse.
+
+## Data checks
+
+* Repeated individual-age records are never averaged. "Collapse exact duplicates" only merges rows that agree in every mapped column; anything else is two measurements, and the checks name the individuals and say which columns differ.
+* An individual appearing under more than one group is named beside the nesting toggle and in the checks. With nesting each becomes a separate individual; if the same animal moved between groups, map the grouping column as an extra random term instead.
+
+## Data format
+
+One row per individual × age. Required columns are individual ID, age and trait. Optional columns are:
+* known lifespan (LS);
+* age at last record (ALR) and age at first record (AFR); both are computed automatically if absent;
+* condition;
+* covariates;
+* a grouping variable.
+
+Count families need non-negative integer traits.

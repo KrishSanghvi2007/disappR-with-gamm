@@ -1,0 +1,47 @@
+== D1 help coverage: 63 help panels
+   45 boxes, 5 without a help panel: Purpose; Glossary of terms; Preview (first 10 rows); How large is the selective process's influence, and is it stronger than chance alone would produce?; Saved results (these are exported)
+   help panels never linked from the interface: among_order, consistency, definitions, predictions, proxy_agreement, quickstart, random_slopes
+
+== D2 each panel has what / how / caution
+PASS every help panel has three substantive parts
+
+== D3 interface names quoted in texts exist
+PASS every quoted interface name exists: 0 of 130 quoted names
+PASS every 'X tab' named exists
+
+== D4 abbreviations
+   AM       used   1 times, not defined
+   BC       used   1 times, not defined
+   DA       used   1 times, not defined
+   DAW      used   1 times, not defined
+   DH       used   1 times, not defined
+   FALSE    used   9 times, not defined
+   JG       used   1 times, not defined
+   JH       used   1 times, not defined
+   JM       used   1 times, not defined
+   JP       used   1 times, not defined
+   LEB      used   1 times, not defined
+   NOT      used   1 times, not defined
+   PNAS     used   1 times, not defined
+   SJL      used   1 times, not defined
+   TO       used   1 times, not defined
+   TRUE     used   3 times, not defined
+   UTF      used   6 times, not defined
+   glossary terms: AFR, AIC, ALR, Among-individual term, CI, Error family, LS, MCAR, Random slope, SD, SE, Sampling interval, Selective appearance, Selective disappearance, Within-individual change, ΔAIC
+
+== D5 long sentences repeated across help panels
+PASS no long sentence repeated across help panels: 0 repeated
+
+== D6 'not available' messages say what to do
+   no action: disappr_integrity_error
+   no action: AFR is the same for every individual, so it cannot be correlated with ALR (no selective appearance can be test
+   no action: No random-effect variances: this model has none to report.
+PASS every 'not available' message names an action (41 messages): 3 without
+
+== D7 long sentences in help panels (over 45 words)
+PASS no help sentence over 45 words: 0 found
+
+== D8 each 'how' says how to read the result
+PASS every 'how' gives a reading cue
+
+0 failure(s)

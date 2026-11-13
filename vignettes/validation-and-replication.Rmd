@@ -1,0 +1,72 @@
+---
+title: "Validation and replication"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Validation and replication}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+disappR is checked in three ways:
+
+* **Simulations with known answers.** An independent implementation of the app's models and decomposition was run on
+  50 development scenarios (4,720 simulated datasets) and on ten held-out scenarios with expectations fixed beforehand.
+  The full report is installed with the package: `system.file("validation", "VALIDATION.md", package = "disappR")`.
+* **Published examples.** Each bundled example ships with the settings that match its paper; the comparison with the
+  published estimates is below.
+* **Held-out real data.** `inst/validation/heldout/` holds a protocol and a runner for published datasets that were not
+  used to build the app (`Rscript tests/scripts/heldout_validation.R`).
+
+## Published examples
+
+Each example ships with the column mapping and model settings that correspond to the published analysis. The
+table below compares what the paper reported with what the app returns on the bundled data using those
+defaults. "Qualitative" means the direction and the conclusion match but the models are not identical.
+
+| Example | What the paper reports | What the app returns | Verdict |
+|---|---|---|---|
+| **Bichet 2022** — tern haemagglutination | Within-individual +0.089/yr, among-individual +0.002/yr; the two do not differ, so no selective (dis)appearance | Model 3: within **+0.091/yr**, among **+0.002/yr**; Model 4 ranks first but Model 1 is only 2.6 AIC behind | **Quantitative match** |
+| **Bichet 2022** — tern haptoglobin | No age effect, no selective (dis)appearance | Model 1 has the lowest AIC; no model is lower by more than ~2 | **Qualitative match** (coefficients differ; the archived haptoglobin scale is ambiguous) |
+| **Wynn 2025** — tern navigational efficiency | Among-individual −0.870°/yr, within-individual +0.851; season (spring) +9.74; variances 63.3 / 6.3 / 1139.9 | Among **−0.78**, within **+0.81** (varies +0.81 to +0.90 across optimiser starts); spring **+4.83**; variances **62.5 / 3.4 / 1429** | **Qualitative match on the signature** (negative among, positive within); the season contrast is about half the published value |
+| **Sanghvi 2022** — beetle male weight | Apparent late-life weight increase attributed to selective disappearance of lighter males; lifespan effect P < 0.001 | Model 1 shows the same shape (age **−0.604**, age² **+0.113**); lifespan **+0.433** in Model 6; lowest AIC for Model 5 (Model 6 +57, Model 1 +468) | **Qualitative match**, consistent with the paper's interpretation |
+| **Sanghvi 2022** — beetle female fecundity | Negative binomial; hot developmental and hot adult temperatures each accelerate the decline in fecundity; lifespan included for selective disappearance | Model 4 first, Model 6 +6.4, Model 1 +610 under a Gaussian approximation | **Not verified**: the published coefficients need the negative-binomial fit (glmmTMB), which the offline check could not run |
+| **Allain 2023** — chipmunk weaning probability | Binomial GLMM; full model with AFR beats age + age² + lifespan by 23.6 AICc | Binomial GLMM: AFR models take the top two places; models without AFR are 19.5 to 25.8 AICc behind | **Quantitative match on the AFR contrast**; the season × age terms are unstable in the subset with complete lifespan |
+| **Allain 2023** — chipmunk litter size | Poisson GLMM; AFR model beats age + age² + lifespan by 25.3 AICc | Poisson GLMM: AFR models first; non-AFR models 11.5 to 17.9 AICc behind | **Qualitative match**, weaker than published |
+| **Warner 2016** — turtle egg mass | Egg mass rises with reproductive age (quadratic, r² = 0.68, P < 0.001) | Age **+0.566**, age² **−0.145**: rising and decelerating | **Qualitative match** |
+| **Warner 2016** — turtle clutch size | No significant age effect (r² = 0.12, P = 0.18) | Model 1 first; age **−0.201**, age² **+0.018** | **Qualitative match** (no age signal), though the published trend is slightly positive |
+| **Warner 2016** — turtle hatchlings alive | Fitness declines at old ages | Model 4 first but Model 1 only 2.3 AIC behind once the year random intercept is included | **Weak**: the app finds no decisive support either way |
+| **Bouwhuis 2009** — great tit recruits | Cross-sectional peak 3.45 yr; individual-level peak 2.80 yr; ALR +0.04 (selective disappearance); ALR × age not significant; post-peak slope −0.11 | Peak **3.48** → **2.80** once ALR is fitted; ALR **+0.062**; Model 2 first (Model 4 +3.4, Model 1 +7.5); post-peak slope **−0.105** | **Quantitative match** |
+| **Bouwhuis 2009** — clutch / brood / fledglings | +0.52/−0.06, +0.62/−0.10, +0.63/−0.11; no ALR effect on any of the three | **+0.499/−0.058, +0.594/−0.096, +0.637/−0.109**; ALR −0.035, −0.026, +0.034 (all negligible); Models 1, 2 and 5 within 4 AIC | **Quantitative match** |
+| **Sanghvi 2025** — fly fecundity | Zero-inflated negative binomial; lowest AIC for Model 4 (ΔAIC for Models 1, 2, 3, 5 = 38.4, 24.1, 28.0, 2.7) | Not reproducible outside R: the zero-inflated fit needs glmmTMB | **Not verified here** |
+
+### How these checks were made
+
+The comparisons were computed outside R with a re-implementation of the app's data pipeline and a maximum
+likelihood mixed model whose deviance was verified against a dense-matrix likelihood, plus Gauss-Hermite
+binomial and Poisson mixed models verified against brute-force quadrature. They predict what the app reports;
+they are not a substitute for running the app itself.
+
+Three differences between these checks and the published models are worth stating:
+
+* the published great tit and chipmunk models use several crossed random effects, whereas these checks fit one
+  random intercept and absorb the rest as fixed factors;
+* the beetle fecundity and fly examples need count families that the offline check could not fit;
+* the tern deflection series is derived here from raw positions, while the paper computed it after FLightR
+  particle filtering (see `inst/app/data/PROVENANCE.md`).
+
+Where the app and the paper disagree, the disagreement is reported above rather than reconciled.
+
+### Note on the great tit sample
+
+The bundled file is the paper's full sample of 7,341 breeding attempts by 4,935 females. An earlier build used a
+7,126-row subset that excluded 215 attempts with no lay date; refitting on the full sample moves the
+individual-level peak from 2.85 to 2.80, exactly the published value, and brings the three component traits
+closer to the published coefficients as well.
+
+### Added in 0.9.5
+
+| Example | What the paper reports | What the app returns | Verdict |
+|---|---|---|---|
+| **McKenna-Ell 2023** — sheep offspring birth weight | Age −0.061, age at last observation +0.016, capture age +0.112, sex +0.106, twin −0.826; early-life terms and their interactions with age n.s.; variances 0.066 / 0.057 / 0.004 / 0.115 | Model 2 with the example's covariates, unstandardised (offline ML refit): every slope identical to three decimals (bred as a yearling +0.054); variances 0.065 / 0.055 / 0.004 / 0.114 (ML; the paper's are REML). Krish confirmed the match in the app | **Quantitative match** |
+| **McKenna-Ell 2023** — breeding probability and offspring survival | Breeding: age −0.487, age at last observation +0.188, age × bred as a yearling −0.210. Survival: age −0.232, age at last observation +0.089, early-life recruitment +0.869 | Model 2, binomial (glmmTMB), same terms and random effects. An independent Python Laplace refit of this specification reproduces every coefficient and variance to three decimals; `tests/smoke_test.R` compares the app's own glmmTMB fit | **Independent reproduction; app fit to confirm in R** |
+| **Szejner-Sigal 2025** — bee locomotor activity | Negative parabola with age; peak at the day-28 occasion in females and day 21 in males; early-life activity only weakly linked to lifespan | Model 1 + lifespan (offline ML refit): peaks at 26.1 days (females) and 17.3 days (males), whose nearest weekly occasions are days 28 and 21; lifespan n.s. in both sexes; a housing-box random intercept does not improve AIC. Letting lifespan interact with age (Model 6) lowers AIC by about 11 (females) and 14 (males) | **Qualitative match**, peaks consistent with the reported occasions |

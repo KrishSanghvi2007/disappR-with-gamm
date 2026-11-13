@@ -1,0 +1,67 @@
+---
+title: "Models and methods"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Models and methods}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Models
+
+With `b(age)` the chosen ageing basis (e.g. age + age²), `mean(·)` individual means and `Δ` within-individual deviations:
+
+| Model | Fixed effects | Tests |
+|---|---|---|
+| 1 | b(age) | negative control |
+| 2 | b(age) + ALR | age-independent selective disappearance |
+| 3 | mean(age) + Δb(age) | within/among separation (Fay et al. 2022 for quadratics) |
+| 4 | b(age) × ALR | age-dependent selective disappearance (ALR proxy) |
+| 5 | mean(age) × Δb(age) | age-dependent selective disappearance (mean-age proxy) |
+| 6 | b(age) × LS | positive control with known lifespan |
+| 7 | b(age) + ALR + AFR | adds age-independent selective appearance |
+| 8 | b(age) × ALR + b(age) × AFR | adds age-dependent selective appearance |
+| 9 | b(age) × ALR + AFR | age-dependent disappearance with age-independent appearance |
+| 10 | b(age) × AFR + ALR | age-independent disappearance with age-dependent appearance |
+
+Every model is fitted to the rows all selected models can use, because AIC and the likelihood-ratio tests only compare models fitted to the same data; the Modelling tab reports what that costs each model. Individual means and within-individual deviations are computed from all rows an individual has, not only the shared ones, so within the fitted rows the deviations do not average to exactly zero. Mapped covariates enter every model additively. Random effects are `(1 | id)`, plus `(1 | group)` if a grouping column is mapped, with an optional random slope: for age alone, or for every age term of the chosen function (correlated or uncorrelated). A slope on age alone does not cover among-individual differences in curvature, which interaction models can otherwise absorb. With nesting, individuals are identified by group + ID, which equals `(1 | group/ID)`. All models use common complete-case rows and maximum likelihood. Age and proxies are standardised by default; this is a linear reparameterisation, so AICs are unchanged.
+
+## Teaching simulations
+
+The simulator uses the manuscript's data-generating process (individual quadratic trajectories, lifespan correlated with the intercept, slope and/or shape), with these options:
+
+* **Traits:** continuous body mass (Gaussian); fecundity counts (Poisson, negative binomial or zero-inflated NB, log link); or the exact manuscript parameterisation.
+* **Pattern strength:** *dramatic* (|ρ| = 0.85) makes the signatures unmistakable; *moderate* uses |ρ| = 0.5.
+* **Sampling:** complete, MCAR, missing when old, missing when young, trait-dependent or condition-dependent.
+* **Extras:** selective appearance, a selective treatment covariate that shortens life and lowers the trait, and 25 families as a nested random effect.
+
+Each simulation lists what the user should see. The Models tab scores each model and the decomposition against the true trajectory (Methods Eq. 11).
+
+## Interpretation caveats
+
+Associations between missingness and observed variables cannot prove MCAR, MAR or MNAR. AIC measures relative support, not causation. The decomposition can be biased as an estimate of latent trajectories when selective disappearance is age-dependent, missingness is substantial, or few individuals are sampled at consecutive ages.
+
+## Fruit-fly example: out-of-sample check
+
+The bundled data are female *D. melanogaster* fecundity: 1,901 rows, 647 F1 females, 240 fathers, assays every 14 days from day 4 to 60 (Sanghvi et al. 2025, *Am. Nat.*). The app pre-maps the manuscript's model: ZINB, `(1 | F0_ID/F1_ID)`, and Rep + paternal age + paternal sperm age as covariates.
+
+**Data-integrity checks flag:**
+* 5 duplicate F1_ID × age rows;
+* 1 F1_ID recorded under two F0_IDs (probably a typo; nesting treats them as two individuals);
+* 9 individuals without LS, and 4 with LS earlier than their last assay;
+* a median of 3 records per individual.
+
+**Error family matters.** These are independent Python replications of the likelihoods, made before the app could be run in R:
+
+| Fit | ΔAIC: M1 | M2 | M3 | M4 | M5 |
+|---|---|---|---|---|---|
+| Gaussian LMM (nested random effects, covariates) | 188.8 | 68.4 | 70.7 | 19.5 | **0** |
+| ZINB GLMM (random intercept, Gauss–Hermite quadrature) | 38.3 | 24.0 | 27.2 | **0** | 2.6 |
+| Manuscript (glmmTMB ZINB) | 38.4 | 24.1 | 28.0 | **0** | 2.7 |
+
+A Gaussian fit reverses the manuscript's conclusion. `tests/scripts/smoke_test.R` checks that the app's ZINB fit gives Model 4 the lowest AIC, with these ΔAICs, within tolerance.
+
+**Other patterns to expect:**
+* **A2 (ALR slope at ages 4, 18, 32, 46):** 0.29, 0.86, 0.72, 1.17. The slope rises with age, consistent with age-dependent selective disappearance.
+* **A1 (mean count at age 18, equal-width ALR bins):** 25, 41, 50 and 57.
+* **A3 (quadratic, residual df ≥ 1):** only 163 females can be fitted, with mean LS 55 versus 41 overall. The mean-coefficient trajectory is itself survivor-biased here.

@@ -1,0 +1,430 @@
+== A1 static audit (tools/static_audit/run_all.py)
+   == parser self-test: ok
+   == R syntax: ok
+   == /home/claude/work/v0242: 97 files, 0 syntax errors, 0 lints
+   == calls against formals: ok
+   0 errors, 0 warnings, 0 notes; 51 unresolved function names
+   == app wiring, help panels, example columns, DESCRIPTION: ok
+   -- 0 errors, 0 warnings, 0 notes; 158 inputs read, 133 outputs, 64 info entries, 13 examples checked
+   == individual-level conflicts in the examples: ok
+   == individual-level conflicts in the stress data: ok
+PASS static audit exit status
+PASS static audit reports no errors
+
+== A2 observers wrapped in disappr_guard
+   63 observers; 5 without disappr_guard in their first 400 characters
+   line 1197: (safe_get(data_sig()), {     rm(list = ls(a3_cache, all.names = TRUE), envir = a3_cache)  
+   line 1200: (input$tabs, {     if (identical(input$tabs, "individual")) {       d <- safe_get(dat())  
+   line 2829: (input$journey_learn, { updateRadioButtons(session, "data_source", selected = "toy"); upda
+   line 2830: (input$journey_explore, { updateRadioButtons(session, "data_source", selected = "example")
+   line 2831: (input$journey_analyse, { updateRadioButtons(session, "data_source", selected = "upload");
+
+== A3 widths per fluidRow in ui.R
+PASS no fluidRow wider than 12 columns
+
+== A4 functions called in server.R are defined
+   550 distinct function names called; 35 not found among local, engine or common package names:
+   Scale, age, bquote, br, conditionalPanel, coord_flip, expansion, f, geom_blank, geom_count, geom_histogram, get0, incProgress, library, ls, nzchar, outputOptions, parent.frame, pr, reactiveValues, requireNamespace, rm, scale_alpha_manual, scale_x_reverse, sec_axis, setProgress, setequal, strwrap, summary, suppressPackageStartupMessages, sys.source, system.file, try, waiver, withProgress
+
+== A5 saved results: SAVE_ORDER prefixes against add_saved titles
+PASS every saved title has a SAVE_ORDER place
+   20 titles, 30 prefixes; prefixes with no literal title start (may be built at run time): Trait trajectory by, Difference between, Trait against, Regression coefficient of the trait on, Sampling summary and proxy guidance, Missingness and sample size by age, Missingness against, Model comparison, Ageing-function check with, Null-model bootstrap
+
+== A6 regression: changes to pre-existing code between 0.21.16 and 0.22.0
+   R/api.R:16-17 changed 2 line(s) | removed: #'   `cov_factor`, `cov_age`, `group`, `group2`, `random`, ...). For `
+   R/api.R:22-23 changed 2 line(s) | removed: #' @param dup_action What to do with repeated individual-by-age record
+   R/api.R:52-52 changed 1 line(s) | removed: disappr_mapping <- function(...) example_map(...)
+   R/data-preparation.R:2-2 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/data-preparation.R:179-183 added 5 line(s)
+   R/data-preparation.R:185-187 changed 3 line(s) | removed: last_rec <- stats::ave(out$age, out$id, FUN = max) / first_rec <- stats::ave(out$age, out$id, FUN = min)
+   R/data-preparation.R:325-325 added 1 line(s)
+   R/diagnostics.R:2-2 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/diagnostics.R:20-22 changed 3 line(s) | removed: if (!is_count) return(list(family = "gaussian", kind = "Continuous", t
+   R/diagnostics.R:109-109 changed 1 line(s) | removed: if (!identical(family, "gaussian")) {
+   R/diagnostics.R:148-148 changed 1 line(s) | removed: if (identical(family, "gaussian")) NA_real_ else p_of(DHARMa::testZero
+   R/diagnostics.R:178-178 changed 1 line(s) | removed: if (random_structure %in% c("correlated", "uncorrelated")) {
+   R/diagnostics.R:199-246 added 48 line(s)
+   R/disappearance.R:3-3 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/disappearance.R:325-325 changed 1 line(s) | removed: decomposition_trajectory <- function(dat) {
+   R/disappearance.R:328-331 changed 4 line(s) | removed: step <- infer_age_step(ia$age, ia$id)
+   R/disappearance.R:333-349 added 17 line(s)
+   R/disappearance.R:357-357 added 1 line(s)
+   R/disappearance.R:398-398 added 1 line(s)
+   R/disappearance.R:411-411 changed 1 line(s) | removed: disappearance_data <- function(dat, meta, log_scale = FALSE) {
+   R/disappearance.R:415-415 changed 1 line(s) | removed: step <- infer_age_step(ia$age, ia$id)
+   R/disappearance.R:451-478 added 28 line(s)
+   R/disappearance.R:492-493 changed 2 line(s) | removed: glm_safe <- function(f, data) tryCatch(suppressWarnings(stats::glm(sta
+   R/disappearance.R:500-501 changed 2 line(s) | removed: P = cf[term, 4], Records = n, Disappearances = ev, stringsAsFactors = 
+   R/disappearance.R:516-516 changed 1 line(s) | removed: p_age <- if (!is.null(m1) && !is.null(m2)) stats::pchisq(max(0, m1$dev
+   R/disappearance.R:519-520 changed 2 line(s) | removed: cf <- stats::coef(m2) / vc <- stats::vcov(m2)
+   R/disappearance.R:532-532 changed 1 line(s) | removed: lifespan_known = isTRUE(attr(ia, "lifespan_known")), message = "")
+   R/disappearance.R:561-561 changed 1 line(s) | removed: life_table <- function(dat, meta) {
+   R/disappearance.R:565-565 changed 1 line(s) | removed: step <- infer_age_step(dat$age, dat$id)
+   R/disappearance.R:592-611 changed 20 line(s) | removed: list(ok = TRUE, table = lt, overall = overall, p_constant = p_const, l
+   R/disappearance.R:615-615 changed 1 line(s) | removed: terminal_data <- function(dat, meta, n_min = 3) {
+   R/disappearance.R:621-621 changed 1 line(s) | removed: step <- infer_age_step(ia$age, ia$id)
+   R/effects.R:58-58 changed 1 line(s) | removed: scale_word <- if (identical(res$family, "gaussian")) "trait" else if (
+   R/effects.R:152-155 changed 4 line(s) | removed: standardise = TRUE, zi = "~1", among = "linear", extra = NULL), settin
+   R/effects.R:162-162 changed 1 line(s) | removed: zi_str = s$zi, among = s$among, extra = s$extra),
+   R/effects.R:187-187 changed 1 line(s) | removed: random_slope = rs, standardise = s$standardise, zi_str = s$zi, among =
+   R/effects.R:226-227 changed 2 line(s) | removed: null_model = list(age_function = null_fun, random_slope = null_rs, fam
+   R/effects.R:272-272 changed 1 line(s) | removed: "Missing records that depend on the trait itself make individuals look
+   R/evidence.R:228-228 changed 1 line(s) | removed: else if (fam %in% BINOMIAL_FAMILIES) stats::qlogis(pmin(pmax(x, 1e-9),
+   R/export.R:2-2 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/export.R:61-61 changed 1 line(s) | removed: if (identical(res$family, "gaussian")) "library(lme4)" else "library(g
+   R/export.R:75-77 changed 3 line(s) | removed: if (isTRUE(meta$alr_mapped)) paste0("dat$ALR_raw <- as.numeric(dat[[", / if (isTRUE(meta$entry_mapped)) paste0("dat$AFR_raw <- as.numeric(dat[[
+   R/export.R:81-81 changed 1 line(s) | removed: if (identical(meta$dup_action, "mean")) "# NOTE: the app averaged dupl
+   R/export.R:139-140 changed 2 line(s) | removed: if (identical(res$family, "gaussian")) {
+   R/export.R:143-143 changed 1 line(s) | removed: fam <- switch(res$family, poisson = "poisson()", zip = "poisson()", nb / binomial = "binomial()", betabinomial = "betabinomial()", "nbinom2()")
+   R/export.R:146-147 changed 2 line(s) | removed: sprintf("%s <- glmmTMB(%s, family = %s, ziformula = %s, data = dat%s)"
+   R/export.R:171-171 changed 1 line(s) | removed: sprintf("  raw <- disappR:::read_user_csv(%s, %s)$data", q(source_labe
+   R/export.R:187-188 changed 2 line(s) | removed: ", extra = ", paste(deparse(res$extra, width.cutoff = 500L), collapse 
+   R/export.R:282-283 changed 2 line(s) | removed: "decomp <- decomposition_trajectory(dat)",
+   R/export.R:512-725 added 214 line(s)
+   R/formulas.R:2-2 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/formulas.R:272-272 changed 1 line(s) | removed: Name = c("Naive", "Additive ALR", "Mean-centring", "ALR interaction",  / "LS interaction (positive control)", "Additive ALR + AFR", "Interactiv
+   R/formulas.R:295-295 changed 1 line(s) | removed: text = "Centring-based. Each individual's age is split into its mean a
+   R/formulas.R:374-375 changed 2 line(s) | removed: family = paste0(family_label(fam), if (fam %in% ZI_FAMILIES) paste0(";
+   R/formulas.R:469-470 changed 2 line(s) | removed: binomial = , betabinomial = paste0("logit(", sb("p", "ij"), ")"), past
+   R/formulas.R:480-492 changed 13 line(s) | removed: betabinomial = paste0(sb("y", "ij"), " ~ Beta-binomial(", sb("n", "ij"
+   R/formulas.R:576-577 changed 2 line(s) | removed: fam_call <- switch(fam, poisson = "poisson()", zip = "poisson()", nbin / binomial = "binomial()", betabinomial = "glmmTMB::betabinomial()", "gl
+   R/formulas.R:582-583 changed 2 line(s) | removed: if (fam %in% BINOMIAL_FAMILIES && isTRUE(meta$has_trials)) ", weights 
+   R/formulas.R:585-586 changed 2 line(s) | removed: list(available = TRUE, equation = c(eq, zi_line), distributions = c(if
+   R/import.R:2-2 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/import.R:15-16 changed 2 line(s) | removed: start_mode = "same", start_age = 4, age_round = NA_real_, cov_age = ch
+   R/import.R:34-36 changed 3 line(s) | removed: inconsistent = "error")
+   R/import.R:43-48 added 6 line(s)
+   R/import.R:56-56 changed 1 line(s) | removed: "which restricts every model to the 99% of flies with a known lifespan
+   R/import.R:60-65 added 6 line(s)
+   R/import.R:77-77 changed 1 line(s) | removed: "intercepts with random intercepts and slopes, and random intercepts f / "the titre, 2.6 for haptoglobin), so the example keeps a random interc
+   R/import.R:81-86 added 6 line(s)
+   R/import.R:102-107 added 6 line(s)
+   R/import.R:116-116 changed 1 line(s) | removed: "and threshold (breakpoint) models and averaged those within 2 AICc, f
+   R/import.R:129-134 added 6 line(s)
+   R/import.R:159-164 added 6 line(s)
+   R/import.R:179-184 added 6 line(s)
+   R/import.R:199-204 added 6 line(s)
+   R/import.R:213-213 changed 1 line(s) | removed: "weaning, Poisson for the number of juveniles), compared them by AICc,
+   R/import.R:217-217 changed 1 line(s) | removed: "lifespan, because AIC comparisons need the same rows throughout. Thei
+   R/import.R:219-219 changed 1 line(s) | removed: "AFR \u00d7 age + AFR \u00d7 age\u00b2 + lifespan (AICc weight 0.88): 
+   R/import.R:224-229 added 6 line(s)
+   R/import.R:248-253 added 6 line(s)
+   R/import.R:267-272 added 6 line(s)
+   R/import.R:290-295 added 6 line(s)
+   R/import.R:313-318 added 6 line(s)
+   R/import.R:395-396 changed 2 line(s) | removed: censor = "", censor_value = "", start_mode = "afr", start_age = NA_rea
+   R/interpretation.R:2-2 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/interpretation.R:61-81 added 21 line(s)
+   R/interpretation.R:127-128 changed 2 line(s) | removed: contrast <- function(label, var, hold_lo, hold_hi, lo_txt, hi_txt, mai
+   R/interpretation.R:140-159 added 20 line(s)
+   R/interpretation.R:191-193 changed 3 line(s) | removed: main_note <- if (!length(main_terms)) "" else if (sig_main) / " The term itself is also supported, so the two groups already differ 
+   R/interpretation.R:195-195 changed 1 line(s) | removed: " The term itself is not supported, so at the mean age the two groups 
+   R/interpretation.R:200-201 changed 2 line(s) | removed: if (length(inter_terms)) " (the interaction is not clearly supported)"
+   R/interpretation.R:203-204 changed 2 line(s) | removed: paste0(label, ": no clear evidence for this term in this model (", evi
+   R/interpretation.R:252-261 changed 10 line(s) | removed: ap <- res$age_params / to_age <- function(x) if (isTRUE(ap$standardise) && ap$fun %in% c("Lin
+   R/interpretation.R:263-266 changed 4 line(s) | removed: paste0("individuals whose records centre on younger ages (mean age \u2 / paste0("individuals whose records centre on older ages (mean age \u224
+   R/missingness.R:2-2 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/missingness.R:7-12 changed 6 line(s) | removed: # Each individual's expected window runs from its first observation of / # use: the last recorded age, with or without a trait value, or the ma
+   R/missingness.R:15-15 changed 1 line(s) | removed: build_missing_grid <- function(dat, margin = 0, start_mode = "afr", st
+   R/missingness.R:23-23 changed 1 line(s) | removed: step0 <- infer_age_step(d$age, d$id)
+   R/missingness.R:38-43 changed 6 line(s) | removed: start_ref <- if (common_start) rep(start_age, length(ids)) else first_
+   R/missingness.R:51-55 changed 5 line(s) | removed: # a mapped ALR later than the last record (seen alive, not measured) k
+   R/missingness.R:57-57 changed 1 line(s) | removed: end_k <- pmax(last_k, alr_k, na.rm = TRUE)
+   R/missingness.R:59-59 changed 1 line(s) | removed: end_k <- pmax(end_k, last_k)
+   R/missingness.R:61-63 changed 3 line(s) | removed: # AFR mode: the window opens at the first trait record, so a capture w / # counted; AFE mode: it opens at the common start age (the anchor)
+   R/missingness.R:112-112 added 1 line(s)
+   R/missingness.R:287-297 added 11 line(s)
+   R/missingness.R:299-300 added 2 line(s)
+   R/model-comparison.R:2-2 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/model-comparison.R:38-39 changed 2 line(s) | removed: age_var <- switch(ap$fun, Logarithmic = "log(age)", "Asymptotic expone
+   R/model-comparison.R:54-58 added 5 line(s)
+   R/model-comparison.R:60-60 changed 1 line(s) | removed: if (identical(raw, "(Intercept)")) return(c(scale = NA_real_, unit = "
+   R/model-comparison.R:70-70 changed 1 line(s) | removed: if (identical(raw, "(Intercept)")) return(c(scale = if (rate) s else N
+   R/model-comparison.R:79-79 changed 1 line(s) | removed: if (pw > 1) paste0("(", age_var, " \u2212 centre)^", pw) else paste(ag
+   R/model-comparison.R:85-86 changed 2 line(s) | removed: units <- c(units, if (pw > 1) paste0("(", v, " \u2212 centre)^", pw) e
+   R/model-comparison.R:103-103 changed 1 line(s) | removed: negligible_random_terms <- function(vc, share_min = 0.01, sd_min = 0.0
+   R/model-comparison.R:109-123 changed 15 line(s) | removed: out$sd[sd_rows] <- sqrt(pmax(vc$Variance[sd_rows], 0))
+   R/model-comparison.R:126-126 changed 1 line(s) | removed: tot <- sum(vc$Variance[sd_rows | res])
+   R/model-comparison.R:128-128 changed 1 line(s) | removed: out$share[sd_rows] <- vc$Variance[sd_rows] / tot
+   R/model-comparison.R:140-139 changed 0 line(s) | removed: how <- if (is.finite(share)) sprintf("%.1f%% of the variance", 100 * s
+   R/model-comparison.R:141-142 added 2 line(s)
+   R/model-comparison.R:147-147 changed 1 line(s) | removed: return(sprintf("Random term %s (%s) explains no variance (%s): individ
+   R/model-comparison.R:205-210 changed 6 line(s) | removed: disp <- tryCatch({ / fam <- stats::family(fit)$family
+   R/model-comparison.R:212-224 added 13 line(s)
+   R/model-comparison.R:272-273 changed 2 line(s) | removed: among = "linear", include_invalid = FALSE) { / if (!HAS_GLMMTMB) return(list(ok = FALSE, message = "Install glmmTMB t
+   R/model-comparison.R:276-284 changed 9 line(s) | removed: if (binom_set) {
+   R/model-comparison.R:295-295 changed 1 line(s) | removed: among = among, include_invalid = include_invalid)
+   R/model-comparison.R:308-310 changed 3 line(s) | removed: list(ok = TRUE, table = tab, model = model)
+   R/model-comparison.R:320-320 changed 1 line(s) | removed: among = "linear", include_invalid = FALSE) {
+   R/model-comparison.R:329-330 changed 2 line(s) | removed: among = among, include_invalid = include_invalid)
+   R/model-comparison.R:363-368 changed 6 line(s) | removed: data.frame(Term = x$Term, Estimate = signif(x$Estimate, 4), SE = signi / Statistic = round(x$Statistic, 2), P = vapply(x$P_value, format_p, cha
+   R/model-comparison.R:391-548 added 158 line(s)
+   R/model-fit.R:2-2 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/model-fit.R:5-6 changed 2 line(s) | removed: switch(f, gaussian = "Gaussian (lme4)", poisson = "Poisson", nbinom2 =
+   R/model-fit.R:8-9 changed 2 line(s) | removed: zinb = "zero-inflated negative binomial (nbinom2)", zinb1 = "zero-infl
+   R/model-fit.R:40-41 changed 2 line(s) | removed: paste0("Caution (rule of thumb, not a threshold): these data carry lit / paste(msgs, collapse = "; "),
+   R/model-fit.R:62-74 added 13 line(s)
+   R/model-fit.R:77-79 added 3 line(s)
+   R/model-fit.R:98-139 added 42 line(s)
+   R/model-fit.R:186-186 changed 1 line(s) | removed: fit_one_model <- function(formula_str, random_str, data, family = "gau
+   R/model-fit.R:191-193 changed 3 line(s) | removed: if (identical(family, "gaussian")) {
+   R/model-fit.R:198-200 changed 3 line(s) | removed: fam <- switch(family, poisson = stats::poisson(), zip = stats::poisson
+   R/model-fit.R:211-211 changed 1 line(s) | removed: glmmTMB::glmmTMB(ff, data = data, family = fam, ziformula = zi, REML =
+   R/model-fit.R:216-216 changed 1 line(s) | removed: glmmTMB::glmmTMB(ff, data = data, family = fam, ziformula = zi, REML =
+   R/model-fit.R:498-499 changed 2 line(s) | removed: among = "linear", include_invalid = FALSE, extra = NULL, dry_run = FAL
+   R/model-fit.R:503-503 added 1 line(s)
+   R/model-fit.R:506-506 added 1 line(s)
+   R/model-fit.R:516-536 added 21 line(s)
+   R/model-fit.R:541-541 changed 1 line(s) | removed: if (identical(meta$dup_action %||% "keep", "mean")) "Averaging duplica
+   R/model-fit.R:648-649 added 2 line(s)
+   R/model-fit.R:700-700 added 1 line(s)
+   R/model-fit.R:708-708 changed 1 line(s) | removed: res <- fit_one_model(fs[[m]], rstr, dd, family, zi_str)
+   R/model-fit.R:754-754 changed 1 line(s) | removed: schedule_irregular = isTRUE(tryCatch(schedule_irregular(dd), error = f
+   R/model-fit.R:760-760 added 1 line(s)
+   R/provenance.R:3-3 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/provenance.R:71-74 changed 4 line(s) | removed: paste(s$family, s$zi, s$random_slope, s$standardise, s$among, s$includ
+   R/provenance.R:114-114 changed 1 line(s) | removed: random = res$random, zero_inflation = res$zi),
+   R/run_app.R:35-35 changed 1 line(s) | removed: # Uploads up to 20 MB (Shiny's default is 5 MB, which long-term field  / old <- options(shiny.maxRequestSize = 20 * 1024^2)
+   R/simulation.R:2-2 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/simulation.R:267-269 changed 3 line(s) | removed: alr = "__AUTO_LAST__", life = "lifespan", entry = if (afr_ind) "AFR" e
+   R/simulation.R:273-273 changed 1 line(s) | removed: cov_age = character(0), cov_int = character(0))
+   R/simulation.R:334-335 changed 2 line(s) | removed: trait = "Trait-dependent missingness (low values more often missing):  / condition = "Condition-dependent missingness (condition covaries with 
+   R/trajectories.R:2-2 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/trajectories.R:300-309 added 10 line(s)
+   R/trajectories.R:318-318 added 1 line(s)
+   R/trajectories.R:370-372 changed 3 line(s) | removed: predict_population_curve <- function(fit, res, ages, hold = NULL, by =
+   R/trajectories.R:433-439 added 7 line(s)
+   R/trajectories.R:481-481 changed 1 line(s) | removed: observed_prediction_ages <- function(age, id = NULL) {
+   R/trajectories.R:484-484 changed 1 line(s) | removed: step <- if (is.null(id)) NA_real_ else tryCatch(infer_age_step(age[is.
+   R/trajectories.R:541-673 added 133 line(s)
+   R/ui-helpers.R:2-2 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/ui-helpers.R:51-54 changed 4 line(s) | removed: "Loads simulated data with a known answer, one of 13 empirical example / "With the simulator, change one setting at a time and see how the diag
+   R/ui-helpers.R:56-56 changed 1 line(s) | removed: "Sets where each individual's expected-occasion window opens. 'Age at 
+   R/ui-helpers.R:69-71 changed 3 line(s) | removed: "What to do when the same individual appears more than once at the sam / "Rows that differ in anything - the trait, the number of trials, a cov
+   R/ui-helpers.R:77-86 added 10 line(s)
+   R/ui-helpers.R:90-90 changed 1 line(s) | removed: ""),
+   R/ui-helpers.R:92-95 changed 4 line(s) | removed: "Checks the data for duplicate records, ages that look like calendar y / "Clear anything flagged here before modelling. The suggested error fam
+   R/ui-helpers.R:103-103 changed 1 line(s) | removed: "Every bin and age point needs at least three individuals, so sparse b
+   R/ui-helpers.R:106-109 changed 4 line(s) | removed: "Groups individuals by how long they were observed, then plots mean tr / "Parallel bands indicate a constant difference between groups. Bands t
+   R/ui-helpers.R:111-114 changed 4 line(s) | removed: "Plots the gap between neighbouring lifespan groups at each age, which / "A flat series indicates an age-independent difference. A series with 
+   R/ui-helpers.R:118-118 changed 1 line(s) | removed: "For count traits the slope can change through scale alone, so compare
+   R/ui-helpers.R:121-124 changed 4 line(s) | removed: "Aligns individuals on occasions before death rather than on age, and  / "A fall or rise in the final occasions indicates that individuals chan
+   R/ui-helpers.R:126-129 changed 4 line(s) | removed: "At each age, compares the mean trait of individuals that survive to t / "A point whose interval excludes zero indicates selective disappearanc
+   R/ui-helpers.R:134-137 changed 4 line(s) | removed: more = "At each age, the probability of disappearing before the next o / sampling_guidance = info_entry("Sampling summary and proxy guidance",
+   R/ui-helpers.R:141-141 changed 1 line(s) | removed: "Look for individuals with gaps, late entry or early exit, and for who
+   R/ui-helpers.R:143-143 changed 1 line(s) | removed: more = "One row per individual and one column per expected occasion: o
+   R/ui-helpers.R:145-147 changed 3 line(s) | removed: "Shows how many individuals are still present at each age and what sha / "Use it to see where the data thin out, and how far conclusions about 
+   R/ui-helpers.R:156-156 changed 1 line(s) | removed: "",
+   R/ui-helpers.R:168-171 changed 4 line(s) | removed: "Fits each individual's own ageing curve with the function you choose, / "Look at how consistently individuals follow the chosen shape, and whe
+   R/ui-helpers.R:173-176 changed 4 line(s) | removed: "Averages the fitted individual ageing trajectories, including every i / "Read it as the latent within-individual trajectory the analysis is tr
+   R/ui-helpers.R:178-181 changed 4 line(s) | removed: "Compares how well each ageing function fits individual trajectories,  / "The function with the lowest mean \u0394AICc, or with the highest mea
+   R/ui-helpers.R:186-190 changed 5 line(s) | removed: b2 = info_entry("Which shape fits the population trajectory?", / "Fits each ageing function to the whole population rather than to indi
+   R/ui-helpers.R:192-195 changed 4 line(s) | removed: "Sets the error family, ageing function, random effects and which mode / "Start simple: choose the distribution that suits your trait, keep the
+   R/ui-helpers.R:201-203 changed 3 line(s) | removed: "Shows, for each model, whether the fit converged, whether it is singu / "Converged: the optimiser found a maximum of the likelihood, so the es
+   R/ui-helpers.R:205-208 changed 4 line(s) | removed: "Ranks the fitted models by AIC and marks those within 2 AIC of the be / "Read the supported set rather than the top row, and check each model'
+   R/ui-helpers.R:210-212 changed 3 line(s) | removed: "Automatic cross-checks between the model ranking and other evidence:  / "Agreement across criteria strengthens a conclusion. When they disagre
+   R/ui-helpers.R:219-231 changed 13 line(s) | removed: "The variance attributed to each random term: how much individuals (an / "Compare each variance with the residual. A random-intercept variance 
+   R/ui-helpers.R:233-236 changed 4 line(s) | removed: "Draws each model's predicted population trajectory on the trait scale / "Compare how far the corrected models sit from Model 1, which acts as 
+   R/ui-helpers.R:243-245 changed 3 line(s) | removed: "Averages each individual's own fitted ageing function across the whol / "Use it to ask what the average within-individual trajectory would be 
+   R/ui-helpers.R:247-250 changed 4 line(s) | removed: "Reports how far the ageing slope moves when the lifespan proxy is add / "Use these to say how much the correction changed the answer, not just
+   R/ui-helpers.R:254-256 changed 3 line(s) | removed: "The default is 39 simulated datasets. The smallest possible p-value i
+   R/ui-helpers.R:265-265 changed 1 line(s) | removed: ""),
+   R/ui-helpers.R:279-282 changed 4 line(s) | removed: "Refits any model with each ageing function in turn, so you can test w / "Use it when the shape you chose is not clearly the best-supported one
+   R/ui-helpers.R:284-287 changed 4 line(s) | removed: "Refits a model with each count family, so you can see which distribut / "Compare AICs across families and check the dispersion. Zero inflation
+   R/ui-helpers.R:290-290 changed 1 line(s) | removed: "A good model gives a QQ plot whose points follow the diagonal and a r
+   R/ui-helpers.R:306-329 added 24 line(s)
+   R/ui-helpers.R:333-333 changed 1 line(s) | removed: "")
+   R/ui-helpers.R:378-378 changed 1 line(s) | removed: guide_box <- function(tab, goal, start_with, then = NULL, tip = NULL) 
+   R/ui-helpers.R:387-387 added 1 line(s)
+   R/utils.R:2-2 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/utils.R:180-216 added 37 line(s)
+   R/validation.R:2-2 changed 1 line(s) | removed: # Moved verbatim from inst/app/global.R (0.9.9); do not edit here with
+   R/validation.R:65-65 changed 1 line(s) | removed: data_integrity <- function(dat, meta) {
+   R/validation.R:73-73 changed 1 line(s) | removed: step <- infer_age_step(dat$age, dat$id)
+   R/validation.R:122-124 added 3 line(s)
+   R/validation.R:126-130 changed 5 line(s) | removed: mism <- sum(abs(im$alr - im$last_recorded) > 1e-8, na.rm = TRUE) / add("Mapped ALR vs last recorded age", sprintf("%d individuals differ"
+   R/validation.R:145-146 changed 2 line(s) | removed: gap <- (im$lifespan - im$last_recorded) / step
+   R/validation.R:151-151 changed 1 line(s) | removed: "Gaps of \u2265 1 step mean an individual was alive at a sampling occa
+   R/validation.R:288-288 changed 1 line(s) | removed: schedule_irregular <- function(dat) {
+   R/validation.R:293-293 changed 1 line(s) | removed: step <- infer_age_step(a, id)
+   inst/app/server.R:3-9 changed 7 line(s) | removed: HEAT_COLOURS <- c("Observed" = "#7C8060", "Missed" = "#C0392B", "Last 
+   inst/app/server.R:62-62 changed 1 line(s) | removed: notify("Simulated dataset ready. All tabs now use it; refit models on 
+   inst/app/server.R:110-110 added 1 line(s)
+   inst/app/server.R:113-121 changed 9 line(s) | removed: div(class = "truth-card", strong("Empirical example. "), ex$note)
+   inst/app/server.R:173-173 changed 1 line(s) | removed: selectInput("col_alr", "ALR (age at last record)", choices = c("Automa
+   inst/app/server.R:175-175 changed 1 line(s) | removed: selectInput("col_life", "Known lifespan (LS)", choices = c("(not avail
+   inst/app/server.R:177-184 changed 8 line(s) | removed: checkboxInput("exclude_inconsistent", "Exclude individuals whose ALR,  / value = identical(pm$inconsistent, "exclude"))
+   inst/app/server.R:211-212 changed 2 line(s) | removed: fluidRow(column(4, numericInput("age_round", "Round ages to multiples  / value = if (isTRUE(is.finite(pm$age_round))) pm$age_round else NA, min
+   inst/app/server.R:218-218 changed 1 line(s) | removed: choices = c("Automatic: each individual's first record (default)" = "a
+   inst/app/server.R:224-224 changed 1 line(s) | removed: box_note("AFR is the age when the individual enters the dataset. This 
+   inst/app/server.R:227-226 changed 0 line(s) | removed: box_note("Binomial weights (the number of trials behind each proportio
+   inst/app/server.R:237-249 added 13 line(s)
+   inst/app/server.R:396-396 changed 1 line(s) | removed: shiny::validate(shiny::need(any(present), "No non-missing values."))
+   inst/app/server.R:435-435 added 1 line(s)
+   inst/app/server.R:463-467 changed 5 line(s) | removed: tryCatch(unname(tools::md5sum(system.file("app", "data", current_examp
+   inst/app/server.R:484-495 changed 12 line(s) | removed: meta <- reactive(bundle()$meta)
+   inst/app/server.R:506-506 changed 1 line(s) | removed: m$dup_action, m$n_censored, isTRUE(m$has_group2), if (isTRUE(m$has_gro
+   inst/app/server.R:531-534 changed 4 line(s) | removed: # the random structure the source paper used (0.20.25); examples witho / updateSelectInput(session, "random_structure", selected = normalise_sl
+   inst/app/server.R:550-550 changed 1 line(s) | removed: st <- infer_age_step(d$age, d$id)
+   inst/app/server.R:556-557 changed 2 line(s) | removed: paste0(length(unique(d$age)), " distinct; step ", if (is.finite(st)) f
+   inst/app/server.R:672-672 changed 1 line(s) | removed: step <- infer_age_step(d$age, d$id)
+   inst/app/server.R:707-709 changed 3 line(s) | removed: strong(if (ok) "Trait scale: suitable. " else "Trait scale: change it. / sprintf("The trait looks like %s. ", what), advice)
+   inst/app/server.R:715-715 changed 1 line(s) | removed: shiny::validate(shiny::need(all(d$trait[is.finite(d$trait)] > -1), "lo
+   inst/app/server.R:722-722 changed 1 line(s) | removed: shiny::validate(shiny::need(length(ch) > 0, "No usable grouping variab
+   inst/app/server.R:761-761 changed 1 line(s) | removed: shiny::validate(shiny::need(nrow(s) > 0, "Not enough variation in the 
+   inst/app/server.R:782-782 changed 1 line(s) | removed: shiny::validate(shiny::need(nrow(z) > 0, "No individuals with both tra
+   inst/app/server.R:785-785 changed 1 line(s) | removed: shiny::validate(shiny::need(nrow(z) > 0, "No age bin has at least 3 in
+   inst/app/server.R:852-852 changed 1 line(s) | removed: shiny::validate(shiny::need(nrow(s) > 0, "No bins to compare (see the 
+   inst/app/server.R:854-854 changed 1 line(s) | removed: shiny::validate(shiny::need(nrow(dz) > 0, "No age at which two bins bo
+   inst/app/server.R:956-956 changed 1 line(s) | removed: start_age = afe)
+   inst/app/server.R:975-974 changed 0 line(s) | removed: output$sampling_guidance <- renderUI({ / ms <- msum()
+   inst/app/server.R:1010-1010 changed 1 line(s) | removed: shiny::validate(shiny::need(nrow(g) > 0, "Could not build the sampling
+   inst/app/server.R:1016-1017 added 2 line(s)
+   inst/app/server.R:1019-1020 changed 2 line(s) | removed: alr = ids[order(im$alr[mi], im$first_recorded[mi], na.last = FALSE)], / afr = ids[order(im$entry[mi], im$alr[mi], na.last = FALSE)],
+   inst/app/server.R:1027-1027 changed 1 line(s) | removed: shiny::validate(shiny::need(nrow(x) > 0, "Could not build the sampling
+   inst/app/server.R:1029-1032 changed 4 line(s) | removed: labs_map <- c("Observed" = "Observed", "Missed" = "Missed (between the / "Last record (ALR)" = "Last record (ALR)",
+   inst/app/server.R:1050-1050 changed 1 line(s) | removed: shiny::validate(shiny::need(nrow(g) > 0, "No sampling grid."))
+   inst/app/server.R:1065-1065 changed 1 line(s) | removed: shiny::validate(shiny::need(nrow(g) > 0, "No sampling grid."))
+   inst/app/server.R:1067-1067 changed 1 line(s) | removed: shiny::validate(shiny::need(nrow(x) > 0, "This variable is not availab
+   inst/app/server.R:1112-1113 changed 2 line(s) | removed: shiny::validate(shiny::need(nrow(df) >= 5, "Fewer than 5 individuals w / shiny::validate(shiny::need(stats::sd(df$AFR) > 0, "AFR is the same fo
+   inst/app/server.R:1147-1147 changed 1 line(s) | removed: shiny::validate(shiny::need(life_known(), "LS unknown."))
+   inst/app/server.R:1152-1152 changed 1 line(s) | removed: shiny::validate(shiny::need(life_known(), "LS unknown."))
+   inst/app/server.R:1387-1387 changed 1 line(s) | removed: shiny::validate(shiny::need(nrow(raw) > 0, "No trait records for the s
+   inst/app/server.R:1545-1546 changed 2 line(s) | removed: extra = if (length(ex)) ex else NULL)
+   inst/app/server.R:1599-1599 changed 1 line(s) | removed: if (!is.null(ex_fn)) { / return(p(class = "small-note", sprintf("Set by the example to the agei
+   inst/app/server.R:1644-1644 added 1 line(s)
+   inst/app/server.R:1646-1647 changed 2 line(s) | removed: div(class = "small-note", style = paste0("border-left: 3px solid ", co
+   inst/app/server.R:1805-1805 changed 1 line(s) | removed: if (identical(fam$family, "gaussian") && !identical(s$family, "gaussia
+   inst/app/server.R:1810-1810 changed 1 line(s) | removed: msgs <- c(msgs, list(div(class = "diagnosis-card", div(class = "diagno
+   inst/app/server.R:1855-1855 changed 1 line(s) | removed: functions = fns, model = "M1", among = s$among, include_invalid = s$in
+   inst/app/server.R:1887-1887 changed 1 line(s) | removed: shiny::validate(shiny::need(nrow(r$curves) > 0, "No function could be 
+   inst/app/server.R:1906-1906 changed 1 line(s) | removed: among = s$among, include_invalid = s$include_invalid, extra = s$extra,
+   inst/app/server.R:1910-1910 changed 1 line(s) | removed: link <- if (identical(pv$family, "gaussian")) "identity" else if (pv$f
+   inst/app/server.R:1919-1920 changed 2 line(s) | removed: if (nzchar(pv$zi %||% "") && !identical(pv$zi, "~1")) paste0(", zero-i
+   inst/app/server.R:1925-1925 changed 1 line(s) | removed: if (is.data.frame(pv$re_checks) && any(pv$re_checks$Status == "Caution / p(strong("Random effects: "), paste(paste0(pv$re_checks$Check, " (", p
+   inst/app/server.R:1941-1941 changed 1 line(s) | removed: among = s$among, include_invalid = s$include_invalid, extra = s$extra)
+   inst/app/server.R:1970-1969 changed 0 line(s) | removed: d45 <- if (all(c("Model 4", "Model 5") %in% elig$Model)) { / elig$AIC[elig$Model == "Model 5"] - elig$AIC[elig$Model == "Model 4"]
+   inst/app/server.R:1991-2000 changed 10 line(s) | removed: div(class = "diagnosis-detail small-note", if (isTRUE(r$nonlinear)) pa / paste0("Fitted formula of this model: trait ~ ", display_term(r$formul
+   inst/app/server.R:2004-2004 changed 1 line(s) | removed: if (isTRUE(r$n_excluded > 0)) div(class = "diagnosis-detail", strong(s
+   inst/app/server.R:2012-2012 changed 1 line(s) | removed: shiny::validate(shiny::need(nrow(aic) > 0, "No eligible AIC values."))
+   inst/app/server.R:2052-2052 changed 1 line(s) | removed: if (any(vapply(c("M3", "M5", "M6"), function(m) m %in% names(r$formula
+   inst/app/server.R:2089-2089 changed 1 line(s) | removed: shiny::validate(shiny::need(is.data.frame(vc) && nrow(vc) > 0, "No ran
+   inst/app/server.R:2094-2095 added 2 line(s)
+   inst/app/server.R:2103-2107 changed 5 line(s) | removed: term_lab <- function(t) gsub("f1", "age (first ageing term)", t, fixed
+   inst/app/server.R:2136-2136 changed 1 line(s) | removed: ages <- if (isTRUE(input$pred_as_lines)) observed_prediction_ages(r$da
+   inst/app/server.R:2161-2161 changed 1 line(s) | removed: decomp_traj <- reactive(decomposition_trajectory(dat()))
+   inst/app/server.R:2166-2168 added 3 line(s)
+   inst/app/server.R:2189-2189 changed 1 line(s) | removed: st <- infer_age_step(rp$age, rp$id)
+   inst/app/server.R:2357-2357 added 1 line(s)
+   inst/app/server.R:2360-2360 changed 1 line(s) | removed: fl <- negligible_random_terms(vc)
+   inst/app/server.R:2370-2370 changed 1 line(s) | removed: fl <- negligible_random_terms(vc)
+   inst/app/server.R:2390-2392 changed 3 line(s) | removed: res <- run_with_progress("Comparing count families", function(pr) { / fams <- if ((s$family %||% "gaussian") %in% BINOMIAL_FAMILIES) BINOMIA
+   inst/app/server.R:2395-2395 changed 1 line(s) | removed: among = s$among, include_invalid = s$include_invalid, families = fams)
+   inst/app/server.R:2402-2402 changed 1 line(s) | removed: shiny::validate(shiny::need(!is.null(r), "Press 'Compare count familie
+   inst/app/server.R:2405-2405 changed 1 line(s) | removed: "Data or settings changed since the comparison: press 'Compare count f
+   inst/app/server.R:2420-2420 changed 1 line(s) | removed: shiny::validate(shiny::need(is.data.frame(z) && nrow(z) > 0, "Too few 
+   inst/app/server.R:2446-2448 changed 3 line(s) | removed: paste0("Change at the last occasion relative to occasions two or more  / ". Similar changes in every lifespan group suggest terminal effects of
+   inst/app/server.R:2479-2479 changed 1 line(s) | removed: shiny::validate(shiny::need(nrow(s) > 0, "No age with at least three s
+   inst/app/server.R:2528-2529 changed 2 line(s) | removed: sprintf("Test of a constant hazard against age-specific hazards: p = % / if (is.finite(z$p_constant) && z$p_constant < 0.05) ": the hazard chan
+   inst/app/server.R:2552-2552 changed 1 line(s) | removed: output$a3_support <- renderUI({ / sup <- safe_get(individual_data_support(dat()))
+   inst/app/server.R:2617-2617 added 1 line(s)
+   inst/app/server.R:2723-2723 changed 1 line(s) | removed: "grid <- build_missing_grid(dat, margin = 0, start_mode = start_mode, 
+   inst/app/server.R:2736-2736 changed 1 line(s) | removed: "        scale_fill_manual(values = c(\"Observed\" = \"#7C8060\", \"Mi
+   inst/app/server.R:2790-2791 changed 2 line(s) | removed: dput_text(isTRUE(s$standardise)), ", zi_str = zero_inflation, function
+   inst/app/server.R:2817-2817 changed 1 line(s) | removed: # ---- suggested starting analysis (a recommendation, never an automat / suggested_settings <- reactive({
+   inst/app/server.R:2870-2870 changed 1 line(s) | removed: strong(t$Function[[1]]),
+   inst/app/server.R:2873-2874 changed 2 line(s) | removed: if (thin) sprintf(" Based on %d of %d individuals, so read it as sugge
+   inst/app/server.R:2876-2876 changed 1 line(s) | removed: "A starting point: confirm it with the Ageing-function check in step 5
+   inst/app/server.R:2996-2996 changed 1 line(s) | removed: zi = ms$zi, among = ms$among, extra = ms$extra),
+   inst/app/server.R:3022-3022 changed 1 line(s) | removed: sprintf("%s versus %s; %d of %d simulated datasets fitted; p = %s. Nul
+   inst/app/server.R:3026-3029 changed 4 line(s) | removed: correlated = "correlated intercept and slope", uncorrelated = "interce / if (isTRUE((z$n_ok %||% 0L) < BOOTSTRAP_MIN_OK)) sprintf(" With %d ref
+   inst/app/server.R:3065-3065 added 1 line(s)
+   inst/app/server.R:3078-3087 changed 10 line(s) | removed: res <- tryCatch(compare_population_functions(d, meta(), family = ms$fa / standardise = ms$standardise, zi_str = ms$zi, model = mid,
+   inst/app/server.R:3093-3122 added 30 line(s)
+   inst/app/server.R:3127-3133 changed 7 line(s) | removed: # error family: if the family check has been run and another family fi
+   inst/app/server.R:3136-3136 changed 1 line(s) | removed: fresh <- !is.null(fr) && !is.null(s_fam) &&
+   inst/app/server.R:3138-3141 changed 4 line(s) | removed: if (isTRUE(fresh) && isTRUE(fr$ok) && is.data.frame(fr$table) && nrow( / ft <- fr$table[is.finite(fr$table$AIC), , drop = FALSE]
+   inst/app/server.R:3144-3145 changed 2 line(s) | removed: mlab <- if (length(fr$model) && nzchar(fr$model[[1]])) model_label(fr$ / if (nrow(ft) > 1 && length(here) == 1 && nzchar(here) && !identical(ft
+   inst/app/server.R:3147-3149 changed 3 line(s) | removed: if (length(gap) == 1 && is.finite(gap) && gap > 2) / out$error_family <- sprintf("%s fits %s better than the family used he
+   inst/app/server.R:3151-3156 added 6 line(s)
+   inst/app/server.R:3163-3165 changed 3 line(s) | removed: "When the best-supported model is refitted with each ageing function u / cur, paste(fc$supported, collapse = ", "),
+   inst/app/server.R:3168-3168 changed 1 line(s) | removed: out$function_form_skipped <- "The ageing-function check was not run au
+   inst/app/server.R:3171-3172 changed 2 line(s) | removed: slope_fitted <- !identical(normalise_slope(input$random_structure %||%
+   inst/app/server.R:3180-3182 changed 3 line(s) | removed: strength <- switch(lvl, / good = "These data support fitting random slopes",
+   inst/app/server.R:3216-3216 changed 1 line(s) | removed: among = ms$among, include_invalid = isTRUE(ms$include_invalid))
+   inst/app/server.R:3218-3218 changed 1 line(s) | removed: res$signature <- paste(data_sig(), m, ms$family, ms$random_slope, ms$s
+   inst/app/server.R:3307-3311 changed 5 line(s) | removed: content = function(file) writeLines(code_text(), file)
+   inst/app/server.R:3332-3331 changed 0 line(s) | removed: summary_parts <- reactive({ / d <- dat()
+   inst/app/server.R:3396-3396 added 1 line(s)
+   inst/app/server.R:3399-3400 added 2 line(s)
+   inst/app/server.R:3496-3497 changed 2 line(s) | removed: evidence = if (is.list(evidence)) evidence else NULL)
+   inst/app/server.R:3678-3677 changed 0 line(s) | removed: d45 <- if (all(c("Model 4", "Model 5") %in% elig$Model)) elig$AIC[elig
+   inst/app/server.R:3728-3728 changed 1 line(s) | removed: add_saved("5 Modelling", paste("Error-family check with", model_label(
+   inst/app/server.R:3772-3771 changed 0 line(s) | removed:  / overview_text <- reactive({
+   inst/app/server.R:3844-4214 added 371 line(s)
+   inst/app/ui.R:23-23 added 1 line(s)
+   inst/app/ui.R:177-181 added 5 line(s)
+   inst/app/ui.R:374-374 changed 1 line(s) | removed: "Default settings match each paper\u0027s model specification as close / box_note("Column mapping, covariates, nesting, random effects, the err
+   inst/app/ui.R:419-425 changed 7 line(s) | removed: tags$li(strong("Within-individual change"), " \u2014 how a trait chang
+   inst/app/ui.R:453-452 changed 0 line(s) | removed: box_note("These settings apply to all figures below. Every bin, bin \u
+   inst/app/ui.R:517-521 changed 5 line(s) | removed: box(width = 4, title = info_title("Settings and proxy guidance", "samp
+   inst/app/ui.R:527-527 changed 1 line(s) | removed: box_note("Missed occasions are counted only from the first record (AFR
+   inst/app/ui.R:530-529 changed 0 line(s) | removed: uiOutput("sampling_guidance"),
+   inst/app/ui.R:570-569 changed 0 line(s) | removed: uiOutput("a3_support"),
+   inst/app/ui.R:591-591 changed 1 line(s) | removed: box(width = 4, title = info_title("Which shape fits the population tra
+   inst/app/ui.R:596-596 changed 1 line(s) | removed: box(width = 8, title = "Fitted population trajectories", status = "inf
+   inst/app/ui.R:608-608 changed 1 line(s) | removed: then = "check the model assumptions and diagnostics, then explore the  / fluidRow(column(12, uiOutput("suggested_analysis"))),
+   inst/app/ui.R:631-632 changed 2 line(s) | removed: p(class = "small-note", "Standardising changes the scale of the coeffi
+   inst/app/ui.R:705-705 changed 1 line(s) | removed: box(width = 12, title = info_title("Which selective processes best exp
+   inst/app/ui.R:707-707 added 1 line(s)
+   inst/app/ui.R:710-709 changed 0 line(s) | removed: column(12, uiOutput("sensitivity_banner")),
+   inst/app/ui.R:717-728 changed 12 line(s) | removed: )
+   inst/app/ui.R:733-739 changed 7 line(s) | removed: column(3, checkboxInput("show_observed", "Observed means", TRUE)), / column(3, checkboxInput("show_raw_points", "Individual records (jitter
+   inst/app/ui.R:761-776 added 16 line(s)
+   inst/app/ui.R:797-797 changed 1 line(s) | removed: box(width = 6, title = info_title("Error-family check (count traits)",
+   inst/app/ui.R:799-799 changed 1 line(s) | removed: actionButton("run_family_check", "Compare count families", class = "bt
+   inst/app/ui.R:880-886 added 7 line(s)
+   353 hunks listed; each is classified in README section A6
+PASS population_newdata() is a verbatim move of the old prediction grid code
+PASS build_missing_grid: only the signature and the interval lookup changed (wording aside): 16 changed code lines
+PASS disappearance_data: only the signature and the interval lookup changed (wording aside): 4 changed code lines
+PASS life_table: only the signature and the interval lookup changed (wording aside): 23 changed code lines
+PASS terminal_data: only the signature and the interval lookup changed (wording aside): 4 changed code lines
+PASS data_integrity: only the signature and the interval lookup changed (wording aside): 16 changed code lines
+PASS schedule_irregular: only the signature and the interval lookup changed (wording aside): 4 changed code lines
+PASS observed_prediction_ages: only the signature and the interval lookup changed (wording aside): 4 changed code lines
+
+== A7 examples and stress data: load, sampling interval, grid, decomposition (ports)
+PASS fly: id, age and trait columns present
+PASS bichet: id, age and trait columns present
+PASS bichet_marmot: id, age and trait columns present
+PASS moullec_swift: id, age and trait columns present
+PASS pasztor_apollo: id, age and trait columns present
+PASS wynn: id, age and trait columns present
+PASS sanghvi_female: id, age and trait columns present
+PASS allain: id, age and trait columns present
+PASS bouwhuis: id, age and trait columns present
+PASS warner: id, age and trait columns present
+PASS mckennaell_breeding: id, age and trait columns present
+PASS mckennaell_weight: id, age and trait columns present
+PASS szejnersigal_activity: id, age and trait columns present
+   example                    rows   ids     step   miss %  segs max pair merged
+   fly                        1901   647       14      0.1     1      621  False
+   bichet                     1097   407        1     32.9     1       53  False
+   bichet_marmot               173    53        1      5.6     1       22  False
+   moullec_swift              2087   545        1      9.6     1      250  False
+   pasztor_apollo             3888  1315        1     65.7     3      118  False
+   wynn                       2689    78        1      1.1     1       18  False
+   sanghvi_female             6001   637        1      0.2     1      632  False
+   allain                      487   197        3     61.2     3       12  False
+   bouwhuis                   7341  4935        1      5.0     1     1038  False
+   warner                     2205   600        1     27.0     1      176  False
+   mckennaell_breeding        3173   762        1      0.0     1      679  False
+   mckennaell_weight          2317   649        1      9.4     1      369  False
+   szejnersigal_activity       808   184        7      1.0     1      144  False
+   stress files with id/age/trait-like columns: 25
+
+== A8 cross-check: this audit's decomposition port against the 0.21.0 audit's independent port
+PASS the two independent decomposition ports agree on the manuscript's generating process: 300 points, largest difference 2.3e-13
+
+0 failure(s)

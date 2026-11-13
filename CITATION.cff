@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - family-names: "Sanghvi"
+    given-names: "Krish"
+    orcid: "https://orcid.org/0000-0002-5125-2983"
+  - family-names: "Ivimey-Cook"
+    given-names: "Edward R."
+    orcid: "https://orcid.org/0000-0003-4910-0443"
+title: "disappR: a shiny app to model ageing and selective [dis]appearance"
+abstract: "A Shiny workflow for longitudinal ageing data that follows a visual-first diagnosis of selective disappearance and selective appearance, then fits and compares ten comparative mixed models."
+version: 0.21.16
+url: "https://github.com/EIvimeyCook/disappR"
+repository-code: "https://github.com/EIvimeyCook/disappR"
+license: MIT
+keywords:
+  - "ageing"
+  - "senescence"
+  - "selective disappearance"
+  - "selective appearance"
+  - "mixed models"
+  - "shiny"
+  - "R"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Sanghvi"
+      given-names: "Krish"
+      orcid: "https://orcid.org/0000-0002-5125-2983"
+    - family-names: "Ivimey-Cook"
+      given-names: "Edward R."
+      orcid: "https://orcid.org/0000-0003-4910-0443"
+    - family-names: "Bouwhuis"
+      given-names: "S."
+    - family-names: "Sepil"
+      given-names: "I."
+    - family-names: "van de Pol"
+      given-names: "M."
+  title: "A comparison of methods to assess selective disappearance and quantify ageing"
+  journal: "EcoEvoRxiv"
+  year: 2026

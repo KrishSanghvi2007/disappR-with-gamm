@@ -1,0 +1,361 @@
+observed_gain,aic_prefers_m4,lrt_p,p_permutation,p_boot_uncorrelated,p_boot_correlated,scenario,rep,seed,analyst_function,expectation
+-1.6436124896431463,False,0.3078342607850098,0.375,0.375,0.5,clean null,0,7000,Linear,reject at the nominal rate
+-3.049567433773973,False,0.6217505677734119,0.725,0.65,0.675,clean null,1,7001,Linear,reject at the nominal rate
+-3.1268796621634465,False,0.6462556122152583,0.7,0.9,0.8,clean null,2,7002,Linear,reject at the nominal rate
+-3.3962193772490537,False,0.7394191663128005,0.825,0.725,0.775,clean null,3,7003,Linear,reject at the nominal rate
+-3.6966017550116703,False,0.8592467698774078,0.825,0.975,0.9,clean null,4,7004,Linear,reject at the nominal rate
+-2.118823517117562,False,0.3903981194485025,0.4,0.675,0.675,clean null,5,7005,Linear,reject at the nominal rate
+-3.5239936822572417,False,0.788200201266781,0.725,0.725,0.65,clean null,6,7006,Linear,reject at the nominal rate
+4.0348061296831474,True,0.0179996482158367,0.025,0.075,0.025,clean null,7,7007,Linear,reject at the nominal rate
+-3.7017261126256926,False,0.8614511365260074,0.9,0.875,0.875,clean null,8,7008,Linear,reject at the nominal rate
+-2.6012366426461995,False,0.4968924480206091,0.625,0.475,0.55,clean null,9,7009,Linear,reject at the nominal rate
+-3.452183421137306,False,0.7604018089454785,0.85,0.875,0.775,clean null,10,7010,Linear,reject at the nominal rate
+-2.304167885723473,False,0.428306568982792,0.4,0.675,0.575,clean null,11,7011,Linear,reject at the nominal rate
+0.0712756162320147,False,0.1305971600063875,0.15,0.225,0.175,clean null,12,7012,Linear,reject at the nominal rate
+-3.4578136112086213,False,0.762545428133174,0.725,0.85,0.825,clean null,13,7013,Linear,reject at the nominal rate
+-2.793621628182791,False,0.5470641617491118,0.625,0.525,0.575,clean null,14,7014,Linear,reject at the nominal rate
+3.040483021212367,True,0.029592287453521,0.05,0.075,0.125,clean null,15,7015,Linear,reject at the nominal rate
+-3.722680803764433,False,0.870524306140976,0.925,0.9,0.925,clean null,16,7016,Linear,reject at the nominal rate
+1.1544191144425895,False,0.0759857423296062,0.1,0.1,0.175,clean null,17,7017,Linear,reject at the nominal rate
+-2.453593732387162,False,0.461532348237593,0.4,0.7,0.65,clean null,18,7018,Linear,reject at the nominal rate
+-3.7741436013197927,False,0.8932147912250992,0.875,0.925,0.825,clean null,19,7019,Linear,reject at the nominal rate
+-3.663430012870776,False,0.8451129486090748,0.825,0.8,0.825,clean null,20,7020,Linear,reject at the nominal rate
+-3.517353007872316,False,0.7855874508300187,0.825,0.9,0.75,clean null,21,7021,Linear,reject at the nominal rate
+-2.2044364874595885,False,0.4074725313634784,0.325,0.25,0.4,clean null,22,7022,Linear,reject at the nominal rate
+-3.922395517683981,False,0.9619409226604732,0.975,0.975,1.0,clean null,23,7023,Linear,reject at the nominal rate
+-2.7330747000605697,False,0.5307508112143416,0.525,0.525,0.45,clean null,24,7024,Linear,reject at the nominal rate
+0.7314564108019113,False,0.0938809108843529,0.1,0.125,0.1,clean null,25,7025,Linear,reject at the nominal rate
+-2.988691591587667,False,0.6031108886581,0.475,0.6,0.525,clean null,26,7026,Linear,reject at the nominal rate
+-3.2788186660504834,False,0.6972643533874572,0.875,0.65,0.875,clean null,27,7027,Linear,reject at the nominal rate
+0.2720892010975149,False,0.1181211365038579,0.25,0.15,0.125,clean null,28,7028,Linear,reject at the nominal rate
+-1.9089128978621372,False,0.3515007088575786,0.325,0.7,0.725,clean null,29,7029,Linear,reject at the nominal rate
+-3.5326249715089943,False,0.7916091438309198,0.85,0.9,0.825,clean null,30,7030,Linear,reject at the nominal rate
+-3.0978162427213647,False,0.6369323190147009,0.7,0.75,0.6,clean null,31,7031,Linear,reject at the nominal rate
+-2.08712155860394,False,0.3842587133000709,0.375,0.475,0.4,clean null,32,7032,Linear,reject at the nominal rate
+-3.639925922221664,False,0.8352392745034243,0.75,0.775,0.875,clean null,33,7033,Linear,reject at the nominal rate
+-3.196541589779372,False,0.6691619267879283,0.675,0.725,0.75,clean null,34,7034,Linear,reject at the nominal rate
+-3.7692238915924463,False,0.8910203126325636,0.775,0.85,0.85,clean null,35,7035,Linear,reject at the nominal rate
+-0.6596493150809692,False,0.1882140608289179,0.175,0.2,0.325,clean null,36,7036,Linear,reject at the nominal rate
+-3.767648587603162,False,0.8903187750260687,0.925,0.925,0.9,clean null,37,7037,Linear,reject at the nominal rate
+-2.274636030092552,False,0.4220286885319053,0.45,0.375,0.5,clean null,38,7038,Linear,reject at the nominal rate
+-3.661749901008079,False,0.8444033045760084,0.85,0.85,0.825,clean null,39,7039,Linear,reject at the nominal rate
+-0.9280113311215246,False,0.2152415626312147,0.15,0.325,0.275,clean null,40,7040,Linear,reject at the nominal rate
+-2.7811775037548614,False,0.5436708621077774,0.575,0.55,0.6,clean null,41,7041,Linear,reject at the nominal rate
+-3.3773992042547434,False,0.7324938032361066,0.8,0.725,0.725,clean null,42,7042,Linear,reject at the nominal rate
+-2.032153742373339,False,0.3738415894875566,0.425,0.325,0.4,clean null,43,7043,Linear,reject at the nominal rate
+-0.2589274537294841,False,0.1540410315939565,0.125,0.35,0.175,clean null,44,7044,Linear,reject at the nominal rate
+-3.615151008899829,False,0.8249566037467253,0.825,0.8,0.85,clean null,45,7045,Linear,reject at the nominal rate
+4.685651852663341,True,0.0129997399400573,0.05,0.125,0.1,clean null,46,7046,Linear,reject at the nominal rate
+-0.0815695845258233,False,0.1409690089085723,0.175,0.4,0.6,clean null,47,7047,Linear,reject at the nominal rate
+-0.6008994039234494,False,0.1827656956668591,0.225,0.15,0.25,clean null,48,7048,Linear,reject at the nominal rate
+-2.6644352545717997,False,0.5128446158800339,0.55,0.65,0.625,clean null,49,7049,Linear,reject at the nominal rate
+-3.173192956198818,False,0.6613953414678969,0.625,0.85,0.75,clean null,50,7050,Linear,reject at the nominal rate
+-2.4019230807562053,False,0.4497612198416341,0.55,0.425,0.475,clean null,51,7051,Linear,reject at the nominal rate
+-3.155318239465487,False,0.6555105506924522,0.65,0.725,0.75,clean null,52,7052,Linear,reject at the nominal rate
+-3.0342866601263268,False,0.6170182543013527,0.6,0.8,0.875,clean null,53,7053,Linear,reject at the nominal rate
+-3.1331719119407357,False,0.6482920147899768,0.55,0.725,0.725,clean null,54,7054,Linear,reject at the nominal rate
+-2.2785329296521013,False,0.4228517918644813,0.45,0.35,0.5,clean null,55,7055,Linear,reject at the nominal rate
+-0.4366293190673787,False,0.1683541739379286,0.225,0.25,0.25,clean null,56,7056,Linear,reject at the nominal rate
+-2.563482682474387,False,0.4876005961460798,0.475,0.7,0.575,clean null,57,7057,Linear,reject at the nominal rate
+-1.9286727065496048,False,0.3549907143088853,0.375,0.5,0.55,clean null,58,7058,Linear,reject at the nominal rate
+-2.2222125301714186,False,0.411110298251412,0.425,0.4,0.525,clean null,59,7059,Linear,reject at the nominal rate
+49.09829239506416,True,2.9502057639077093e-12,0.025,0.45,0.4,"misspecified ageing function, no selection",0,8000,Linear,reject at the nominal rate
+80.73776004361616,True,3.975842777295619e-19,0.025,0.5,0.55,"misspecified ageing function, no selection",1,8001,Linear,reject at the nominal rate
+59.7947079728533,True,1.4033150290235848e-14,0.025,0.85,0.7,"misspecified ageing function, no selection",2,8002,Linear,reject at the nominal rate
+165.6681283392768,True,1.4356019967056149e-37,0.025,0.45,0.3,"misspecified ageing function, no selection",3,8003,Linear,reject at the nominal rate
+68.23180632814137,True,2.065677632333092e-16,0.025,0.6,0.65,"misspecified ageing function, no selection",4,8004,Linear,reject at the nominal rate
+70.64145245187001,True,6.191766062463194e-17,0.025,0.05,0.15,"misspecified ageing function, no selection",5,8005,Linear,reject at the nominal rate
+80.11937982032669,True,5.416375456164346e-19,0.025,0.525,0.45,"misspecified ageing function, no selection",6,8006,Linear,reject at the nominal rate
+44.45150622884967,True,3.012236748202848e-11,0.025,0.9,0.825,"misspecified ageing function, no selection",7,8007,Linear,reject at the nominal rate
+89.87109886134658,True,4.1319007131346256e-21,0.025,0.5,0.425,"misspecified ageing function, no selection",8,8008,Linear,reject at the nominal rate
+72.2856986073275,True,2.721266174255713e-17,0.025,0.2,0.275,"misspecified ageing function, no selection",9,8009,Linear,reject at the nominal rate
+68.4962679219575,True,1.8098202427100744e-16,0.025,0.7,0.725,"misspecified ageing function, no selection",10,8010,Linear,reject at the nominal rate
+64.47841387966855,True,1.349277757811829e-15,0.025,0.875,0.8,"misspecified ageing function, no selection",11,8011,Linear,reject at the nominal rate
+64.55059062017654,True,1.3014526775003128e-15,0.025,1.0,1.0,"misspecified ageing function, no selection",12,8012,Linear,reject at the nominal rate
+83.48286198369533,True,1.0077153864217116e-19,0.025,0.25,0.175,"misspecified ageing function, no selection",13,8013,Linear,reject at the nominal rate
+68.38311391884554,True,1.9151664319333566e-16,0.025,0.825,0.85,"misspecified ageing function, no selection",14,8014,Linear,reject at the nominal rate
+51.14816117487044,True,1.05859285241153e-12,0.025,0.8,0.5,"misspecified ageing function, no selection",15,8015,Linear,reject at the nominal rate
+89.62462262595454,True,4.6738149309365535e-21,0.025,0.125,0.325,"misspecified ageing function, no selection",16,8016,Linear,reject at the nominal rate
+135.59077608489042,True,4.878070929447753e-31,0.025,0.075,0.025,"misspecified ageing function, no selection",17,8017,Linear,reject at the nominal rate
+38.34195976151023,True,6.390874089063731e-10,0.025,0.75,0.9,"misspecified ageing function, no selection",18,8018,Linear,reject at the nominal rate
+64.42148839181073,True,1.388233671313147e-15,0.025,0.775,0.85,"misspecified ageing function, no selection",19,8019,Linear,reject at the nominal rate
+58.580904681038646,True,2.5747152909909767e-14,0.025,0.725,0.775,"misspecified ageing function, no selection",20,8020,Linear,reject at the nominal rate
+73.0517142192898,True,1.8553798968811493e-17,0.025,0.9,0.775,"misspecified ageing function, no selection",21,8021,Linear,reject at the nominal rate
+79.88753170014297,True,6.08210538713424e-19,0.025,0.55,0.4,"misspecified ageing function, no selection",22,8022,Linear,reject at the nominal rate
+70.37229234649067,True,7.083728601098543e-17,0.025,0.65,0.65,"misspecified ageing function, no selection",23,8023,Linear,reject at the nominal rate
+48.919267051998304,True,3.2264665463231718e-12,0.025,0.85,0.95,"misspecified ageing function, no selection",24,8024,Linear,reject at the nominal rate
+37.94861779699977,True,7.779888694283316e-10,0.025,0.775,0.775,"misspecified ageing function, no selection",25,8025,Linear,reject at the nominal rate
+70.71413106213868,True,5.970800764575873e-17,0.025,0.45,0.275,"misspecified ageing function, no selection",26,8026,Linear,reject at the nominal rate
+44.03461677672431,True,3.7103552790157794e-11,0.025,0.475,0.5,"misspecified ageing function, no selection",27,8027,Linear,reject at the nominal rate
+49.016602927376425,True,3.0732008857854727e-12,0.025,0.675,0.7,"misspecified ageing function, no selection",28,8028,Linear,reject at the nominal rate
+119.20709707203878,True,1.7616466615855923e-27,0.025,0.2,0.225,"misspecified ageing function, no selection",29,8029,Linear,reject at the nominal rate
+71.27774323273934,True,4.504491294700665e-17,0.025,0.725,0.725,"misspecified ageing function, no selection",30,8030,Linear,reject at the nominal rate
+130.2802479746374,True,6.940881630203293e-30,0.025,0.075,0.025,"misspecified ageing function, no selection",31,8031,Linear,reject at the nominal rate
+75.59092552591028,True,5.212548600600596e-18,0.025,0.325,0.175,"misspecified ageing function, no selection",32,8032,Linear,reject at the nominal rate
+73.00482094803874,True,1.8993963152676488e-17,0.025,0.725,0.85,"misspecified ageing function, no selection",33,8033,Linear,reject at the nominal rate
+62.89672917399275,True,2.9754991543973604e-15,0.025,0.525,0.575,"misspecified ageing function, no selection",34,8034,Linear,reject at the nominal rate
+49.58769338417415,True,2.309831143572794e-12,0.025,0.725,0.725,"misspecified ageing function, no selection",35,8035,Linear,reject at the nominal rate
+55.58119443031046,True,1.153740178090108e-13,0.025,0.425,0.6,"misspecified ageing function, no selection",36,8036,Linear,reject at the nominal rate
+86.17676740643583,True,2.6203768849964962e-20,0.025,0.95,0.95,"misspecified ageing function, no selection",37,8037,Linear,reject at the nominal rate
+95.63539504838128,True,2.3144556550426923e-22,0.025,0.325,0.325,"misspecified ageing function, no selection",38,8038,Linear,reject at the nominal rate
+75.28530934340733,True,6.073147486258132e-18,0.025,0.425,0.75,"misspecified ageing function, no selection",39,8039,Linear,reject at the nominal rate
+113.63763287454684,True,2.853071064380203e-26,0.025,0.675,0.875,"misspecified ageing function, no selection",40,8040,Linear,reject at the nominal rate
+100.54112778570698,True,1.991510201225985e-23,0.025,0.375,0.375,"misspecified ageing function, no selection",41,8041,Linear,reject at the nominal rate
+125.44107202747956,True,7.802402375143598e-29,0.025,0.275,0.275,"misspecified ageing function, no selection",42,8042,Linear,reject at the nominal rate
+64.01513088873389,True,1.7009908777826129e-15,0.025,0.9,0.975,"misspecified ageing function, no selection",43,8043,Linear,reject at the nominal rate
+65.17648534974933,True,9.517372502097446e-16,0.025,0.65,0.575,"misspecified ageing function, no selection",44,8044,Linear,reject at the nominal rate
+103.09940103967485,True,5.5419238843609226e-24,0.025,0.525,0.375,"misspecified ageing function, no selection",45,8045,Linear,reject at the nominal rate
+93.49004695848362,True,6.765583878550538e-22,0.025,0.725,0.625,"misspecified ageing function, no selection",46,8046,Linear,reject at the nominal rate
+63.56628142552245,True,2.1289644379879623e-15,0.025,0.5,0.475,"misspecified ageing function, no selection",47,8047,Linear,reject at the nominal rate
+74.24358986689276,True,1.0223988168909213e-17,0.025,0.575,0.5,"misspecified ageing function, no selection",48,8048,Linear,reject at the nominal rate
+82.60325783253757,True,1.5643772955877469e-19,0.025,0.2,0.2,"misspecified ageing function, no selection",49,8049,Linear,reject at the nominal rate
+129.5030693953695,True,1.0237097090205485e-29,0.025,0.375,0.1,"misspecified ageing function, no selection",50,8050,Linear,reject at the nominal rate
+38.448113495548114,True,6.060511377011408e-10,0.025,0.775,0.725,"misspecified ageing function, no selection",51,8051,Linear,reject at the nominal rate
+74.9004332224722,True,7.361877995737571e-18,0.025,0.375,0.475,"misspecified ageing function, no selection",52,8052,Linear,reject at the nominal rate
+96.62437287892362,True,1.4115460688593848e-22,0.025,0.55,0.55,"misspecified ageing function, no selection",53,8053,Linear,reject at the nominal rate
+55.320802776412165,True,1.3141693863762513e-13,0.025,0.35,0.35,"misspecified ageing function, no selection",54,8054,Linear,reject at the nominal rate
+86.98572255074032,True,1.7486439196937943e-20,0.025,0.375,0.375,"misspecified ageing function, no selection",55,8055,Linear,reject at the nominal rate
+77.11899159660425,True,2.427922311054232e-18,0.025,0.275,0.175,"misspecified ageing function, no selection",56,8056,Linear,reject at the nominal rate
+51.13972455164958,True,1.063067758570285e-12,0.025,0.8,0.825,"misspecified ageing function, no selection",57,8057,Linear,reject at the nominal rate
+42.71925490692957,True,7.162138212846714e-11,0.025,0.675,0.7,"misspecified ageing function, no selection",58,8058,Linear,reject at the nominal rate
+80.86025628935977,True,3.7396372779095865e-19,0.025,0.3,0.45,"misspecified ageing function, no selection",59,8059,Linear,reject at the nominal rate
+-1.5271621255201353,False,0.2904223787352981,0.5,0.8,0.55,"heterogeneous ageing rates, no selection",0,9000,Linear,reject at the nominal rate
+-2.3509576981537066,False,0.4384448911374179,0.825,0.75,0.525,"heterogeneous ageing rates, no selection",1,9001,Linear,reject at the nominal rate
+-0.7675963388801392,False,0.1986517811359865,0.375,0.6,0.425,"heterogeneous ageing rates, no selection",2,9002,Linear,reject at the nominal rate
+-3.538921074200516,False,0.7941050966940704,0.875,0.925,0.875,"heterogeneous ageing rates, no selection",3,9003,Linear,reject at the nominal rate
+7.682860263969815,True,0.0029046855702119,0.2,0.175,0.175,"heterogeneous ageing rates, no selection",4,9004,Linear,reject at the nominal rate
+-0.2453097055404214,False,0.1529957482441442,0.55,0.3,0.35,"heterogeneous ageing rates, no selection",5,9005,Linear,reject at the nominal rate
+-3.0943336981240464,False,0.6358242114499675,0.8,0.8,0.7,"heterogeneous ageing rates, no selection",6,9006,Linear,reject at the nominal rate
+6.639514428047278,True,0.0048939417614431,0.175,0.5,0.15,"heterogeneous ageing rates, no selection",7,9007,Linear,reject at the nominal rate
+2.89522273817056,True,0.0318215556219577,0.075,0.3,0.2,"heterogeneous ageing rates, no selection",8,9008,Linear,reject at the nominal rate
+-3.3181616697256686,False,0.7111163888789116,0.825,0.875,0.75,"heterogeneous ageing rates, no selection",9,9009,Linear,reject at the nominal rate
+-0.8399587344820247,False,0.2059708484141673,0.3,0.5,0.375,"heterogeneous ageing rates, no selection",10,9010,Linear,reject at the nominal rate
+1.4081793523860142,False,0.0669312252101475,0.125,0.325,0.275,"heterogeneous ageing rates, no selection",11,9011,Linear,reject at the nominal rate
+11.236328366538146,True,0.0004914432031374,0.025,0.175,0.075,"heterogeneous ageing rates, no selection",12,9012,Linear,reject at the nominal rate
+20.16667523104752,True,5.652924051027024e-06,0.025,0.025,0.05,"heterogeneous ageing rates, no selection",13,9013,Linear,reject at the nominal rate
+-0.9082391545898644,False,0.2131241492576962,0.3,0.375,0.3,"heterogeneous ageing rates, no selection",14,9014,Linear,reject at the nominal rate
+-2.70145983870907,False,0.5224269671796351,0.725,0.725,0.625,"heterogeneous ageing rates, no selection",15,9015,Linear,reject at the nominal rate
+-1.7414038284559863,False,0.3232600776562638,0.6,0.625,0.625,"heterogeneous ageing rates, no selection",16,9016,Linear,reject at the nominal rate
+10.566408780633536,True,0.0006869806786887,0.05,0.025,0.075,"heterogeneous ageing rates, no selection",17,9017,Linear,reject at the nominal rate
+2.690072177374077,True,0.0352589426857054,0.2,0.175,0.225,"heterogeneous ageing rates, no selection",18,9018,Linear,reject at the nominal rate
+-3.032968450905628,False,0.6166117087180247,0.65,0.75,0.725,"heterogeneous ageing rates, no selection",19,9019,Linear,reject at the nominal rate
+2.6586662618992705,True,0.0358169823422642,0.1,0.325,0.325,"heterogeneous ageing rates, no selection",20,9020,Linear,reject at the nominal rate
+-3.980008925380844,False,0.990054252044937,1.0,1.0,1.0,"heterogeneous ageing rates, no selection",21,9021,Linear,reject at the nominal rate
+-0.936436422105544,False,0.2161501899789157,0.425,0.45,0.475,"heterogeneous ageing rates, no selection",22,9022,Linear,reject at the nominal rate
+7.332195301688898,True,0.0034613463370473,0.1,0.175,0.225,"heterogeneous ageing rates, no selection",23,9023,Linear,reject at the nominal rate
+5.83154910384701,True,0.0073300381979028,0.1,0.15,0.15,"heterogeneous ageing rates, no selection",24,9024,Linear,reject at the nominal rate
+-3.3546104054139505,False,0.7241948468700873,0.825,0.825,0.775,"heterogeneous ageing rates, no selection",25,9025,Linear,reject at the nominal rate
+-0.0343825691829806,False,0.1376819842130707,0.35,0.5,0.35,"heterogeneous ageing rates, no selection",26,9026,Linear,reject at the nominal rate
+-2.813852144368866,False,0.5526259389218151,0.85,0.8,0.8,"heterogeneous ageing rates, no selection",27,9027,Linear,reject at the nominal rate
+-0.8698269801525385,False,0.2090699257675916,0.425,0.55,0.5,"heterogeneous ageing rates, no selection",28,9028,Linear,reject at the nominal rate
+-1.370909313960965,False,0.2685964147171458,0.5,0.3,0.525,"heterogeneous ageing rates, no selection",29,9029,Linear,reject at the nominal rate
+-2.207102400387612,False,0.4080160366620434,0.65,0.775,0.75,"heterogeneous ageing rates, no selection",30,9030,Linear,reject at the nominal rate
+5.481137476827826,True,0.0087336775947501,0.05,0.125,0.125,"heterogeneous ageing rates, no selection",31,9031,Linear,reject at the nominal rate
+-2.8162909209831923,False,0.5533002155489399,0.8,0.75,0.75,"heterogeneous ageing rates, no selection",32,9032,Linear,reject at the nominal rate
+2.169547402939316,True,0.0457403837107116,0.3,0.225,0.3,"heterogeneous ageing rates, no selection",33,9033,Linear,reject at the nominal rate
+-2.4148949770315085,False,0.4526878284440701,0.7,0.7,0.725,"heterogeneous ageing rates, no selection",34,9034,Linear,reject at the nominal rate
+-2.7520366419876154,False,0.5358067740901227,0.8,0.775,0.625,"heterogeneous ageing rates, no selection",35,9035,Linear,reject at the nominal rate
+-0.1887337327320892,False,0.1487284478236963,0.475,0.375,0.425,"heterogeneous ageing rates, no selection",36,9036,Linear,reject at the nominal rate
+1.2614625715123111,False,0.0720257715543269,0.15,0.125,0.225,"heterogeneous ageing rates, no selection",37,9037,Linear,reject at the nominal rate
+-0.6064593575692925,False,0.1832744869511541,0.475,0.325,0.5,"heterogeneous ageing rates, no selection",38,9038,Linear,reject at the nominal rate
+-2.6223056880371587,False,0.502154641474932,0.7,0.775,0.65,"heterogeneous ageing rates, no selection",39,9039,Linear,reject at the nominal rate
+-1.3037897170470387,False,0.2597319499571397,0.45,0.425,0.525,"heterogeneous ageing rates, no selection",40,9040,Linear,reject at the nominal rate
+-2.319940397005212,False,0.4316976580007461,0.65,0.65,0.6,"heterogeneous ageing rates, no selection",41,9041,Linear,reject at the nominal rate
+0.5493711478129626,False,0.1028292355476089,0.325,0.375,0.35,"heterogeneous ageing rates, no selection",42,9042,Linear,reject at the nominal rate
+-1.1900189190550918,False,0.2453693775203338,0.45,0.6,0.6,"heterogeneous ageing rates, no selection",43,9043,Linear,reject at the nominal rate
+-0.9540407821964436,False,0.2180611809730089,0.5,0.425,0.5,"heterogeneous ageing rates, no selection",44,9044,Linear,reject at the nominal rate
+-0.9794688858269184,False,0.2208513215379024,0.4,0.4,0.475,"heterogeneous ageing rates, no selection",45,9045,Linear,reject at the nominal rate
+0.726867356191633,False,0.0940965705216534,0.375,0.35,0.4,"heterogeneous ageing rates, no selection",46,9046,Linear,reject at the nominal rate
+-2.6746415307952702,False,0.5154684219129138,0.65,0.7,0.65,"heterogeneous ageing rates, no selection",47,9047,Linear,reject at the nominal rate
+-2.156277337337997,False,0.397777955024655,0.65,0.75,0.525,"heterogeneous ageing rates, no selection",48,9048,Linear,reject at the nominal rate
+-3.1641467040080897,False,0.6584105223848772,0.825,0.725,0.8,"heterogeneous ageing rates, no selection",49,9049,Linear,reject at the nominal rate
+-3.695125348552665,False,0.858612705200035,0.9,0.95,0.95,"heterogeneous ageing rates, no selection",50,9050,Linear,reject at the nominal rate
+0.3420332221789977,False,0.1140616016604991,0.45,0.45,0.4,"heterogeneous ageing rates, no selection",51,9051,Linear,reject at the nominal rate
+-2.414189225822156,False,0.4525281141341776,0.675,0.625,0.675,"heterogeneous ageing rates, no selection",52,9052,Linear,reject at the nominal rate
+5.44352626302134,True,0.0088994737650851,0.05,0.1,0.2,"heterogeneous ageing rates, no selection",53,9053,Linear,reject at the nominal rate
+34.43420361280732,True,4.509399655357722e-09,0.025,0.025,0.025,"heterogeneous ageing rates, no selection",54,9054,Linear,reject at the nominal rate
+1.342296729726968,False,0.0691727441325126,0.175,0.2,0.3,"heterogeneous ageing rates, no selection",55,9055,Linear,reject at the nominal rate
+0.6287733106591986,False,0.0988267802960123,0.375,0.425,0.325,"heterogeneous ageing rates, no selection",56,9056,Linear,reject at the nominal rate
+2.846294976834088,True,0.0326096347949546,0.15,0.175,0.4,"heterogeneous ageing rates, no selection",57,9057,Linear,reject at the nominal rate
+-3.386111958776837,False,0.7356917833306545,0.875,0.875,0.85,"heterogeneous ageing rates, no selection",58,9058,Linear,reject at the nominal rate
+-2.9394493479017,False,0.5884429337049293,0.675,0.875,0.775,"heterogeneous ageing rates, no selection",59,9059,Linear,reject at the nominal rate
+103.88203189975002,True,3.7472651552343624e-24,0.025,0.025,0.025,rate-linked selection (strength 1),0,10000,Linear,reject often (power)
+135.20219634669047,True,5.9241647668862055e-31,0.025,0.025,0.025,rate-linked selection (strength 1),1,10001,Linear,reject often (power)
+209.33953401823143,True,4.719639226461406e-47,0.025,0.025,0.025,rate-linked selection (strength 1),2,10002,Linear,reject often (power)
+119.3045224762077,True,1.6778886930422796e-27,0.025,0.025,0.025,rate-linked selection (strength 1),3,10003,Linear,reject often (power)
+107.81837990657004,True,5.235369223140337e-25,0.025,0.025,0.025,rate-linked selection (strength 1),4,10004,Linear,reject often (power)
+277.4845549208208,True,7.523250600136331e-62,0.025,0.025,0.025,rate-linked selection (strength 1),5,10005,Linear,reject often (power)
+124.43883544537312,True,1.2878380486449742e-28,0.025,0.025,0.025,rate-linked selection (strength 1),6,10006,Linear,reject often (power)
+160.0302091915405,True,2.4059834815744617e-36,0.025,0.025,0.025,rate-linked selection (strength 1),7,10007,Linear,reject often (power)
+138.58569594738583,True,1.091212986465328e-31,0.025,0.025,0.025,rate-linked selection (strength 1),8,10008,Linear,reject often (power)
+130.6700808601563,True,5.7116751946754484e-30,0.025,0.025,0.025,rate-linked selection (strength 1),9,10009,Linear,reject often (power)
+100.811015476414,True,1.7401118637231938e-23,0.025,0.025,0.025,rate-linked selection (strength 1),10,10010,Linear,reject often (power)
+134.49711751977566,True,8.428165417858387e-31,0.025,0.025,0.025,rate-linked selection (strength 1),11,10011,Linear,reject often (power)
+112.16369221084597,True,5.961763415639839e-26,0.025,0.025,0.025,rate-linked selection (strength 1),12,10012,Linear,reject often (power)
+162.53599550579474,True,6.873343629330527e-37,0.025,0.025,0.025,rate-linked selection (strength 1),13,10013,Linear,reject often (power)
+128.05561361265654,True,2.110998145767809e-29,0.025,0.025,0.025,rate-linked selection (strength 1),14,10014,Linear,reject often (power)
+174.0066934332931,True,2.219921666988277e-39,0.025,0.025,0.025,rate-linked selection (strength 1),15,10015,Linear,reject often (power)
+135.12281237647494,True,6.164035610270984e-31,0.025,0.025,0.025,rate-linked selection (strength 1),16,10016,Linear,reject often (power)
+104.74240451198102,True,2.437175960733916e-24,0.025,0.025,0.025,rate-linked selection (strength 1),17,10017,Linear,reject often (power)
+114.90062821693482,True,1.5172482151748304e-26,0.025,0.025,0.025,rate-linked selection (strength 1),18,10018,Linear,reject often (power)
+131.41053698238602,True,3.94435048685838e-30,0.025,0.025,0.025,rate-linked selection (strength 1),19,10019,Linear,reject often (power)
+114.9763148599218,True,1.4609033655200592e-26,0.025,0.025,0.025,rate-linked selection (strength 1),20,10020,Linear,reject often (power)
+94.406246365877,True,4.2791263414617705e-22,0.025,0.025,0.025,rate-linked selection (strength 1),21,10021,Linear,reject often (power)
+92.88795537319174,True,9.142138770795089e-22,0.025,0.025,0.025,rate-linked selection (strength 1),22,10022,Linear,reject often (power)
+119.98895384747902,True,1.1916281760043509e-27,0.025,0.025,0.025,rate-linked selection (strength 1),23,10023,Linear,reject often (power)
+178.09622534141909,True,2.8728111612017533e-40,0.025,0.025,0.025,rate-linked selection (strength 1),24,10024,Linear,reject often (power)
+124.9742319401389,True,9.853746387279799e-29,0.025,0.025,0.025,rate-linked selection (strength 1),25,10025,Linear,reject often (power)
+127.68157507797604,True,2.545126000563665e-29,0.025,0.025,0.025,rate-linked selection (strength 1),26,10026,Linear,reject often (power)
+149.61206816878075,True,4.401120103072502e-34,0.025,0.025,0.025,rate-linked selection (strength 1),27,10027,Linear,reject often (power)
+119.66970557966532,True,1.3978631106209482e-27,0.025,0.025,0.025,rate-linked selection (strength 1),28,10028,Linear,reject often (power)
+166.51530558702325,True,9.39878795741737e-38,0.025,0.025,0.025,rate-linked selection (strength 1),29,10029,Linear,reject often (power)
+167.85588699137045,True,4.80804250702171e-38,0.025,0.025,0.025,rate-linked selection (strength 1),30,10030,Linear,reject often (power)
+106.11166762955644,True,1.2290093238376861e-24,0.025,0.025,0.025,rate-linked selection (strength 1),31,10031,Linear,reject often (power)
+148.90702462282707,True,6.261256290645539e-34,0.025,0.025,0.025,rate-linked selection (strength 1),32,10032,Linear,reject often (power)
+167.42325296910712,True,5.969164985640975e-38,0.025,0.025,0.025,rate-linked selection (strength 1),33,10033,Linear,reject often (power)
+121.98772946104556,True,4.3864396014875275e-28,0.025,0.025,0.025,rate-linked selection (strength 1),34,10034,Linear,reject often (power)
+96.73153488819344,True,1.33790452381527e-22,0.025,0.025,0.025,rate-linked selection (strength 1),35,10035,Linear,reject often (power)
+116.9024440517419,True,5.576578883026935e-27,0.025,0.025,0.025,rate-linked selection (strength 1),36,10036,Linear,reject often (power)
+187.73484522147783,True,2.3190353342637225e-42,0.025,0.025,0.025,rate-linked selection (strength 1),37,10037,Linear,reject often (power)
+158.14160837701093,True,6.185817423011444e-36,0.025,0.025,0.025,rate-linked selection (strength 1),38,10038,Linear,reject often (power)
+133.63043377454687,True,1.2999631300274351e-30,0.025,0.025,0.025,rate-linked selection (strength 1),39,10039,Linear,reject often (power)
+167.8111603171319,True,4.916777691612988e-38,0.025,0.025,0.025,rate-linked selection (strength 1),40,10040,Linear,reject often (power)
+99.77542612775687,True,2.920468577009549e-23,0.025,0.025,0.025,rate-linked selection (strength 1),41,10041,Linear,reject often (power)
+155.93082727332967,True,1.8683666838868507e-35,0.025,0.025,0.025,rate-linked selection (strength 1),42,10042,Linear,reject often (power)
+203.80412089948777,True,7.514645336270483e-46,0.025,0.025,0.025,rate-linked selection (strength 1),43,10043,Linear,reject often (power)
+200.39354701717772,True,4.135282627263584e-45,0.025,0.025,0.025,rate-linked selection (strength 1),44,10044,Linear,reject often (power)
+191.11785447892728,True,4.272639385206328e-43,0.025,0.025,0.025,rate-linked selection (strength 1),45,10045,Linear,reject often (power)
+118.11279024021768,True,3.0447000505104784e-27,0.025,0.025,0.025,rate-linked selection (strength 1),46,10046,Linear,reject often (power)
+137.8460716842178,True,1.5794900483071067e-31,0.025,0.025,0.025,rate-linked selection (strength 1),47,10047,Linear,reject often (power)
+97.82595793169912,True,7.740592019727905e-23,0.025,0.025,0.025,rate-linked selection (strength 1),48,10048,Linear,reject often (power)
+109.80252035088644,True,1.9413180496288216e-25,0.025,0.025,0.025,rate-linked selection (strength 1),49,10049,Linear,reject often (power)
+74.20797579971486,True,1.0407677698635e-17,0.025,0.025,0.025,rate-linked selection (strength 1),50,10050,Linear,reject often (power)
+114.65959070321014,True,1.7115802494131478e-26,0.025,0.025,0.025,rate-linked selection (strength 1),51,10051,Linear,reject often (power)
+221.17887916586412,True,1.267732629513944e-49,0.025,0.025,0.025,rate-linked selection (strength 1),52,10052,Linear,reject often (power)
+143.18092564422705,True,1.0966500825455477e-32,0.025,0.025,0.025,rate-linked selection (strength 1),53,10053,Linear,reject often (power)
+132.85310355972706,True,1.9174592644847032e-30,0.025,0.025,0.025,rate-linked selection (strength 1),54,10054,Linear,reject often (power)
+110.86543126195193,True,1.1410075568625908e-25,0.025,0.025,0.025,rate-linked selection (strength 1),55,10055,Linear,reject often (power)
+108.33903908959472,True,4.035409485845681e-25,0.025,0.025,0.025,rate-linked selection (strength 1),56,10056,Linear,reject often (power)
+95.1458351255974,True,2.9563472912332333e-22,0.025,0.025,0.025,rate-linked selection (strength 1),57,10057,Linear,reject often (power)
+119.69898605801518,True,1.3775471385627277e-27,0.025,0.025,0.025,rate-linked selection (strength 1),58,10058,Linear,reject often (power)
+133.49072085774606,True,1.394020977920201e-30,0.025,0.025,0.025,rate-linked selection (strength 1),59,10059,Linear,reject often (power)
+25.29304384565512,True,4.356085043279709e-07,0.025,0.025,0.025,rate-linked selection (strength 0.5),0,11000,Linear,reject often (power)
+75.16370685777974,True,6.453858990502929e-18,0.025,0.025,0.025,rate-linked selection (strength 0.5),1,11001,Linear,reject often (power)
+43.91957004248525,True,3.930045493199393e-11,0.025,0.025,0.025,rate-linked selection (strength 0.5),2,11002,Linear,reject often (power)
+33.402241737321674,True,7.554511755474544e-09,0.025,0.025,0.025,rate-linked selection (strength 0.5),3,11003,Linear,reject often (power)
+54.14299322590068,True,2.3681512701862075e-13,0.025,0.025,0.025,rate-linked selection (strength 0.5),4,11004,Linear,reject often (power)
+8.14623199143216,True,0.0023039828132203812,0.025,0.125,0.1,rate-linked selection (strength 0.5),5,11005,Linear,reject often (power)
+35.242359329735336,True,3.0104397730102238e-09,0.025,0.025,0.025,rate-linked selection (strength 0.5),6,11006,Linear,reject often (power)
+40.05133673466071,True,2.7187781303863507e-10,0.025,0.025,0.025,rate-linked selection (strength 0.5),7,11007,Linear,reject often (power)
+28.91070527057036,True,7.137254000916451e-08,0.025,0.025,0.025,rate-linked selection (strength 0.5),8,11008,Linear,reject often (power)
+31.57244321514645,True,1.8860017957894674e-08,0.025,0.025,0.025,rate-linked selection (strength 0.5),9,11009,Linear,reject often (power)
+22.961037568123174,True,1.397928885676117e-06,0.025,0.025,0.025,rate-linked selection (strength 0.5),10,11010,Linear,reject often (power)
+34.88968371746796,True,3.5909758074013245e-09,0.025,0.05,0.025,rate-linked selection (strength 0.5),11,11011,Linear,reject often (power)
+20.626894222160445,True,4.490946345348535e-06,0.025,0.025,0.025,rate-linked selection (strength 0.5),12,11012,Linear,reject often (power)
+31.196856910824863,True,2.2756194215223546e-08,0.025,0.025,0.05,rate-linked selection (strength 0.5),13,11013,Linear,reject often (power)
+44.45381307108528,True,3.0087643736656654e-11,0.025,0.025,0.025,rate-linked selection (strength 0.5),14,11014,Linear,reject often (power)
+37.27115928400099,True,1.0916455043968894e-09,0.025,0.025,0.025,rate-linked selection (strength 0.5),15,11015,Linear,reject often (power)
+21.350809765780014,True,3.127098804124635e-06,0.025,0.025,0.025,rate-linked selection (strength 0.5),16,11016,Linear,reject often (power)
+37.67133650667256,True,8.936845518184548e-10,0.025,0.025,0.025,rate-linked selection (strength 0.5),17,11017,Linear,reject often (power)
+25.593269531347687,True,3.7488940829888157e-07,0.025,0.025,0.025,rate-linked selection (strength 0.5),18,11018,Linear,reject often (power)
+57.094323330093175,True,5.414224391550385e-14,0.025,0.025,0.025,rate-linked selection (strength 0.5),19,11019,Linear,reject often (power)
+40.92821198140973,True,1.7537299842165795e-10,0.025,0.025,0.025,rate-linked selection (strength 0.5),20,11020,Linear,reject often (power)
+52.61610152487083,True,5.081240610738721e-13,0.025,0.025,0.025,rate-linked selection (strength 0.5),21,11021,Linear,reject often (power)
+33.43727560388152,True,7.423332163449394e-09,0.025,0.025,0.025,rate-linked selection (strength 0.5),22,11022,Linear,reject often (power)
+53.62826724108072,True,3.0632381897690364e-13,0.025,0.025,0.025,rate-linked selection (strength 0.5),23,11023,Linear,reject often (power)
+25.301706474054754,True,4.3372582720398995e-07,0.025,0.025,0.025,rate-linked selection (strength 0.5),24,11024,Linear,reject often (power)
+55.0231642140111,True,1.5250452807551754e-13,0.025,0.025,0.025,rate-linked selection (strength 0.5),25,11025,Linear,reject often (power)
+37.962025296908905,True,7.727908690941112e-10,0.025,0.025,0.025,rate-linked selection (strength 0.5),26,11026,Linear,reject often (power)
+30.66344628031129,True,2.9711753159089856e-08,0.025,0.025,0.025,rate-linked selection (strength 0.5),27,11027,Linear,reject often (power)
+35.03379395160573,True,3.3413297655192814e-09,0.025,0.025,0.025,rate-linked selection (strength 0.5),28,11028,Linear,reject often (power)
+26.65050742665335,True,2.2096672478985687e-07,0.025,0.025,0.025,rate-linked selection (strength 0.5),29,11029,Linear,reject often (power)
+56.37546744829706,True,7.755928958372406e-14,0.025,0.025,0.025,rate-linked selection (strength 0.5),30,11030,Linear,reject often (power)
+37.2870409924526,True,1.083011233693722e-09,0.025,0.025,0.025,rate-linked selection (strength 0.5),31,11031,Linear,reject often (power)
+23.380996658655476,True,1.1331623100121262e-06,0.025,0.025,0.025,rate-linked selection (strength 0.5),32,11032,Linear,reject often (power)
+56.13181880903221,True,8.760753326271273e-14,0.025,0.025,0.025,rate-linked selection (strength 0.5),33,11033,Linear,reject often (power)
+47.718380434053415,True,5.8816121464732606e-12,0.025,0.025,0.025,rate-linked selection (strength 0.5),34,11034,Linear,reject often (power)
+21.92487843462777,True,2.3468437508164832e-06,0.025,0.025,0.025,rate-linked selection (strength 0.5),35,11035,Linear,reject often (power)
+67.51905155366785,True,2.950090096497072e-16,0.025,0.025,0.025,rate-linked selection (strength 0.5),36,11036,Linear,reject often (power)
+22.197408658796576,True,2.0478822871871233e-06,0.025,0.025,0.025,rate-linked selection (strength 0.5),37,11037,Linear,reject often (power)
+44.60645068925169,True,2.7876827029809982e-11,0.025,0.025,0.025,rate-linked selection (strength 0.5),38,11038,Linear,reject often (power)
+53.443679644107306,True,3.3594134385277825e-13,0.025,0.025,0.025,rate-linked selection (strength 0.5),39,11039,Linear,reject often (power)
+32.748284755623445,True,1.0476382721347949e-08,0.025,0.025,0.025,rate-linked selection (strength 0.5),40,11040,Linear,reject often (power)
+49.98665103162193,True,1.8921156605261965e-12,0.025,0.025,0.025,rate-linked selection (strength 0.5),41,11041,Linear,reject often (power)
+35.32242691161173,True,2.8923010058965338e-09,0.025,0.025,0.025,rate-linked selection (strength 0.5),42,11042,Linear,reject often (power)
+26.44705873885414,True,2.4462745648841727e-07,0.025,0.025,0.025,rate-linked selection (strength 0.5),43,11043,Linear,reject often (power)
+29.446484924863398,True,5.459942625332088e-08,0.025,0.025,0.025,rate-linked selection (strength 0.5),44,11044,Linear,reject often (power)
+17.243931342088217,True,2.4374679959234748e-05,0.025,0.025,0.075,rate-linked selection (strength 0.5),45,11045,Linear,reject often (power)
+54.87554169455143,True,1.641869220920831e-13,0.025,0.025,0.025,rate-linked selection (strength 0.5),46,11046,Linear,reject often (power)
+43.08833185109097,True,5.955231621738738e-11,0.025,0.025,0.025,rate-linked selection (strength 0.5),47,11047,Linear,reject often (power)
+37.67572415506447,True,8.917261140446873e-10,0.025,0.025,0.025,rate-linked selection (strength 0.5),48,11048,Linear,reject often (power)
+35.55444483880865,True,2.5754992982242126e-09,0.025,0.05,0.025,rate-linked selection (strength 0.5),49,11049,Linear,reject often (power)
+29.89410791536193,True,4.3650375259782875e-08,0.025,0.025,0.025,rate-linked selection (strength 0.5),50,11050,Linear,reject often (power)
+30.307939038541917,True,3.5491609544091986e-08,0.025,0.025,0.025,rate-linked selection (strength 0.5),51,11051,Linear,reject often (power)
+36.917487474545396,True,1.3028082145105132e-09,0.025,0.025,0.025,rate-linked selection (strength 0.5),52,11052,Linear,reject often (power)
+27.54500719970929,True,1.4128261373753581e-07,0.025,0.025,0.025,rate-linked selection (strength 0.5),53,11053,Linear,reject often (power)
+31.691129294936218,True,1.777336857497174e-08,0.025,0.025,0.025,rate-linked selection (strength 0.5),54,11054,Linear,reject often (power)
+25.378561854524378,True,4.173749212915983e-07,0.025,0.025,0.025,rate-linked selection (strength 0.5),55,11055,Linear,reject often (power)
+8.00667189376054,True,0.002470496968199811,0.025,0.1,0.05,rate-linked selection (strength 0.5),56,11056,Linear,reject often (power)
+33.124011765679825,True,8.682069779503442e-09,0.025,0.025,0.025,rate-linked selection (strength 0.5),57,11057,Linear,reject often (power)
+39.019459166190245,True,4.5545254672074555e-10,0.025,0.025,0.025,rate-linked selection (strength 0.5),58,11058,Linear,reject often (power)
+42.37547660064456,True,8.505369948026905e-11,0.025,0.025,0.025,rate-linked selection (strength 0.5),59,11059,Linear,reject often (power)
+32.248319512356375,True,1.3451707918418e-08,0.025,0.625,0.775,"misspecified function and heterogeneous rates, no selection",0,12000,Linear,reject at the nominal rate
+60.68968442417099,True,8.970435116140683e-15,0.025,0.525,0.6,"misspecified function and heterogeneous rates, no selection",1,12001,Linear,reject at the nominal rate
+50.99276464327386,True,1.1441234457859721e-12,0.025,0.875,0.9,"misspecified function and heterogeneous rates, no selection",2,12002,Linear,reject at the nominal rate
+22.98012558090886,True,1.384650508703487e-06,0.025,1.0,0.975,"misspecified function and heterogeneous rates, no selection",3,12003,Linear,reject at the nominal rate
+58.39942277739465,True,2.8192754328200314e-14,0.025,0.4,0.475,"misspecified function and heterogeneous rates, no selection",4,12004,Linear,reject at the nominal rate
+96.36365692860636,True,1.6080842787894984e-22,0.025,0.7,0.65,"misspecified function and heterogeneous rates, no selection",5,12005,Linear,reject at the nominal rate
+53.53404091581797,True,3.2110107116127836e-13,0.025,0.725,0.7,"misspecified function and heterogeneous rates, no selection",6,12006,Linear,reject at the nominal rate
+10.520753113868068,True,0.0007028433252426895,0.075,0.925,0.95,"misspecified function and heterogeneous rates, no selection",7,12007,Linear,reject at the nominal rate
+50.70962729919074,True,1.3181213014548895e-12,0.025,0.775,0.725,"misspecified function and heterogeneous rates, no selection",8,12008,Linear,reject at the nominal rate
+124.75358853882472,True,1.1003060126356943e-28,0.025,0.075,0.1,"misspecified function and heterogeneous rates, no selection",9,12009,Linear,reject at the nominal rate
+55.93341626667143,True,9.674399488146815e-14,0.025,0.375,0.4,"misspecified function and heterogeneous rates, no selection",10,12010,Linear,reject at the nominal rate
+53.67687099103932,True,2.989693020500685e-13,0.025,0.3,0.35,"misspecified function and heterogeneous rates, no selection",11,12011,Linear,reject at the nominal rate
+65.40039735692835,True,8.50932660358271e-16,0.025,0.35,0.4,"misspecified function and heterogeneous rates, no selection",12,12012,Linear,reject at the nominal rate
+75.83896357580034,True,4.604572750815384e-18,0.025,0.675,0.75,"misspecified function and heterogeneous rates, no selection",13,12013,Linear,reject at the nominal rate
+32.155421927628595,True,1.4091261776844746e-08,0.025,0.875,0.775,"misspecified function and heterogeneous rates, no selection",14,12014,Linear,reject at the nominal rate
+38.5887219186061,True,5.649064581399568e-10,0.025,0.65,0.525,"misspecified function and heterogeneous rates, no selection",15,12015,Linear,reject at the nominal rate
+68.02583287318566,True,2.2897555183291953e-16,0.025,0.5,0.5,"misspecified function and heterogeneous rates, no selection",16,12016,Linear,reject at the nominal rate
+69.97520930826249,True,8.639475947635167e-17,0.025,0.225,0.2,"misspecified function and heterogeneous rates, no selection",17,12017,Linear,reject at the nominal rate
+54.02784163754768,True,2.508501066630941e-13,0.025,0.625,0.475,"misspecified function and heterogeneous rates, no selection",18,12018,Linear,reject at the nominal rate
+26.415941525537164,True,2.4846328153036066e-07,0.025,0.875,0.85,"misspecified function and heterogeneous rates, no selection",19,12019,Linear,reject at the nominal rate
+33.11078137116783,True,8.739693770579663e-09,0.025,0.6,0.5,"misspecified function and heterogeneous rates, no selection",20,12020,Linear,reject at the nominal rate
+58.73618541175574,True,2.3823766837824826e-14,0.025,0.775,0.8,"misspecified function and heterogeneous rates, no selection",21,12021,Linear,reject at the nominal rate
+40.41959520379987,True,2.2615565791516618e-10,0.025,0.75,0.65,"misspecified function and heterogeneous rates, no selection",22,12022,Linear,reject at the nominal rate
+20.759858496434845,True,4.202087013076534e-06,0.025,1.0,1.0,"misspecified function and heterogeneous rates, no selection",23,12023,Linear,reject at the nominal rate
+91.86201700794345,True,1.5269594169514037e-21,0.025,0.35,0.525,"misspecified function and heterogeneous rates, no selection",24,12024,Linear,reject at the nominal rate
+42.363166364495555,True,8.557882950399466e-11,0.025,0.7,0.625,"misspecified function and heterogeneous rates, no selection",25,12025,Linear,reject at the nominal rate
+68.03983905589621,True,2.2737761689813324e-16,0.025,0.3,0.45,"misspecified function and heterogeneous rates, no selection",26,12026,Linear,reject at the nominal rate
+31.365399946807884,True,2.091707609766298e-08,0.025,0.825,0.9,"misspecified function and heterogeneous rates, no selection",27,12027,Linear,reject at the nominal rate
+135.75860415613306,True,4.485436453168117e-31,0.025,0.1,0.125,"misspecified function and heterogeneous rates, no selection",28,12028,Linear,reject at the nominal rate
+96.31833750296164,True,1.6449389883625053e-22,0.025,0.6,0.675,"misspecified function and heterogeneous rates, no selection",29,12029,Linear,reject at the nominal rate
+70.113024971286,True,8.064196634382813e-17,0.025,0.75,0.6,"misspecified function and heterogeneous rates, no selection",30,12030,Linear,reject at the nominal rate
+59.54312813008346,True,1.591420855296173e-14,0.025,0.7,0.7,"misspecified function and heterogeneous rates, no selection",31,12031,Linear,reject at the nominal rate
+40.03483118660279,True,2.741308432803775e-10,0.025,0.925,0.875,"misspecified function and heterogeneous rates, no selection",32,12032,Linear,reject at the nominal rate
+45.60877472360562,True,1.6888514139000375e-11,0.025,0.8,0.75,"misspecified function and heterogeneous rates, no selection",33,12033,Linear,reject at the nominal rate
+73.05494342593511,True,1.8523866114694356e-17,0.025,0.275,0.4,"misspecified function and heterogeneous rates, no selection",34,12034,Linear,reject at the nominal rate
+61.55845345715488,True,5.80982044745186e-15,0.025,0.275,0.2,"misspecified function and heterogeneous rates, no selection",35,12035,Linear,reject at the nominal rate
+88.01968493432287,True,1.0427478505029785e-20,0.025,0.475,0.45,"misspecified function and heterogeneous rates, no selection",36,12036,Linear,reject at the nominal rate
+44.707745574251476,True,2.6500095289153092e-11,0.025,0.95,0.925,"misspecified function and heterogeneous rates, no selection",37,12037,Linear,reject at the nominal rate
+34.81305585600967,True,3.7312298915375165e-09,0.025,0.75,0.775,"misspecified function and heterogeneous rates, no selection",38,12038,Linear,reject at the nominal rate
+51.72518565171595,True,7.932858069941798e-13,0.025,0.675,0.6,"misspecified function and heterogeneous rates, no selection",39,12039,Linear,reject at the nominal rate
+49.33696221282662,True,2.6183386393277496e-12,0.025,0.275,0.3,"misspecified function and heterogeneous rates, no selection",40,12040,Linear,reject at the nominal rate
+96.686592909522,True,1.368308890837779e-22,0.025,0.425,0.225,"misspecified function and heterogeneous rates, no selection",41,12041,Linear,reject at the nominal rate
+85.2833264287483,True,4.0961136974021106e-20,0.025,0.15,0.225,"misspecified function and heterogeneous rates, no selection",42,12042,Linear,reject at the nominal rate
+56.58715240951051,True,6.976972595823124e-14,0.025,0.65,0.5,"misspecified function and heterogeneous rates, no selection",43,12043,Linear,reject at the nominal rate
+74.97388126477335,True,7.096424328642497e-18,0.025,0.375,0.3,"misspecified function and heterogeneous rates, no selection",44,12044,Linear,reject at the nominal rate
+53.888433475423426,True,2.6895918976962066e-13,0.025,0.6,0.55,"misspecified function and heterogeneous rates, no selection",45,12045,Linear,reject at the nominal rate
+89.01055873340874,True,6.353511080565357e-21,0.025,0.275,0.25,"misspecified function and heterogeneous rates, no selection",46,12046,Linear,reject at the nominal rate
+23.755898274244373,True,9.394707641268754e-07,0.025,0.85,0.9,"misspecified function and heterogeneous rates, no selection",47,12047,Linear,reject at the nominal rate
+80.66479592520727,True,4.123567984671762e-19,0.025,0.375,0.375,"misspecified function and heterogeneous rates, no selection",48,12048,Linear,reject at the nominal rate
+138.54520646703577,True,1.113529443091086e-31,0.025,0.05,0.025,"misspecified function and heterogeneous rates, no selection",49,12049,Linear,reject at the nominal rate
+56.57699744860656,True,7.012488126196417e-14,0.025,0.725,0.625,"misspecified function and heterogeneous rates, no selection",50,12050,Linear,reject at the nominal rate
+80.96642270410166,True,3.546302157547357e-19,0.025,0.2,0.2,"misspecified function and heterogeneous rates, no selection",51,12051,Linear,reject at the nominal rate
+54.618207144944336,True,1.8673169910275185e-13,0.025,0.85,0.85,"misspecified function and heterogeneous rates, no selection",52,12052,Linear,reject at the nominal rate
+108.16682628629997,True,4.398282754611653e-25,0.025,0.025,0.125,"misspecified function and heterogeneous rates, no selection",53,12053,Linear,reject at the nominal rate
+9.49243611699012,True,0.0011753162031858163,0.1,0.875,0.9,"misspecified function and heterogeneous rates, no selection",54,12054,Linear,reject at the nominal rate
+43.58469721480333,True,4.646375324543126e-11,0.025,0.875,0.525,"misspecified function and heterogeneous rates, no selection",55,12055,Linear,reject at the nominal rate
+75.31827551520291,True,5.973863773428974e-18,0.025,0.1,0.1,"misspecified function and heterogeneous rates, no selection",56,12056,Linear,reject at the nominal rate
+50.639653418033504,True,1.3650545714360305e-12,0.025,0.625,0.575,"misspecified function and heterogeneous rates, no selection",57,12057,Linear,reject at the nominal rate
+67.62610144816517,True,2.7963381671522833e-16,0.025,0.5,0.575,"misspecified function and heterogeneous rates, no selection",58,12058,Linear,reject at the nominal rate
+36.75076084941065,True,1.4160699761578813e-09,0.025,0.5,0.825,"misspecified function and heterogeneous rates, no selection",59,12059,Linear,reject at the nominal rate

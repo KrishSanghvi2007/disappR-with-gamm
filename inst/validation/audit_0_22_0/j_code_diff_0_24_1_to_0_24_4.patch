@@ -1,0 +1,835 @@
+diff -ruN 0.24.1/DESCRIPTION 0.24.4/DESCRIPTION
+--- 0.24.1/DESCRIPTION	2026-09-25 14:49:44.639837091 +0000
++++ 0.24.4/DESCRIPTION	2026-09-26 14:38:41.208631417 +0000
+@@ -1,6 +1,6 @@
+ Package: disappR
+ Title: Diagnose and Model Selective Disappearance and Appearance in Longitudinal Ageing Data
+-Version: 0.24.1
++Version: 0.24.4
+ Authors@R: c(
+     person("Krish", "Sanghvi", role = "aut",
+            comment = c(ORCID = "0000-0002-5125-2983")),
+diff -ruN 0.24.1/NEWS.md 0.24.4/NEWS.md
+--- 0.24.1/NEWS.md	2026-09-25 14:49:44.694139679 +0000
++++ 0.24.4/NEWS.md	2026-09-26 14:42:00.643040669 +0000
+@@ -1,3 +1,47 @@
++# disappR 0.24.4
++
++* **AFE and the trait-specific box no longer conflict.** With an age at first expression (AFE) set on the Sampling
++  tab, the missingness window opened at the earlier of the AFE and the individual's first record of any kind, ignoring
++  the box and a mapped AFR column. It now opens at the earlier of the AFE and the AFR the models use. Unchanged when
++  unticked with automatic AFR (every bundled example).
++* **Mapped columns and the box.** A note under the box now says when a mapped ALR or AFR column means the box
++  changes only one of them, or neither. The automatic ALR, AFR and lifespan choices name the box.
++* The R snapshot tier (tier 9) counts missed occasions from AFR, as the app does by default.
++* **Audit Part L** (19 checks) and `test-0-24-4.R`: every combination of AFR automatic or mapped, ALR automatic or
++  mapped, box ticked or not, and AFE absent, early or late gives the specified AFR, ALR and window, and the models
++  use the same AFR and ALR.
++
++# disappR 0.24.3
++
++* **Data checks follow the trait-specific option.** "Mapped ALR vs last age" compares a mapped ALR with the last age
++  with a trait value when ticked (the last record of any kind when unticked), and "LS - ALR" uses the ALR the models
++  use when ticked. "LS earlier than the last record" still uses any record, since no individual is seen after death.
++* The sampling grid's ALR order breaks ties by the same AFR as the blue tile.
++* The app server test toggles the trait-specific box and redraws the grid, the proxy panels and the data checks
++  under each option, and checks the benchmark note on a ticked bundled example.
++* **Audit Part K** (17 checks): odd missingness x trait x age scenarios with known lifespan and ALR automatic, mapped
++  as the last sighting, or mapped inconsistently. Every invariant of the window and the proxies holds.
++
++# disappR 0.24.2
++
++* **Trait-specific ALR and AFR (default).** When ALR and AFR are not mapped as columns, they are the last and first
++  ages at which the trait has a value (zero is a value, NA is not), the same records mean age uses. A tick box on the
++  Data tab, with a help panel, switches to the last and first ages of any record ("dataset-wide"). Before, the
++  dataset-wide definition was the only one.
++  - Bundled examples open unticked, so their documented model results are unchanged; a note appears if it is ticked.
++  - Uploads, simulations and `disappr_mapping()` in R open ticked. Mapped ALR and AFR columns are used as supplied.
++  - "Lifespan = last recorded age" follows the same choice; the disappearance hazard and life table still use each
++    individual's last record of any kind.
++  - The choice is part of the data fingerprint, the exported R script and the methods draft.
++* **Simulations use the observed AFR** (the first observed record), like ALR; the true AFR stays in the data.
++* **Missingness window from AFR to ALR, both included.** It opened at the first trait record and closed at the later of
++  the ALR and the last record of any kind. Records without a trait value inside the window count as missed, so the
++  missingness figures of six bundled examples rise by 0.6 to 3.4 percentage points. The AFR is now a blue tile on the
++  sampling grid (an individual seen once gets the ALR tile with a blue outline), and "order by AFR" sorts on it.
++* **Audit Part J** (33 checks) and R tier 9 (`trait_ages_snapshot.R`) compare the two options on every example, on
++  files with several traits and on simulations; `j_snapshot_before_after.md` and a code diff record 0.24.1 against
++  0.24.2.
++
+ # disappR 0.24.1
+ 
+ From the first R run of 0.24.0 (R CMD check: 0 errors, 0 warnings, 0 notes; unit tests 1896 passed, 1 failed).
+diff -ruN 0.24.1/R/api.R 0.24.4/R/api.R
+--- 0.24.1/R/api.R	2026-09-25 14:18:46.462500231 +0000
++++ 0.24.4/R/api.R	2026-09-26 12:44:34.239935552 +0000
+@@ -13,7 +13,8 @@
+ #' and the reproducible code.
+ #'
+ #' @param ... For `disappr_mapping()`: column roles (`id`, `age`, `trait`, `alr`, `life`, `entry`, `covars`,
+-#'   `cov_factor`, `cov_age`, `group`, `group2`, `random`, ...). For `disappr_fit()`: further settings passed to the
++#'   `cov_factor`, `cov_age`, `group`, `group2`, `random`, ...) and `trait_specific_ages` (default `TRUE`: automatic
++#'   ALR and AFR are the last and first ages with a trait value; `FALSE`: of any record). For `disappr_fit()`: further settings passed to the
+ #'   model suite (`random_slope`, `standardise`, `zi_str`, `among`, `include_invalid`, `extra`). For
+ #'   `disappr_simulate()`: simulation settings (`n_id`, `seed`, `sd_type`, `missingness`, `form`, ...).
+ #' @param data A data frame with one row per record.
+@@ -48,7 +49,7 @@
+ 
+ #' @rdname disappr_api
+ #' @export
+-disappr_mapping <- function(...) example_map(...)
++disappr_mapping <- function(...) utils::modifyList(example_map(trait_specific_ages = TRUE), list(...))   # trait-specific ALR/AFR by default (0.24.2)
+ 
+ #' @rdname disappr_api
+ #' @export
+diff -ruN 0.24.1/R/data-preparation.R 0.24.4/R/data-preparation.R
+--- 0.24.1/R/data-preparation.R	2026-09-25 14:18:46.462518336 +0000
++++ 0.24.4/R/data-preparation.R	2026-09-26 12:41:26.291080305 +0000
+@@ -176,9 +176,15 @@
+     if (isTRUE(map$nested)) out$id <- ifelse(is.na(out$group), out$id, paste(out$group, out$id, sep = "/"))
+   }
+ 
++  # Automatic ALR and AFR (0.24.2). Trait-specific (the default, map$trait_specific_ages = TRUE): the last and first
++  # ages at which the trait has a value (zero is a value, NA is not), the same records mean age uses. Dataset-wide
++  # (FALSE, used by the bundled examples): the last and first ages of any record, with or without a trait value.
++  # Individuals without a single trait value get NA under the trait-specific rule; they enter no model.
++  trait_specific <- !isFALSE(map$trait_specific_ages)
+   if (nrow(out)) {
+-    last_rec <- stats::ave(out$age, out$id, FUN = max)
+-    first_rec <- stats::ave(out$age, out$id, FUN = min)
++    a_use <- if (trait_specific) ifelse(is.finite(out$trait), out$age, NA_real_) else out$age
++    last_rec <- stats::ave(a_use, out$id, FUN = function(v) if (any(is.finite(v))) max(v, na.rm = TRUE) else NA_real_)
++    first_rec <- stats::ave(a_use, out$id, FUN = function(v) if (any(is.finite(v))) min(v, na.rm = TRUE) else NA_real_)
+   } else {
+     last_rec <- numeric(0)
+     first_rec <- numeric(0)
+@@ -316,6 +322,7 @@
+     n_dup_identical = length(dup$identical), n_dup_differing = length(dup$differing), dup_examples = dup$examples,
+     dup_columns = dup$columns,
+     alr_mapped = alr_mapped, life_auto = life_auto, has_life = life_auto || has_col(map$life),
++    trait_specific_ages = trait_specific,
+     entry_mapped = entry_mapped, has_group = has_group, nested = isTRUE(map$nested),
+     n_multi_group = n_multi_group, multi_group_examples = multi_group$examples, n_multi_group_gap = multi_group$n_gap,
+     has_group2 = has_group2, n_multi_group2 = n_multi_group2, covars = covars, cov_labels = cov_labels,
+diff -ruN 0.24.1/R/export.R 0.24.4/R/export.R
+--- 0.24.1/R/export.R	2026-09-25 14:18:46.545331239 +0000
++++ 0.24.4/R/export.R	2026-09-26 12:41:56.729019094 +0000
+@@ -72,8 +72,9 @@
+     paste0("dat$trait <- as.numeric(dat[[", q(map$trait), "]])"),
+     if (res$family %in% BINOMIAL_FAMILIES && isTRUE(meta$has_trials)) paste0("dat$.trials <- as.numeric(dat[[", q(meta$trials_col), "]])  # number of binomial trials (prior weights)") else NULL,
+     "dat <- dat[!is.na(dat$id) & is.finite(dat$age), ]",
+-    if (isTRUE(meta$alr_mapped)) paste0("dat$ALR_raw <- as.numeric(dat[[", q(map$alr), "]])") else "dat$ALR_raw <- ave(dat$age, dat$id, FUN = max)  # age at last record",
+-    if (isTRUE(meta$entry_mapped)) paste0("dat$AFR_raw <- as.numeric(dat[[", q(map$entry), "]])") else "dat$AFR_raw <- ave(dat$age, dat$id, FUN = min)  # age at first observation",
++    if (!isFALSE(meta$trait_specific_ages)) "rec_age <- ifelse(is.finite(dat$trait), dat$age, NA)  # trait-specific ALR and AFR: only ages with a trait value" else "rec_age <- dat$age  # dataset-wide ALR and AFR: every record, with or without a trait value",
++    if (isTRUE(meta$alr_mapped)) paste0("dat$ALR_raw <- as.numeric(dat[[", q(map$alr), "]])") else "dat$ALR_raw <- ave(rec_age, dat$id, FUN = function(v) if (any(is.finite(v))) max(v, na.rm = TRUE) else NA)  # age at last record",
++    if (isTRUE(meta$entry_mapped)) paste0("dat$AFR_raw <- as.numeric(dat[[", q(map$entry), "]])") else "dat$AFR_raw <- ave(rec_age, dat$id, FUN = function(v) if (any(is.finite(v))) min(v, na.rm = TRUE) else NA)  # age at first record",
+     if (isTRUE(meta$has_life) && !isTRUE(meta$life_auto)) paste0("dat$LS_raw <- as.numeric(dat[[", q(map$life), "]])") else "dat$LS_raw <- NA_real_",
+     if (isTRUE(meta$has_censor)) sprintf("dat$LS_raw[dat$id %%in%% dat$id[as.character(dat[[%s]]) %%in%% %s]] <- NA  # censored individuals: lifespan unknown",
+                                          q(map$censor), q(map$censor_value)) else NULL,
+@@ -555,8 +556,8 @@
+       "We analysed ", big(dd$n_trait), " records of ", dd$trait %||% "the trait", " from ", big(dd$n_ind), " individuals aged ",
+       n(dd$age_min), "\u2013", n(dd$age_max), " (", src, "). Records were placed on a sampling grid with an interval of ", n(dd$step),
+       " age units (", if (isTRUE(dd$step_manual)) "set manually" else "inferred from the spacing of each individual's records", "). ",
+-      "Age at last record (ALR) was ", if (isTRUE(dd$alr_mapped)) "taken from a recorded column" else "each individual's oldest recorded age",
+-      " and age at first record (AFR) ", if (isTRUE(dd$afr_mapped)) "was taken from a recorded column" else "was each individual's youngest recorded age", ".",
++      "Age at last record (ALR) was ", if (isTRUE(dd$alr_mapped)) "taken from a recorded column" else if (isFALSE(dd$trait_specific_ages)) "each individual's oldest recorded age (any record)" else "each individual's oldest age with a trait value",
++      " and age at first record (AFR) ", if (isTRUE(dd$afr_mapped)) "was taken from a recorded column" else if (isFALSE(dd$trait_specific_ages)) "was each individual's youngest recorded age (any record)" else "was each individual's youngest age with a trait value", ".",
+       if (isTRUE(dd$life_known)) paste0(" Known lifespans were available", if (isTRUE(dd$n_censored > 0)) paste0(", with ", big(dd$n_censored), " individuals censored (lifespan unknown)") else "", ".") else "",
+       if (length(dd$covars)) paste0(" Covariates: ", and_list(dd$covars), ".") else "",
+       if (length(dd$groups)) paste0(" Grouping: ", and_list(dd$groups), ".") else "",
+@@ -584,8 +585,8 @@
+     ss <- first_with("sampling") %||% list()
+     parts <- c(if (has("Sampling grid") || has("Sampling summary") || has("Missingness and sample size")) paste0(
+                  "we compared each individual's records with the occasions expected between ",
+-                 if (identical(ss$miss_start, "afe")) paste0("the age at first trait expression (", n(ss$afe_age), ")") else "its first record",
+-                 " and its ALR"),
++                 if (identical(ss$miss_start, "afe")) paste0("the age at first trait expression (", n(ss$afe_age), ")") else "its AFR",
++                 " and its ALR, both included"),
+                if (has("Missingness against") || has("Sampling summary")) "tested whether missed occasions were associated with age, lifespan, AFR, condition and the previously observed trait value (logistic regressions)",
+                if (has("Agreement between")) "assessed the agreement between ALR, mean age and known lifespan as lifespan proxies")
+     paras <- c(paras, paste0("To assess the completeness of sampling, we ", and_list(parts), "."))
+diff -ruN 0.24.1/R/import.R 0.24.4/R/import.R
+--- 0.24.1/R/import.R	2026-09-25 14:18:46.462674429 +0000
++++ 0.24.4/R/import.R	2026-09-26 12:41:26.291740850 +0000
+@@ -12,7 +12,8 @@
+   entry = "__AUTO_FIRST__", condition = "", covars = c("Rep", "Paternal_age", "Paternal_sperm_age"),
+   cov_factor = c("Rep", "Paternal_age", "Paternal_sperm_age"), cov_int = character(0),
+   group = "F0_ID", nested = TRUE, random = character(0), censor = "Censored", censor_value = "0",
+-  start_mode = "same", start_age = 4, age_round = NA_real_, cov_age = character(0)
++  start_mode = "same", start_age = 4, age_round = NA_real_, cov_age = character(0),
++  trait_specific_ages = FALSE   # documented results use ALR and AFR from every record (0.24.2)
+ )
+ 
+ # ---------------------------------------------------------------------------
+@@ -30,7 +31,9 @@
+                condition = "", covars = character(0), cov_factor = character(0), cov_int = character(0),
+                group = "", nested = TRUE, random = character(0), censor = "", censor_value = "",
+                start_mode = "afr", start_age = NA_real_, age_round = NA_real_, cov_age = character(0),
+-               inconsistent = "error")
++               inconsistent = "error",
++               # the documented example results use ALR and AFR from every record (0.24.2)
++               trait_specific_ages = FALSE)
+   utils::modifyList(base, list(...))
+ }
+ 
+@@ -312,7 +315,8 @@
+     life = life,
+     entry = if (nzchar(afr)) afr else "__AUTO_FIRST__",
+     condition = cond, covars = character(0), cov_factor = character(0), cov_int = character(0), group = "", nested = TRUE, random = character(0),
+-    censor = "", censor_value = "", start_mode = "afr", start_age = NA_real_, age_round = NA_real_, cov_age = character(0)
++    censor = "", censor_value = "", start_mode = "afr", start_age = NA_real_, age_round = NA_real_, cov_age = character(0),
++    trait_specific_ages = TRUE
+   )
+ }
+ 
+diff -ruN 0.24.1/R/missingness.R 0.24.4/R/missingness.R
+--- 0.24.1/R/missingness.R	2026-09-25 14:18:46.462712689 +0000
++++ 0.24.4/R/missingness.R	2026-09-26 14:35:52.826003120 +0000
+@@ -4,11 +4,12 @@
+ # ---------------------------------------------------------------------------
+ # Expected sampling grid and missingness (B3 inputs)
+ # ---------------------------------------------------------------------------
+-# Each individual's expected window runs from its first observation of the trait to its ALR (the ALR the models
+-# use: the last recorded age, with or without a trait value, or the mapped column). Missingness is counted ONLY
+-# inside that window: the first observation is observed by definition, and nothing after the ALR is counted, with
+-# or without a known lifespan (the gap between ALR and death is summarised separately, by r(ALR, LS)).
+-# start_mode = "afr": the window opens at the individual's first trait record.
++# Each individual's expected window runs from its AFR to its ALR, both included (0.24.2): the AFR and ALR the models
++# use, i.e. the mapped columns, or else the first and last ages with a trait value (trait-specific, the default) or
++# of any record (dataset-wide). An occasion in the window without a trait value counts as missed, including an AFR
++# or ALR record without one. Nothing after the ALR is counted, with or without a known lifespan (the gap between
++# ALR and death is summarised separately, by r(ALR, LS)).
++# start_mode = "afr": the window opens at the individual's AFR (never after its first trait record).
+ # start_mode = "same": trait expression starts at start_age for everyone, so unrecorded occasions between
+ # start_age and an individual's first record count as missing.
+ build_missing_grid <- function(dat, margin = 0, start_mode = "afr", start_age = NA_real_, max_cells = 300000, step = NULL) {
+@@ -34,7 +35,12 @@
+   # An age at first trait expression (AFE), where supplied, opens the window earlier than entry into the
+   # dataset: occasions between expression and entry then count as missed rather than as "not yet expressing".
+   first_trait_age <- as.numeric(tapply(ifelse(is.finite(d$trait), d$age, NA_real_), f, function(v) min(v, na.rm = TRUE)))
+-  start_ref <- if (common_start) rep(start_age, length(ids)) else first_trait_age
++  # the AFR the models use; a mapped AFR later than the first trait record (an inconsistency) cannot push observed
++  # records out of the window
++  afr_ref <- ifelse(is.finite(entry), pmin(entry, first_trait_age), first_trait_age)
++  # AFE mode opens the window at the earlier of the AFE and the AFR (0.24.4; before, at the earlier of the AFE and the
++  # first record of any kind, which ignored the trait-specific option and a mapped AFR)
++  start_ref <- if (common_start) pmin(start_age, afr_ref) else afr_ref
+   build <- function(step) {
+     # Each individual's schedule is anchored on its first record, so individuals sampled on schedules
+     # offset from each other (staggered cohorts) are not given spurious missed occasions.
+@@ -42,15 +48,19 @@
+     anchor <- first_age - n_before * step
+     k_rec <- round((d$age - anchor[fi]) / step)
+     last_k <- as.numeric(tapply(k_rec, f, max))
+-    # a mapped ALR later than the last record (seen alive, not measured) keeps those occasions expected
++    # The window closes at the ALR the models use (0.24.2; before, at the last record of any kind when that was
++    # later): a mapped ALR later than the last record keeps those occasions expected, and a trait record after a
++    # mapped ALR (an inconsistency) stays inside the window
++    last_tk <- as.numeric(tapply(ifelse(is.finite(d$trait), k_rec, NA_real_), f,
++                                 function(v) if (any(is.finite(v))) max(v, na.rm = TRUE) else NA_real_))
+     alr_k <- ifelse(is.finite(alr_i), round((alr_i - anchor) / step), NA_real_)
+-    end_k <- pmax(last_k, alr_k, na.rm = TRUE)
++    end_k <- pmax(alr_k, last_tk, na.rm = TRUE)
+     end_k <- pmin(end_k, floor((amax - anchor) / step + 1e-9))
+-    end_k <- pmax(end_k, last_k)
++    end_k <- pmax(end_k, last_tk, na.rm = TRUE)
+     end_k[!is.finite(end_k)] <- last_k[!is.finite(end_k)]
+-    # AFR mode: the window opens at the first trait record, so a capture without a trait value before it is not
+-    # counted; AFE mode: it opens at the common start age (the anchor)
+-    first_k <- if (common_start) rep(0, length(ids)) else round((first_trait_age - anchor) / step)
++    # The window opens at start_ref: the AFR (AFR mode), or the earlier of the AFE and the AFR (AFE mode); a record
++    # without a trait value from there on counts as missed
++    first_k <- round((start_ref - anchor) / step)
+     start_k <- pmax(0, first_k, end_k - 4999)
+     list(anchor = anchor, k_rec = k_rec, start_k = start_k, end_k = end_k,
+          n_cells = as.integer(pmax(1, end_k - start_k + 1)))
+@@ -99,6 +109,7 @@
+   grid$alr <- im$alr[mm]
+   grid$condition <- im$condition[mm]
+   grid$condition_label <- im$condition_label[mm]
++  grid$afr <- afr_ref[gi]   # the AFR the window opens at (shown as the first-record tile)
+ 
+   n <- nrow(grid)
+   tr <- grid$trait
+@@ -273,7 +284,19 @@
+     lo <- ifelse(is.finite(ak), ak, lo)
+   }
+   end_k <- as.numeric(tapply(g$k, g$id, max)[full$id])
++  # the AFR the window opens at is marked in blue (0.24.2); where it is also the ALR (one record), the tile stays the
++  # ALR colour and gets a blue outline
++  afr_outline <- rep(FALSE, nrow(full))
++  if ("afr" %in% names(g)) {
++    afr_by <- tapply(g$afr, g$id, function(v) v[[1]])
++    anc_by2 <- tapply(g$anchor, g$id, function(v) v[[1]])
++    fk <- round((as.numeric(afr_by[full$id]) - as.numeric(anc_by2[full$id])) / step)
++    at_afr <- !is.na(m) & is.finite(fk) & full$k == fk
++    status[at_afr] <- "First record (AFR)"
++    afr_outline <- at_afr & is.finite(lo) & full$k == lo
++  }
+   status[!is.na(m) & is.finite(lo) & full$k == lo] <- "Last record (ALR)"
++  full$afr_outline <- afr_outline
+   # the window ends at the ALR, so nothing after it is drawn as expected, with or without a known lifespan
+   full$status <- status
+   attr(full, "n_shown") <- length(ids)
+diff -ruN 0.24.1/R/simulation.R 0.24.4/R/simulation.R
+--- 0.24.1/R/simulation.R	2026-09-25 14:18:46.462820422 +0000
++++ 0.24.4/R/simulation.R	2026-09-26 12:41:26.292057158 +0000
+@@ -264,11 +264,13 @@
+   cols <- names(df)
+   afr_ind <- "AFR" %in% cols
+   list(id = "ID", age = "age", trait = if ("body_mass" %in% cols) "body_mass" else "fecundity",
+-       alr = "__AUTO_LAST__", life = "lifespan", entry = if (afr_ind) "AFR" else "__AUTO_FIRST__",
++       # AFR is the observed one (the first observed record), like ALR (the last); the true AFR column stays in the
++       # data for comparison (0.24.2)
++       alr = "__AUTO_LAST__", life = "lifespan", entry = "__AUTO_FIRST__",
+        condition = "condition", covars = intersect("diet", cols), cov_factor = intersect("diet", cols),
+        group = if ("family" %in% cols) "family" else "", nested = TRUE, random = character(0),
+        censor = "", censor_value = "", start_mode = if (afr_ind) "afr" else "same", start_age = 1, age_round = NA_real_,
+-       cov_age = character(0), cov_int = character(0))
++       cov_age = character(0), cov_int = character(0), trait_specific_ages = TRUE)
+ }
+ 
+ toy_family <- function(type) {
+diff -ruN 0.24.1/R/ui-helpers.R 0.24.4/R/ui-helpers.R
+--- 0.24.1/R/ui-helpers.R	2026-09-25 14:18:46.547667273 +0000
++++ 0.24.4/R/ui-helpers.R	2026-09-26 14:36:00.032504372 +0000
+@@ -53,7 +53,7 @@
+     "For your own CSV, age must be numeric; missing values can be blank or NA.",
+     more = "The examples cover laboratory systems (fruit-fly and seed-beetle fecundity, leafcutting-bee activity) and wild populations (tern immunity and navigation, painted turtle reproduction, great tit recruitment, chipmunk reproduction, Soay sheep reproduction and weight, marmot immunity, swift reproduction, Apollo body mass). The simulator draws trajectories from an ageing form (linear, quadratic, cubic, logarithmic, exponential) and a shape within it (slow, fast or no senescence; an early or late peak; decline then improvement; a change that levels off). Selective disappearance can be absent, age-independent (lifespan linked to the individual's level), age-dependent (linked to its rate of ageing) or both, positive or negative; with individual AFR, selective appearance is set the same way. Mean lifespan sets how many occasions each individual supplies. Diet lowers the trait; families add a nested random effect. Use 'Subset the data' to analyse one group."),
+   afr_expression = info_entry("Counting missed occasions: from AFR or from AFE",
+-    "Sets where each individual's expected-occasion window opens. 'Age at first record (AFR)' opens each individual's window at its first observation of the trait, so the first observation is never counted as missed. 'Age at first trait expression (AFE)' is the age from which the trait exists and could in principle have been measured, entered as one age that applies to every individual: body size is expressed from birth even if recording begins at first breeding.",
++    "Sets where each individual's expected-occasion window opens. 'Age at first record (AFR)' opens each individual's window at its AFR, the one the models use, and counts the AFR itself. 'Age at first trait expression (AFE)' is the age from which the trait exists and could in principle have been measured, entered as one age that applies to every individual: body size is expressed from birth even if recording begins at first breeding. The window then opens at the earlier of the AFE and the individual's AFR.",
+     "Use AFR when the trait genuinely begins when the individual enters the data (a first clutch, for example). Use AFE when individuals could have been measured earlier than they were, and give the age at which the trait starts.",
+     "This setting changes the missingness figures only. It affects this tab's grid, missed-occasion counts and coverage; it does not enter any model, proxy or statistic anywhere in the app, all of which use AFR. Counting from AFE usually raises the estimated missingness, sometimes substantially, and changes its age profile at young ages, so the two definitions are not comparable: say which one you used when reporting."),
+   afr_alr = info_entry("Agreement between AFR and ALR",
+@@ -74,6 +74,11 @@
+     "The three required columns must be different. Age must be numeric. Map lifespan when you know it: it makes Model 6 available as a benchmark.",
+     "Getting this wrong invalidates everything downstream. Non-numeric values in a continuous covariate are treated as missing and drop those rows.",
+     more = "Tells the app which columns hold ID, age and trait, plus optional ALR, lifespan, AFR (age at first observation), continuous and categorical fixed-effect covariates, their interactions, grouping, additional random intercepts, censoring and an optional age resolution. Uploaded columns keep their names. Continuous covariates (e.g. temperature) enter the models as linear effects; categorical covariates (e.g. treatment, sex, diet) enter as factors with one coefficient per level. Interactions can be a covariate \u00d7 age (the covariate changes the shape of the ageing trajectory, e.g. diet \u00d7 (age + age\u00b2)) or between two covariates (e.g. diet \u00d7 sex, added to every model with both main effects). Covariates and interactions are used in the mixed models on tab 5 (Modelling). Map lifespan (LS) only if it is truly known; use nesting when IDs repeat across groups; map a censoring column for individuals alive at the end of the study. With a 'next level up' column the random effects have three levels, e.g. individuals within fathers within families: (1 | family) + (1 | family:father) + (1 | family:father:ID)."),
++  trait_ages = info_entry("Trait-specific ALR/AFR (default)",
++    "When ALR and AFR are not supplied as columns, they are calculated for each individual as the last and first ages at which the trait has a value (zero is a value; NA is not). Unticked, they are the last and first ages of any record, with or without a trait value.",
++    "Example: ages 1\u20135 with trait values NA, 5, 7, 6, NA give AFR 2 and ALR 4 when ticked, and AFR 1 and ALR 5 when unticked. Unticked assumes that an individual with a record at an age was alive then, even if the trait was not recorded.",
++    "Bundled examples open unticked, because their documented results use every record; ticking the box can change them. Mean age is always calculated from the ages with a trait value.",
++    more = "Missingness is counted from AFR to ALR, both included, so a record without a trait value inside that window counts as a missed occasion. ALR or AFR columns chosen in the mapping are used as supplied, whichever option is chosen. The disappearance hazard and the life table always use each individual's last record of any kind."),
+   subset = info_entry("Subset the data",
+     "Restricts every analysis to the rows whose value of one categorical variable (a text column with up to 50 levels, or a numeric column with up to 10 distinct values) is among the chosen levels.",
+     "Pick the variable, then tick the levels to keep (for example females only, or one treatment). Leave the variable empty to use all rows. The subset applies to the integrity checks, all diagnostics, individual fits and models, and to the exported R code only through the data you supply.",
+@@ -123,14 +128,14 @@
+     "With unknown lifespan, disappearance includes missed detection and emigration. Old ages rest on few individuals, so intervals are wide.",
+     more = "At each age, the probability of disappearing before the next occasion (with 95% Wilson intervals, point size = individuals at risk), the overall, age-independent hazard (dashed line: all disappearances / all individual-occasions at risk), and a likelihood-ratio test of a constant hazard against age-specific hazards. The test is fitted on individual occasions with an individual random intercept (frailty) when that can be estimated. The dashed line is the overall hazard: the share of all individual-occasions that ended in disappearance, ignoring age. Points above it mark ages where individuals disappear faster than average, points below it ages where they disappear more slowly. A flat series along the dashed line is consistent with and indicative of a chance of disappearing that does not change with age. A series rising across age is consistent with and indicative of actuarial senescence, and means later ages are thinned most, so any selective disappearance acts hardest there. A falling series means the opposite: early losses dominate, and the survivors reaching old age are already a filtered set. With unknown lifespan, disappearances include missed detections and emigration, and individuals alive at the study end must be marked as censored. Hazards at old ages rest on few individuals (wide intervals). The hazard is fitted with ordinary binomial GLMs on individual \u00d7 occasion records: the discrete-time likelihood is standard, but unmodelled differences in frailty between individuals are not accounted for."),
+   sampling_guidance = info_entry("Sampling summary and proxy guidance",
+-    "Summarises detection and proxy quality to guide the choice between ALR (Models 2, 4) and mean age (Models 3, 5). Missed occasions are counted only between each individual's first observation of the trait and its ALR, or from the age at first expression when that option is chosen.",
++    "Summarises detection and proxy quality to guide the choice between ALR (Models 2, 4) and mean age (Models 3, 5). Missed occasions are counted only from each individual's AFR to its ALR, both included, or from the age at first expression when that option is chosen.",
+     "Read the guidance alongside the proxy-agreement plots. In the sampling grid, ordering by ALR or AFR uses the ALR and AFR the models use, which for simulated data are taken after missingness.",
+     "In the manuscript we use 'missingness' for two things: occasions missed between AFR and ALR, and the occasions between ALR and true lifespan, at which an individual was alive but no longer recorded. Only the first is calculable from data alone, because the steps between ALR and LS are latent whenever lifespan is unknown. This grid therefore measures missingness between each individual's first and last record, so occasions missed after the last record are invisible to it and the detection rate reported here is an upper bound. The missingness grid assumes regular, scheduled sampling occasions: it is most reliable when every individual is due to be sampled at a common interval. With irregular ages (for example ages calculated from dates) expected occasions are approximate, so missingness percentages, patterns and drivers should be read qualitatively; round ages to a sampling resolution on the Data tab. Without known lifespan, occasions missed after the last record are invisible, so detection is overestimated. If individuals genuinely follow different schedules (for example some sampled every year and others every third year), the common step is the shortest one and the less frequently sampled individuals appear here as heavily missing: that is study design, not failed detection."),
+   heatmap = info_entry("Sampling grid",
+     "Draws one row per individual showing the ages at which it was recorded, so the sampling design is visible directly.",
+-    "Look for individuals with gaps, late entry or early exit, and for whole occasions missing across the population. Ordering by ALR or AFR uses the values the models use - the last and first recorded ages, with or without a trait value, or the mapped columns - so the latest ALRs sit at the bottom. Each row runs from the first observation of the trait to the ALR, which is marked: nothing before the first observation or after the ALR is counted as missed, whether or not lifespan is known. Individuals never measured for the trait enter no model and are not shown.",
++    "Look for individuals with gaps, late entry or early exit, and for whole occasions missing across the population. Ordering by ALR or AFR uses the values the models use (see 'Trait-specific ALR/AFR' on the Data tab, or the mapped columns), so the latest ALRs sit at the bottom. Each row runs from the AFR (blue) to the ALR (orange), both counted: nothing before the AFR or after the ALR is counted as missed, whether or not lifespan is known. Individuals never measured for the trait enter no model and are not shown.",
+     "With many individuals only a sample of rows is drawn.",
+-    more = "One row per individual and one column per expected occasion: observed, missed (expected but not recorded), the final expected occasion (death if LS is known, otherwise ALR), and white cells where no observations are expected (before AFR, after death or ALR). Each individual's schedule starts from its own first record (or the common start age), so staggered cohorts are not given spurious missed occasions. Scattered red cells: random gaps. Red concentrated at young or old ages: age-dependent sampling. Order rows by ALR, AFR, mean trait, ID or at random to see whether gaps line up with lifespan, entry age or trait values. Up to 500 individuals (set with 'Individuals to show in the grid') and 60,000 cells are drawn, evenly spaced in the chosen order. With irregular ages the occasions are approximate; round ages on the Data tab. Very fine or irregular ages are coarsened so that the grid stays below 300,000 cells, which is reported on this tab."),
++    more = "One row per individual and one column per expected occasion: observed, missed (expected but not recorded), the AFR (blue) and the ALR (orange; a blue outline when it is also the AFR). White cells lie outside the window: before the AFR or after the ALR. Each individual's schedule starts from its own first record (or the common start age), so staggered cohorts are not given spurious missed occasions. Scattered red cells: random gaps. Red concentrated at young or old ages: age-dependent sampling. Order rows by ALR, AFR, mean trait, ID or at random to see whether gaps line up with lifespan, entry age or trait values. Up to 500 individuals (set with 'Individuals to show in the grid') and 60,000 cells are drawn, evenly spaced in the chosen order. With irregular ages the occasions are approximate; round ages on the Data tab. Very fine or irregular ages are coarsened so that the grid stays below 300,000 cells, which is reported on this tab."),
+   missing_by_age = info_entry("How much is missing, and where?",
+     "Shows how many individuals are present at each age and the share of expected occasions with a trait record.",
+     "Missingness rising with age suggests 'missing when old'; high early missingness suggests 'missing when young'. Where few individuals remain, conclusions about those ages are weak.",
+diff -ruN 0.24.1/R/validation.R 0.24.4/R/validation.R
+--- 0.24.1/R/validation.R	2026-09-25 14:18:46.462912410 +0000
++++ 0.24.4/R/validation.R	2026-09-26 13:01:04.645723577 +0000
+@@ -119,10 +119,15 @@
+   add("One ALR, lifespan and AFR per individual", if (n_cf) paste0(n_cf, " excluded: ", cf_txt) else "consistent",
+       if (n_cf) "Warning" else "OK",
+       if (n_cf) "These individuals had different values in different records (a column that repeats the age, or two individuals sharing an ID) and were excluded, as the mapping asked. Correct the data to include them." else "")
++  # the last record the automatic ALR would use: with a trait value when trait-specific (0.24.2), else any record
++  trait_specific <- !isFALSE(meta$trait_specific_ages)
++  last_ref <- if (trait_specific && !is.null(im$last_observed)) im$last_observed else im$last_recorded
+   if (isTRUE(meta$alr_mapped)) {
+-    mism <- sum(abs(im$alr - im$last_recorded) > 1e-8, na.rm = TRUE)
+-    add("Mapped ALR vs last recorded age", sprintf("%d individuals differ", mism), if (mism > 0) "Warning" else "OK",
+-        if (mism > 0) "ALR should equal the last recorded age; check the column or use automatic calculation." else "")
++    mism <- sum(abs(im$alr - last_ref) > 1e-8, na.rm = TRUE)
++    add(if (trait_specific) "Mapped ALR vs last age with a trait value" else "Mapped ALR vs last recorded age",
++        sprintf("%d individuals differ", mism), if (mism > 0) "Warning" else "OK",
++        if (mism > 0) paste0("ALR should equal the last ", if (trait_specific) "age with a trait value" else "recorded age",
++                             "; check the column or use automatic calculation.") else "")
+   }
+   if (isTRUE(meta$has_censor)) {
+     add("Censored individuals", sprintf("%d individuals (%s = %s)", meta$n_censored, meta$map$censor, meta$map$censor_value),
+@@ -137,7 +142,8 @@
+     add("LS earlier than last recorded age", sprintf("%d individuals", n_ls_bad), if (n_ls_bad > 0) "Warning" else "OK",
+         if (n_ls_bad > 0) "Impossible values: check lifespan or age records for these IDs (listed below)." else "")
+     if (is.finite(step)) {
+-      gap <- (im$lifespan - im$last_recorded) / step
++      # LS minus the ALR the models use when trait-specific (0.24.2); dataset-wide, minus the last record of any kind
++      gap <- (im$lifespan - (if (trait_specific) im$alr else im$last_recorded)) / step
+       gap <- gap[is.finite(gap)]
+       if (length(gap)) {
+         add("LS \u2212 ALR (time steps)", sprintf("median %.2f; %.0f%% \u2265 1 step", stats::median(gap), 100 * mean(gap >= 1 - 1e-8)),
+diff -ruN 0.24.1/inst/app/server.R 0.24.4/inst/app/server.R
+--- 0.24.1/inst/app/server.R	2026-09-25 14:18:46.542807888 +0000
++++ 0.24.4/inst/app/server.R	2026-09-26 14:35:52.836047543 +0000
+@@ -6,7 +6,7 @@
+     shiny::renderTable(bquote(display_numbers(.(expr))), ..., env = env, quoted = TRUE)
+   }
+ 
+-  HEAT_COLOURS <- c("Observed" = "#7C8060", "Missed" = "#C0392B", "Last record (ALR)" = "#E67E22", "Not expected" = "#FFFFFF")
++  HEAT_COLOURS <- c("Observed" = "#7C8060", "Missed" = "#C0392B", "First record (AFR)" = "#2C6FAC", "Last record (ALR)" = "#E67E22", "Not expected" = "#FFFFFF")
+ 
+   # "i" help modals for every section
+   lapply(names(INFO), function(key) {
+@@ -161,12 +161,18 @@
+         selectInput("col_trait", "Trait *", choices = cols, selected = pick(pm$trait, cols[[min(3, length(cols))]]))
+       ),
+       column(4,
+-        selectInput("col_alr", "ALR (age at last record)", choices = c("Automatic: last recorded age" = "__AUTO_LAST__", cols),
++        selectInput("col_alr", "ALR (age at last record)", choices = c("Automatic: last age (see 'Trait-specific ALR/AFR')" = "__AUTO_LAST__", cols),
+                     selected = pick(pm$alr, "__AUTO_LAST__")),
+-        selectInput("col_life", "Known lifespan (LS)", choices = c("(not available)" = "", "Automatic: last recorded age (proxy only)" = "__AUTO_LAST__", cols),
++        selectInput("col_life", "Known lifespan (LS)", choices = c("(not available)" = "", "Automatic: the automatic ALR (proxy only)" = "__AUTO_LAST__", cols),
+                     selected = if (identical(pm$life, "__AUTO_LAST__")) "__AUTO_LAST__" else pick(pm$life, "")),
+         checkboxInput("exclude_inconsistent", "Exclude individuals whose ALR, lifespan or AFR differs between their records (otherwise loading stops and names them)",
+-                      value = identical(pm$inconsistent, "exclude"))
++                      value = identical(pm$inconsistent, "exclude")),
++        # 0.24.2: automatic ALR and AFR from the ages with a trait value (ticked) or from every record (unticked);
++        # bundled examples open unticked, uploads and simulations ticked
++        div(style = "display:flex; align-items:flex-start; gap:6px;",
++            checkboxInput("trait_ages", "Trait-specific ALR/AFR (default)", value = !isFALSE(pm$trait_specific_ages)),
++            actionLink("info_trait_ages", icon("circle-info"), class = "info-link", style = "margin-top:10px;")),
++        uiOutput("trait_ages_note")
+       ),
+       column(4,
+         selectizeInput("col_cov_num", tags$span(tags$b("CONTINUOUS"), " fixed-effect covariates (linear effects)"), choices = cols, selected = pm_num,
+@@ -202,7 +208,7 @@
+         fluidRow(
+           column(7,
+             radioButtons("afr_mode", "Age at first record (AFR): when the individual enters the data",
+-                         choices = c("Automatic: each individual's first record (default)" = "auto",
++                         choices = c("Automatic: first age (default; see 'Trait-specific ALR/AFR')" = "auto",
+                                      "Choose a column" = "column"),
+                          selected = if (isTRUE(nzchar(pick(pm$entry, ""))) && !identical(pm$entry, "__AUTO_FIRST__")) "column" else "auto"),
+             conditionalPanel("input.afr_mode == 'column'",
+@@ -222,6 +228,19 @@
+     )
+   })
+   try(outputOptions(output, "mapping_ui", suspendWhenHidden = FALSE), silent = TRUE)
++  # a bundled example analysed with trait-specific ALR/AFR no longer matches its documented results (0.24.2)
++  output$trait_ages_note <- renderUI({
++    alr_col <- !identical(input$col_alr %||% "__AUTO_LAST__", "__AUTO_LAST__")
++    afr_col <- identical(input$afr_mode %||% "auto", "column") && !identical(input$data_source, "toy")
++    msgs <- c(
++      if (alr_col && afr_col) "ALR and AFR both come from columns, so this box changes neither (only an automatic lifespan)."
++      else if (alr_col) "ALR comes from a column, so this box changes only AFR."
++      else if (afr_col) "AFR comes from a column, so this box changes only ALR.",
++      if (identical(input$data_source, "example") && isTRUE(input$trait_ages))
++        "Ticked for a bundled example: automatic ALR and AFR now use only ages with a trait value, so results can differ from the documented ones, which use every record.")
++    if (!length(msgs)) return(NULL)
++    div(class = "small-note", style = "border-left: 3px solid #9a6b1e; padding-left: 7px; margin: 0 0 8px;", lapply(msgs, function(m) div(m)))
++  })
+   # Immediate checks under the column menus: age must be numeric, and covariates should sit in the right box.
+   output$age_type_note <- renderUI({
+     df <- safe_get(raw_data())
+@@ -407,6 +426,7 @@
+          censor = input$col_censor %||% "", censor_value = input$censor_value %||% "",
+          cov_age = character(0),
+          inconsistent = if (isTRUE(input$exclude_inconsistent)) "exclude" else "error",
++         trait_specific_ages = if (is.null(input$trait_ages)) !isFALSE(safe_get(preset_map())$trait_specific_ages) else isTRUE(input$trait_ages),
+          age_round = if (identical(input$data_source, "toy")) NA_real_ else num_input(input$age_round, NA_real_))
+     # a second grouping level chosen without the first is used as the first level
+     if (!nzchar(mp$group) && nzchar(mp$group2)) {
+@@ -477,7 +497,7 @@
+     paste(input$data_source, input$example_id %||% "", nrow(d), length(unique(d$id)), signif(sum(d$age), 12), signif(sum(d$trait, na.rm = TRUE), 12),
+           signif(sum(d$alr, na.rm = TRUE), 12), signif(sum(d$life, na.rm = TRUE), 12), signif(sum(d$entry, na.rm = TRUE), 12),
+           paste(m$covars, collapse = ","), paste(m$random_terms, collapse = ","), m$has_group, m$nested, m$life_auto,
+-          m$dup_action, m$n_censored, isTRUE(m$has_group2), if (isTRUE(m$has_group2)) m$map$group2 else "", input$afr_mode %||% "auto", paste(m$cov_age, collapse = ","), paste(m$cov_types, collapse = ","),
++          m$dup_action, m$n_censored, isTRUE(m$has_group2), !isFALSE(m$trait_specific_ages), if (isTRUE(m$has_group2)) m$map$group2 else "", input$afr_mode %||% "auto", paste(m$cov_age, collapse = ","), paste(m$cov_types, collapse = ","),
+           paste(m$cov_pairs, collapse = ","), input$subset_var %||% "",
+           paste(input$subset_levels %||% character(0), collapse = ","), sep = "|")
+   })
+@@ -991,9 +1011,11 @@
+     mi <- match(ids, im$id)
+     # ALR and AFR for ordering are the values the models use (after missingness for simulated data, whose
+     # missed records are removed); individuals with no ALR value are placed at the top
++    # AFR order uses the AFR the grid's window opens at, i.e. the blue tile (0.24.2)
++    afr_g <- if ("afr" %in% names(g)) as.numeric(tapply(g$afr, g$id, function(v) v[[1]])[ids]) else im$entry[mi]
+     ord <- switch(input$heat_order %||% "alr",
+-                  alr = ids[order(im$alr[mi], im$first_recorded[mi], na.last = FALSE)],
+-                  afr = ids[order(im$entry[mi], im$alr[mi], na.last = FALSE)],
++                  alr = ids[order(im$alr[mi], afr_g, na.last = FALSE)],
++                  afr = ids[order(afr_g, im$alr[mi], na.last = FALSE)],
+                   trait = ids[order(im$trait_mean[mi], im$alr[mi])],
+                   id = sort(ids),
+                   random = ids[order(stats::runif(length(ids)))])
+@@ -1002,13 +1024,16 @@
+     x <- grid_display(g, ord, life_known = isTRUE(life_known()))
+     shiny::validate(shiny::need(nrow(x) > 0, "Could not build the sampling grid: check the ages on the Data tab, or set the sampling interval."))
+     n_shown <- attr(x, "n_shown") %||% length(ord)
+-    labs_map <- c("Observed" = "Observed", "Missed" = "Missed (between the first observation and the ALR)",
+-                  "Last record (ALR)" = "Last record (ALR)",
+-                  "Not expected" = "Outside the window (before the first observation or after the ALR)")
++    labs_map <- c("Observed" = "Observed", "Missed" = "Missed (between AFR and ALR, both included)",
++                  "First record (AFR)" = "First record (AFR)", "Last record (ALR)" = "Last record (ALR; blue outline: also the AFR)",
++                  "Not expected" = "Outside the window (before the AFR or after the ALR)")
+     x$id_f <- factor(x$id, levels = rev(ord))
+     x$status <- factor(x$status, levels = names(HEAT_COLOURS))
+     ggplot(x, aes(age, id_f, fill = status)) +
+       geom_tile(width = g$step[[1]], colour = "#E9E1D6", linewidth = 0.15) +
++      (if (any(x$afr_outline %||% FALSE)) geom_tile(data = x[x$afr_outline, , drop = FALSE], aes(age, id_f), inherit.aes = FALSE, fill = NA,
++                                                   colour = HEAT_COLOURS[["First record (AFR)"]], linewidth = 0.7,
++                                                   width = 0.85 * g$step[[1]], height = 0.85) else NULL) +
+       scale_fill_manual(values = HEAT_COLOURS, breaks = names(HEAT_COLOURS), labels = wrap_label(unname(labs_map[names(HEAT_COLOURS)]), 32), drop = FALSE) +
+       labs(x = "Age (scheduled occasions)", y = NULL, fill = NULL,
+            subtitle = if (n_shown < length(ids)) paste("Showing", n_shown, "of", length(ids), "individuals (evenly spaced in the chosen order)") else NULL) +
+@@ -2714,7 +2739,7 @@
+         "cells <- grid_display(grid, ids, life_known = any(is.finite(dat$life)))",
+         "cells$id <- factor(cells$id, levels = rev(ids))",
+         "print(ggplot(cells, aes(age, id, fill = status)) + geom_tile() +",
+-        "        scale_fill_manual(values = c(\"Observed\" = \"#7C8060\", \"Missed\" = \"#C0392B\", \"Last record (ALR)\" = \"#E67E22\", \"Not expected\" = \"#FFFFFF\")) +",
++        "        scale_fill_manual(values = c(\"Observed\" = \"#7C8060\", \"Missed\" = \"#C0392B\", \"First record (AFR)\" = \"#2C6FAC\", \"Last record (ALR)\" = \"#E67E22\", \"Not expected\" = \"#FFFFFF\")) +",
+         "        labs(x = \"Age\", y = NULL, fill = NULL) + theme_minimal() + theme(axis.text.y = element_blank()))",
+         "",
+         "# ---- Missingness by age ----",
+@@ -4147,7 +4172,7 @@
+         trait = m$map$trait %||% "the trait", n_rows = nrow(d), n_ind = length(unique(d$id)), n_trait = sum(is.finite(d$trait)),
+         age_min = min(d$age, na.rm = TRUE), age_max = max(d$age, na.rm = TRUE),
+         step = resolve_age_step(d$age, d$id, m$age_step), step_manual = valid_age_step(m$age_step),
+-        alr_mapped = isTRUE(m$alr_mapped), afr_mapped = isTRUE(m$entry_mapped),
++        alr_mapped = isTRUE(m$alr_mapped), afr_mapped = isTRUE(m$entry_mapped), trait_specific_ages = !isFALSE(m$trait_specific_ages),
+         life_known = isTRUE(m$has_life) && !isTRUE(m$life_auto), n_censored = m$n_censored %||% 0,
+         covars = unname(vapply(m$covars %||% character(0), function(cv) tryCatch(as.character(m$cov_labels[[cv]] %||% cv)[1], error = function(e) cv), character(1))),
+         groups = c(if (isTRUE(m$has_group2)) paste("random intercepts for", m$map$group2),
+diff -ruN 0.24.1/inst/app/ui.R 0.24.4/inst/app/ui.R
+--- 0.24.1/inst/app/ui.R	2026-09-25 14:18:46.533720545 +0000
++++ 0.24.4/inst/app/ui.R	2026-09-26 12:43:20.908728990 +0000
+@@ -526,7 +526,7 @@
+                                        "Age at first trait expression (AFE)" = "afe"), selected = "afr"),
+               conditionalPanel("input.miss_start == 'afe'",
+                 numericInput("afe_age", "Age at first trait expression (AFE)", value = NA)),
+-              box_note("Missed occasions are counted only from the first record (AFR), or from the age at first expression (AFE) if set, to the age at last record (ALR). This setting changes the missingness figures on this tab only: every model and statistic in the app uses AFR, as mapped on the Data tab."),
++              box_note("Missed occasions are counted only from the age at first record (AFR), or from the age at first expression (AFE) if set, to the age at last record (ALR), both included. This setting changes the missingness figures on this tab only: every model and statistic in the app uses AFR, as mapped on the Data tab."),
+               sliderInput("heat_n", "Individuals to show in the grid", min = 20, max = 500, value = 150, step = 10),
+               selectInput("heat_order", "Order individuals by", choices = c("ALR" = "alr", "AFR" = "afr", "Mean trait value" = "trait", "ID" = "id", "Random" = "random")),
+               uiOutput("sampling_guidance"),
+diff -ruN 0.24.1/man/disappr_api.Rd 0.24.4/man/disappr_api.Rd
+--- 0.24.1/man/disappr_api.Rd	2026-09-25 14:18:46.468716434 +0000
++++ 0.24.4/man/disappr_api.Rd	2026-09-26 12:44:34.240073989 +0000
+@@ -48,7 +48,8 @@
+ }
+ \arguments{
+ \item{...}{For \code{disappr_mapping()}: column roles (\code{id}, \code{age}, \code{trait}, \code{alr}, \code{life}, \code{entry}, \code{covars},
+-\code{cov_factor}, \code{cov_age}, \code{group}, \code{group2}, \code{random}, ...). For \code{disappr_fit()}: further settings passed to the
++\code{cov_factor}, \code{cov_age}, \code{group}, \code{group2}, \code{random}, ...) and \code{trait_specific_ages} (default \code{TRUE}: automatic
++ALR and AFR are the last and first ages with a trait value; \code{FALSE}: of any record). For \code{disappr_fit()}: further settings passed to the
+ model suite (\code{random_slope}, \code{standardise}, \code{zi_str}, \code{among}, \code{include_invalid}, \code{extra}). For
+ \code{disappr_simulate()}: simulation settings (\code{n_id}, \code{seed}, \code{sd_type}, \code{missingness}, \code{form}, ...).}
+ 
+diff -ruN 0.24.1/tests/scripts/app_test.R 0.24.4/tests/scripts/app_test.R
+--- 0.24.1/tests/scripts/app_test.R	2026-09-25 14:18:46.548245579 +0000
++++ 0.24.4/tests/scripts/app_test.R	2026-09-26 13:01:18.605415394 +0000
+@@ -19,7 +19,7 @@
+   }
+ }
+ 
+-all_outputs <- c("package_status", "toy_status", "mapping_ui", "censor_value_ui", "data_metrics", "integrity_table",
++all_outputs <- c("trait_ages_note", "package_status", "toy_status", "mapping_ui", "censor_value_ui", "data_metrics", "integrity_table",
+                  "visual_scale_advice", "a3_cap_warning", "model_rowset_warning", "coef_re_flags",
+                  "integrity_extra", "dist_var_ui", "dist_plot", "data_preview",
+                  "visual_proxy_ui", "a1_plot", "bin_diff_plot", "a2_plot", "toy_card_visual",
+@@ -63,6 +63,13 @@
+   session$setInputs(visual_proxy = "ALR", model_family = "gaussian", use_M1 = TRUE, use_M2 = TRUE, use_M3 = TRUE, use_M4 = TRUE, use_M5 = TRUE, use_M6 = TRUE, use_M7 = TRUE, use_M8 = TRUE, use_M9 = FALSE, use_M10 = FALSE)
+   session$setInputs(fit_models = 1)
+   touch(output, all_outputs)
++  # 0.24.2: dataset-wide and trait-specific ALR/AFR, with the grid and the proxy panels redrawn under each
++  session$setInputs(trait_ages = FALSE)
++  touch(output, c("mapping_ui", "trait_ages_note", "heatmap", "missing_by_age", "sampling_metrics", "proxy_plots_ui", "integrity_table"))
++  session$setInputs(heat_order = "afr")
++  touch(output, "heatmap")
++  session$setInputs(trait_ages = TRUE, heat_order = "alr")
++  touch(output, c("trait_ages_note", "heatmap", "missing_by_age", "sampling_metrics", "integrity_table"))
+   session$setInputs(pred_as_lines = TRUE)
+   touch(output, "pred_plot")
+   session$setInputs(pred_as_lines = FALSE)
+@@ -170,6 +177,12 @@
+                     zi_vars = NULL, use_M1 = TRUE, use_M2 = TRUE, use_M3 = TRUE, use_M4 = TRUE, use_M5 = TRUE, use_M6 = FALSE, use_M7 = FALSE, use_M8 = FALSE, use_M9 = FALSE, use_M10 = FALSE)
+   cat("Fly rows:", nrow(dat()), " individuals:", length(unique(dat()$id)), " censored:", meta()$n_censored, "\n")
+   cat(sprintf("Fly missing expected occasions: %.1f%%\n", msum()$percent))
++  # a bundled example ticked shows the benchmark note; unticked again for the rest of the test (0.24.2)
++  session$setInputs(trait_ages = TRUE)
++  touch(output, c("trait_ages_note", "heatmap", "integrity_table"))
++  if (!grepl("documented", paste(capture.output(print(output$trait_ages_note)), collapse = " ")))
++    problems <<- c(problems, "trait_ages_note: no benchmark note for a ticked bundled example")
++  session$setInputs(trait_ages = FALSE)
+   # the same data without LS: only the ALR vs mean age panel is drawn
+   session$setInputs(col_life = "")
+   touch(output, c("proxy_plots_ui", "proxy_alr_mean", "a2_plot"))
+diff -ruN 0.24.1/tests/scripts/run_all.R 0.24.4/tests/scripts/run_all.R
+--- 0.24.1/tests/scripts/run_all.R	2026-09-25 14:18:46.548148234 +0000
++++ 0.24.4/tests/scripts/run_all.R	2026-09-26 12:49:45.036099133 +0000
+@@ -8,6 +8,7 @@
+ #   6 empirical replication and simulations        tests/scripts/stress_empirical.R
+ #   7 sweep of the 0.20.9-0.20.19 changes          tests/scripts/sweep_0_20.R
+ #   8 complex scenarios (0.22.7)                   tests/scripts/complex_scenarios.R
++#   9 trait-specific ALR/AFR snapshot (0.24.2)     tests/scripts/trait_ages_snapshot.R
+ # Each tier runs in a fresh R process; the script exits with status 1 if any tier fails.
+ # From an R console (RStudio included), with the working directory at the package root:
+ #   source("tests/scripts/run_all.R")
+@@ -35,6 +36,7 @@
+ res["empirical"] <- run("6 empirical and simulations", "tests/scripts/stress_empirical.R")
+ res["sweep"] <- run("7 sweep of the 0.20.9-0.20.19 changes", "tests/scripts/sweep_0_20.R")
+ res["complex"] <- run("8 complex scenarios", "tests/scripts/complex_scenarios.R")
++res["trait_ages"] <- run("9 trait-specific ALR/AFR snapshot", "tests/scripts/trait_ages_snapshot.R")
+ cat("\nSummary:", paste(names(res), ifelse(res, "passed", "FAILED"), sep = ": ", collapse = "; "), "\n")
+ if (!all(res)) {
+   if (interactive()) stop("Some test tiers failed: ", paste(names(res)[!res], collapse = ", "), call. = FALSE)
+diff -ruN 0.24.1/tests/scripts/trait_ages_snapshot.R 0.24.4/tests/scripts/trait_ages_snapshot.R
+--- 0.24.1/tests/scripts/trait_ages_snapshot.R	1970-01-01 00:00:00.000000000 +0000
++++ 0.24.4/tests/scripts/trait_ages_snapshot.R	2026-09-26 14:36:00.032679726 +0000
+@@ -0,0 +1,46 @@
++# Trait-specific against dataset-wide ALR/AFR on every bundled example, through the real engine (0.24.2): the R
++# counterpart of audit Part J (inst/validation/audit_0_22_0/j_snapshot_before_after.md). Run from the package root:
++#   Rscript tests/scripts/trait_ages_snapshot.R
++# For each example: how many individuals change AFR or ALR when the box is ticked, the share of expected occasions
++# missed under each option, and the documented models' AIC table under each option. Fails only on errors.
++app_dir <- file.path("inst", "app")
++if (!dir.exists(app_dir)) stop("Run this script from the package root (the folder containing DESCRIPTION).")
++old_wd <- setwd(app_dir)
++source("global.R")
++setwd(old_wd)
++errors <- character(0)
++first_of <- function(d, v) tapply(d[[v]], d$id, function(x) x[[1]])
++for (key in names(EXAMPLES)) {
++  ex <- tryCatch(disappr_example(key), error = function(e) NULL)
++  if (is.null(ex)) { errors <- c(errors, paste(key, "not loaded")); next }
++  out <- list()
++  for (sp in c(FALSE, TRUE)) {
++    mp <- utils::modifyList(ex$mapping, list(trait_specific_ages = sp))
++    b <- tryCatch(standardise_data(ex$data, mp), error = function(e) { errors <<- c(errors, paste(key, sp, conditionMessage(e))); NULL })
++    if (is.null(b)) next
++    # the app counts missed occasions from AFR unless an AFE is entered on the Sampling tab
++    g <- tryCatch(build_missing_grid(b$data, 0, "afr", NA_real_),
++                  error = function(e) { errors <<- c(errors, paste(key, sp, "grid:", conditionMessage(e))); NULL })
++    spec <- EXAMPLES[[key]]
++    r <- tryCatch(fit_model_suite(b$data, b$meta, models = spec$models %||% MODEL_IDS, age_function = spec$age_function %||% "Quadratic",
++                                  family = spec$family %||% "gaussian"),
++                  error = function(e) { errors <<- c(errors, paste(key, sp, "fit:", conditionMessage(e))); NULL })
++    out[[if (sp) "ticked" else "unticked"]] <- list(b = b, miss = if (is.null(g)) NA_real_ else 100 * mean(g$missing), fit = r)
++  }
++  if (length(out) < 2) next
++  u <- out$unticked$b$data; t <- out$ticked$b$data
++  ids <- intersect(names(first_of(t, "alr")), names(first_of(u, "alr")))
++  n_alr <- sum(first_of(t, "alr")[ids] != first_of(u, "alr")[ids], na.rm = TRUE)
++  n_afr <- sum(first_of(t, "entry")[ids] != first_of(u, "entry")[ids], na.rm = TRUE)
++  best <- function(r) if (is.null(r)) "-" else { a <- r$aic; a <- a[is.finite(a$AIC), , drop = FALSE]; if (!nrow(a)) "-" else a$Model[which.min(a$AIC)] }
++  cat(sprintf("%-24s ALR changes %4d, AFR changes %4d | missing %% unticked %5.1f, ticked %5.1f | best model unticked %s, ticked %s\n",
++              key, n_alr, n_afr, out$unticked$miss, out$ticked$miss, best(out$unticked$fit), best(out$ticked$fit)))
++  if (n_alr + n_afr > 0 && !is.null(out$unticked$fit) && !is.null(out$ticked$fit)) {
++    a <- merge(out$unticked$fit$aic[, c("Model", "AIC")], out$ticked$fit$aic[, c("Model", "AIC")], by = "Model", suffixes = c("_unticked", "_ticked"))
++    a$dAIC_unticked <- round(a$AIC_unticked - min(a$AIC_unticked, na.rm = TRUE), 1)
++    a$dAIC_ticked <- round(a$AIC_ticked - min(a$AIC_ticked, na.rm = TRUE), 1)
++    print(a[, c("Model", "dAIC_unticked", "dAIC_ticked")], row.names = FALSE)
++  }
++}
++cat(if (length(errors)) paste0("\nERRORS (", length(errors), "):\n  ", paste(errors, collapse = "\n  "), "\n") else "\nNo errors.\n")
++if (length(errors) && !interactive()) quit(status = 1)
+diff -ruN 0.24.1/tests/testthat/test-0-24-2.R 0.24.4/tests/testthat/test-0-24-2.R
+--- 0.24.1/tests/testthat/test-0-24-2.R	1970-01-01 00:00:00.000000000 +0000
++++ 0.24.4/tests/testthat/test-0-24-2.R	2026-09-26 12:44:39.881974130 +0000
+@@ -0,0 +1,97 @@
++# 0.24.2: trait-specific automatic ALR and AFR (default) against dataset-wide ALR and AFR (bundled examples)
++
++base_map <- function(trait, specific = TRUE, ...) {
++  utils::modifyList(list(id = "id", age = "age", trait = trait, alr = "__AUTO_LAST__", life = "", entry = "__AUTO_FIRST__",
++                         condition = "", covars = character(0), cov_factor = character(0), cov_int = character(0),
++                         group = "", nested = TRUE, random = character(0), censor = "", censor_value = "",
++                         start_mode = "afr", start_age = NA_real_, age_round = NA_real_, cov_age = character(0),
++                         trait_specific_ages = specific), list(...))
++}
++two_traits <- function() data.frame(
++  id = rep(c("P", "Q"), each = 5), age = rep(1:5, 2),
++  A = c(NA, 5, 7, 6, NA, 4, 5, 6, 7, 8),           # P: trait A measured at ages 2-4
++  B = c(3, 4, 0, NA, NA, 2, NA, 3, 4, NA),          # P: trait B at ages 1-3 (zero is a value)
++  ALRcol = rep(c(9, 5), each = 5),
++  stringsAsFactors = FALSE)
++per_id <- function(b, v) tapply(b$data[[v]], b$data$id, function(x) x[[1]])
++
++test_that("ticked: ALR and AFR are the last and first ages with a trait value; unticked: of any record", {
++  d <- two_traits()
++  a_t <- standardise_data(d, base_map("A", TRUE))
++  a_u <- standardise_data(d, base_map("A", FALSE))
++  expect_equal(unname(per_id(a_t, "alr")[["P"]]), 4)
++  expect_equal(unname(per_id(a_t, "entry")[["P"]]), 2)
++  expect_equal(unname(per_id(a_u, "alr")[["P"]]), 5)
++  expect_equal(unname(per_id(a_u, "entry")[["P"]]), 1)
++  expect_true(isTRUE(a_t$meta$trait_specific_ages))
++  expect_false(isTRUE(a_u$meta$trait_specific_ages))
++})
++
++test_that("each trait gets its own ALR and AFR from the same file, and zero counts as a value", {
++  d <- two_traits()
++  b_t <- standardise_data(d, base_map("B", TRUE))
++  expect_equal(unname(per_id(b_t, "alr")[["P"]]), 3)     # the zero at age 3 is a value
++  expect_equal(unname(per_id(b_t, "entry")[["P"]]), 1)
++  expect_equal(unname(per_id(b_t, "alr")[["Q"]]), 4)
++  b_u <- standardise_data(d, base_map("B", FALSE))
++  expect_equal(unname(per_id(b_u, "alr")[["P"]]), 5)
++})
++
++test_that("mean age uses only ages with a trait value, whichever option is chosen", {
++  d <- two_traits()
++  for (sp in c(TRUE, FALSE)) {
++    im <- individual_metrics(standardise_data(d, base_map("A", sp))$data)
++    expect_equal(im$mean_age[im$id == "P"], 3)
++  }
++})
++
++test_that("mapped ALR and AFR columns are used as supplied under either option", {
++  d <- two_traits()
++  for (sp in c(TRUE, FALSE)) {
++    b <- standardise_data(d, base_map("A", sp, alr = "ALRcol"))
++    expect_equal(unname(per_id(b, "alr")[["P"]]), 9)
++  }
++})
++
++test_that("'lifespan = last recorded age' follows the same option", {
++  d <- two_traits()
++  expect_equal(unname(per_id(standardise_data(d, base_map("A", TRUE, life = "__AUTO_LAST__")), "life")[["P"]]), 4)
++  expect_equal(unname(per_id(standardise_data(d, base_map("A", FALSE, life = "__AUTO_LAST__")), "life")[["P"]]), 5)
++})
++
++test_that("bundled examples are dataset-wide; uploads and simulations are trait-specific", {
++  expect_true(all(vapply(EXAMPLES, function(e) isFALSE(e$mapping$trait_specific_ages), logical(1))))
++  sim <- simulate_toy_data(list(n_id = 40, seed = 3, afr_mode = "individual"))
++  tm <- toy_mapping(sim)
++  expect_true(isTRUE(tm$trait_specific_ages))
++  expect_identical(tm$entry, "__AUTO_FIRST__")              # the observed AFR
++  expect_true(isTRUE(guess_mapping(two_traits())$trait_specific_ages))
++})
++
++test_that("the missingness window runs from AFR to ALR, both included, under either option", {
++  d <- two_traits()[1:5, ]
++  g_t <- build_missing_grid(standardise_data(d, base_map("A", TRUE))$data)
++  expect_equal(sort(g_t$age[g_t$id == "P"]), 2:4)
++  expect_false(any(g_t$missing[g_t$id == "P"]))
++  g_u <- build_missing_grid(standardise_data(d, base_map("A", FALSE))$data)
++  expect_equal(sort(g_u$age[g_u$id == "P"]), 1:5)
++  expect_equal(sum(g_u$missing[g_u$id == "P"]), 2)         # ages 1 and 5: recorded, trait not measured
++  x <- grid_display(g_u, "P", life_known = FALSE)
++  expect_identical(x$status[x$age == 1], "First record (AFR)")
++  expect_identical(x$status[x$age == 5], "Last record (ALR)")
++})
++
++test_that("the exported script computes ALR and AFR the same way", {
++  d <- two_traits()
++  for (sp in c(TRUE, FALSE)) {
++    b <- standardise_data(d, base_map("A", sp))
++    r <- fit_model_suite(b$data, b$meta, models = c("M1", "M2"), age_function = "Linear")
++    code <- paste(model_r_code(r, b$meta, "two_traits.csv"), collapse = "\n")
++    expect_true(grepl(if (sp) "trait-specific ALR and AFR" else "dataset-wide ALR and AFR", code, fixed = TRUE))
++  }
++})
++
++test_that("disappr_mapping() is trait-specific by default and can be switched", {
++  expect_true(isTRUE(disappr_mapping(id = "id", age = "age", trait = "A")$trait_specific_ages))
++  expect_false(isTRUE(disappr_mapping(id = "id", age = "age", trait = "A", trait_specific_ages = FALSE)$trait_specific_ages))
++})
+diff -ruN 0.24.1/tests/testthat/test-0-24-4.R 0.24.4/tests/testthat/test-0-24-4.R
+--- 0.24.1/tests/testthat/test-0-24-4.R	1970-01-01 00:00:00.000000000 +0000
++++ 0.24.4/tests/testthat/test-0-24-4.R	2026-09-26 14:36:37.184611742 +0000
+@@ -0,0 +1,53 @@
++# 0.24.4: no conflicts between the trait-specific box, mapped AFR/ALR columns and the AFE start of the missingness
++# window, and the chosen AFR/ALR reach the models. One individual (P) is recorded at ages 1-6 but has trait values at
++# ages 2-4 only; mapped columns give AFR 1 and ALR 5 (a sighting without the trait).
++
++conflict_data <- function() data.frame(
++  id = rep(c("P", "Q"), c(6, 4)), age = c(1:6, 1:4),
++  y = c(NA, 5, 6, 7, NA, NA, 1, 2, 3, 4),
++  AFRc = c(rep(1, 6), rep(1, 4)), ALRc = c(rep(5, 6), rep(4, 4)), stringsAsFactors = FALSE)
++conflict_map <- function(afr_col, alr_col, ticked) list(
++  id = "id", age = "age", trait = "y", alr = if (alr_col) "ALRc" else "__AUTO_LAST__", life = "",
++  entry = if (afr_col) "AFRc" else "__AUTO_FIRST__", condition = "", covars = character(0), cov_factor = character(0),
++  cov_int = character(0), group = "", nested = TRUE, random = character(0), censor = "", censor_value = "",
++  start_mode = "afr", start_age = NA_real_, age_round = NA_real_, cov_age = character(0), trait_specific_ages = ticked)
++# the rule: a mapped column wins; otherwise ticked = ages with a trait value (P: 2-4), unticked = any record (P: 1-6)
++expected_afr <- function(afr_col, ticked) if (afr_col) 1 else if (ticked) 2 else 1
++expected_alr <- function(alr_col, ticked) if (alr_col) 5 else if (ticked) 4 else 6
++
++test_that("every combination of mapped columns and the box gives the expected AFR and ALR, in the data and the models", {
++  for (afr_col in c(FALSE, TRUE)) for (alr_col in c(FALSE, TRUE)) for (ticked in c(FALSE, TRUE)) {
++    lab <- sprintf("AFR column %s, ALR column %s, ticked %s", afr_col, alr_col, ticked)
++    b <- standardise_data(conflict_data(), conflict_map(afr_col, alr_col, ticked))
++    p <- b$data[b$data$id == "P", ]
++    expect_equal(unique(p$entry), expected_afr(afr_col, ticked), info = lab)
++    expect_equal(unique(p$alr), expected_alr(alr_col, ticked), info = lab)
++    # the models' ALR and AFR proxies (unstandardised) are the same values
++    pm <- prepare_model_data(b$data, "Linear", standardise = FALSE)$data
++    expect_equal(unique(pm$ALR_raw[pm$id == "P"]), expected_alr(alr_col, ticked), info = lab)
++    expect_equal(unique(pm$AFR_raw[pm$id == "P"]), expected_afr(afr_col, ticked), info = lab)
++    # the missingness window: AFR mode opens at the AFR and closes at the ALR (never excluding a trait record)
++    g <- build_missing_grid(b$data, 0, "afr", NA_real_)
++    gp <- g$age[g$id == "P"]
++    expect_equal(min(gp), min(expected_afr(afr_col, ticked), 2), info = lab)
++    expect_equal(max(gp), max(expected_alr(alr_col, ticked), 4), info = lab)
++    # AFE mode: the window opens at the earlier of the AFE and the AFR
++    for (afe in c(1, 3)) {
++      ga <- build_missing_grid(b$data, 0, "same", afe)
++      expect_equal(min(ga$age[ga$id == "P"]), min(afe, expected_afr(afr_col, ticked), 2), info = paste(lab, "AFE", afe))
++    }
++  }
++})
++
++test_that("the box changes the fitted models only through AFR and ALR", {
++  d <- conflict_data()
++  d <- rbind(d, transform(d, id = paste0(id, "b")), transform(d, id = paste0(id, "c")))   # enough individuals to fit
++  d$y[!is.na(d$y)] <- d$y[!is.na(d$y)] + seq_len(sum(!is.na(d$y))) %% 3
++  fit <- function(ticked) {
++    b <- standardise_data(d, conflict_map(FALSE, FALSE, ticked))
++    fit_model_suite(b$data, b$meta, models = c("M1", "M2"), age_function = "Linear")
++  }
++  r_t <- fit(TRUE); r_u <- fit(FALSE)
++  a1 <- function(r) r$aic$AIC[r$aic$Model == "Model 1"]
++  expect_equal(a1(r_t), a1(r_u), tolerance = 1e-6)          # Model 1 has no ALR term: identical either way
++})
+diff -ruN 0.24.1/tests/testthat/test-grid.R 0.24.4/tests/testthat/test-grid.R
+--- 0.24.1/tests/testthat/test-grid.R	2026-09-25 14:18:46.470265733 +0000
++++ 0.24.4/tests/testthat/test-grid.R	2026-09-26 12:42:52.710565073 +0000
+@@ -1,4 +1,4 @@
+-# The sampling grid must follow the ALR and AFR the models use. Field data often contain records without a trait
++# The sampling grid must follow the ALR and AFR the models use; since 0.24.2 the window runs from AFR to ALR, both included. Field data often contain records without a trait
+ # value (a capture without a weighing): those still count as recorded ages for ALR, and individuals never measured
+ # for the trait enter no model. Checked against all bundled datasets and simulated designs before release.
+ 
+@@ -35,13 +35,23 @@
+   expect_false("Death (known LS)" %in% x$status)
+ })
+ 
+-test_that("the first observation is never counted as missed: a capture without a trait value before it is outside the window", {
+-  # H is sampled from age 1, so age 1 is drawn; D was captured at age 1 without a trait value
+-  d <- data.frame(id = rep(c("D", "H"), each = 3), age = rep(c(1, 2, 3), 2), trait = c(NA, 5, 6, 4, 5, 6),
+-                  alr = 3, life = NA_real_, entry = 1)
+-  x <- grid_display(build_missing_grid(d), c("D", "H"), life_known = FALSE)
+-  expect_identical(x$status[x$id == "D" & x$age == 1], "Not expected")
++test_that("the window opens at the AFR: a record without a trait value at the AFR counts as missed (0.24.2)", {
++  # D was captured at age 1 without a trait value. Dataset-wide AFR (entry = 1): the window opens at 1, so age 1 is the
++  # AFR and a missed occasion. Trait-specific AFR (entry = 2): the window opens at 2, the first trait value.
++  wide <- data.frame(id = rep(c("D", "H"), each = 3), age = rep(c(1, 2, 3), 2), trait = c(NA, 5, 6, 4, 5, 6),
++                     alr = 3, life = NA_real_, entry = 1)
++  g <- build_missing_grid(wide)
++  x <- grid_display(g, c("D", "H"), life_known = FALSE)
++  expect_identical(x$status[x$id == "D" & x$age == 1], "First record (AFR)")
++  expect_true(g$missing[g$id == "D" & g$age == 1])
+   expect_identical(x$status[x$id == "D" & x$age == 2], "Observed")
++  spec <- wide
++  spec$entry[spec$id == "D"] <- 2
++  g2 <- build_missing_grid(spec)
++  x2 <- grid_display(g2, c("D", "H"), life_known = FALSE)
++  expect_identical(x2$status[x2$id == "D" & x2$age == 1], "Not expected")
++  expect_false(any(g2$id == "D" & g2$age == 1))
++  expect_identical(x2$status[x2$id == "D" & x2$age == 2], "First record (AFR)")
+ })
+ 
+ test_that("with known lifespan nothing after the ALR is counted as missed", {
+@@ -59,5 +69,5 @@
+   x <- grid_display(build_missing_grid(d, start_mode = "same", start_age = 1), "G", life_known = FALSE)
+   expect_identical(x$status[x$age == 1], "Missed")
+   expect_identical(x$status[x$age == 2], "Missed")
+-  expect_identical(x$status[x$age == 3], "Observed")
++  expect_identical(x$status[x$age == 3], "First record (AFR)")   # the AFR is marked inside the window (0.24.2)
+ })

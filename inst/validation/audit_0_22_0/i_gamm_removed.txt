@@ -1,0 +1,15 @@
+== I1 no GAMM residue
+PASS no GAMM code, input, output, help key or package in the package, app, tests or workflows: 0 lines
+PASS the GAMM files are gone: R/gamm.R, tests/scripts/gamm_vs_glmm.R, tests/testthat/test-gamm.R
+PASS no file was added
+
+== I2 removal only
+   files changed: .github/workflows/script-tiers.yaml, DESCRIPTION, R/export.R, R/ui-helpers.R, inst/app/global.R, inst/app/server.R, inst/app/ui.R, tests/scripts/app_test.R, tests/scripts/run_all.R
+PASS every removed block contains GAMM code
+PASS nothing was added except shortened lists, the re-punctuated menu item, the reflowed comment and the version
+
+== I3 engine otherwise untouched
+PASS every other R/ file is byte-identical to 0.23.2
+PASS every engine function outside gamm.R is still defined: 282 functions
+
+0 failure(s)

@@ -1,0 +1,70 @@
+Package: disappR
+Title: Diagnose and Model Selective Disappearance and Appearance in Longitudinal Ageing Data
+Version: 0.24.9
+Authors@R: c(
+    person("Krish", "Sanghvi", role = "aut",
+           comment = c(ORCID = "0000-0002-5125-2983")),
+    person("Edward R.", "Ivimey-Cook", , "e.ivimeycook@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-4910-0443")))
+Description: A Shiny workflow for longitudinal ageing data that follows a
+    visual-first diagnosis of selective disappearance and selective appearance:
+    trait trajectories within ALR, lifespan and AFR bins, proxy-trait
+    associations at each age, individual parametric fits, sampling and
+    missingness diagnostics, ageing-function comparison and comparative mixed
+    models (Models 1-10) with Gaussian, Poisson, negative binomial,
+    zero-inflated (Poisson, nbinom1 and nbinom2), binomial, beta-binomial, Gamma, lognormal and beta families, fixed covariates
+    and nested (up to three levels) or crossed random effects. Includes teaching simulations with known answers, 13 empirical
+    examples from 12 published studies, residual checks and exportable R code.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Depends:
+    R (>= 4.1.0)
+Imports:
+    ggplot2 (>= 3.4.0),
+    grDevices,
+    graphics,
+    htmltools,
+    jsonlite,
+    lme4 (>= 1.1-27),
+    shiny (>= 1.7.0),
+    shinydashboard,
+    stats,
+    tools,
+    utils
+Suggests:
+    callr,
+    DHARMa,
+    glmmTMB,
+    lmerTest,
+    nlme,
+    performance,
+    see,
+    codetools,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Collate:
+    'utils.R'
+    'provenance.R'
+    'simulation.R'
+    'import.R'
+    'validation.R'
+    'data-preparation.R'
+    'formulas.R'
+    'model-fit.R'
+    'model-comparison.R'
+    'diagnostics.R'
+    'trajectories.R'
+    'disappearance.R'
+    'missingness.R'
+    'interpretation.R'
+    'effects.R'
+    'evidence.R'
+    'ui-helpers.R'
+    'export.R'
+    'api.R'
+    'run_app.R'
+Config/testthat/edition: 3
+VignetteBuilder: knitr

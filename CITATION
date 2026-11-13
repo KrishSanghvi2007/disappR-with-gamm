@@ -1,0 +1,19 @@
+bibentry(
+  bibtype = "Manual",
+  title = "disappR: a shiny app to model ageing and selective [dis]appearance",
+  author = c(person("Krish", "Sanghvi"), person(c("E.", "R."), "Ivimey-Cook")),
+  year = "2026",
+  note = sprintf("R package version %s", meta$Version),
+  textVersion = paste0("Sanghvi, K., Ivimey-Cook, E. 2026. disappR: a shiny app to model ageing and selective [dis]appearance. R package version ",
+                       meta$Version, ".")
+)
+bibentry(
+  bibtype = "Misc",
+  title = "A comparison of methods to assess selective disappearance and quantify ageing",
+  author = c(person("K.", "Sanghvi"), person(c("E.", "R."), "Ivimey-Cook"), person("S.", "Bouwhuis"), person("I.", "Sepil"),
+             person("M.", "van de Pol")),
+  year = "2026",
+  howpublished = "EcoEvoRxiv preprint",
+  textVersion = paste("Sanghvi, K., Ivimey-Cook, E.R., Bouwhuis, S., Sepil, I. and van de Pol, M., 2026.",
+                      "A comparison of methods to assess selective disappearance and quantify ageing. EcoEvoRxiv.")
+)

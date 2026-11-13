@@ -1,0 +1,16 @@
+== logic port (pure helpers added since 0.20.9)
+38/38 logic checks passed
+
+== binomial behaviour
+weights: slope with trials                                            mean +0.354 (true +0.350), SD 0.028, mean SE 0.034
+weights: slope without trials                                         mean +0.354, SD 0.044, mean SE 0.109
+weights: 95% CI coverage                                              with trials 0.99; without 1.00
+weights: equal trials, same estimate                                  with +0.3284 vs without +0.3284 (difference 0.0000)
+two records at one age: keep both                                     mean slope +0.348 (true +0.350), SD 0.028
+two records at one age: pool successes and trials                     mean slope +0.348, SD 0.028
+two records at one age: average the proportions                       mean slope +0.347 (bias -0.003, SD 0.047)
+selective disappearance (none): within-individual age slope           naive +0.187, additive ALR -0.299, ALR interaction -0.299 (true -0.300)
+selective disappearance (none): ALR x age term                        mean +0.000 (true 0.000), detected in 5% of runs
+selective disappearance (age_dependent): within-individual age slope  naive +0.394, additive ALR -0.171, ALR interaction -0.249 (true -0.300)
+selective disappearance (age_dependent): ALR x age term               mean +0.193 (true +0.180), detected in 100% of runs
+overdispersion: beta-binomial data read as binomial                   Pearson chi2/df = 3.83; clean binomial data = 1.02

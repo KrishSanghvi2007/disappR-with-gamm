@@ -1,0 +1,162 @@
+================ audit_0_21_0/scripts/logic_port.py (re-run against 0.22.1)
+38/38 logic checks passed
+
+================ audit_0_21_0/scripts/binomial_checks.py (re-run against 0.22.1)
+weights: slope with trials                                            mean +0.354 (true +0.350), SD 0.028, mean SE 0.034
+weights: slope without trials                                         mean +0.354, SD 0.044, mean SE 0.109
+weights: 95% CI coverage                                              with trials 0.99; without 1.00
+weights: equal trials, same estimate                                  with +0.3284 vs without +0.3284 (difference 0.0000)
+two records at one age: keep both                                     mean slope +0.348 (true +0.350), SD 0.028
+two records at one age: pool successes and trials                     mean slope +0.348, SD 0.028
+two records at one age: average the proportions                       mean slope +0.347 (bias -0.003, SD 0.047)
+selective disappearance (none): within-individual age slope           naive +0.187, additive ALR -0.299, ALR interaction -0.299 (true -0.300)
+selective disappearance (none): ALR x age term                        mean +0.000 (true 0.000), detected in 5% of runs
+selective disappearance (age_dependent): within-individual age slope  naive +0.394, additive ALR -0.171, ALR interaction -0.249 (true -0.300)
+selective disappearance (age_dependent): ALR x age term               mean +0.193 (true +0.180), detected in 100% of runs
+overdispersion: beta-binomial data read as binomial                   Pearson chi2/df = 3.83; clean binomial data = 1.02
+
+================ audit_0_21_0/scripts/decomp_truth_check.py (re-run against 0.22.1)
+scenario                               obs vs true decomp vs true  obs vs Eq.9  step vs Eq.15  segments
+no selective disappearance                    1.1%           1.0%        1.07%           0.42       1.0
+intercept only (+0.5)                         2.0%           1.0%        1.04%           0.40       1.0
+slope only (+0.5)                             1.2%           1.1%        1.10%           0.41       1.0
+shape only (-0.5)                             1.2%           1.0%        1.13%           0.41       1.0
+intercept + slope + shape                     2.6%           1.1%        1.08%           0.41       1.0
+intercept only, MCAR 50%                      1.9%           1.5%        1.05%           0.58       1.6
+slope only, MCAR 50%                          1.1%           1.7%        1.05%           0.55       1.2
+short-lived (mean LS 5), complete             1.1%           1.0%        1.19%           1.42       1.0
+short-lived (mean LS 5), MCAR 50%             1.1%           1.4%        1.15%           1.42       1.0
+
+================ audit_0_21_0/scripts/curvature_controls.py (re-run against 0.22.1)
+
+negative control: no selection, curvature varies (6 replicates)
+  (1|id)               wins: M1  2 M2  1 M4  3 | mean AIC(M1)-AIC(M4) =  +18.2
+  (1+age|id)           wins: M1  4 M2  0 M4  2 | mean AIC(M1)-AIC(M4) =   -1.1
+  (1+age+age^2|id)     wins: M1  5 M2  1 M4  0 | mean AIC(M1)-AIC(M4) =   -3.9
+
+================ audit_0_21_0/scripts/null_rates.py (re-run against 0.22.1)
+Traceback (most recent call last):
+  File "/home/claude/work/disappR/inst/validation/audit_0_21_0/scripts/null_rates.py", line 4, in <module>
+    exec(open("null_randomslope.py").read().split("def lmm(")[0])
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'null_randomslope.py'
+
+================ audit_0_21_0/scripts/emp_defaults.py (re-run against 0.22.1)
+## fly [zinb/Quadratic] best M5  next +1.5 AIC | mean_age=-0.838; dage1:mean_age=+1.538; dage2:mean_age=+0.503 | n=1883, ids=638
+## bichet [gaussian/Linear] best M4  next +1.1 AIC | age1=+0.584(3.4sd); ALR=-0.416(2.4sd); age1:ALR=-0.167(2.4sd) | n=1023, ids=396
+## bichet_marmot [poisson/Linear] best M2  next +5.8 AIC | age1=-0.400; ALR=+0.347 | n=169, ids=52
+## moullec_swift [gaussian/Quadratic] best M8  next +2.5 AIC | age1=-4.558(13.9sd); age2=+3.078(8.7sd); ALR=+0.450(1.5sd); AFR=+0.340(1.5sd); age1:ALR=-0.101(0.3sd); age2:ALR=-0.836(5.8sd) | n=2072, ids=543
+## pasztor_apollo [gaussian/Quadratic] best M5  next +3.7 AIC | mean_age=-0.085(14.0sd); dage1:mean_age=+0.028(4.4sd); dage2:mean_age=-0.017(5.7sd) | n=3150, ids=1179
+## wynn [gaussian/Linear] best M3  next +1.7 AIC | mean_age=-3.080(2.6sd) | n=2689, ids=78
+## sanghvi_female [nbinom2/Quadratic] best M5  next +107.9 AIC | mean_age=-0.989; dage1:mean_age=+1.607; dage2:mean_age=-0.035 | n=5997, ids=637
+## allain [poisson/Quadratic] best M8  next +0.6 AIC | age1=+0.027; age2=-0.441; ALR=-0.010; AFR=+0.018; age1:ALR=+0.210; age2:ALR=+0.041 | n=463, ids=175
+## bouwhuis [gaussian/Quadratic] best M4  next +7.7 AIC | age1=-2.381(14.5sd); age2=+0.952(6.5sd); ALR=+0.172(1.2sd); age1:ALR=+0.213(1.4sd); age2:ALR=-0.158(3.7sd) | n=7126, ids=4848
+warner: no fit
+## mckennaell_breeding [binomial/Linear] best M5  next +4.2 AIC | mean_age=-0.317; dage1:mean_age=+0.318 | n=3173, ids=762
+## mckennaell_weight [gaussian/Linear] best M3  next +2.0 AIC | mean_age=-0.010(0.4sd) | n=2317, ids=649
+## szejnersigal_activity [gaussian/Quadratic] best M6  next +8.4 AIC | age1=+161.800(7.1sd); age2=-283.268(10.7sd); LS=+204.510(4.9sd); age1:LS=+192.066(7.1sd); age2:LS=+31.815(1.9sd) | n=808, ids=184
+
+================ audit_0_21_0/scripts/emp_crossed.py (re-run against 0.22.1)
+## bichet: individual + year_sampling | n=1023
+   M2: id-only AIC 4557.5 -> full AIC 4503.9
+      id only : age1=+0.471(2.9sd) ALR=-0.389(2.2sd)
+      full    : age1=+0.294(1.8sd) ALR=-0.246(1.5sd)
+   M3: id-only AIC 4554.9 -> full AIC 4502.5
+      id only : mean_age=+0.023(0.3sd) dage1=+0.661(3.3sd)
+      full    : mean_age=+0.011(0.1sd) dage1=+0.432(2.2sd)
+   M4: id-only AIC 4553.8 -> full AIC 4501.6
+      id only : age1=+0.584(3.4sd) ALR=-0.416(2.4sd) age1:ALR=-0.167(2.4sd)
+      full    : age1=+0.403(2.4sd) ALR=-0.273(1.6sd) age1:ALR=-0.144(2.1sd)
+   M7: id-only AIC 4556.5 -> full AIC 4504.7
+      id only : age1=+0.675(3.3sd) ALR=-0.386(2.2sd) AFR=-0.244(1.7sd)
+      full    : age1=+0.423(2.1sd) ALR=-0.247(1.5sd) AFR=-0.149(1.1sd)
+## warner: individual + Year | n=1839
+   M1: id-only AIC 3780.2 -> full AIC 3748.8
+      id only : age1=+0.566(23.2sd) age2=-0.136(10.7sd)
+      full    : age1=+0.568(18.8sd) age2=-0.148(11.3sd)
+   M2: id-only AIC 3781.4 -> full AIC 3750.0
+      id only : age1=+0.572(22.8sd) age2=-0.136(10.7sd) ALR=-0.032(0.9sd)
+      full    : age1=+0.580(17.6sd) age2=-0.148(11.3sd) ALR=-0.035(0.9sd)
+   M4: id-only AIC 3762.1 -> full AIC 3736.6
+      id only : age1=+0.611(22.0sd) age2=-0.188(5.7sd) ALR=-0.163(3.6sd) age1:ALR=-0.112(3.4sd)
+      full    : age1=+0.597(17.1sd) age2=-0.236(6.7sd) ALR=-0.135(2.9sd) age1:ALR=-0.050(1.4sd)
+## wynn: individual + track_id | n=2689
+   M2: id-only AIC 27249.7 -> full AIC 27251.6
+      id only : age1=+0.932(0.3sd) ALR=-3.524(1.2sd)
+      full    : age1=+0.738(0.3sd) ALR=-3.331(1.1sd)
+   M3: id-only AIC 27246.8 -> full AIC 27248.8
+      id only : mean_age=-3.080(2.6sd) dage1=+3.643(1.2sd)
+      full    : mean_age=-3.080(2.6sd) dage1=+3.643(1.2sd)
+   M4: id-only AIC 27250.9 -> full AIC 27252.8
+      id only : age1=+0.285(0.1sd) ALR=-3.618(1.2sd) age1:ALR=+0.885(0.9sd)
+      full    : age1=+0.046(0.0sd) ALR=-3.390(1.1sd) age1:ALR=+0.896(0.9sd)
+## pasztor_apollo: individual + year | n=3150
+   M3: id-only AIC -4326.7 -> full AIC -4518.4
+      id only : mean_age=-0.085(14.0sd) dage1=-0.181(65.6sd) dage2=+0.036(21.6sd)
+      full    : mean_age=-0.130(20.6sd) dage1=-0.181(65.4sd) dage2=+0.036(21.6sd)
+   M5: id-only AIC -4361.2 -> full AIC -4552.7
+      id only : mean_age=-0.085(14.0sd) dage1=-0.185(62.8sd) dage2=+0.042(13.9sd) dage1:mean_age=+0.028(4.4sd)
+      full    : mean_age=-0.130(20.6sd) dage1=-0.185(62.6sd) dage2=+0.042(13.9sd) dage1:mean_age=+0.028(4.4sd)
+## moullec_swift: individual + year | n=2072
+   M7: id-only AIC 14817.8 -> full AIC 14002.7
+      id only : age1=-4.833(15.6sd) age2=+1.623(11.5sd) ALR=-0.135(0.5sd) AFR=-0.219(1.1sd)
+      full    : age1=-4.561(16.1sd) age2=+1.544(12.8sd) ALR=-0.109(0.4sd) AFR=-0.232(1.2sd)
+   M2: id-only AIC 14816.9 -> full AIC 14002.1
+      id only : age1=-4.918(16.4sd) age2=+1.661(12.2sd) ALR=-0.113(0.4sd)
+      full    : age1=-4.647(16.9sd) age2=+1.578(13.5sd) ALR=-0.091(0.4sd)
+## bouwhuis: individual + year, area | n=7126
+
+================ audit_0_21_0/scripts/emp_paper_terms.py (re-run against 0.22.1)
+## fly [zinb/Quadratic] n=1883 ids=638
+    M2 age1=-1.300 age2=-0.323 ALR=+0.318
+    M6 age1=-1.656 age2=-0.805 LS=+0.497 age1:LS=+0.613 age2:LS=+0.184
+## bichet [gaussian/Linear] n=1023 ids=396
+    M3 mean_age=+0.023(0.3sd) dage1=+0.661(3.3sd)
+    M7 age1=+0.675(3.3sd) ALR=-0.386(2.2sd) AFR=-0.244(1.7sd)
+## bichet_marmot [poisson/Linear] n=169 ids=52
+    M7 age1=-0.219 ALR=+0.264 AFR=-0.105
+## moullec_swift [gaussian/Quadratic] n=2072 ids=543
+    M7 age1=-4.833(15.6sd) age2=+1.623(11.5sd) ALR=-0.135(0.5sd) AFR=-0.219(1.1sd)
+## pasztor_apollo [gaussian/Quadratic] n=3150 ids=1179
+    M3 mean_age=-0.085(14.0sd) dage1=-0.181(65.6sd) dage2=+0.036(21.6sd)
+## wynn [gaussian/Linear] n=2689 ids=78
+    M3 mean_age=-3.080(2.6sd) dage1=+3.643(1.2sd)
+## sanghvi_female [nbinom2/Quadratic] n=5997 ids=637
+    M2 age1=-1.332 age2=+0.204 ALR=+0.011
+    M6 age1=-1.564 age2=-0.232 LS=+0.176 age1:LS=+0.837 age2:LS=-0.019
+## allain [poisson/Quadratic] n=463 ids=175
+    M10 age1=+0.086 age2=-0.218 ALR=-0.049 AFR=+0.061 age1:AFR=+0.117 age2:AFR=-0.213
+## bouwhuis [gaussian/Quadratic] n=7126 ids=4848
+    M4 age1=-2.381(14.5sd) age2=+0.952(6.5sd) ALR=+0.172(1.2sd) age1:ALR=+0.213(1.4sd) age2:ALR=-0.158(3.7sd)
+## warner [gaussian/Quadratic] n=1839 ids=547
+    M1 age1=+0.566(23.2sd) age2=-0.136(10.7sd)
+## mckennaell_breeding [binomial/Linear] n=3173 ids=762
+    M2 age1=-0.974 ALR=+0.352
+## mckennaell_weight [gaussian/Linear] n=2317 ids=649
+    M2 age1=-0.065(6.4sd) ALR=+0.026(1.8sd)
+## szejnersigal_activity [gaussian/Quadratic] n=808 ids=184
+    M1 age1=+242.695(11.6sd) age2=-151.734(9.2sd)
+    M6 age1=+161.800(7.1sd) age2=-283.268(10.7sd) LS=+204.510(4.9sd) age1:LS=+192.066(7.1sd) age2:LS=+31.815(1.9sd)
+
+=== with a correlated random slope (as the papers fitted) ===
+## bichet
+   M3: intercept-only AIC 4554.9 | slope AIC 4558.9 (no gain)
+      intercept-only: mean_age=+0.023(0.3sd) dage1=+0.661(3.3sd)
+      with slope    : mean_age=+0.023(0.3sd) dage1=+0.661(3.3sd)
+   M7: intercept-only AIC 4556.5 | slope AIC 4560.5 (no gain)
+      intercept-only: age1=+0.675(3.3sd) ALR=-0.386(2.2sd) AFR=-0.244(1.7sd)
+      with slope    : age1=+0.675(3.3sd) ALR=-0.386(2.2sd) AFR=-0.244(1.7sd)
+   M2: intercept-only AIC 4557.5 | slope AIC 4560.2 (no gain)
+      intercept-only: age1=+0.471(2.9sd) ALR=-0.389(2.2sd)
+      with slope    : age1=+0.490(2.9sd) ALR=-0.403(2.3sd)
+   M4: intercept-only AIC 4553.8 | slope AIC 4557.8 (no gain)
+      intercept-only: age1=+0.584(3.4sd) ALR=-0.416(2.4sd) age1:ALR=-0.167(2.4sd)
+      with slope    : age1=+0.584(3.4sd) ALR=-0.416(2.4sd) age1:ALR=-0.167(2.4sd)
+## pasztor_apollo
+   M3: intercept-only AIC -4326.7 | slope AIC -4389.7 (slope better)
+      intercept-only: mean_age=-0.085(14.0sd) dage1=-0.181(65.6sd) dage2=+0.036(21.6sd)
+      with slope    : mean_age=-0.086(13.7sd) dage1=-0.183(59.1sd) dage2=+0.036(19.5sd)
+   M5: intercept-only AIC -4361.2 | slope AIC -4440.0 (slope better)
+      intercept-only: mean_age=-0.085(14.0sd) dage1=-0.185(62.8sd) dage2=+0.042(13.9sd) dage1:mean_age=+0.028(4.4sd)
+      with slope    : mean_age=-0.085(13.8sd) dage1=-0.184(54.6sd) dage2=+0.046(14.2sd) dage1:mean_age=+0.028(4.0sd)
+

@@ -1,0 +1,7 @@
+scenario,datasets,expectation,aic_prefers_model4,lrt_rejects,permutation_rejects,bootstrap_uncorrelated_rejects,bootstrap_correlated_rejects
+clean null,60,reject at the nominal rate,0.05,0.05,0.016666666666666666,0.0,0.016666666666666666
+"misspecified ageing function, no selection",60,reject at the nominal rate,1.0,1.0,1.0,0.0,0.03333333333333333
+"heterogeneous ageing rates, no selection",60,reject at the nominal rate,0.25,0.25,0.05,0.05,0.016666666666666666
+rate-linked selection (strength 1),60,reject often (power),1.0,1.0,1.0,1.0,1.0
+rate-linked selection (strength 0.5),60,reject often (power),1.0,1.0,1.0,0.9333333333333333,0.9333333333333333
+"misspecified function and heterogeneous rates, no selection",60,reject at the nominal rate,1.0,1.0,0.9666666666666667,0.016666666666666666,0.016666666666666666

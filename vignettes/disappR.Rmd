@@ -1,0 +1,45 @@
+---
+title: "Getting started with disappR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with disappR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+A Shiny workflow for diagnosing and modelling **selective disappearance** and **selective appearance** in longitudinal ageing data. It follows the manuscript's Figure 8: look for the signatures in the data (A1–A3), then choose the error family, random effects and ageing function, and compare Models 1–8 (B1–B5).
+
+## Install and run
+
+```r
+# from the package root (the folder containing DESCRIPTION)
+install.packages(c("shiny", "shinydashboard", "ggplot2", "lme4"))   # required
+install.packages(c("glmmTMB", "lmerTest", "DHARMa"))               # count families, p-values, residual checks
+source("launch_app.R")                                              # run without installing
+
+# or install the package (DESCRIPTION uses an anonymous placeholder maintainer, which R requires;
+# replace it with real details before public release)
+install.packages(".", repos = NULL, type = "source")   # or devtools::install()
+disappR::run_app()
+```
+
+## Scripted analyses
+
+The same engine is available from R scripts:
+
+```r
+x   <- disappr_prepare(my_data, disappr_mapping(id = "ID", age = "age", trait = "mass", life = "lifespan"))
+fit <- disappr_fit(x, models = c("M1", "M2", "M4"), age_function = "Quadratic", family = "gaussian")
+disappr_compare(fit); disappr_diagnose(fit); disappr_interpret(fit)
+disappr_predict(fit, "M4")
+disappr_provenance(fit)
+ex <- disappr_example("bouwhuis")            # bundled data, mapping and settings
+cat(disappr_code(fit, x, "my_data.csv"))
+```
+
+## Further documentation
+
+* `vignette("workflow", package = "disappR")`: the diagnosis-first workflow and the data format.
+* `vignette("models-and-methods", package = "disappR")`: Models 1-10, teaching simulations and interpretation caveats.
+* `vignette("validation-and-replication", package = "disappR")`: simulation validation and the published examples.
+* `vignette("development-and-testing", package = "disappR")`: architecture, tests and releases.

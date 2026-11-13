@@ -1,0 +1,94 @@
+== H1 continuous integration
+PASS three workflows, all valid YAML: R-CMD-check.yaml, script-tiers.yaml, test-coverage.yaml
+PASS R CMD check on macOS, Windows and Linux, on every push and pull request
+PASS the app server test and the source-tree unit tests run on every push
+PASS coverage computed on every push; upload cannot fail the build
+PASS all script tiers run weekly and on demand
+PASS .github is left out of the built package
+PASS the app test now fails with a non-zero status when an output errors
+PASS every output the app test renders is defined by the server (0.24.6)
+PASS the server test is part of the unit tests (skipped on CRAN and outside a source tree)
+
+== H2 individual frailty in the hazard models (null: the trait does not affect disappearance)
+   150 datasets per condition (99 s): 300 individuals, one terminal event each, frailty SD 1, age as a covariate
+   type I error of the trait effect: GLM 7.3%, GLMM 7.3%   |   power (log-odds 0.25 per SD): GLM 98.0%, GLMM 97.3%
+   frailty SD estimated (true 1): median 1.04, at the lower bound (< 0.05) in 16% of datasets
+PASS H2 the GLM's type I error is near 5% even with unmodelled frailty (<= 8%): 7.3%
+PASS H2 the frailty GLMM keeps type I error near 5% (<= 8%): 7.3%
+
+== H3 Models 3 and 5: three specifications of the within-individual quadratic term
+   300 datasets, 29 s
+PASS H3 the app's standardised Model 5 is the revised manuscript's Model 5 (identical AIC): largest AIC difference 5.2e-08
+                      scenario    sampling model           version   dAIC  dev_all  dev_late
+              intercept (+0.5) 50% missing    M3   mean of squares    0.0      0.9       1.5
+              intercept (+0.5) 50% missing    M3    square of mean    7.7      1.0       1.6
+              intercept (+0.5) 50% missing    M3 squared deviation 2069.5      1.5       2.1
+              intercept (+0.5) 50% missing    M5   mean of squares    0.0      0.9       1.5
+              intercept (+0.5) 50% missing    M5    square of mean    7.6      1.0       1.6
+              intercept (+0.5) 50% missing    M5 squared deviation   20.2      1.0       1.5
+              intercept (+0.5)    complete    M3   mean of squares    0.1      1.2       1.9
+              intercept (+0.5)    complete    M3    square of mean    0.0      1.2       1.9
+              intercept (+0.5)    complete    M3 squared deviation 1644.1      2.1       4.2
+              intercept (+0.5)    complete    M5   mean of squares    0.1      1.3       2.0
+              intercept (+0.5)    complete    M5    square of mean    0.0      1.3       2.0
+              intercept (+0.5)    complete    M5 squared deviation   33.8      1.1       1.4
+intercept, slope, shape (+0.5) 50% missing    M3   mean of squares 1286.7      5.4      14.8
+intercept, slope, shape (+0.5) 50% missing    M3    square of mean 1293.7      5.3      14.6
+intercept, slope, shape (+0.5) 50% missing    M3 squared deviation    0.0      2.4       6.0
+intercept, slope, shape (+0.5) 50% missing    M5   mean of squares    0.0      2.0       4.7
+intercept, slope, shape (+0.5) 50% missing    M5    square of mean   10.7      1.8       4.2
+intercept, slope, shape (+0.5) 50% missing    M5 squared deviation   61.7      2.0       4.9
+intercept, slope, shape (+0.5)    complete    M3   mean of squares 2189.9      5.4      14.7
+intercept, slope, shape (+0.5)    complete    M3    square of mean 2190.0      5.4      14.5
+intercept, slope, shape (+0.5)    complete    M3 squared deviation    0.0      2.0       4.1
+intercept, slope, shape (+0.5)    complete    M5   mean of squares    0.0      1.4       2.0
+intercept, slope, shape (+0.5)    complete    M5    square of mean    0.1      1.3       1.8
+intercept, slope, shape (+0.5)    complete    M5 squared deviation   68.4      1.2       1.8
+    no selective disappearance 50% missing    M3   mean of squares    0.6      0.8       1.3
+    no selective disappearance 50% missing    M3    square of mean    0.0      1.0       1.5
+    no selective disappearance 50% missing    M3 squared deviation 1961.4      1.5       2.1
+    no selective disappearance 50% missing    M5   mean of squares    0.6      0.8       1.1
+    no selective disappearance 50% missing    M5    square of mean    0.0      1.0       1.4
+    no selective disappearance 50% missing    M5 squared deviation    9.2      1.0       1.3
+    no selective disappearance    complete    M3   mean of squares    0.1      1.3       2.3
+    no selective disappearance    complete    M3    square of mean    0.0      1.4       2.3
+    no selective disappearance    complete    M3 squared deviation 1477.0      2.1       4.0
+    no selective disappearance    complete    M5   mean of squares    0.1      1.1       1.6
+    no selective disappearance    complete    M5    square of mean    0.0      1.2       1.7
+    no selective disappearance    complete    M5 squared deviation   27.1      1.1       1.4
+                  shape (-0.5) 50% missing    M3   mean of squares    2.0      3.4       8.7
+                  shape (-0.5) 50% missing    M3    square of mean    0.0      3.7       9.3
+                  shape (-0.5) 50% missing    M3 squared deviation 3628.8      3.5       7.1
+                  shape (-0.5) 50% missing    M5   mean of squares    2.0      1.7       3.4
+                  shape (-0.5) 50% missing    M5    square of mean    0.0      1.9       3.9
+                  shape (-0.5) 50% missing    M5 squared deviation   13.9      2.0       4.0
+                  shape (-0.5)    complete    M3   mean of squares    0.2      3.5       8.8
+                  shape (-0.5)    complete    M3    square of mean    0.0      3.7       9.3
+                  shape (-0.5)    complete    M3 squared deviation 3528.3      4.2       9.4
+                  shape (-0.5)    complete    M5   mean of squares    0.3      1.3       2.0
+                  shape (-0.5)    complete    M5    square of mean    0.0      1.4       2.1
+                  shape (-0.5)    complete    M5 squared deviation   74.4      1.3       1.7
+                  slope (+0.5) 50% missing    M3   mean of squares    0.0      2.5       6.4
+                  slope (+0.5) 50% missing    M3    square of mean    0.2      2.4       6.0
+                  slope (+0.5) 50% missing    M3 squared deviation  438.0      0.9       1.4
+                  slope (+0.5) 50% missing    M5   mean of squares    0.0      1.2       2.2
+                  slope (+0.5) 50% missing    M5    square of mean    0.3      1.1       1.9
+                  slope (+0.5) 50% missing    M5 squared deviation   15.6      1.0       1.8
+                  slope (+0.5)    complete    M3   mean of squares  148.6      2.7       6.3
+                  slope (+0.5)    complete    M3    square of mean  148.6      2.6       6.0
+                  slope (+0.5)    complete    M3 squared deviation    0.0      1.4       2.1
+                  slope (+0.5)    complete    M5   mean of squares    0.0      1.4       2.2
+                  slope (+0.5)    complete    M5    square of mean    0.1      1.4       2.2
+                  slope (+0.5)    complete    M5 squared deviation   27.7      1.2       1.6
+
+   averaged over scenarios and sampling:
+                   dev_all  dev_late    dAIC
+version                                     
+mean of squares       2.02      4.47  181.57
+square of mean        2.05      4.49  182.95
+squared deviation     1.73      3.19  754.94
+PASS H3 'mean of squares' (app, revised manuscript) and 'square of mean' give nearly the same trajectories (within 0.5 points): largest gap 0.36 points; AIC gap up to 10.7
+PASS H3 in Model 5, 'squared deviation' (Fay eq. 4) fits worse than the other two in every scenario
+   note: in Model 3 under age-dependent selection, 'squared deviation' fits far better (dAIC 2190, 149): (age - mean)^2 contains -2 age x mean age, an age-by-mean-age interaction, so it partly models age-dependent selective disappearance that Model 3 otherwise omits
+
+0 failure(s)

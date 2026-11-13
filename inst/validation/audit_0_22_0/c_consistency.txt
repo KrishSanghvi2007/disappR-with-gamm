@@ -1,0 +1,54 @@
+== C1-C6 over 4 datasets x 5 functions x 8 models x standardised / not
+PASS C1 description x scale factor reproduces every model column: largest relative error 6.1e-16
+PASS C2 estimate / scale factor equals the refit in the described units: largest relative error 2.3e-06
+PASS C3 standardising changes the parameterisation, not the model (fitted values): largest difference 1.6e-07 SD
+PASS C4 predicted differences for the text do not depend on standardisation: largest difference 3.4e-07
+PASS C5 the stated reference age is where the main-effect coefficient applies: largest difference 4.6e-15
+PASS C6 the joint Wald test of the interaction block does not depend on standardisation: largest relative difference 4.9e-07
+
+== C4 against a hand calculation, and C5 in words, on the reported case (cubic, AFR x age, not standardised)
+   AFR 3.0 vs 1.0; hand-calculated difference at ages [np.float64(2.0), np.float64(6.0), np.float64(11.0)]: [np.float64(-0.4612), np.float64(0.0272), np.float64(0.9884)]
+   main-effect coefficient x delta AFR = -0.4766 = the difference at age 0; at the median age it is 0.0272
+PASS C5 the text names age 0, not the mean age, when a polynomial is not standardised
+PASS C5 logarithmic and asymptotic exponential references are named for their own zero point
+
+== C7 displayed numbers never round to zero when they are not zero
+   128 coefficients: 11 shown as 0.00 by two-decimal rounding, 0 by three significant digits
+PASS C7 no non-zero coefficient is displayed as zero
+PASS C7 display_numbers(): small values kept, other columns untouched: {'a': ['0.0004', '0.50', '12.00'], 'b': [np.float64(1.0), np.float64(2.0), np.float64(3.0)], 'c': ['1234.50', '0.00', '-0.0021']}
+
+== C8 the ages quoted for the mean-age term
+   Linear                   std   old labels [3.95 8.  ]      new labels [4. 8.]      truth [4. 8.]      old error 0.05 years
+   Linear                   raw   old labels [3.95 8.  ]      new labels [4. 8.]      truth [4. 8.]      old error 0.05 years
+   Quadratic                std   old labels [3.95 8.  ]      new labels [4. 8.]      truth [4. 8.]      old error 0.05 years
+   Quadratic                raw   old labels [3.95 8.  ]      new labels [4. 8.]      truth [4. 8.]      old error 0.05 years
+   Cubic                    std   old labels [3.95 8.  ]      new labels [4. 8.]      truth [4. 8.]      old error 0.05 years
+   Cubic                    raw   old labels [3.95 8.  ]      new labels [4. 8.]      truth [4. 8.]      old error 0.05 years
+   Logarithmic              std   old labels [-0.77  0.47]    new labels [4. 8.]      truth [4. 8.]      old error 7.53 years
+   Logarithmic              raw   old labels [1.22 1.99]      new labels [4. 8.]      truth [4. 8.]      old error 6.01 years
+   Asymptotic exponential   std   old labels [-0.4   0.75]    new labels [4.  8.5]    truth [8.5 4. ]    old error 8.90 years; old 'younger' group was the older one
+   Asymptotic exponential   raw   old labels [1.01 2.42]      new labels [4.  8.5]    truth [8.5 4. ]    old error 7.49 years; old 'younger' group was the older one
+PASS C8 the new labels are the real mean ages of the individuals used, younger group first, for every function
+
+== C9 'explains no variance' and the scale of the slope's covariate
+   slope SD 0.01    per age^2, covariate rescaled x 1       : SD per unit 0.01      old flag True  new flag False (SD across records 1.0903)
+   slope SD 0.01    per age^2, covariate rescaled x 0.06667 : SD per unit 0.15      old flag False new flag False (SD across records 1.0903)
+   slope SD 0.01    per age^2, covariate rescaled x 0.004444: SD per unit 2.25      old flag False new flag False (SD across records 1.0903)
+   slope SD 0.0001  per age^2, covariate rescaled x 1       : SD per unit 0.0001    old flag True  new flag True  (SD across records 0.0109)
+   slope SD 0.0001  per age^2, covariate rescaled x 0.06667 : SD per unit 0.0015    old flag True  new flag True  (SD across records 0.0109)
+   slope SD 0.0001  per age^2, covariate rescaled x 0.004444: SD per unit 0.0225    old flag True  new flag True  (SD across records 0.0109)
+PASS C9 the new flag does not depend on the covariate's scale (the old one did)
+PASS C9 a slope that varies little is still flagged
+
+== C10 peak and onset ages under standardisation
+   Quadratic  standardised peak 8.688 onset 8.688 | raw peak 8.688 onset 8.688
+   Cubic      standardised peak 8.960 onset 8.960 | raw peak 8.960 onset 8.960
+PASS C10 peak and onset do not depend on standardisation
+
+== C11 tables and the scaling table
+PASS C11 every table is drawn through the rounding guard (defined before all 23 uses)
+PASS C11 coefficient, random-effect and covariance tables format with significant digits
+PASS C11 the log term is described as log(age - youngest age + 1) when ages include 0
+PASS C11 scaling constants are the data's mean and SD
+
+0 failure(s)

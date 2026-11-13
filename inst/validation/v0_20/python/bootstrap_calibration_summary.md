@@ -1,0 +1,10 @@
+N = 100 individuals, mean lifespan 10, 60 datasets per scenario, 39 null draws per dataset; the nominal rejection rate of a valid test is 0.025 (p < 0.05 requires beating all 39 draws).
+
+| scenario                                                    |   datasets | expectation                |   aic_prefers_model4 |   lrt_rejects |   permutation_rejects |   bootstrap_uncorrelated_rejects |   bootstrap_correlated_rejects |
+|:------------------------------------------------------------|-----------:|:---------------------------|---------------------:|--------------:|----------------------:|---------------------------------:|-------------------------------:|
+| clean null                                                  |         60 | reject at the nominal rate |                0.050 |         0.050 |                 0.017 |                            0.000 |                          0.017 |
+| misspecified ageing function, no selection                  |         60 | reject at the nominal rate |                1.000 |         1.000 |                 1.000 |                            0.000 |                          0.033 |
+| heterogeneous ageing rates, no selection                    |         60 | reject at the nominal rate |                0.250 |         0.250 |                 0.050 |                            0.050 |                          0.017 |
+| rate-linked selection (strength 1)                          |         60 | reject often (power)       |                1.000 |         1.000 |                 1.000 |                            1.000 |                          1.000 |
+| rate-linked selection (strength 0.5)                        |         60 | reject often (power)       |                1.000 |         1.000 |                 1.000 |                            0.933 |                          0.933 |
+| misspecified function and heterogeneous rates, no selection |         60 | reject at the nominal rate |                1.000 |         1.000 |                 0.967 |                            0.017 |                          0.017 |

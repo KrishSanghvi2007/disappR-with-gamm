@@ -1,0 +1,67 @@
+== E1 monthly ages, interval typed as 0.0833
+   inferred 0.083333; auto: 120 links, 1 segments; typed 0.0833: 120 links, 1 segments, 0 records dropped
+   missing: auto 9.9%, typed 9.9%
+PASS E1 a rounded monthly interval keeps every record and the same missingness
+   drift of the typed grid after 10 years: 0.048 of an interval (records are dropped beyond 0.25, i.e. after ~52 years)
+
+== E2 staggered biennial cohorts
+   inferred interval 2, missing 0.0%, decomposition: 0 points, 0 segments
+PASS E2 the interval (2) and missingness (0%) are right for staggered cohorts
+   finding: the decomposition links neighbouring occasions (1 year apart), which no individual shares, so it is empty (confirmed)
+
+== E3 annual sampling to age 5, then biennial
+   inferred interval 1; missing 22.3% overall, by design: the grid counts the skipped years after age 5 as missed
+PASS E3 a planned change of frequency shows as missingness (documented in the help: counted against the interval)
+
+== E4 study window with a calendar-year trend, no selective disappearance
+   year trend +0.00/yr: Model 2 wrongly preferred   2%, Model 4   5%; with year in the model, Model 2   2%
+PASS E4 window truncation and censoring alone do not create selective disappearance (Model 2 <= 15%)
+   year trend -0.08/yr: Model 2 wrongly preferred 100%, Model 4  99%; with year in the model, Model 2   2%
+PASS E4 a calendar trend under a study window creates false selective disappearance: 100%
+PASS E4 adding year (a random intercept in the app) removes it (<= 15%): 2%
+
+== E5 selective disappearance with AFR correlated with lifespan, no effect of AFR itself
+   selection on age at death (AFR-ALR r -0.54): AFR x age 'significant' in Model 10 100%, in Model 8   8%
+PASS E5 confounded AFR makes Model 10 report selective appearance: 100%
+PASS E5 Model 8, with ALR x age, removes it (<= 20%): 8%
+   selection on adult lifespan (AFR-ALR r -0.54): AFR x age 'significant' in Model 10 100%, in Model 8 100%
+   finding: when selection acts on adult lifespan (ALR - AFR), AFR x age carries part of it even in Model 8: an 'appearance' term then reflects lifespan measured from entry, not an effect of entry age
+
+== E6 unstandardised cubic on ages in days
+   condition number: raw 1.1e+10, standardised 6.1e+00; largest difference in fitted values 1.69e-09
+   raw coefficients: 5.17, 0.00136, -4.08e-07, -1.49e-10 (two-decimal display: 5.17, 0.00, -0.00, -0.00)
+PASS E6 the raw cubic on days is ill-conditioned (condition number > 1e9): 1.1e+10
+PASS E6 its fit still matches the standardised one here (< 1e-3): 1.7e-09
+
+== E7 tiny and degenerate data
+   step                             1.0
+PASS E7 step runs on degenerate data
+   grid                             0.0
+PASS E7 grid runs on degenerate data
+   decomposition                    3
+PASS E7 decomposition runs on degenerate data
+   share of wins, no common set     0
+PASS E7 share of wins, no common set runs on degenerate data
+   peak on three ages               2.0
+PASS E7 peak on three ages runs on degenerate data
+   stored table, one model          1
+PASS E7 stored table, one model runs on degenerate data
+   two distinct ages, quadratic: design rank 2 of 3 (the app drops the unidentifiable term and marks the fit 'Caution')
+
+== E8 calibration of the instant error-family screen
+   Poisson (no problem)         overdispersion flagged   0%, excess zeros flagged   0%
+PASS E8 few false alarms on Poisson data (each <= 5%)
+   negative binomial, theta 2   overdispersion flagged 100%, excess zeros flagged 100%
+PASS E8 overdispersion detected (>= 90%)
+   Poisson + 25% extra zeros    overdispersion flagged 100%, excess zeros flagged 100%
+PASS E8 excess zeros detected (>= 90%)
+   skewed-residual screen: flagged on Gaussian residuals 0%, on lognormal (sigma 0.5) residuals 100%
+PASS E8 the skew screen does not flag Gaussian residuals
+   finding: with mild skew (lognormal sigma 0.3) the screen flags 32%; the automatic AIC check covers these cases
+
+== E9 continuous proportions: beta against Gaussian
+   beta preferred over Gaussian by more than 2 AIC in 100% of 60 datasets of beta-distributed proportions
+PASS E9 the beta family is recognised on beta data (>= 90%)
+   values of exactly 0 or 1 are refused by the beta family (2 here), as the error message states
+
+0 failure(s)   [29 s]

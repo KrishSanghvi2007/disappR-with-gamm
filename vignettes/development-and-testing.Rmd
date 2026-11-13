@@ -1,0 +1,121 @@
+---
+title: "Architecture, testing and releases"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Architecture, testing and releases}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Architecture
+
+The statistics live in one engine in `R/`, shared by the Shiny app, the R interface and the exported code:
+
+| File | Contents |
+|---|---|
+| `utils.R` | small shared helpers (formatting, labels, `%||%`) |
+| `provenance.R` | disappR and package versions, optional packages, runtime state |
+| `simulation.R` | teaching simulations with known answers |
+| `import.R` | file reading, the bundled empirical examples |
+| `validation.R` | data integrity checks |
+| `data-preparation.R` | column mapping, standardisation, individual metrics, model data |
+| `formulas.R` | Models 1-10, covariate and built terms, random-effect structures |
+| `model-fit.R` | fitting one model and the model suite, validity classification |
+| `model-comparison.R` | AIC tables, likelihood-ratio tests, family comparison, accuracy against simulated truth |
+| `diagnostics.R` | residual and model checks |
+| `trajectories.R` | population predictions, observed means, individual fits |
+| `disappearance.R` | decomposition and the selective disappearance/appearance diagnostics |
+| `missingness.R` | sampling and missingness diagnostics |
+| `interpretation.R` | interpretation notes built from the fitted results |
+| `ui-helpers.R` | help texts and interface helpers used by the app |
+| `export.R` | reproducible R code and reports |
+| `api.R` | the R interface (below) |
+| `run_app.R` | `run_app()` |
+
+`inst/app/global.R` only loads packages, sets options and loads this engine, and `server.R` only orchestrates: it reads
+inputs, calls the engine, stores results and renders outputs. The engine was moved out of `global.R` (0.9.10) and the
+pure helpers out of `server.R` (0.9.11) verbatim, so every result is the same as in 0.9.9.
+
+Every model comparison stores its provenance (`disappr_provenance(fit)`): a fingerprint of the analysed rows and
+individuals, formulas, family, random effects, transformations, settings, warnings and software versions. Saved
+results and reports include it, and so does the header of the exported script. The exported script runs the same
+engine as the app when the same disappR version is installed, and otherwise a standalone reconstruction with lme4 /
+glmmTMB.
+
+Scripted analyses use the same functions as the app:
+
+```r
+x   <- disappr_prepare(my_data, disappr_mapping(id = "ID", age = "age", trait = "mass", life = "lifespan"))
+fit <- disappr_fit(x, models = c("M1", "M2", "M4"), age_function = "Quadratic", family = "gaussian")
+disappr_compare(fit); disappr_diagnose(fit); disappr_interpret(fit)
+disappr_predict(fit, "M4")
+disappr_provenance(fit)
+ex <- disappr_example("bouwhuis")            # bundled data, mapping and settings
+cat(disappr_code(fit, x, "my_data.csv"))
+```
+
+To deploy the app where the package is not installed (for example shinyapps.io), `source("inst/scripts/bundle_app.R")`
+writes a self-contained `disappR_app/` folder with the engine included.
+
+## Tests (please run these first)
+
+`tests/scripts/run_all.R` runs seven tiers; tier 7 (`sweep_0_20.R`) covers the changes made in 0.20.9 to 0.20.19: the Trajectories page with sparse individuals and count traits, the clamping of extreme curves, duplicates and multi-group IDs, per-model row sets, the evidence summary across Models 1-10, the likelihood-ratio pairs, and every bundled example. Set `DISAPPR_SWEEP_FULL=1` to fit models for all of them.
+
+
+```sh
+Rscript tests/scripts/smoke_test.R   # every analysis function on simulated data + the fly-data replication
+Rscript tests/scripts/app_test.R     # drives the real server with shiny::testServer() and renders every output
+```
+
+Both scripts collect problems instead of stopping, and finish with a `FAILURES` / `Output problems` block.
+
+## Testing
+
+Unit tests (testthat, in `tests/testthat/`) run with R CMD check or `testthat::test_local()`. `Rscript tests/scripts/run_all.R`
+runs every tier in order: unit, smoke, golden regression (with `DISAPPR_GOLDEN_REF`), robustness
+(adversarial, metamorphic, lme4 oracle, exported-code equivalence), app server, stress, and empirical/simulation checks.
+`Rscript tests/scripts/release_gate.R` adds R CMD check and requires the golden comparison against the previous release.
+
+`tests/golden/` checks that a version reproduces another exactly (formulas, analysed rows, coefficients,
+log-likelihoods, AIC, predictions, validity, notes, decomposition, observed means and exported code) for all ten
+examples and eight simulated designs. To confirm this version against 0.9.9 on your machine:
+
+```
+Rscript tests/golden/golden_capture.R /path/to/disappR_0.9.9 golden_0.9.9.rds
+Rscript tests/golden/golden_capture.R .                      golden_0.9.10.rds
+Rscript tests/golden/golden_compare.R golden_0.9.9.rds golden_0.9.10.rds
+```
+
+`tests/scripts/robustness_suite.R` is an optional check, not part of the app: it runs metamorphic invariants, a comparison with
+hand-written lme4 fits, an exported-code round trip in a fresh R session, adversarial data and reactive-state tests
+(`Rscript tests/scripts/robustness_suite.R` from the package root; `DISAPPR_BIG=1` adds large-data timings).
+
+From the package root:
+
+```r
+Rscript tests/scripts/smoke_test.R    # every analysis function on simulated data and the fruit-fly reanalysis
+Rscript tests/scripts/app_test.R      # the Shiny server with shiny::testServer()
+Rscript tests/scripts/stress_test.R   # 26 realistic, adversarial and simulated datasets, 6,000-individual timings
+```
+
+Each script ends with a list of expectations (PASS / CHECK) and any FAILURES.
+
+Continuous integration (`.github/workflows/`) runs R CMD check on Linux, Windows and macOS and the full test tiers on
+every push and pull request.
+
+## Step 4 runs in its own process
+
+With the `callr` package installed, the individual fits on the Trajectories page run in a separate R process: an error, a hang or a crash there ends only that process, and a job running longer than three minutes is stopped. Without `callr` they run in the app's process and the page says so.
+
+## Reproducible versions
+
+Numbers can shift slightly between versions of lme4, glmmTMB and their optimisers. To record the versions behind
+published results, run from the package root:
+
+```r
+source("inst/scripts/lock_dependencies.R")
+```
+
+It writes `dependency_versions.csv` (R and every package disappR uses) and, if the renv package is installed,
+`renv.lock`, which `renv::restore()` can reinstall elsewhere. Exported model scripts also start with the versions
+used by the app session. The Start page lists which optional packages are installed and what each one adds.

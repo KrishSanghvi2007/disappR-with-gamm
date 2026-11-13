@@ -1,0 +1,74 @@
+== K1 what the tick option reaches
+PASS grid window: AFR and ALR from the prepared data (which follow the tick)
+PASS AFR-ALR agreement uses the prepared AFR and ALR
+PASS ALR-mean age and ALR-LS correlations use the prepared ALR; mean age always from ages with a trait value
+PASS proxy tables (ALR, mean age, LS, AFR) use the prepared values
+PASS data check 'mapped ALR vs last age' compares with the last age the tick implies
+PASS data check 'LS - ALR' uses the ALR the models use when ticked
+PASS the ALR order of the grid breaks ties by the same AFR
+PASS unchanged by design: LS earlier than the last record of any kind is still an impossible value
+PASS unchanged by design: hazard and life table use each individual's last record of any kind
+PASS the app server test toggles the box and redraws the grid, the proxies and the checks under each option
+
+== K2 odd scenarios
+   75 datasets x 2 traits x 3 ALR variants x 2 options, 20 s
+trait                     variant       selection   option  r_ALR_LS  r_meanage_LS  r_ALR_meanage  r_AFR_ALR  missing_pct  ALR_term  LS_term  agedep_ALR  agedep_LS
+    A               automatic ALR   age-dependent   ticked      0.92          0.84           0.90       0.29        31.64      28.0     28.0       100.0      100.0
+    A               automatic ALR   age-dependent unticked      0.99          0.84           0.85      -0.01        60.52      24.0     28.0       100.0      100.0
+    A               automatic ALR age-independent   ticked      0.91          0.70           0.82      -0.15        32.63     100.0    100.0        44.0       32.0
+    A               automatic ALR age-independent unticked      0.98          0.70           0.72       0.02        59.00     100.0    100.0        28.0       32.0
+    A               automatic ALR            none   ticked      0.89          0.78           0.87       0.17        32.76       4.0      4.0        24.0       16.0
+    A               automatic ALR            none unticked      0.99          0.78           0.79      -0.01        61.74       4.0      4.0        16.0       16.0
+    A  mapped ALR = last sighting   age-dependent   ticked      0.99          0.84           0.85       0.29        38.96      24.0     28.0       100.0      100.0
+    A  mapped ALR = last sighting   age-dependent unticked      0.99          0.84           0.85      -0.01        60.52      24.0     28.0       100.0      100.0
+    A  mapped ALR = last sighting age-independent   ticked      0.98          0.70           0.72      -0.19        39.67     100.0    100.0        28.0       32.0
+    A  mapped ALR = last sighting age-independent unticked      0.98          0.70           0.72       0.02        59.00     100.0    100.0        28.0       32.0
+    A  mapped ALR = last sighting            none   ticked      0.99          0.78           0.79       0.17        41.08       4.0      4.0        16.0       16.0
+    A  mapped ALR = last sighting            none unticked      0.99          0.78           0.79      -0.01        61.74       4.0      4.0        16.0       16.0
+    A mapped ALR, 5% inconsistent   age-dependent   ticked      0.99          0.84           0.85       0.29        38.78      20.0     28.0       100.0      100.0
+    A mapped ALR, 5% inconsistent   age-dependent unticked      0.99          0.84           0.85      -0.01        60.44      20.0     28.0       100.0      100.0
+    A mapped ALR, 5% inconsistent age-independent   ticked      0.98          0.70           0.72      -0.19        39.46     100.0    100.0        32.0       32.0
+    A mapped ALR, 5% inconsistent age-independent unticked      0.98          0.70           0.72       0.02        58.91     100.0    100.0        32.0       32.0
+    A mapped ALR, 5% inconsistent            none   ticked      0.98          0.78           0.79       0.17        40.88       4.0      4.0        16.0       16.0
+    A mapped ALR, 5% inconsistent            none unticked      0.98          0.78           0.79      -0.01        61.66       4.0      4.0        16.0       16.0
+    B               automatic ALR   age-dependent   ticked      0.51          0.42           0.81       0.06        18.59       4.0      4.0         0.0        8.0
+    B               automatic ALR   age-dependent unticked      0.99          0.42           0.43      -0.01        56.00       4.0      4.0         8.0        8.0
+    B               automatic ALR age-independent   ticked      0.52          0.43           0.82       0.06        18.80     100.0    100.0         0.0        0.0
+    B               automatic ALR age-independent unticked      0.99          0.43           0.44       0.02        56.05     100.0    100.0         0.0        0.0
+    B               automatic ALR            none   ticked      0.53          0.44           0.83       0.07        18.53       0.0      0.0         8.0        8.0
+    B               automatic ALR            none unticked      0.99          0.44           0.44      -0.01        56.09       0.0      0.0         8.0        8.0
+    B  mapped ALR = last sighting   age-dependent   ticked      0.99          0.42           0.43       0.03        48.47       4.0      4.0         8.0        8.0
+    B  mapped ALR = last sighting   age-dependent unticked      0.99          0.42           0.43      -0.01        56.00       4.0      4.0         8.0        8.0
+    B  mapped ALR = last sighting age-independent   ticked      0.99          0.43           0.44       0.04        48.44     100.0    100.0         0.0        0.0
+    B  mapped ALR = last sighting age-independent unticked      0.99          0.43           0.44       0.02        56.05     100.0    100.0         0.0        0.0
+    B  mapped ALR = last sighting            none   ticked      0.99          0.44           0.44       0.03        48.49       0.0      0.0         8.0        8.0
+    B  mapped ALR = last sighting            none unticked      0.99          0.44           0.44      -0.01        56.09       0.0      0.0         8.0        8.0
+    B mapped ALR, 5% inconsistent   age-dependent   ticked      0.99          0.42           0.43       0.03        48.23       4.0      4.0         8.0        8.0
+    B mapped ALR, 5% inconsistent   age-dependent unticked      0.99          0.42           0.43      -0.01        55.82       4.0      4.0         8.0        8.0
+    B mapped ALR, 5% inconsistent age-independent   ticked      0.98          0.43           0.43       0.04        48.18     100.0    100.0         0.0        0.0
+    B mapped ALR, 5% inconsistent age-independent unticked      0.98          0.43           0.43       0.02        55.87     100.0    100.0         0.0        0.0
+    B mapped ALR, 5% inconsistent            none   ticked      0.99          0.44           0.44       0.03        48.24       4.0      0.0         8.0        8.0
+    B mapped ALR, 5% inconsistent            none unticked      0.99          0.44           0.44      -0.01        55.92       4.0      0.0         8.0        8.0
+PASS every observed trait record lies inside its window (all traits, variants and options)
+PASS with automatic ALR the window ends exactly at the ALR
+PASS automatic ALR never exceeds LS
+PASS ticked automatic ALR is never later than unticked
+PASS a mapped ALR is the same under both options
+PASS an inconsistent mapped ALR (earlier than the last trait value) does not push observed records out of the window
+PASS age-dependent selection is detected with ALR as often as with known LS for trait A (every variant and option)
+   false age-dependent calls with no selection, ALR against known LS (percent of datasets):
+trait                     variant   option  agedep_ALR  agedep_LS
+    A               automatic ALR   ticked        24.0       16.0
+    A               automatic ALR unticked        16.0       16.0
+    A  mapped ALR = last sighting   ticked        16.0       16.0
+    A  mapped ALR = last sighting unticked        16.0       16.0
+    A mapped ALR, 5% inconsistent   ticked        16.0       16.0
+    A mapped ALR, 5% inconsistent unticked        16.0       16.0
+    B               automatic ALR   ticked         8.0        8.0
+    B               automatic ALR unticked         8.0        8.0
+    B  mapped ALR = last sighting   ticked         8.0        8.0
+    B  mapped ALR = last sighting unticked         8.0        8.0
+    B mapped ALR, 5% inconsistent   ticked         8.0        8.0
+    B mapped ALR, 5% inconsistent unticked         8.0        8.0
+
+0 failure(s)

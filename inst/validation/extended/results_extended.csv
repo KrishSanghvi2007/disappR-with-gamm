@@ -1,0 +1,22 @@
+Area,Scenario,Expected,Seeds,Expected_win_share,Median_dAIC_expected_behind_winner,Winners,Verdict,Note
+count,"Poisson, SD=none",M1,10,0.9,0.0,"M1:9, M4:1",PASS,
+count,"Poisson, SD=level",M1/M2/M3/M7,10,0.9,0.0,"M2:9, M4:1",PASS,
+count,"Poisson, SD=rate",M10/M4/M5/M6/M8/M9,10,1.0,0.0,M4:10,PASS,
+binomial,"binary 0/1, SD=none",M1,10,0.8,0.0,"M1:8, M2:2",PASS,
+binomial,"binary 0/1, SD=level",M1/M2/M3/M7,10,0.7,0.0,"M2:7, M4:3",PASS,
+binomial,"binary 0/1, SD=rate",M10/M4/M5/M6/M8/M9,10,1.0,0.0,M4:10,PASS,
+binomial,"proportion, 8 trials, SD=none",M1,10,0.6,0.0,"M1:6, M4:3, M2:1",PASS (ties),
+binomial,"proportion, 8 trials, SD=level",M1/M2/M3/M7,10,0.8,0.0,"M2:8, M4:2",PASS,
+binomial,"proportion, 8 trials, SD=rate",M10/M4/M5/M6/M8/M9,10,1.0,0.0,M4:10,PASS,
+appearance,selective appearance only,M10/M7/M8/M9,10,1.0,0.0,M7:10,PASS,
+appearance,"variable AFR, nothing linked to the trait",M1/M2/M3/M7,10,0.8,0.0,"M1:6, M2:2, M4:1, M9:1",PASS,no selection of any kind: only ties are acceptable outside the expected set
+random effects,"nested: individual within group, rate-linked SD",M10/M4/M5/M6/M8/M9,10,1.0,0.0,M4:10,PASS,
+covariates,"factor covariate with an age interaction, rate-linked SD",M10/M4/M5/M6/M8/M9,10,1.0,0.0,M4:10,PASS,
+random slopes,"slope variation (SD 0.12), no selection, slopes FITTED",M1/M2/M3/M7,10,1.0,0.0,"M1:9, M2:1",PASS,
+random slopes,"slope variation (SD 0.12), no selection, slopes NOT fitted",M1/M2/M3/M7,10,0.1,3.45,"M4:9, M1:1",DOCUMENTED: 90% of seeds favour a selection model,documented false-positive mechanism: among-individual variation in ageing rate can be absorbed by the ALR x age interaction when random slopes are omitted
+random slopes,"rate-linked SD, random slopes fitted",M10/M4/M5/M6/M8/M9,10,1.0,0.0,M4:10,PASS,
+misspecification,"quadratic data fitted with a LINEAR ageing function, no selection",M1,10,0.0,1205.3,"M4:9, M5:1",DOCUMENTED: 100% of seeds favour a selection model,documented false-positive mechanism: unmodelled curvature is absorbed by the proxy x age terms
+misspecification,"quadratic data fitted with a QUADRATIC function, no selection",M1,10,0.7,0.0,"M1:7, M4:2, M2:1",PASS,
+decomposition,no SD,unbiased,10,,,slope -0.244 +/- 0.016 (truth -0.250),PASS,chained mean within-individual change on the population grid
+decomposition,level-linked SD,unbiased,10,,,slope -0.244 +/- 0.016 (truth -0.250),PASS,chained mean within-individual change on the population grid
+decomposition,rate-linked SD,biased,10,,,slope -0.134 +/- 0.031 (truth -0.250),PASS,chained mean within-individual change on the population grid

@@ -1,0 +1,26 @@
+== L1 precedence and wording
+PASS a mapped ALR or AFR column wins over the box (engine)
+PASS the note under the box says which of ALR/AFR it cannot change when columns are mapped
+PASS the automatic ALR, AFR and lifespan choices refer to the box
+PASS AFE opens the window at the earlier of AFE and the AFR (not the first record of any kind)
+PASS the AFE help says so, and that AFE changes only the missingness figures
+PASS the help panel of the box says mapped columns are used as supplied
+
+== L2 propagation of AFR and ALR
+PASS models: the ALR and AFR proxies come from the prepared data
+PASS models: an automatic lifespan follows the box
+PASS fits: the data fingerprint includes the box, and results are shown only for the current fingerprint
+PASS fits: the fingerprint also sums the prepared ALR and AFR
+PASS exported script and methods draft follow the box
+PASS proxy panels and data checks read the prepared ALR/AFR
+PASS evidence and effect summaries read the prepared ALR
+PASS the R snapshot tier counts missingness from AFR, as the app does by default
+PASS the R unit tests cover every combination
+
+== L3 the R grid code (ported) against the specification, every combination
+PASS the grid code matches the specification in every combination (1440 datasets x combinations)
+PASS AFR column (1) + ticked + AFE 3: window opens at the column AFR (1) and closes at the trait-specific ALR (4)
+PASS automatic AFR + ticked + AFE 3: window opens at the trait-specific AFR (2), not the first record (1)
+PASS automatic AFR + ticked + AFE 1: window opens at the AFE (1)
+
+0 failure(s)

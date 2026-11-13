@@ -1,0 +1,41 @@
+PASS removed: pre-filled mapping note
+PASS removed: binomial weights note
+PASS removed: AFR 'enters the dataset' sentence
+PASS removed: bins sentence on page 2
+PASS removed: frailty clause of the hazard test
+PASS removed: 'changes the missingness figures on this tab only' note
+PASS removed: proxy-choice card
+PASS removed: 'Missing cells' line
+PASS removed: data-support box on page 4
+PASS removed: example ageing-function sentence
+PASS removed: pre-fit random-effects warning
+PASS removed: 'rule of thumb' caution
+PASS removed: suggested starting analysis
+PASS removed: Apply these settings button
+PASS removed: outlined AFR = ALR tile
+PASS removed: AIC values in example notes
+PASS in place: exclusion label
+PASS in place: rounding help (records not averaged)
+PASS in place: trait-scale wording
+PASS in place: terminal-change wording
+PASS in place: suggested-function wording
+PASS in place: function-comparison title
+PASS in place: fitted-curve help without the decomposition
+PASS in place: 'Further' step in the modelling guide
+PASS in place: formulas of every supported model
+PASS in place: random-term wording
+PASS in place: misspecified-shape wording
+PASS in place: random-effects covariance title
+PASS in place: invalid-Hessian wording
+PASS in place: short caution wording
+PASS in place: standardising wording
+PASS in place: variance question label
+PASS in place: AFR = ALR legend entry
+PASS in place: stored-model trajectory plot
+PASS in place: set comparison wording
+PASS every bundled example has a short summary (species, trait, default model, covariates, main result, other traits): 13 of 13
+PASS the example card shows the summary and folds the full note under 'More details'
+PASS the new plot and its choices are placed in the interface and rendered by the app test
+PASS 0.24.8: well-supported random slopes are the default for simulated and uploaded data; examples keep their published structure
+
+0 failure(s)

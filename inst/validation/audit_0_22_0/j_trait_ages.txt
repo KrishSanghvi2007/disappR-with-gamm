@@ -1,0 +1,118 @@
+== J1 wiring
+PASS engine: automatic ALR/AFR from ages with a trait value unless trait_specific_ages is FALSE
+PASS engine: the choice is recorded in meta
+PASS bundled examples are dataset-wide (the base example mapping and the fly mapping)
+PASS uploads (guess_mapping), simulations (toy_mapping) and the R interface (disappr_mapping) are trait-specific
+PASS simulations use the observed AFR (first observed record)
+PASS the tick box, its help link and the example note are in the Data tab
+PASS the help panel exists
+PASS the mapping passes the choice on; before the box renders, the preset decides
+PASS the choice is part of the data fingerprint (no stale stored results)
+PASS the exported script computes ALR and AFR the same way
+PASS the methods draft states the definition
+PASS the missingness window opens at the AFR and closes at the ALR the models use
+PASS the AFR tile, its outline when it is also the ALR, and the AFR order
+PASS the disappearance hazard and life table still use the last record of any kind
+PASS the unit tests cover the rule, two traits, zeros, mapped columns, lifespan, defaults, the window and the script
+
+== J2 worked examples and edge cases (independent implementation)
+PASS your example, ticked: AFR 2, ALR 4
+PASS your example, unticked: AFR 1, ALR 5
+PASS a second trait of the same file (sampled at 1-3, with a zero at 3): AFR 1, ALR 3
+PASS window ticked: ages 2-4, nothing missed
+PASS window unticked: ages 1-5, two of five missed (records without a trait value at 1 and 5)
+PASS 0.24.1 window for comparison: first trait record (2) to the last record (5), one of four missed
+PASS an individual never measured has no automatic ALR when ticked and is left out of the grid
+PASS a mapped ALR column is used as supplied under either option
+PASS a gap between trait values counts as missed; a trailing record without one is outside the ticked window
+PASS one record: AFR = ALR, one expected occasion, observed
+PASS the R unit tests assert the same values
+
+== J3 bundled examples: before (0.24.1) and after (0.24.2)
+   fly                      done
+   bichet                   done
+   bichet_marmot            done
+   moullec_swift            done
+   pasztor_apollo           done
+   wynn                     done
+   sanghvi_female           done
+   allain                   done
+   bouwhuis                 done
+   warner                   done
+   mckennaell_breeding      done
+   mckennaell_weight        done
+   szejnersigal_activity    done
+              example   family               ALR        AFR  individuals  ALR_changed  AFR_changed  miss_0241  miss_unticked  miss_ticked
+                  fly     zinb        column ALR  automatic          647            0            0        0.1            0.1          0.1
+               bichet gaussian         automatic  automatic          396            9           25       32.9           35.6         32.3
+        bichet_marmot  poisson        column ALO  automatic           53            0            1        5.6            5.6          5.6
+        moullec_swift gaussian         automatic column AFR          543            0            0        9.6           10.8         10.8
+       pasztor_apollo gaussian         automatic  automatic         1190          107          300       65.7           69.1         64.4
+                 wynn gaussian         automatic  automatic           77            0            0        1.1            1.1          1.1
+       sanghvi_female  nbinom2         automatic  automatic          637            0            0        0.2            0.2          0.2
+               allain  poisson         automatic column AFR          197            0            0       61.2           62.3         62.3
+             bouwhuis gaussian      column f_ALR  automatic         4935            0          137       10.3           10.9         10.3
+               warner gaussian         automatic  automatic          555           36           40       27.0           28.8         24.7
+  mckennaell_breeding binomial column AgeLastObs  automatic          762            0            0        0.0            0.0          0.0
+    mckennaell_weight gaussian column AgeLastObs  automatic          649            0            0       25.5           25.5         25.5
+szejnersigal_activity gaussian         automatic  automatic           77            0            0        1.7            1.7          1.7
+       example model  dAIC_unticked  dAIC_ticked  n_unticked  n_ticked
+        bichet    M1            0.1          0.0        1023      1023
+        bichet    M2            1.8          1.8        1023      1023
+        bichet    M3            0.2          0.1        1023      1023
+        bichet    M4            0.7          0.6        1023      1023
+        bichet    M7            0.0          0.2        1023      1023
+pasztor_apollo    M1          105.9        105.9        3173      3173
+pasztor_apollo    M2           26.8         28.4        3173      3173
+pasztor_apollo    M3           35.6         35.6        3173      3173
+pasztor_apollo    M4            0.7          0.2        3173      3173
+pasztor_apollo    M5            0.0          0.0        3173      3173
+      bouwhuis    M1           13.8         13.8        7126      7126
+      bouwhuis    M2           15.5         15.5        7126      7126
+      bouwhuis    M3           76.9         76.9        7126      7126
+      bouwhuis    M4            0.0          0.0        7126      7126
+      bouwhuis    M5           68.2         68.2        7126      7126
+        warner    M1           21.1         19.9        1928      1928
+        warner    M2           22.7         21.7        1928      1928
+        warner    M3           36.3         35.0        1928      1928
+        warner    M4            0.0          0.0        1928      1928
+        warner    M5            5.2          3.9        1928      1928
+PASS every bundled example was processed: 13 of 13
+PASS examples without records lacking a trait value have identical AFR, ALR and missingness under both options
+
+== J4 files with several traits
+          file         trait  measured  individuals  ALR_earlier  AFR_later  mean_ALR_ticked  mean_ALR_unticked
+   bichet tern            HA      1023          396            9         25            10.85              10.88
+   bichet tern         hapto       590          221            0         43            10.63              10.63
+   bichet tern initial_lysis      1067          398            2         12            10.87              10.87
+bouwhuis great            LD      7126         4848           52         50             1.82               1.83
+bouwhuis great            HD      6932         4752           87         79             1.81               1.84
+bouwhuis great           ACW      6524         4499          147        136             1.82               1.86
+bouwhuis great            CS      7341         4935            0          0             1.82               1.82
+bouwhuis great            FL      7341         4935            0          0             1.82               1.82
+PASS unticked, every trait of a file shares one ALR per individual
+PASS ticked, ALR is never later and AFR never earlier than unticked
+PASS ticked, traits sampled at different ages get different ALR (at least one file)
+
+== J5 simulations with records kept when the trait is missing
+   450 datasets, 35 s
+                      design       selection  r_ALR_LS_ticked  r_ALR_LS_unticked  r_meanage_LS  agedep_ticked  agedep_unticked  ALR_term_ticked  ALR_term_unticked  err_ticked  err_unticked  miss_ticked  miss_unticked
+no records without the trait   age-dependent             1.00               1.00          1.00         100.00           100.00            93.33              93.33        0.05          0.05         0.00           0.00
+no records without the trait age-independent             1.00               1.00          1.00          10.00            10.00           100.00             100.00        0.01          0.01         0.00           0.00
+no records without the trait            none             1.00               1.00          1.00           6.67             6.67             0.00               0.00        0.01          0.01         0.00           0.00
+              trait MCAR 50%   age-dependent             0.91               1.00          0.81         100.00           100.00            73.33              76.67        0.05          0.05        37.90          49.15
+              trait MCAR 50% age-independent             0.90               1.00          0.81          10.00             6.67           100.00             100.00        0.02          0.02        38.05          49.54
+              trait MCAR 50%            none             0.91               1.00          0.81           3.33             3.33             6.67               6.67        0.02          0.02        37.85          49.26
+      trait missing when old   age-dependent             0.77               1.00          0.75         100.00           100.00           100.00             100.00        0.04          0.03        11.28          24.84
+      trait missing when old age-independent             0.77               1.00          0.75          10.00            13.33           100.00             100.00        0.03          0.02        11.22          24.64
+      trait missing when old            none             0.77               1.00          0.75           6.67            10.00             3.33               6.67        0.02          0.02        11.07          24.57
+           trait starts at 3   age-dependent             0.98               1.00          0.95         100.00           100.00            16.67              20.00        0.06          0.06        14.47          34.83
+           trait starts at 3 age-independent             0.98               1.00          0.95           0.00             0.00           100.00             100.00        0.02          0.02        14.51          34.91
+           trait starts at 3            none             0.98               1.00          0.95          13.33            16.67             3.33               3.33        0.02          0.02        14.94          35.28
+  trait stops 2 before death   age-dependent             0.98               0.99          0.95         100.00           100.00           100.00             100.00        0.06          0.07        14.65          34.91
+  trait stops 2 before death age-independent             0.98               0.99          0.95           6.67            13.33           100.00             100.00        0.03          0.03        14.93          34.93
+  trait stops 2 before death            none             0.98               0.99          0.95           6.67             6.67             6.67               6.67        0.03          0.03        15.04          35.19
+PASS without records lacking the trait (the app's simulator), both options are identical
+PASS every simulated dataset fitted under both options
+
+0 failure(s)

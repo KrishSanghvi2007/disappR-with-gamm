@@ -1,0 +1,9 @@
+== decomposition and the target trajectory against Supplementary S1
+no selective disappearance         obs% @25/35    0.1    3.1 | decomp% @25/35   -0.2   -0.3 | Eq.9 fit 0.24% | segments 1.0
+intercept +0.5                     obs% @25/35    7.0   23.6 | decomp% @25/35   -0.1   -0.3 | Eq.9 fit 0.30% | segments 1.0
+slope +0.5                         obs% @25/35    3.2   14.6 | decomp% @25/35    0.7    3.1 | Eq.9 fit 0.25% | segments 1.0
+shape -0.5                         obs% @25/35   -2.8  -19.5 | decomp% @25/35   -0.9   -6.5 | Eq.9 fit 0.33% | segments 1.0
+intercept +0.5, MCAR 50%           obs% @25/35    7.0   22.2 | decomp% @25/35    0.2   -0.1 | Eq.9 fit 0.36% | segments 1.6
+
+== independent validation reproducibility
+50 cells re-run, 50 reproduce exactly

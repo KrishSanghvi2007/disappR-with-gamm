@@ -1,0 +1,19 @@
+== G1 the review's findings, fixed in 0.23.1
+PASS 1 the random-slope warning reads the fitted structure
+PASS 2 the suggested analysis offers Model 6 only with a known lifespan (the whole suggestion was removed in 0.24.7)
+PASS 3 the bootstrap caution prints the number that refitted
+PASS 4 the checksum is of the file the app loaded
+PASS 5 one upload limit, set in one place
+PASS 6 the random-slope support check covers the _all structures
+PASS 7 no message says duplicates were averaged
+PASS 8 the mean-age note is for Models 3 and 5 only
+PASS 9 the model script is written as UTF-8
+PASS 10 the layout test skips without the app sources
+PASS unused server code removed (summary_parts, overview_text, d45)
+PASS automatic checks cached by signature
+PASS exported scripts use the public reader
+PASS model names from one source
+PASS stale 'moved verbatim' headers gone
+PASS .Rhistory removed and ignored
+
+0 failure(s)

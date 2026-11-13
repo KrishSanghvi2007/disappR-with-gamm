@@ -1,0 +1,63 @@
+== static suite
+== parser self-test: ok
+   parser self-test: PASS (49 valid, 15 invalid cases)
+== R syntax: ok
+   == /home/claude/v210/disappR: 77 files, 0 syntax errors, 0 lints
+== calls against formals: ok
+   0 errors, 0 warnings, 0 notes; 47 unresolved function names
+   pkg:: namespaces used: {'DHARMa': 4, 'callr': 1, 'codetools': 1, 'ggplot2': 11, 'glmmTMB': 6, 'grDevices': 4, 'graphics': 3, 'htmltools': 1, 'jsonlite': 2, 'lme4': 6, 'lmerTest': 1, 'nlme': 6, 'performance': 8, 'pkgload': 1, 'shiny': 9, 'stats': 47, 'testthat': 1, 'tools': 2, 'utils': 12}
+== app wiring, help panels, example columns, DESCRIPTION: ok
+   -- 0 errors, 0 warnings, 0 notes; 144 inputs read, 117 outputs, 54 info entries, 13 examples checked
+== individual-level conflicts in the examples: ok
+   bichet_marmot            consistent  inconsistent=error
+   moullec_swift            life=lifespan: 1 [Frontiers_000304]  inconsistent=exclude
+   pasztor_apollo           consistent  inconsistent=error
+   wynn                     consistent  inconsistent=error
+   sanghvi_female           consistent  inconsistent=error
+   allain                   entry=AFR: 3 [D037, D114, D165]  inconsistent=exclude
+   bouwhuis                 consistent  inconsistent=error
+   warner                   consistent  inconsistent=error
+   mckennaell_breeding      consistent  inconsistent=error
+   mckennaell_weight        consistent  inconsistent=error
+   szejnersigal_activity    consistent (example has a subset)  inconsistent=error
+   -- 0 example(s) with conflicts that would stop loading
+== individual-level conflicts in the stress data: ok
+   grouping_timevarying_edge.csv            consistent
+   latin1_semicolon.csv                     consistent
+   tab_with_commas_in_quotes.tsv            (could not read with the mapped columns)
+   leading_zero_ids.csv                     consistent
+   blank_duplicate_headers.csv              consistent
+   inf_and_huge_traits.csv                  consistent
+   all_na_covariate.csv                     consistent
+   dates_in_age_column.csv                  consistent
+   a4_selection_censored.csv                consistent
+   a4_age_dependent_selection.csv           consistent
+   terminal_decline.csv                     consistent
+   rising_hazard.csv                        consistent
+
+static audit: all steps passed
+
+== duplicate ids / wiring extras
+duplicate UI ids: none
+ids created in both ui.R and server.R: none
+non-ASCII in R/: False
+browser()/debug() in R/: False
+versions: 0.21.0 0.21.0 0.21.0
+exports without an Rd page: none
+www assets referenced and present: True
+RANDOM_STRUCTURES: 6
+
+== conditional-object scan (blocks)
+candidate unassigned reads: 249
+   (65, 'card')
+   (76, 'rows')
+   (76, 'tab')
+   (104, 'card')
+   (141, 'changes')
+   (141, 'chosen')
+   (141, 'first')
+   (141, 'between')
+   (141, 'tab')
+   (141, 'individual')
+   (141, 'note')
+   (220, 'note')
