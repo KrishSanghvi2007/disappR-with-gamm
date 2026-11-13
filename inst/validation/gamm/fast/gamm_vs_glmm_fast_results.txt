@@ -1,2 +1,86 @@
 disappR 0.25.0 starting from /home/user/disappR-with-gamm
 == Simulations (20 replicates per scenario)
+240 datasets in 4 min
+       shape       selection approach age-dependent declared (%)
+ logarithmic   age-dependent     GAMM                        100
+ logarithmic   age-dependent   GLMM_F                        100
+ logarithmic   age-dependent   GLMM_Q                        100
+ logarithmic age-independent     GAMM                          5
+ logarithmic age-independent   GLMM_F                         10
+ logarithmic age-independent   GLMM_Q                        100
+ logarithmic            none     GAMM                          0
+ logarithmic            none   GLMM_F                          0
+ logarithmic            none   GLMM_Q                        100
+     plateau   age-dependent     GAMM                        100
+     plateau   age-dependent   GLMM_F                        100
+     plateau   age-dependent   GLMM_Q                        100
+     plateau age-independent     GAMM                          5
+     plateau age-independent   GLMM_F                         45
+     plateau age-independent   GLMM_Q                        100
+     plateau            none     GAMM                          5
+     plateau            none   GLMM_F                         35
+     plateau            none   GLMM_Q                        100
+   quadratic   age-dependent     GAMM                        100
+   quadratic   age-dependent   GLMM_F                        100
+   quadratic   age-dependent   GLMM_Q                        100
+   quadratic age-independent     GAMM                          0
+   quadratic age-independent   GLMM_F                          0
+   quadratic age-independent   GLMM_Q                          5
+   quadratic            none     GAMM                          0
+   quadratic            none   GLMM_F                          0
+   quadratic            none   GLMM_Q                          0
+   threshold   age-dependent     GAMM                        100
+   threshold   age-dependent   GLMM_F                        100
+   threshold   age-dependent   GLMM_Q                        100
+   threshold age-independent     GAMM                          0
+   threshold age-independent   GLMM_F                         80
+   threshold age-independent   GLMM_Q                         95
+   threshold            none     GAMM                          0
+   threshold            none   GLMM_F                         70
+   threshold            none   GLMM_Q                        100
+ Model 4 best (%) Model 2 best (%) Model 1 best (%) shape error
+              100                0                0       0.784
+              100                0                0       0.932
+              100                0                0       0.499
+               20               80                0       0.128
+               35               65                0       0.034
+              100                0                0       0.400
+                0               10               90       0.145
+                5               10               85       0.024
+              100                0                0       0.341
+              100                0                0       0.719
+              100                0                0       0.709
+              100                0                0       0.464
+                5               95                0       0.125
+               60               40                0       0.205
+              100                0                0       0.379
+                5               15               80       0.084
+               50                0               50       0.182
+              100                0                0       0.392
+              100                0                0       0.783
+              100                0                0       0.766
+              100                0                0       0.696
+                0              100                0       0.135
+                0              100                0       0.107
+                5               95                0       0.079
+                0               20               80       0.131
+                0               20               80       0.083
+                0               20               80       0.076
+              100                0                0       0.752
+              100                0                0       0.678
+              100                0                0       0.930
+                0              100                0       0.133
+               85               15                0       0.382
+              100                0                0       0.343
+                0               20               80       0.129
+               75                0               25       0.378
+              100                0                0       0.363
+
+== Overall, by approach
+ approach false age-dependent (%) power, age-dependent (%) mean shape error
+     GAMM                   1.875                      100        0.3374900
+   GLMM_F                  30.000                      100        0.3733214
+   GLMM_Q                  75.000                      100        0.4134984
+
+== Empirical examples (Gaussian traits)
+  bichet                 GLMM quadratic: M4 (age-dependent) | GLMM Logarithmic: M1 | GAMM: M1
