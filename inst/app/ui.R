@@ -18,7 +18,7 @@ ui <- dashboardPage(
       menuItem("4 \u00b7 Trajectories", tabName = "individual", icon = icon("chart-line")),
       menuItem("5 \u00b7 Modelling", tabName = "models", icon = icon("layer-group")),
       menuItem("6 \u00b7 Summary and report", tabName = "summary", icon = icon("square-check")),
-      menuItem("7 \u00b7 GAMMs (optional)", tabName = "gamm", icon = icon("wave-square"))
+      menuItem("7 \u00b7 GAMMs (smooth models)", tabName = "gamm", icon = icon("wave-square"))
     ),
     tags$hr(),
     uiOutput("current_data_box"),
@@ -276,7 +276,7 @@ ui <- dashboardPage(
                 actionButton("journey_learn", "Start with simulated data", class = "btn-primary btn-block-space"))),
               column(4, div(class = "journey",
                 div(class = "journey-title", "Explore"),
-                div(class = "journey-sub", "Open one of 13 empirical datasets from 12 published studies and set the default options that most closely reproduce the analysis reported in its paper. Fit alternative models to these data to understand how the interpreted biological pattern would change. Useful for seeing how the workflow applies to real longitudinal data."),
+                div(class = "journey-sub", "Open one of 15 empirical datasets from 14 published studies and set the default options that most closely reproduce the analysis reported in its paper. Fit alternative models to these data to understand how the interpreted biological pattern would change. Useful for seeing how the workflow applies to real longitudinal data."),
                 actionButton("journey_explore", "Open an empirical example", class = "btn-default btn-block-space"))),
               column(4, div(class = "journey",
                 div(class = "journey-title", "Analyse"),
@@ -845,90 +845,6 @@ ui <- dashboardPage(
         )
       ),
       # ---------------------------------------------------------------- summary
-      # ---------------------------------------------------------------- GAMM layer (0.23.0)
-      tabItem(tabName = "gamm",
-        page_title("Do smooth models (GAMMs) tell the same ageing story?"),
-        fluidRow(box(width = 12, status = "info", solidHeader = FALSE,
-          p(class = "small-note", "An optional, independent layer: generalized additive mixed models (mgcv) fitted to the current data. It changes nothing in steps 1\u20136; its results can be saved to the summary."))),
-        fluidRow(
-          box(width = 4, title = info_title("Which smooth model?", "gamm_settings"), status = "primary", solidHeader = TRUE,
-              selectInput("gamm_family", "Error family", GAMM_FAMILIES, "gaussian"),
-              selectInput("gamm_bs", "Smooth basis for age", GAMM_BASES, "tp"),
-              numericInput("gamm_k", "Basis size k (upper limit on wiggliness)", 10, min = 3, max = 50, step = 1),
-              selectInput("gamm_individual", "Individual variation", GAMM_INDIVIDUAL, "ri"),
-              uiOutput("gamm_group_ui"),
-              selectInput("gamm_proxy", "Selective disappearance through", c("ALR" = "ALR", "Known lifespan (LS)" = "LS", "None" = "none"), "ALR"),
-              selectInput("gamm_proxy_form", "\u2026entered as", GAMM_PROXY_FORMS, "linear"),
-              selectInput("gamm_afr_form", "Selective appearance through AFR, entered as", GAMM_PROXY_FORMS, "none"),
-              tags$details(class = "info-more", tags$summary("Advanced options"),
-                div(class = "info-more-body",
-                    selectInput("gamm_engine", "Engine", GAMM_ENGINES, "gam"),
-                    radioButtons("gamm_method", "Smoothing-parameter estimation", c("REML (recommended)" = "REML", "ML" = "ML"), "REML", inline = TRUE),
-                    numericInput("gamm_m", "Penalty order m (blank: default)", NA, min = 1, max = 4, step = 1),
-                    textInput("gamm_knots", "Knot positions (cr and cs bases; comma-separated)", ""),
-                    checkboxInput("gamm_select", "Shrinkage selection (select = TRUE)", FALSE),
-                    checkboxInput("gamm_covars", "Include mapped covariates", TRUE),
-                    checkboxInput("gamm_random", "Include mapped random intercepts", TRUE))),
-              actionButton("gamm_fit", "Fit GAMM", class = "btn-primary", icon = icon("play")),
-              uiOutput("gamm_formula_ui")),
-          box(width = 8, title = info_title("What does the fitted ageing trajectory look like?", "gamm_curve"), status = "info", solidHeader = TRUE,
-              uiOutput("gamm_cautions_ui"),
-              fluidRow(column(6, checkboxInput("gamm_show_means", "Observed means", TRUE)),
-                       column(6, checkboxInput("gamm_show_points", "Individual records", FALSE))),
-              plotOutput("gamm_curve_plot", height = 420),
-              save_button("save_gamm_curve"))
-        ),
-        fluidRow(
-          box(width = 12, title = info_title("Where does the trait change with age?", "gamm_deriv"), status = "info", solidHeader = TRUE,
-              radioButtons("gamm_interval", NULL, c("Pointwise 95% intervals" = "pointwise", "Simultaneous 95% intervals" = "simultaneous"),
-                           "pointwise", inline = TRUE),
-              fluidRow(
-                column(7, plotOutput("gamm_deriv_plot", height = 360)),
-                column(5, h5(strong("Periods of significant change")), tableOutput("gamm_periods_table"),
-                       h5(strong(info_title("Peak age and onset of the final decline", "peak_onset"))), tableOutput("gamm_peak_table"))),
-              save_button("save_gamm_deriv"))
-        ),
-        fluidRow(
-          box(width = 6, title = info_title("Is the smooth well specified?", "gamm_check"), status = "info", solidHeader = TRUE,
-              uiOutput("gamm_fit_stats"),
-              h5(strong("Smooth terms")), tableOutput("gamm_smooth_table"),
-              h5(strong("Parametric terms")), tableOutput("gamm_param_table"),
-              h5(strong("Basis dimension (k) check")), tableOutput("gamm_kcheck_table"),
-              h5(strong("Concurvity")), tableOutput("gamm_concurvity_table"),
-              save_button("save_gamm_check")),
-          box(width = 6, title = info_title("Do the residuals look right?", "gamm_resid"), status = "info", solidHeader = TRUE,
-              plotOutput("gamm_resid_plot", height = 380))
-        ),
-        fluidRow(
-          box(width = 12, title = info_title("Do groups age differently?", "gamm_groups"), status = "info", solidHeader = TRUE,
-              uiOutput("gamm_groups_note"),
-              actionButton("gamm_run_groups", "Compare group structures", class = "btn-default", icon = icon("layer-group")),
-              fluidRow(
-                column(6, tableOutput("gamm_groups_table"), h5(strong("Difference smooths against the reference group")),
-                       tableOutput("gamm_diff_test_table"), tableOutput("gamm_lrt_table")),
-                column(6, plotOutput("gamm_diff_plot", height = 360))),
-              save_button("save_gamm_groups"))
-        ),
-        fluidRow(
-          box(width = 6, title = info_title("Does selective disappearance or appearance shape the smooth?", "gamm_proxy"), status = "info", solidHeader = TRUE,
-              h5(strong("Proxy terms in the fitted model")), tableOutput("gamm_proxy_terms_table"),
-              actionButton("gamm_run_proxy", "Compare no, additive and age-dependent proxy", class = "btn-default"),
-              tableOutput("gamm_proxy_table"), tableOutput("gamm_proxy_lrt"),
-              save_button("save_gamm_proxy")),
-          box(width = 6, title = info_title("Is a smooth better than a polynomial?", "gamm_poly"), status = "info", solidHeader = TRUE,
-              actionButton("gamm_run_poly", "Compare with linear, quadratic and cubic age", class = "btn-default"),
-              tableOutput("gamm_poly_table"),
-              save_button("save_gamm_poly"))
-        ),
-        fluidRow(
-          box(width = 12, title = info_title("How much do individuals differ?", "gamm_indiv"), status = "info", solidHeader = TRUE,
-              fluidRow(column(4, tableOutput("gamm_vcomp_table")), column(8, plotOutput("gamm_indiv_plot", height = 360))))
-        ),
-        fluidRow(
-          box(width = 12, title = "R code for this GAMM", status = "info", solidHeader = TRUE, collapsible = TRUE, collapsed = TRUE,
-              verbatimTextOutput("gamm_code"))
-        )
-      ),
       tabItem(tabName = "summary",
         page_title("What did I find, and do the pieces agree?"),
         guide_box("summary",
@@ -972,7 +888,9 @@ ui <- dashboardPage(
           box(width = 12, title = "Saved results (these are exported)", status = "info", solidHeader = TRUE,
               uiOutput("saved_ui"))
         )
-      )
+      ),
+      # ---------------------------------------------------------------- step 7: GAMMs (inst/app/gamm_ui.R)
+      gamm_tab_ui()
     )
   )
 )

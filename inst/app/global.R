@@ -48,6 +48,12 @@ if (nzchar(.disappr_engine_dir)) {
   for (.disappr_name in ls(.disappr_ns)) assign(.disappr_name, get(.disappr_name, envir = .disappr_ns), envir = .disappr_app_env)
 }
 
+# Step 7 (GAMMs) lives in its own files: the tab's interface, and the server code that server() evaluates in its own
+# environment (parsed here once, so it does not depend on the working directory when the server starts).
+.disappr_app_dir <- if (file.exists("gamm_ui.R")) "." else system.file("app", package = "disappR")
+source(file.path(.disappr_app_dir, "gamm_ui.R"), local = .disappr_app_env, encoding = "UTF-8")
+GAMM_SERVER_CODE <- parse(file.path(.disappr_app_dir, "gamm_server.R"), keep.source = FALSE, encoding = "UTF-8")
+
 if (any(!OPTIONAL_STATUS$Installed)) {
   message("disappR ", DISAPPR_VERSION, ": optional packages not installed: ",
           paste(OPTIONAL_STATUS$Package[!OPTIONAL_STATUS$Installed], collapse = ", "), " (the Start page lists what each adds).")

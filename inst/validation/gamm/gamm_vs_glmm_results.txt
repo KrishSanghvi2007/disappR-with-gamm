@@ -1,0 +1,2 @@
+disappR 0.24.9 starting from /home/user/disappR-with-gamm
+== Simulations (20 replicates per scenario)

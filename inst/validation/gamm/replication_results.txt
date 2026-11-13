@@ -1,0 +1,4 @@
+==== 1. Tsui et al. 2026, Evolution Letters: Seychelles warbler body mass (z-scored) ====
+Published (paper, Results and Table 2): body mass declines with age; onset of decline 4.7 years (limits 1-8.5) from the
+derivative of the age smooth; lifespan fitted as a linear term; age x lifespan interaction significant for body mass;
+model choice among G, GS and S by AIC (delta < 4). Authors' code: model1.R (Zenodo 10.5281/zenodo.21101620).

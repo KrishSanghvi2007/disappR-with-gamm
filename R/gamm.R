@@ -1,55 +1,109 @@
 # ---------------------------------------------------------------------------
-# GAMM layer (0.23.0): generalized additive mixed models of ageing, fitted with mgcv (or gamm4). An independent layer:
-# it reads the standardised data and meta of the app and changes nothing else. Every function here is prefixed gamm_.
-# Approach (Wood 2017; Pedersen et al. 2019, PeerJ; as applied to ageing by, e.g., Tsui et al. 2026, Evol. Lett.):
-# a penalised smooth of age fitted by REML, individual random effects as penalised smooths, selective disappearance
-# and appearance through ALR, lifespan or AFR terms (additive, smooth, or age-dependent through ti()), group-specific
-# smooths compared as models G, GS, GI, S and I, and ageing read from the first derivative of the age smooth.
+# GAMM layer (step 7): generalized additive mixed models of ageing, fitted with mgcv. An independent layer: it reads
+# the standardised data and meta of the app and changes nothing used by steps 1-6. Every name here starts gamm_/GAMM_.
+#
+# Approach (Wood 2017; Pedersen et al. 2019; Simpson 2018), as used in ageing studies (e.g. Hammers et al. 2016;
+# Brown et al. 2021; Ravindran et al. 2025; Tsui et al. 2026):
+#   - a penalised smooth of age, smoothness estimated by REML (ML when models with different fixed terms are compared);
+#   - individual variation as random effects written as penalised smooths (intercept, intercept + slope, or a random
+#     smooth per individual), plus any mapped random intercepts (year, cohort, observer...);
+#   - selective disappearance through ALR or known lifespan, and selective appearance through AFR, each linear, smooth
+#     or age-dependent through ti(age, proxy); a terminal-record effect is optional;
+#   - groups (sex, treatment) as fixed-effect smooths: G, GS, GI, S and I of Pedersen et al. (2019), all with the group
+#     main effect, so that "groups age differently" is never confused with "groups differ in level";
+#   - ageing read from the first derivative of the population curve with pointwise and simultaneous intervals.
+# Every model comparison fits all its models to the same records.
 # ---------------------------------------------------------------------------
 
 gamm_has_mgcv <- function() requireNamespace("mgcv", quietly = TRUE)
-gamm_has_gamm4 <- function() requireNamespace("gamm4", quietly = TRUE)
 
-GAMM_BASES <- c("Thin plate (tp)" = "tp", "Thin plate, shrinkage (ts)" = "ts", "Cubic regression (cr)" = "cr",
-                "Cubic regression, shrinkage (cs)" = "cs", "P-spline (ps)" = "ps", "B-spline (bs)" = "bs", "Adaptive (ad)" = "ad")
-GAMM_FAMILIES <- c("Gaussian" = "gaussian", "Gaussian, variance smooth in age (gaulss)" = "gaulss",
-                   "Gamma (log link)" = "Gamma", "Beta (betar)" = "betar", "Poisson" = "poisson",
-                   "Negative binomial (nb)" = "nb", "Zero-inflated Poisson (ziP)" = "ziP", "Tweedie (tw)" = "tw",
-                   "Binomial" = "binomial")
-GAMM_STRUCTURES <- c("G: one smooth for everyone" = "G",
-                     "GS: global smooth + group deviations, shared wiggliness" = "GS",
-                     "GI: global smooth + group deviations, own wiggliness" = "GI",
-                     "S: a smooth per group, shared wiggliness" = "S",
-                     "I: a separate smooth per group" = "I")
-GAMM_INDIVIDUAL <- c("Random intercept" = "ri", "Random intercept and slope" = "rs",
-                     "Random smooth per individual (fs)" = "fs", "None" = "none")
-GAMM_PROXY_FORMS <- c("None" = "none", "Additive, linear" = "linear", "Additive, smooth" = "smooth",
+GAMM_FAMILIES <- c("Gaussian" = "gaussian",
+                   "Gaussian, variance changing with age (gaulss)" = "gaulss",
+                   "Gamma, log link (positive values)" = "Gamma",
+                   "Beta (proportions strictly between 0 and 1)" = "betar",
+                   "Poisson (counts)" = "poisson",
+                   "Negative binomial (overdispersed counts)" = "nb",
+                   "Zero-inflated Poisson" = "ziP",
+                   "Tweedie (non-negative, with zeros)" = "tw",
+                   "Binomial (0/1, or proportions with trials)" = "binomial")
+GAMM_BASES <- c("Thin plate (tp, default)" = "tp", "Cubic regression (cr, faster)" = "cr",
+                "Thin plate with shrinkage (ts)" = "ts", "Cubic regression with shrinkage (cs)" = "cs",
+                "Adaptive (ad; wiggliness varies with age)" = "ad")
+GAMM_STRUCTURES <- c("G: one curve, groups differ only in level" = "G",
+                     "GS: common curve + group deviations, shared wiggliness" = "GS",
+                     "GI: common curve + group deviations, own wiggliness" = "GI",
+                     "S: a curve per group, shared wiggliness" = "S",
+                     "I: a separate curve per group" = "I")
+GAMM_INDIVIDUAL <- c("Random intercept" = "ri",
+                     "Random intercept and slope (uncorrelated)" = "rs",
+                     "Random smooth per individual (fs)" = "fs",
+                     "None (not recommended)" = "none")
+GAMM_PROXY_FORMS <- c("None" = "none", "Linear" = "linear", "Smooth" = "smooth",
                       "Age-dependent: smooth + ti(age, proxy)" = "ti")
-GAMM_ENGINES <- c("mgcv::gam" = "gam", "mgcv::bam (large data)" = "bam", "gamm4 (lme4)" = "gamm4")
+GAMM_ENGINES <- c("Automatic (gam; bam for large data)" = "auto", "mgcv::gam" = "gam", "mgcv::bam (large data)" = "bam")
+GAMM_BAM_ROWS <- 6000      # automatic engine: bam above this many records ...
+GAMM_BAM_IND <- 400        # ... or this many individuals (gam slows sharply with many random-effect levels)
 
 gamm_defaults <- function() {
-  list(engine = "gam", method = "REML", family = "gaussian", bs = "tp", k = 10, m = NA_real_, knots = "",
-       select = FALSE, individual = "ri", group = "", structure = "G", proxy = "ALR", proxy_form = "linear",
-       afr_form = "none", covars = TRUE, random = TRUE)
+  list(engine = "auto", method = "REML", family = "gaussian", bs = "tp", k = 10, select = FALSE,
+       individual = "ri", group = "", structure = "G", proxy = "ALR", proxy_form = "linear", afr_form = "none",
+       terminal = FALSE, covars = TRUE, cov_smooth = FALSE, random = TRUE, ar1 = FALSE,
+       cov_pairs = character(0), cov_age = character(0))
 }
 
 gamm_family_obj <- function(f) {
-  switch(f, gaussian = stats::gaussian(), gaulss = mgcv::gaulss(), Gamma = stats::Gamma(link = "log"),
-         betar = mgcv::betar(link = "logit"), poisson = stats::poisson(), nb = mgcv::nb(), ziP = mgcv::ziP(),
-         tw = mgcv::tw(), binomial = stats::binomial(), stats::gaussian())
+  fam <- switch(f, gaussian = stats::gaussian(), gaulss = mgcv::gaulss(), Gamma = stats::Gamma(link = "log"),
+                betar = mgcv::betar(link = "logit"), poisson = stats::poisson(), nb = mgcv::nb(), ziP = mgcv::ziP(),
+                tw = mgcv::tw(), binomial = stats::binomial(), stats::gaussian())
+  # mgcv's tw() family looks up ldTweedie() on the search path, so it fails unless mgcv is attached with library().
+  # The app never attaches mgcv, so the function is placed where the family's own functions look first.
+  if (identical(f, "tw")) for (el in fam) if (is.function(el)) {
+    e <- environment(el)
+    if (!is.null(e) && !environmentIsLocked(e) && !exists("ldTweedie", envir = e, inherits = FALSE))
+      try(assign("ldTweedie", mgcv::ldTweedie, envir = e), silent = TRUE)
+  }
+  fam
 }
 gamm_family_label <- function(f) { l <- names(GAMM_FAMILIES)[GAMM_FAMILIES == f]; if (length(l)) l[[1]] else f }
+gamm_family_code <- function(f) switch(f, gaussian = "gaussian()", gaulss = "gaulss()", Gamma = "Gamma(link = \"log\")",
+                                       betar = "betar(link = \"logit\")", poisson = "poisson()", nb = "nb()", ziP = "ziP()",
+                                       tw = "tw()", binomial = "binomial()", "gaussian()")
 
-# The analysis data: one row per record with the trait, age, individual, the lifespan proxies (one value per
-# individual), mapped covariates, grouping and random-effect columns, and binomial trials.
+# The family the app suggests for the trait (from the data-integrity check of step 1), mapped to a GAMM family.
+gamm_suggest_family <- function(app_family) {
+  switch(app_family %||% "gaussian", gaussian = "gaussian", gamma = "Gamma", lognormal = "Gamma", beta = "betar",
+         poisson = "poisson", nbinom2 = "nb", nbinom1 = "nb", zip = "ziP", zinb = "nb", zinb1 = "nb",
+         binomial = "binomial", betabinomial = "binomial", "gaussian")
+}
+
+# ---------------------------------------------------------------------------
+# Data
+# ---------------------------------------------------------------------------
+
+# The analysis frame: one row per record with the trait, age, individual, the lifespan proxies (one value per
+# individual), a terminal-record indicator, mapped covariates, grouping and random-effect columns, and binomial trials.
+# ALR falls back to the last recorded age and AFR to the first; LS (known lifespan) stays missing where unknown.
 gamm_data <- function(dat, meta) {
   d <- dat[is.finite(dat$trait) & is.finite(dat$age), , drop = FALSE]
-  if (!nrow(d)) return(d)
+  if (!nrow(d)) return(data.frame())
+  d <- d[order(as.character(d$id), d$age), , drop = FALSE]
   out <- data.frame(id = factor(d$id), age = as.numeric(d$age), trait = as.numeric(d$trait), stringsAsFactors = FALSE)
-  first_of <- function(v) { v <- as.numeric(v); stats::ave(v, d$id, FUN = function(x) { x <- x[is.finite(x)]; if (length(x)) x[[1]] else NA_real_ }) }
-  out$ALR <- if (!is.null(d$alr)) first_of(d$alr) else stats::ave(out$age, d$id, FUN = max)
+  first_of <- function(v) {
+    v <- as.numeric(v)
+    stats::ave(v, d$id, FUN = function(x) { x <- x[is.finite(x)]; if (length(x)) x[[1]] else NA_real_ })
+  }
+  out$ALR <- if (!is.null(d$alr) && any(is.finite(d$alr))) first_of(d$alr) else stats::ave(out$age, d$id, FUN = max)
+  out$ALR[!is.finite(out$ALR)] <- stats::ave(out$age, d$id, FUN = max)[!is.finite(out$ALR)]
   out$LS <- if (!is.null(d$life)) first_of(d$life) else NA_real_
-  out$AFR <- if (!is.null(d$entry)) first_of(d$entry) else stats::ave(out$age, d$id, FUN = min)
+  out$AFR <- if (!is.null(d$entry) && any(is.finite(d$entry))) first_of(d$entry) else stats::ave(out$age, d$id, FUN = min)
+  out$AFR[!is.finite(out$AFR)] <- stats::ave(out$age, d$id, FUN = min)[!is.finite(out$AFR)]
+  # Terminal record: the last record of an individual known to have died (a known lifespan, or not censored when a
+  # censoring column is mapped). Unknown for the rest, which are coded "no" but counted, so the app can warn.
+  last <- out$age == stats::ave(out$age, d$id, FUN = max)
+  censored <- as.character(d$id) %in% as.character(meta$censored_ids %||% character(0))
+  dead <- is.finite(out$LS) | (isTRUE(meta$has_censor) & !censored)
+  out$.terminal <- factor(ifelse(last & dead, "yes", "no"), levels = c("no", "yes"))
+  attr(out, "n_dead_known") <- length(unique(out$id[dead]))
   for (cv in meta$covars %||% character(0)) {
     if (!cv %in% names(d)) next
     out[[cv]] <- if (identical(meta$cov_types[[cv]], "categorical")) factor(d[[cv]]) else as.numeric(d[[cv]])
@@ -58,151 +112,249 @@ gamm_data <- function(dat, meta) {
   if (isTRUE(meta$has_group) && !is.null(d$group)) out$group <- factor(d$group)
   if (isTRUE(meta$has_group2) && !is.null(d$group2)) out$group2 <- factor(d$group2)
   if (isTRUE(meta$has_trials) && !is.null(d$.trials)) out$.trials <- as.numeric(d$.trials)
+  rownames(out) <- NULL
   out
 }
 
 # Categorical variables that can define group-specific smooths (sex, treatment...): categorical covariates and the
-# grouping columns with 2 to 8 levels.
+# grouping columns with 2 to 8 levels, each level with at least 5 individuals.
 gamm_group_choices <- function(meta, gd) {
-  cand <- c(stats::setNames(meta$covars %||% character(0), unname(as.character(meta$cov_labels[meta$covars %||% character(0)]))))
+  if (!is.data.frame(gd) || !nrow(gd)) return(character(0))
+  cv <- meta$covars %||% character(0)
+  cand <- stats::setNames(cv, vapply(cv, function(v) as.character(meta$cov_labels[[v]] %||% sub("^cv_", "", v)), character(1)))
   cand <- cand[vapply(cand, function(v) identical(meta$cov_types[[v]], "categorical"), logical(1))]
-  if (isTRUE(meta$has_group)) cand <- c(cand, stats::setNames("group", meta$map$group %||% "group"))
-  if (!nrow(gd)) return(character(0))
-  ok <- vapply(cand, function(v) v %in% names(gd) && nlevels(droplevels(factor(gd[[v]]))) %in% 2:8, logical(1))
+  if (isTRUE(meta$has_group)) cand <- c(cand, stats::setNames("group", as.character(meta$map$group %||% "group")))
+  ok <- vapply(cand, function(v) {
+    if (!v %in% names(gd)) return(FALSE)
+    x <- droplevels(factor(gd[[v]]))
+    n_ind <- tapply(gd$id, x, function(z) length(unique(z)))
+    nlevels(x) %in% 2:8 && all(n_ind >= 5)
+  }, logical(1))
   cand[ok]
 }
 
-gamm_knots <- function(s) {
-  if (!nzchar(s$knots %||% "") || !s$bs %in% c("cr", "cs")) return(NULL)
-  kn <- suppressWarnings(as.numeric(strsplit(gsub(" ", "", s$knots), ",")[[1]]))
-  kn <- sort(unique(kn[is.finite(kn)]))
-  if (length(kn) < 3) NULL else list(age = kn)
+# Which covariate and random-effect columns can enter a model (vary in the data); the rest are left out with a note.
+gamm_usable_terms <- function(gd, s) {
+  cv <- if (isTRUE(s$covars)) grep("^cv_", names(gd), value = TRUE) else character(0)
+  re <- if (isTRUE(s$random)) grep("^re_", names(gd), value = TRUE) else character(0)
+  varies <- function(v) { x <- gd[[v]]; x <- x[!is.na(x)]; length(unique(x)) >= 2 }
+  list(cv = cv[vapply(cv, varies, logical(1))], re = re[vapply(re, varies, logical(1))],
+       dropped = c(cv[!vapply(cv, varies, logical(1))], re[!vapply(re, varies, logical(1))]))
 }
 
-gamm_age_smooth <- function(s, by = NULL, m = s$m, k = s$k, extra = "") {
-  kn <- gamm_knots(s)
-  k_use <- if (!is.null(kn)) length(kn$age) else k
-  parts <- c(sprintf("bs = \"%s\"", s$bs), sprintf("k = %d", as.integer(k_use)),
-             if (is.finite(m %||% NA_real_)) sprintf("m = %d", as.integer(m)), if (!is.null(by)) sprintf("by = %s", by), if (nzchar(extra)) extra)
+# ---------------------------------------------------------------------------
+# Formula
+# ---------------------------------------------------------------------------
+
+gamm_age_smooth <- function(s, by = NULL, m = NA, k = s$k, extra = "") {
+  bs <- s$bs %||% "tp"
+  use_m <- is.finite(m) && bs %in% c("tp", "ts")
+  parts <- c(sprintf("bs = \"%s\"", bs), sprintf("k = %d", as.integer(k)), if (use_m) sprintf("m = %d", as.integer(m)),
+             if (!is.null(by)) sprintf("by = %s", by), if (nzchar(extra)) extra)
   sprintf("s(age, %s)", paste(parts, collapse = ", "))
 }
 
-# The model formula (a string) for the settings; for gamm4 the individual random effects go in `random` instead.
+gamm_proxy_k <- function(gd, p) {
+  nu <- length(unique(gd[[p]][is.finite(gd[[p]])]))
+  max(3L, min(6L, nu - 1L))
+}
+
+# The model formula (a string) for the settings. structure, proxy_form and afr_form can be overridden for comparisons;
+# age_poly > 0 replaces the smooth with a polynomial; ordered_by fits group difference smooths against a reference.
 gamm_formula <- function(s, gd, structure = s$structure, proxy_form = s$proxy_form, afr_form = s$afr_form,
                          age_poly = 0L, ordered_by = FALSE) {
-  terms <- character(0)
   grp <- if (nzchar(s$group %||% "") && s$group %in% names(gd)) s$group else ""
   if (!nzchar(grp)) structure <- "G"
   k <- as.integer(s$k)
+  ut <- gamm_usable_terms(gd, s)
+  terms <- character(0)
+  if (nzchar(grp)) terms <- c(terms, if (isTRUE(ordered_by)) ".grp_o" else grp)       # the group main effect, always
   if (age_poly > 0) {
     terms <- c(terms, if (age_poly == 1) "age" else sprintf("poly(age, %d, raw = TRUE)", as.integer(age_poly)))
-    if (!identical(structure, "G") && nzchar(grp)) terms <- c(terms, grp)
   } else if (isTRUE(ordered_by)) {
-    terms <- c(terms, ".grp_o", gamm_age_smooth(s), gamm_age_smooth(s, by = ".grp_o"))
+    terms <- c(terms, gamm_age_smooth(s), gamm_age_smooth(s, by = ".grp_o"))
   } else {
-    fs_xt <- sprintf("xt = list(bs = \"%s\")", if (s$bs %in% c("ad")) "tp" else s$bs)
+    xt <- sprintf("xt = list(bs = \"%s\")", if (s$bs %in% c("cr", "cs")) "cr" else "tp")
     terms <- c(terms, switch(structure,
       G = gamm_age_smooth(s),
-      GS = c(gamm_age_smooth(s, m = 2), sprintf("s(age, %s, bs = \"fs\", k = %d, m = 2, %s)", grp, k, fs_xt)),
-      GI = c(gamm_age_smooth(s, m = 2), gamm_age_smooth(s, by = grp, m = 1), grp),
-      S = sprintf("s(age, %s, bs = \"fs\", k = %d, m = 2, %s)", grp, k, fs_xt),
-      I = c(gamm_age_smooth(s, by = grp), grp)))
+      GS = c(gamm_age_smooth(s, m = 2), sprintf("s(age, %s, bs = \"sz\", k = %d, %s)", grp, k, xt)),
+      GI = c(gamm_age_smooth(s, m = 2), gamm_age_smooth(s, by = grp, m = 1)),
+      S = gamm_age_smooth(s, by = grp, extra = "id = 1"),
+      I = gamm_age_smooth(s, by = grp)))
   }
   prox_terms <- function(p, form) {
     if (identical(form, "none") || !p %in% names(gd) || sum(is.finite(gd[[p]])) < 5) return(character(0))
-    nu <- length(unique(gd[[p]][is.finite(gd[[p]])]))
-    kp <- max(3L, min(5L, nu - 1L))
+    if (length(unique(gd[[p]][is.finite(gd[[p]])])) < 3 && !identical(form, "linear")) form <- "linear"
+    kp <- gamm_proxy_k(gd, p)
     switch(form, linear = p, smooth = sprintf("s(%s, k = %d)", p, kp),
-           ti = c(sprintf("s(%s, k = %d)", p, kp), sprintf("ti(age, %s, k = c(%d, %d))", p, min(5L, k), kp)), character(0))
+           ti = c(sprintf("s(%s, k = %d)", p, kp), sprintf("ti(age, %s, k = c(%d, %d))", p, min(5L, k), min(5L, kp))),
+           character(0))
   }
   if (!identical(s$proxy %||% "none", "none")) terms <- c(terms, prox_terms(s$proxy, proxy_form))
   terms <- c(terms, prox_terms("AFR", afr_form))
-  if (isTRUE(s$covars)) {
-    cv <- grep("^cv_", names(gd), value = TRUE)
-    # a factor-smooth ("fs") by group already carries each group's level, so the group is not added again
-    if (structure %in% c("GS", "S")) cv <- setdiff(cv, grp)
-    terms <- c(terms, cv)
+  if (isTRUE(s$terminal) && ".terminal" %in% names(gd) && length(unique(gd$.terminal)) == 2) terms <- c(terms, ".terminal")
+  cv <- setdiff(ut$cv, grp)
+  for (v in cv) {
+    nu <- length(unique(gd[[v]][!is.na(gd[[v]])]))
+    terms <- c(terms, if (isTRUE(s$cov_smooth) && is.numeric(gd[[v]]) && nu >= 6) sprintf("s(%s, k = %d)", v, min(6L, nu - 1L)) else v)
   }
-  if (!identical(s$engine, "gamm4")) {
-    terms <- c(terms, switch(s$individual, ri = "s(id, bs = \"re\")", rs = c("s(id, bs = \"re\")", "s(id, age, bs = \"re\")"),
-                             fs = sprintf("s(age, id, bs = \"fs\", k = %d, m = 1)", min(5L, k)), character(0)))
-    if (isTRUE(s$random)) for (rt in grep("^re_", names(gd), value = TRUE)) terms <- c(terms, sprintf("s(%s, bs = \"re\")", rt))
-  }
+  # covariate interactions mapped on the Data tab: covariate x covariate as products; numeric covariate x age as ti()
+  for (pp in s$cov_pairs %||% character(0)) { v <- strsplit(pp, ":", fixed = TRUE)[[1]]; if (length(v) == 2 && all(v %in% cv)) terms <- c(terms, pp) }
+  for (v in intersect(s$cov_age %||% character(0), cv)) if (is.numeric(gd[[v]]) && length(unique(gd[[v]])) >= 5) terms <- c(terms, sprintf("ti(age, %s, k = c(5, 5))", v))
+  terms <- c(terms, switch(s$individual %||% "ri",
+                           ri = "s(id, bs = \"re\")",
+                           rs = c("s(id, bs = \"re\")", "s(id, .age_c, bs = \"re\")"),
+                           fs = sprintf("s(age, id, bs = \"fs\", k = %d, m = 1, xt = list(bs = \"%s\"))", min(5L, k),
+                                        if (s$bs %in% c("cr", "cs")) "cr" else "tp"),
+                           character(0)))
+  for (rt in ut$re) terms <- c(terms, sprintf("s(%s, bs = \"re\")", rt))
   paste("trait ~", paste(unique(terms), collapse = " + "))
 }
 
-gamm_random_formula <- function(s, gd) {
-  re <- switch(s$individual, rs = "(1 + age | id)", none = character(0), "(1 | id)")
-  if (isTRUE(s$random)) re <- c(re, sprintf("(1 | %s)", grep("^re_", names(gd), value = TRUE)))
-  if (!length(re)) return(NULL)
-  stats::as.formula(paste("~", paste(re, collapse = " + ")))
+# The variables a formula needs from the data (for complete-case rows).
+gamm_formula_vars <- function(f_str, gd) {
+  v <- intersect(all.vars(stats::as.formula(f_str)), names(gd))
+  if (".age_c" %in% all.vars(stats::as.formula(f_str))) v <- c(v, "age")
+  unique(v)
 }
 
-# Fit one GAMM. Returns list(ok, fit (the mgcv gam object), mer (gamm4 only), formula, data, settings, message, notes).
+# Rows usable by every one of a set of formulas: comparisons fit all their models to the same records.
+gamm_common_rows <- function(gd, formulas, family = "gaussian") {
+  vars <- unique(unlist(lapply(formulas, gamm_formula_vars, gd = gd)))
+  keep <- stats::complete.cases(gd[, vars, drop = FALSE])
+  if (identical(family, "binomial") && ".trials" %in% names(gd) && any(is.finite(gd$.trials))) keep <- keep & is.finite(gd$.trials) & gd$.trials > 0
+  keep
+}
+
+# ---------------------------------------------------------------------------
+# Fitting
+# ---------------------------------------------------------------------------
+
+# Checks the trait against the family; returns a message, or NULL when the family suits the data.
+gamm_family_problem <- function(y, fam, trials = NULL) {
+  y <- y[is.finite(y)]
+  if (fam %in% c("Gamma") && any(y <= 0)) return("The Gamma family needs strictly positive values: choose Gaussian or Tweedie.")
+  if (identical(fam, "betar") && any(y <= 0 | y >= 1)) return("The beta family needs values strictly between 0 and 1.")
+  if (fam %in% c("poisson", "nb", "ziP") && any(y < 0 | abs(y - round(y)) > 1e-8)) return("Count families need non-negative whole numbers.")
+  if (identical(fam, "tw") && any(y < 0)) return("The Tweedie family needs non-negative values.")
+  if (identical(fam, "binomial")) {
+    if (any(y < 0 | y > 1)) return("The binomial family needs 0/1 values or proportions between 0 and 1 (with a trials column).")
+    if (is.null(trials) && any(y > 0 & y < 1)) return("Proportions need a trials column (map it on the Data or Modelling tab); without one the binomial family takes only 0/1 values.")
+  }
+  if (length(unique(y)) < 2) return("The trait does not vary, so there is nothing to model.")
+  NULL
+}
+
+gamm_engine_for <- function(s, n, n_ind) {
+  e <- s$engine %||% "auto"
+  if (identical(s$family, "gaulss")) return("gam")                     # location-scale families: gam only
+  if (isTRUE(s$ar1) && identical(s$family, "gaussian")) return("bam")  # AR1 errors: bam only
+  if (identical(e, "auto")) return(if (n > GAMM_BAM_ROWS || n_ind > GAMM_BAM_IND) "bam" else "gam")
+  e
+}
+
+# Lag-1 autocorrelation of residuals between consecutive records of the same individual.
+gamm_lag1 <- function(res, id) {
+  ok <- is.finite(res)
+  res <- res[ok]; id <- id[ok]
+  same <- c(FALSE, id[-1] == id[-length(id)])
+  if (sum(same) < 10) return(NA_real_)
+  suppressWarnings(stats::cor(res[which(same) - 1], res[same]))
+}
+
+# Fit one GAMM. Returns list(ok, fit, formula, data (the rows used), settings, method, engine, notes, n, n_ind, ...).
+# rows: optional logical vector selecting the records to use (comparisons pass their common rows).
 gamm_fit <- function(gd, s, method = s$method, structure = s$structure, proxy_form = s$proxy_form,
-                     afr_form = s$afr_form, age_poly = 0L, ordered_by = FALSE) {
+                     afr_form = s$afr_form, age_poly = 0L, ordered_by = FALSE, rows = NULL) {
   fail <- function(msg) list(ok = FALSE, message = msg)
   if (!gamm_has_mgcv()) return(fail("The GAMM layer needs the mgcv package: install.packages('mgcv')."))
   if (!is.data.frame(gd) || nrow(gd) < 20) return(fail("At least 20 records are needed to fit a GAMM."))
+  s <- utils::modifyList(gamm_defaults(), s)
   notes <- character(0)
   fam <- s$family
-  y <- gd$trait
-  if (fam %in% c("Gamma") && any(y <= 0)) return(fail("The Gamma family needs positive values: choose Gaussian or tw."))
-  if (identical(fam, "betar") && any(y <= 0 | y >= 1)) return(fail("The beta family needs values strictly between 0 and 1."))
-  if (fam %in% c("poisson", "nb", "ziP") && any(y < 0 | abs(y - round(y)) > 1e-8)) return(fail("Count families need non-negative whole numbers."))
-  if (identical(fam, "tw") && any(y < 0)) return(fail("The Tweedie family needs non-negative values."))
-  nu <- length(unique(gd$age))
-  if (nu < 4) return(fail("A smooth of age needs at least 4 distinct ages."))
-  k0 <- as.integer(s$k)
-  s$k <- max(3L, min(k0, nu - 1L))
-  if (s$k < k0) notes <- c(notes, "k was lowered to the number of distinct ages minus one")
-  if (isTRUE(ordered_by)) {
+  if (!identical(s$group %||% "", "") && !s$group %in% names(gd)) s$group <- ""
+  if (!nzchar(s$group)) structure <- "G"
+  if (identical(s$proxy, "LS") && !any(is.finite(gd$LS))) return(fail("Known lifespan (LS) is not mapped or is missing for everyone: choose ALR, or map a lifespan column on the Data tab."))
+  if (isTRUE(ordered_by) && nzchar(s$group)) {
     gd$.grp_o <- factor(gd[[s$group]], ordered = TRUE)
-    contrasts(gd$.grp_o) <- "contr.treatment"
+    stats::contrasts(gd$.grp_o) <- "contr.treatment"
   }
   f_str <- gamm_formula(s, gd, structure, proxy_form, afr_form, age_poly, ordered_by)
-  f <- stats::as.formula(f_str)
-  needed <- intersect(all.vars(f), names(gd))
-  keep <- stats::complete.cases(gd[, needed, drop = FALSE])
-  if (fam == "binomial" && ".trials" %in% names(gd)) keep <- keep & is.finite(gd$.trials) & gd$.trials > 0
+  keep <- gamm_common_rows(gd, list(f_str), fam)
+  if (!is.null(rows)) keep <- keep & rows
   dd <- droplevels(gd[keep, , drop = FALSE])
-  if (sum(!keep)) notes <- c(notes, sprintf("%d record(s) with missing values in model variables were left out", sum(!keep)))
-  if (nrow(dd) < 20) return(fail("Too few complete records for this model."))
-  wts <- if (fam == "binomial" && ".trials" %in% names(dd)) dd$.trials else NULL
+  if (sum(!keep)) notes <- c(notes, sprintf("%d record(s) with missing values in the model's variables were left out", sum(!keep)))
+  if (nrow(dd) < 20) return(fail("Too few complete records (fewer than 20) for this model."))
+  if (nzchar(s$group) && nlevels(droplevels(factor(dd[[s$group]]))) < 2) {
+    structure <- "G"; notes <- c(notes, "the grouping variable has one level in these records, so one curve was fitted")
+    s$group <- ""
+    f_str <- gamm_formula(s, dd, structure, proxy_form, afr_form, age_poly, FALSE)
+  }
+  prob <- gamm_family_problem(dd$trait, fam, if (".trials" %in% names(dd) && any(is.finite(dd$.trials))) dd$.trials else NULL)
+  if (!is.null(prob)) return(fail(prob))
+  nu <- length(unique(dd$age))
+  if (age_poly == 0 && nu < 4) return(fail("A smooth of age needs at least 4 distinct ages."))
+  k0 <- as.integer(s$k)
+  s$k <- max(3L, min(k0, nu - 1L))
+  if (s$k < k0) {
+    notes <- c(notes, sprintf("k was lowered from %d to %d (the number of distinct ages minus one)", k0, s$k))
+    f_str <- gamm_formula(s, dd, structure, proxy_form, afr_form, age_poly, ordered_by)
+  }
+  ut <- gamm_usable_terms(dd, s)
+  if (length(ut$dropped)) notes <- c(notes, paste("left out because they do not vary in these records:", paste(ut$dropped, collapse = ", ")))
+  dd$.age_c <- dd$age - mean(dd$age)
+  wts <- if (identical(fam, "binomial") && ".trials" %in% names(dd) && all(is.finite(dd$.trials))) dd$.trials else NULL
+  n_ind <- nlevels(dd$id)
+  engine <- gamm_engine_for(s, nrow(dd), n_ind)
+  if (identical(engine, "bam") && fam %in% c("gaulss")) engine <- "gam"
+  f <- stats::as.formula(f_str)
   famobj <- gamm_family_obj(fam)
-  if (identical(fam, "gaulss")) f <- list(f, stats::as.formula(paste("~", gamm_age_smooth(s))))
-  kn <- gamm_knots(s)
-  fit <- NULL; mer <- NULL; err <- NULL
+  if (identical(fam, "gaulss")) f <- list(f, stats::as.formula(paste("~", gamm_age_smooth(s, k = min(s$k, 6L)))))
+  rho <- 0
+  fit <- NULL; err <- NULL
   t0 <- proc.time()[["elapsed"]]
-  res <- tryCatch(withCallingHandlers({
-    if (identical(s$engine, "gamm4")) {
-      if (!gamm_has_gamm4()) stop("gamm4 is not installed: install.packages('gamm4'), or choose mgcv.")
-      if (!fam %in% c("gaussian", "poisson", "binomial", "Gamma")) stop("gamm4 fits only Gaussian, Poisson, binomial and Gamma families.")
-      g4 <- gamm4::gamm4(f, random = gamm_random_formula(s, dd), family = famobj, data = dd, weights = wts,
-                         REML = identical(method, "REML"), knots = kn)
-      fit <- g4$gam; mer <- g4$mer
-    } else if (identical(s$engine, "bam")) {
-      fit <- mgcv::bam(f, family = famobj, data = dd, weights = wts, method = if (identical(method, "ML")) "ML" else "fREML",
-                       select = isTRUE(s$select), knots = kn, discrete = !identical(method, "ML"))
+  # do.call passes values rather than names, so mgcv never has to find weights or AR.start in a calling frame
+  do_fit <- function(rho) {
+    args <- list(formula = f, family = famobj, data = dd, select = isTRUE(s$select))
+    if (!is.null(wts)) args$weights <- wts
+    if (identical(engine, "bam")) {
+      args$method <- if (identical(method, "ML")) "ML" else "fREML"
+      args$discrete <- !identical(method, "ML")
+      if (rho != 0) { args$rho <- rho; args$AR.start <- !duplicated(dd$id) }
+      do.call(mgcv::bam, args)
     } else {
-      fit <- mgcv::gam(f, family = famobj, data = dd, weights = wts, method = method, select = isTRUE(s$select), knots = kn)
+      args$method <- method
+      do.call(mgcv::gam, args)
+    }
+  }
+  res <- tryCatch(withCallingHandlers({
+    fit <- do_fit(0)
+    if (isTRUE(s$ar1) && identical(fam, "gaussian") && identical(engine, "bam") && age_poly == 0) {
+      rho <- gamm_lag1(stats::residuals(fit, type = "response"), dd$id)
+      if (is.finite(rho) && rho > 0.05) { rho <- min(rho, 0.95); fit <- do_fit(rho) } else rho <- 0
     }
     TRUE
   }, warning = function(w) { notes <<- c(notes, conditionMessage(w)); invokeRestart("muffleWarning") }),
   error = function(e) { err <<- conditionMessage(e); FALSE })
   if (!isTRUE(res) || is.null(fit)) return(fail(paste("The GAMM could not be fitted:", err %||% "unknown error")))
-  list(ok = TRUE, fit = fit, mer = mer, formula = f_str, data = dd, settings = s, method = method, structure = structure,
-       proxy_form = proxy_form, afr_form = afr_form, notes = unique(notes), n = nrow(dd), n_ind = nlevels(dd$id),
-       seconds = proc.time()[["elapsed"]] - t0)
+  conv <- tryCatch(isTRUE(fit$converged) && (is.null(fit$outer.info$conv) || identical(fit$outer.info$conv, "full convergence")),
+                   error = function(e) TRUE)
+  if (!conv) notes <- c(notes, "the smoothing-parameter optimisation did not report full convergence")
+  list(ok = TRUE, fit = fit, formula = f_str, data = dd, settings = s, method = method, structure = structure,
+       proxy_form = proxy_form, afr_form = afr_form, engine = engine, rho = rho, converged = conv,
+       notes = unique(notes), n = nrow(dd), n_ind = n_ind, age_mean = mean(dd$age),
+       n_dropped = sum(!keep), seconds = proc.time()[["elapsed"]] - t0)
 }
 
 gamm_aic <- function(r) {
   if (!isTRUE(r$ok)) return(NA_real_)
-  if (!is.null(r$mer)) return(stats::AIC(r$mer))
   tryCatch(stats::AIC(r$fit), error = function(e) NA_real_)
 }
 
-# Summary tables: parametric terms and smooth terms (edf, reference df, statistic, approximate p-value).
+# ---------------------------------------------------------------------------
+# Summaries and checks
+# ---------------------------------------------------------------------------
+
 gamm_tables <- function(r) {
   sm <- summary(r$fit)
   pt <- as.data.frame(sm$p.table)
@@ -212,158 +364,216 @@ gamm_tables <- function(r) {
     data.frame(Smooth = rownames(x), edf = x[[1]], Ref.df = x[[2]], Statistic = x[[3]], P = x[[4]], stringsAsFactors = FALSE)
   } else data.frame()
   list(parametric = pt, smooth = st, dev_expl = sm$dev.expl, r_sq = sm$r.sq, n = sm$n,
-       aic = gamm_aic(r), score = tryCatch(as.numeric(r$fit$gcv.ubre), error = function(e) NA_real_))
+       aic = gamm_aic(r), stat_name = if (isTRUE(sm$residual.df > 0) && identical(r$fit$family$family, "gaussian")) "F" else "Chi.sq")
 }
 
-# Basis-dimension check: k', edf, k-index and its p-value per smooth (mgcv::k.check). A small p-value with k-index
-# below 1 suggests k is too low, especially when edf is close to k'.
+# Basis-dimension check: k', edf, k-index and its p-value per smooth (mgcv::k.check). A small p-value with a k-index
+# below 1 suggests k is too low, especially when edf is close to k'. Random-effect smooths are not checked.
 gamm_kcheck <- function(r) {
+  set.seed(1)
   kc <- tryCatch(mgcv::k.check(r$fit, subsample = 5000, n.rep = 200), error = function(e) NULL)
   if (is.null(kc) || !nrow(kc)) return(data.frame())
-  data.frame(Smooth = rownames(kc), k = kc[, 1], edf = kc[, 2], k_index = kc[, 3], P = kc[, 4],
-             Flag = ifelse(is.finite(kc[, 4]) & kc[, 4] < 0.05 & kc[, 3] < 1, "k may be too low", ""), stringsAsFactors = FALSE)
+  out <- data.frame(Smooth = rownames(kc), k = kc[, 1], edf = kc[, 2], k_index = kc[, 3], P = kc[, 4], stringsAsFactors = FALSE)
+  out <- out[!grepl("^s\\((id|re_)", out$Smooth) & !grepl(",id\\)$", out$Smooth), , drop = FALSE]
+  out$Flag <- ifelse(is.finite(out$P) & out$P < 0.05 & out$k_index < 1 & out$edf > 0.8 * out$k, "k may be too low", "")
+  rownames(out) <- NULL
+  out
 }
 
-# Concurvity (the smooth analogue of collinearity): worst-case values above 0.8 flag terms that the others can mimic,
+# Concurvity (the smooth analogue of collinearity) between the model's fixed terms: for each smooth, the largest
+# pairwise concurvity with any other fixed term (parametric terms included) and which term that is. Random effects are
+# left out: a proxy that is constant within individuals is always fully mimicked by the individual random intercept,
+# which the penalty resolves, so it carries no information. Estimates above 0.8 flag terms that are hard to separate,
 # for example age and ALR in short-lived populations.
 gamm_concurvity <- function(r) {
-  cc <- tryCatch(mgcv::concurvity(r$fit, full = TRUE), error = function(e) NULL)
-  if (is.null(cc)) return(data.frame())
-  if (is.list(cc) && !is.matrix(cc)) cc <- cc[[1]]
-  data.frame(Term = colnames(cc), Worst = cc["worst", ], Observed = cc["observed", ], Estimate = cc["estimate", ],
-             Flag = ifelse(cc["worst", ] > 0.8, "high", ""), stringsAsFactors = FALSE, row.names = NULL)
+  cc <- tryCatch(mgcv::concurvity(r$fit, full = FALSE), error = function(e) NULL)
+  if (is.null(cc) || !is.list(cc) || is.null(cc$estimate)) return(data.frame())
+  est <- cc$estimate; wst <- cc$worst
+  fixed <- colnames(est)[!grepl("^s\\((id|re_)|,id\\)$|\\.age_c", colnames(est))]
+  sm <- setdiff(fixed, "para")
+  if (!length(sm) || length(fixed) < 2) return(data.frame())
+  rows <- lapply(sm, function(t) {
+    others <- setdiff(fixed, t)
+    j <- others[[which.max(est[others, t])]]
+    data.frame(Term = t, `Most similar term` = if (identical(j, "para")) "parametric terms" else j,
+               Estimate = est[j, t], Worst = wst[j, t], check.names = FALSE, stringsAsFactors = FALSE)
+  })
+  out <- do.call(rbind, rows)
+  out$Flag <- ifelse(out$Estimate > 0.8, "high", "")
+  rownames(out) <- NULL
+  out
 }
 
-# Which smooths belong to individuals and random effects (left out of population curves).
+# Smooths that belong to individuals and random effects: set to zero in population curves.
 gamm_random_smooths <- function(fit) {
   sm <- fit$smooth
   if (!length(sm)) return(list(labels = character(0), cols = integer(0)))
-  is_re <- vapply(sm, function(x) any(x$term %in% "id") || any(grepl("^re_", x$term)) || inherits(x, "random.effect"), logical(1))
+  is_re <- vapply(sm, function(x) any(x$term %in% c("id", ".age_c")) || any(grepl("^re_", x$term)), logical(1))
   labs <- vapply(sm[is_re], function(x) x$label, character(1))
   cols <- unlist(lapply(sm[is_re], function(x) seq(x$first.para, x$last.para)))
   list(labels = labs, cols = as.integer(cols))
 }
 
-# Prediction grid for population curves: ages x group levels, other variables at reference values (numeric at the
-# mean over individuals, factors at the most common level; excluded random effects at their first level).
-gamm_newdata <- function(r, ages, level = NULL) {
+# Covariance matrix of the coefficients, including smoothing-parameter uncertainty where mgcv provides it.
+gamm_vcov <- function(fit) {
+  V <- tryCatch(stats::vcov(fit, unconditional = TRUE), error = function(e) NULL, warning = function(w) NULL)
+  if (is.null(V) || any(!is.finite(V))) V <- fit$Vp
+  V
+}
+
+# Prediction grid: ages x a group level, other variables at reference values (numeric covariates at their mean,
+# proxies at their mean over individuals unless set in `at`, factors at the commonest level, terminal = "no").
+gamm_newdata <- function(r, ages, level = NULL, at = list()) {
   dd <- r$data
   ind <- dd[!duplicated(dd$id), , drop = FALSE]
   nd <- data.frame(age = ages)
   for (v in setdiff(names(dd), c("age", "trait", ".trials"))) {
     x <- dd[[v]]
-    nd[[v]] <- if (is.factor(x)) factor(names(sort(table(x), decreasing = TRUE))[[1]], levels = levels(x))
+    nd[[v]] <- if (identical(v, ".terminal")) factor("no", levels = levels(x))
+               else if (is.ordered(x)) factor(levels(x)[[1]], levels = levels(x), ordered = TRUE)
+               else if (is.factor(x)) factor(names(sort(table(x), decreasing = TRUE))[[1]], levels = levels(x))
                else if (v %in% c("ALR", "LS", "AFR")) mean(ind[[v]], na.rm = TRUE) else mean(x, na.rm = TRUE)
   }
+  nd$.age_c <- nd$age - (r$age_mean %||% mean(dd$age))
   grp <- r$settings$group %||% ""
   if (nzchar(grp) && grp %in% names(dd) && !is.null(level)) nd[[grp]] <- factor(level, levels = levels(dd[[grp]]))
   if (".grp_o" %in% names(dd) && !is.null(level)) nd$.grp_o <- factor(level, levels = levels(dd$.grp_o), ordered = TRUE)
+  for (v in names(at)) nd[[v]] <- at[[v]]
   nd
 }
 
-gamm_mean_cols <- function(X) {
+# Linear-predictor matrix of the population curve (random effects zeroed, first linear predictor only), with
+# coefficients and covariance.
+gamm_lp <- function(r, nd) {
+  X <- stats::predict(r$fit, newdata = nd, type = "lpmatrix")
   lpi <- attr(X, "lpi")
-  if (is.null(lpi)) seq_len(ncol(X)) else lpi[[1]]
+  cols <- if (is.null(lpi)) seq_len(ncol(X)) else lpi[[1]]
+  rs <- gamm_random_smooths(r$fit)
+  X[, rs$cols] <- 0
+  V <- gamm_vcov(r$fit)
+  list(X = X[, cols, drop = FALSE], b = stats::coef(r$fit)[cols], V = V[cols, cols, drop = FALSE])
 }
 
-# Population curve(s) with 95% pointwise intervals, on the response scale.
-gamm_curve <- function(r, n = 150) {
-  dd <- r$data
-  ages <- seq(min(dd$age), max(dd$age), length.out = n)
-  grp <- r$settings$group %||% ""
-  levs <- if (nzchar(grp) && !identical(r$structure, "G") && grp %in% names(dd)) levels(dd[[grp]]) else list(NULL)
-  rs <- gamm_random_smooths(r$fit)
-  linkinv <- r$fit$family$linfo[[1]]$linkinv %||% r$fit$family$linkinv
-  out <- lapply(levs, function(lv) {
-    nd <- gamm_newdata(r, ages, lv)
-    X <- stats::predict(r$fit, newdata = nd, type = "lpmatrix")
-    cols <- gamm_mean_cols(X)
-    X[, rs$cols] <- 0
-    X <- X[, cols, drop = FALSE]
-    b <- stats::coef(r$fit)[cols]
-    V <- r$fit$Vp[cols, cols, drop = FALSE]
-    eta <- as.numeric(X %*% b)
-    se <- sqrt(pmax(rowSums((X %*% V) * X), 0))
-    data.frame(age = ages, level = if (is.null(lv)) "All" else lv, fit = linkinv(eta),
-               lower = linkinv(eta - 1.96 * se), upper = linkinv(eta + 1.96 * se), stringsAsFactors = FALSE)
-  })
-  do.call(rbind, out)
-}
+gamm_linkinv <- function(fit) fit$family$linfo[[1]]$linkinv %||% fit$family$linkinv
 
-# First derivative of the population curve on the link scale, with pointwise and simultaneous 95% intervals
-# (simultaneous from 2,000 draws of the coefficients). Ageing is significant where the interval excludes zero.
-gamm_derivative <- function(r, n = 150, n_sim = 2000, seed = 1L) {
-  dd <- r$data
-  ages <- seq(min(dd$age), max(dd$age), length.out = n)
-  eps <- 1e-4 * diff(range(dd$age))
-  grp <- r$settings$group %||% ""
-  levs <- if (nzchar(grp) && !identical(r$structure, "G") && grp %in% names(dd)) levels(dd[[grp]]) else list(NULL)
-  rs <- gamm_random_smooths(r$fit)
+# Critical value for simultaneous 95% intervals of X %*% b (Ruppert et al. 2003; Simpson 2018).
+gamm_crit <- function(X, V, se, n_sim = 2000, seed = 1L) {
   set.seed(seed)
-  out <- lapply(levs, function(lv) {
-    X0 <- stats::predict(r$fit, newdata = gamm_newdata(r, ages - eps, lv), type = "lpmatrix")
-    X1 <- stats::predict(r$fit, newdata = gamm_newdata(r, ages + eps, lv), type = "lpmatrix")
-    cols <- gamm_mean_cols(X0)
-    D <- (X1 - X0) / (2 * eps)
-    D[, rs$cols] <- 0
-    D <- D[, cols, drop = FALSE]
-    b <- stats::coef(r$fit)[cols]
-    V <- r$fit$Vp[cols, cols, drop = FALSE]
-    d <- as.numeric(D %*% b)
-    se <- sqrt(pmax(rowSums((D %*% V) * D), 0))
-    B <- mgcv::rmvn(n_sim, rep(0, length(b)), V)
-    dev <- abs(D %*% t(B)) / pmax(se, 1e-12)
-    crit <- stats::quantile(apply(dev, 2, max), 0.95, names = FALSE)
-    data.frame(age = ages, level = if (is.null(lv)) "All" else lv, derivative = d, lower = d - 1.96 * se, upper = d + 1.96 * se,
-               lower_sim = d - crit * se, upper_sim = d + crit * se, stringsAsFactors = FALSE)
+  B <- mgcv::rmvn(n_sim, rep(0, ncol(X)), V)
+  if (is.null(dim(B))) B <- matrix(B, nrow = 1)
+  dev <- abs(X %*% t(B)) / pmax(se, 1e-12)
+  stats::quantile(apply(dev, 2, max), 0.95, names = FALSE)
+}
+
+gamm_levels <- function(r) {
+  dd <- r$data; grp <- r$settings$group %||% ""
+  if (nzchar(grp) && !identical(r$structure, "G") && grp %in% names(dd)) levels(dd[[grp]]) else list(NULL)
+}
+
+gamm_age_grid <- function(r, n = 150) seq(min(r$data$age), max(r$data$age), length.out = n)
+
+# Proxy values at which to draw curves: the mean (additive models) or the 10th, 50th and 90th percentiles over
+# individuals (age-dependent models, where the curve's shape depends on the proxy).
+gamm_proxy_values <- function(r) {
+  p <- r$settings$proxy %||% "none"
+  if (identical(p, "none") || !identical(r$proxy_form, "ti") || !p %in% names(r$data)) return(NULL)
+  ind <- r$data[!duplicated(r$data$id), , drop = FALSE]
+  q <- stats::quantile(ind[[p]], c(0.1, 0.5, 0.9), na.rm = TRUE, names = FALSE)
+  stats::setNames(q, paste0(p, " = ", vapply(q, format_num, character(1)), c(" (short-lived)", " (median)", " (long-lived)")))
+}
+
+# Population curve(s) with pointwise and simultaneous 95% intervals, on the response scale. One curve per group level;
+# for age-dependent proxy models, also one per proxy value (low, median and high).
+gamm_curve <- function(r, n = 150, by_proxy = TRUE) {
+  ages <- gamm_age_grid(r, n)
+  linkinv <- gamm_linkinv(r$fit)
+  pv <- if (by_proxy) gamm_proxy_values(r) else NULL
+  p <- r$settings$proxy %||% "none"
+  combos <- expand.grid(lv = seq_along(gamm_levels(r)), pv = if (is.null(pv)) NA else seq_along(pv))
+  levs <- gamm_levels(r)
+  out <- lapply(seq_len(nrow(combos)), function(i) {
+    lv <- levs[[combos$lv[[i]]]]
+    at <- if (is.na(combos$pv[[i]])) list() else stats::setNames(list(pv[[combos$pv[[i]]]]), p)
+    L <- gamm_lp(r, gamm_newdata(r, ages, lv, at))
+    eta <- as.numeric(L$X %*% L$b)
+    se <- sqrt(pmax(rowSums((L$X %*% L$V) * L$X), 0))
+    crit <- gamm_crit(L$X, L$V, se)
+    data.frame(age = ages, level = if (is.null(lv)) "All" else as.character(lv),
+               proxy = if (is.na(combos$pv[[i]])) "" else names(pv)[[combos$pv[[i]]]],
+               fit = linkinv(eta), lower = linkinv(eta - 1.96 * se), upper = linkinv(eta + 1.96 * se),
+               lower_sim = linkinv(eta - crit * se), upper_sim = linkinv(eta + crit * se), stringsAsFactors = FALSE)
   })
   do.call(rbind, out)
 }
 
-# Periods of significant change from the derivative: runs of ages where the interval lies wholly below (decline)
-# or above (increase) zero. Onset of decline: the start of the last run of significant decline.
-gamm_periods <- function(dv, simultaneous = FALSE) {
+# Numbers of records and individuals at each age (rounded to the data's age step): where the curve is constrained.
+gamm_support <- function(r) {
+  dd <- r$data
+  a <- dd$age
+  step <- if (length(unique(a)) > 40) diff(range(a)) / 30 else NA
+  ab <- if (is.finite(step)) round(a / step) * step else a
+  data.frame(age = sort(unique(ab)), records = as.integer(table(ab)),
+             individuals = as.integer(tapply(dd$id, ab, function(z) length(unique(z)))), stringsAsFactors = FALSE)
+}
+
+# First derivative of the population curve on the link scale, with pointwise and simultaneous 95% intervals.
+# Ageing is significant where the interval excludes zero.
+gamm_derivative <- function(r, n = 150) {
+  ages <- gamm_age_grid(r, n)
+  eps <- 1e-4 * diff(range(r$data$age))
+  out <- lapply(gamm_levels(r), function(lv) {
+    L0 <- gamm_lp(r, gamm_newdata(r, ages - eps, lv))
+    L1 <- gamm_lp(r, gamm_newdata(r, ages + eps, lv))
+    D <- (L1$X - L0$X) / (2 * eps)
+    d <- as.numeric(D %*% L1$b)
+    se <- sqrt(pmax(rowSums((D %*% L1$V) * D), 0))
+    crit <- gamm_crit(D, L1$V, se)
+    data.frame(age = ages, level = if (is.null(lv)) "All" else as.character(lv), derivative = d,
+               lower = d - 1.96 * se, upper = d + 1.96 * se, lower_sim = d - crit * se, upper_sim = d + crit * se,
+               stringsAsFactors = FALSE)
+  })
+  do.call(rbind, out)
+}
+
+# Periods of significant change: runs of ages where the derivative's interval lies wholly below zero (decline) or
+# above zero (increase).
+gamm_periods <- function(dv, simultaneous = TRUE) {
   lo <- if (simultaneous) dv$lower_sim else dv$lower
   hi <- if (simultaneous) dv$upper_sim else dv$upper
   rows <- list()
   for (lv in unique(dv$level)) {
     k <- dv$level == lv
     a <- dv$age[k]; state <- ifelse(hi[k] < 0, "decline", ifelse(lo[k] > 0, "increase", "no clear change"))
-    rl <- rle(state); ends <- cumsum(rl$lengths); starts <- c(1, head(ends, -1) + 1)
+    rl <- rle(state); ends <- cumsum(rl$lengths); starts <- c(1, utils::head(ends, -1) + 1)
     for (j in seq_along(rl$values)) if (!identical(rl$values[[j]], "no clear change"))
-      rows[[length(rows) + 1]] <- data.frame(Group = lv, Change = rl$values[[j]], From = a[starts[[j]]], To = a[ends[[j]]], stringsAsFactors = FALSE)
+      rows[[length(rows) + 1]] <- data.frame(Group = lv, Change = rl$values[[j]], From = a[starts[[j]]], To = a[ends[[j]]],
+                                             stringsAsFactors = FALSE)
   }
   if (length(rows)) do.call(rbind, rows) else data.frame(Group = character(0), Change = character(0), From = numeric(0), To = numeric(0))
 }
 
-# Peak and onset per group from the curve, with 95% limits from 1,000 draws of the coefficients (the turning-point
-# rules of the parametric layer: curve_turning_points()).
+# Peak and onset of the final decline per group, with 95% limits from 1,000 draws of the coefficients (the turning-
+# point rules of the parametric layer: curve_turning_points()). Turning points are the same on the link and response
+# scales, as the links are monotonic.
 gamm_peak_onset <- function(r, n_draws = 1000, n = 150, seed = 1L) {
-  dd <- r$data
-  ages <- seq(min(dd$age), max(dd$age), length.out = n)
-  grp <- r$settings$group %||% ""
-  levs <- if (nzchar(grp) && !identical(r$structure, "G") && grp %in% names(dd)) levels(dd[[grp]]) else list(NULL)
-  rs <- gamm_random_smooths(r$fit)
+  ages <- gamm_age_grid(r, n)
   set.seed(seed)
-  rows <- lapply(levs, function(lv) {
-    X <- stats::predict(r$fit, newdata = gamm_newdata(r, ages, lv), type = "lpmatrix")
-    cols <- gamm_mean_cols(X)
-    X[, rs$cols] <- 0
-    X <- X[, cols, drop = FALSE]
-    b <- stats::coef(r$fit)[cols]
-    V <- r$fit$Vp[cols, cols, drop = FALSE]
-    tp <- curve_turning_points(ages, as.numeric(X %*% b))
-    B <- mgcv::rmvn(n_draws, b, V)
-    sims <- X %*% t(B)
+  rows <- lapply(gamm_levels(r), function(lv) {
+    L <- gamm_lp(r, gamm_newdata(r, ages, lv))
+    tp <- curve_turning_points(ages, as.numeric(L$X %*% L$b))
+    B <- mgcv::rmvn(n_draws, L$b, L$V)
+    sims <- L$X %*% t(B)
     tps <- vapply(seq_len(ncol(sims)), function(j) {
       t <- curve_turning_points(ages, sims[, j])
       c(t$peak, as.numeric(t$peak_interior), t$onset, as.numeric(identical(t$onset_type, "interior")))
     }, numeric(4))
-    q <- function(v) if (length(v) >= 20) paste0(format_num(stats::quantile(v, 0.025)), "\u2013", format_num(stats::quantile(v, 0.975))) else ""
-    data.frame(Group = if (is.null(lv)) "All" else lv,
+    q <- function(v) if (length(v) >= 20) paste0(format_num(stats::quantile(v, 0.025)), "–", format_num(stats::quantile(v, 0.975))) else ""
+    data.frame(Group = if (is.null(lv)) "All" else as.character(lv),
                `Peak age` = if (isTRUE(tp$peak_interior)) format_num(tp$peak) else "none within the sampled ages",
                `Peak 95% CI` = if (isTRUE(tp$peak_interior)) q(tps[1, tps[2, ] == 1]) else "",
-               `Onset of final decline` = switch(tp$onset_type, interior = format_num(tp$onset), from_start = paste("at or before", format_num(min(ages))),
+               `Draws with an interior peak` = sprintf("%.0f%%", 100 * mean(tps[2, ] == 1)),
+               `Onset of final decline` = switch(tp$onset_type, interior = format_num(tp$onset),
+                                                 from_start = paste("at or before", format_num(min(ages))),
                                                  no_final_decline = "no final decline", ""),
                `Onset 95% CI` = if (identical(tp$onset_type, "interior")) q(tps[3, tps[4, ] == 1]) else "",
                check.names = FALSE, stringsAsFactors = FALSE)
@@ -371,8 +581,9 @@ gamm_peak_onset <- function(r, n_draws = 1000, n = 150, seed = 1L) {
   do.call(rbind, rows)
 }
 
-# Difference between two groups' curves (link scale) with pointwise and simultaneous 95% intervals.
-gamm_difference <- function(r, n = 150, n_sim = 2000, seed = 1L) {
+# Difference between two groups' curves (link scale) with pointwise and simultaneous 95% intervals. The difference
+# includes the groups' difference in level (the group main effect).
+gamm_difference <- function(r, n = 150) {
   dd <- r$data
   grp <- r$settings$group %||% ""
   if (!nzchar(grp) || identical(r$structure, "G") || !grp %in% names(dd)) return(data.frame())
@@ -380,121 +591,150 @@ gamm_difference <- function(r, n = 150, n_sim = 2000, seed = 1L) {
   if (length(levs) < 2) return(data.frame())
   pairs <- utils::combn(levs, 2, simplify = FALSE)
   if (length(pairs) > 6) pairs <- pairs[1:6]
-  ages <- seq(min(dd$age), max(dd$age), length.out = n)
-  rs <- gamm_random_smooths(r$fit)
-  set.seed(seed)
+  ages <- gamm_age_grid(r, n)
   do.call(rbind, lapply(pairs, function(pr) {
-    Xa <- stats::predict(r$fit, newdata = gamm_newdata(r, ages, pr[[1]]), type = "lpmatrix")
-    Xb <- stats::predict(r$fit, newdata = gamm_newdata(r, ages, pr[[2]]), type = "lpmatrix")
-    cols <- gamm_mean_cols(Xa)
-    D <- Xa - Xb
-    D[, rs$cols] <- 0
-    D <- D[, cols, drop = FALSE]
-    b <- stats::coef(r$fit)[cols]
-    V <- r$fit$Vp[cols, cols, drop = FALSE]
-    d <- as.numeric(D %*% b)
-    se <- sqrt(pmax(rowSums((D %*% V) * D), 0))
-    B <- mgcv::rmvn(n_sim, rep(0, length(b)), V)
-    crit <- stats::quantile(apply(abs(D %*% t(B)) / pmax(se, 1e-12), 2, max), 0.95, names = FALSE)
-    data.frame(age = ages, pair = paste(pr[[1]], "\u2212", pr[[2]]), diff = d, lower = d - 1.96 * se, upper = d + 1.96 * se,
+    La <- gamm_lp(r, gamm_newdata(r, ages, pr[[1]]))
+    Lb <- gamm_lp(r, gamm_newdata(r, ages, pr[[2]]))
+    D <- La$X - Lb$X
+    d <- as.numeric(D %*% La$b)
+    se <- sqrt(pmax(rowSums((D %*% La$V) * D), 0))
+    crit <- gamm_crit(D, La$V, se)
+    data.frame(age = ages, pair = paste(pr[[1]], "−", pr[[2]]), diff = d, lower = d - 1.96 * se, upper = d + 1.96 * se,
                lower_sim = d - crit * se, upper_sim = d + crit * se, stringsAsFactors = FALSE)
   }))
 }
 
-# Do groups age differently? Fits models G, GS, GI, S and I by ML on the same records and compares AIC; tests the
-# ordered-factor difference smooths (the p-value of each difference smooth tests whether that group's trajectory
-# differs from the reference group's); and a likelihood-ratio test of G against I.
+# ---------------------------------------------------------------------------
+# Comparisons (each fits all its models by ML to the same records)
+# ---------------------------------------------------------------------------
+
+gamm_compare_table <- function(fits, labels) {
+  tab <- data.frame(Model = labels, AIC = vapply(fits, gamm_aic, numeric(1)),
+                    edf = vapply(fits, function(r) if (isTRUE(r$ok)) sum(r$fit$edf) else NA_real_, numeric(1)),
+                    `Deviance explained (%)` = vapply(fits, function(r) if (isTRUE(r$ok)) 100 * summary(r$fit)$dev.expl else NA_real_, numeric(1)),
+                    Status = vapply(fits, function(r) if (isTRUE(r$ok)) "fitted" else r$message %||% "failed", character(1)),
+                    check.names = FALSE, stringsAsFactors = FALSE, row.names = NULL)
+  tab$dAIC <- tab$AIC - suppressWarnings(min(tab$AIC, na.rm = TRUE))
+  tab$Weight <- if (any(is.finite(tab$dAIC))) { w <- exp(-0.5 * tab$dAIC); w / sum(w, na.rm = TRUE) } else NA_real_
+  tab[, c("Model", "AIC", "dAIC", "Weight", "edf", "Deviance explained (%)", "Status")]
+}
+
+gamm_lrt <- function(a, b, label) {
+  if (!isTRUE(a$ok) || !isTRUE(b$ok)) return(NULL)
+  tryCatch({
+    x <- stats::anova(a$fit, b$fit, test = "Chisq")
+    data.frame(Comparison = label, `Deviance difference` = x$Deviance[[2]], df = x$Df[[2]], P = x[[ncol(x)]][[2]], check.names = FALSE)
+  }, error = function(e) NULL)
+}
+
+# Do groups age differently? G, GS, GI, S and I by ML on the same records, compared by AIC; ordered-factor difference
+# smooths (does each group's trajectory differ in shape from the reference group's?); and a likelihood-ratio test of
+# G (one shape, groups differ in level) against I (a separate curve per group).
 gamm_group_comparison <- function(gd, s, progress = NULL) {
-  if (!nzchar(s$group %||% "")) return(list(ok = FALSE, message = "Choose a grouping variable first."))
+  s <- utils::modifyList(gamm_defaults(), s)
+  if (!nzchar(s$group %||% "") || !s$group %in% names(gd)) return(list(ok = FALSE, message = "Choose a grouping variable first."))
   structs <- GAMM_STRUCTURES
+  rows <- gamm_common_rows(gd, lapply(structs, function(st) gamm_formula(s, gd, structure = st)), s$family)
   fits <- list()
   for (i in seq_along(structs)) {
     if (is.function(progress)) progress(i, length(structs) + 1, names(structs)[[i]])
-    fits[[structs[[i]]]] <- gamm_fit(gd, s, method = "ML", structure = structs[[i]])
+    fits[[structs[[i]]]] <- gamm_fit(gd, s, method = "ML", structure = structs[[i]], rows = rows)
   }
-  tab <- do.call(rbind, lapply(names(fits), function(nm) {
-    r <- fits[[nm]]
-    data.frame(Model = nm, Description = sub("^[A-Z]+: ", "", names(structs)[structs == nm]),
-               AIC = if (isTRUE(r$ok)) gamm_aic(r) else NA_real_,
-               edf = if (isTRUE(r$ok)) sum(r$fit$edf) else NA_real_,
-               `Deviance explained (%)` = if (isTRUE(r$ok)) 100 * summary(r$fit)$dev.expl else NA_real_,
-               Status = if (isTRUE(r$ok)) "fitted" else r$message, check.names = FALSE, stringsAsFactors = FALSE)
-  }))
-  tab$dAIC <- tab$AIC - min(tab$AIC, na.rm = TRUE)
-  tab <- tab[order(tab$AIC), c("Model", "Description", "AIC", "dAIC", "edf", "Deviance explained (%)", "Status")]
+  tab <- gamm_compare_table(fits, names(structs))
+  tab$Model <- unname(structs)
+  tab$Description <- sub("^[A-Z]+: ", "", names(structs))
+  tab <- tab[order(tab$AIC), c("Model", "Description", "AIC", "dAIC", "Weight", "edf", "Deviance explained (%)", "Status")]
   if (is.function(progress)) progress(length(structs) + 1, length(structs) + 1, "difference smooths")
-  od <- gamm_fit(gd, s, method = s$method, structure = "I", ordered_by = TRUE)
+  od <- gamm_fit(gd, s, method = s$method, structure = "I", ordered_by = TRUE, rows = rows)
   diff_tab <- if (isTRUE(od$ok)) {
     st <- gamm_tables(od)$smooth
     st[grepl(".grp_o", st$Smooth, fixed = TRUE), , drop = FALSE]
   } else data.frame()
-  if (nrow(diff_tab)) diff_tab$Smooth <- sub(":.grp_o", " difference: ", diff_tab$Smooth, fixed = TRUE)
-  lrt <- NULL
-  if (isTRUE(fits$G$ok) && isTRUE(fits$I$ok) && is.null(fits$G$mer)) {
-    lrt <- tryCatch({
-      a <- stats::anova(fits$G$fit, fits$I$fit, test = "Chisq")
-      data.frame(Comparison = "G (one smooth) vs I (a smooth per group)", `Deviance difference` = a$Deviance[[2]],
-                 df = a$Df[[2]], P = a[[ncol(a)]][[2]], check.names = FALSE)
-    }, error = function(e) NULL)
-  }
-  list(ok = TRUE, table = tab, differences = diff_tab, reference = if (isTRUE(od$ok)) levels(od$data$.grp_o)[[1]] else "", lrt = lrt)
+  if (nrow(diff_tab)) diff_tab$Smooth <- sub("s(age):.grp_o", "shape difference: ", diff_tab$Smooth, fixed = TRUE)
+  best <- tab$Model[[1]]
+  close <- tab$Model[is.finite(tab$dAIC) & tab$dAIC < 2]
+  verdict <- if (identical(close, "G") || (best == "G")) "One curve (G) is best supported: no clear evidence that the groups age differently."
+             else if ("G" %in% close) sprintf("%s is best supported, but G (one curve) is within 2 AIC: weak evidence that the groups age differently.", best)
+             else sprintf("%s is best supported and G is more than 2 AIC worse: the groups appear to age differently.", best)
+  list(ok = TRUE, table = tab, differences = diff_tab, reference = if (isTRUE(od$ok)) levels(od$data$.grp_o)[[1]] else "",
+       lrt = gamm_lrt(fits$G, fits$I, "G (one shape) vs I (a curve per group)"), verdict = verdict, n = sum(rows))
 }
 
-# Selective disappearance and appearance: the proxy terms of the fitted model, and ML comparisons of no proxy,
-# an additive proxy and an age-dependent proxy (ti).
+# Selective disappearance and appearance: ML comparison, on the same records, of no proxy, a linear, a smooth and an
+# age-dependent (ti) proxy; then the same for AFR. Returns a verdict for the summary page.
 gamm_proxy_comparison <- function(gd, s, progress = NULL) {
-  forms <- c(none = "none", additive = "linear", `age-dependent` = "ti")
-  fits <- list()
-  for (i in seq_along(forms)) {
-    if (is.function(progress)) progress(i, length(forms), names(forms)[[i]])
-    fits[[names(forms)[[i]]]] <- gamm_fit(gd, s, method = "ML", proxy_form = forms[[i]])
+  s <- utils::modifyList(gamm_defaults(), s)
+  out <- list(ok = TRUE, tables = list(), verdicts = character(0), texts = character(0))
+  sets <- list()
+  if (!identical(s$proxy, "none")) sets[[s$proxy]] <- "proxy"
+  if (any(is.finite(gd$AFR)) && length(unique(gd$AFR[is.finite(gd$AFR)])) >= 3) sets[["AFR"]] <- "afr"
+  if (!length(sets)) return(list(ok = FALSE, message = "Choose ALR or lifespan as the proxy first (or map AFR on the Data tab)."))
+  forms <- c("none", "linear", "smooth", "ti")
+  step <- 0; total <- length(sets) * length(forms)
+  for (p in names(sets)) {
+    args_for <- function(form) if (identical(sets[[p]], "proxy")) list(proxy_form = form, afr_form = s$afr_form) else list(proxy_form = s$proxy_form, afr_form = form)
+    fs_ <- lapply(forms, function(fm) do.call(gamm_formula, c(list(s = s, gd = gd), args_for(fm))))
+    rows <- gamm_common_rows(gd, fs_, s$family)
+    fits <- lapply(forms, function(fm) {
+      step <<- step + 1
+      if (is.function(progress)) progress(step, total, paste(p, fm))
+      do.call(gamm_fit, c(list(gd = gd, s = s, method = "ML", rows = rows), args_for(fm)))
+    })
+    names(fits) <- forms
+    labs <- c(paste("No", p, "term"), paste("Linear", p), paste("Smooth", p), paste0("Age-dependent ", p, ": ti(age, ", p, ")"))
+    tab <- gamm_compare_table(fits, labs)
+    tab$Records <- sum(rows)
+    out$tables[[p]] <- tab
+    out$fits[[p]] <- lapply(fits, function(r) if (isTRUE(r$ok)) gamm_tables(r)$smooth else NULL)
+    d <- stats::setNames(tab$dAIC, forms)
+    v <- if (!is.finite(d[["ti"]]) || !is.finite(d[["none"]])) "caution"
+         else if (d[["ti"]] == 0 && min(d[c("none", "linear", "smooth")], na.rm = TRUE) >= 2) "age_dependent"
+         else if (d[["none"]] >= 2) "age_independent" else "none"
+    out$verdicts[[p]] <- v
+    out$texts[[p]] <- switch(v,
+      age_dependent = sprintf("Age-dependent %s term best supported (other forms at least 2 AIC worse): the association between %s and the trait changes with age.", p, p),
+      age_independent = sprintf("A %s term is supported (no-%s model at least 2 AIC worse), but not an age-dependent one: consistent with age-independent selective %s.", p, p, if (p == "AFR") "appearance" else "disappearance"),
+      none = sprintf("The model without %s is within 2 AIC of the best: no clear evidence of selective %s through %s.", p, if (p == "AFR") "appearance" else "disappearance", p),
+      sprintf("The %s comparison could not be completed.", p))
   }
-  tab <- data.frame(Model = c("No lifespan proxy", paste("Additive", s$proxy), paste("Age-dependent", s$proxy, "(ti)")),
-                    AIC = vapply(fits, gamm_aic, numeric(1)), stringsAsFactors = FALSE)
-  tab$dAIC <- tab$AIC - min(tab$AIC, na.rm = TRUE)
-  lrt <- tryCatch({
-    if (!is.null(fits$additive$mer) || !isTRUE(fits$additive$ok) || !isTRUE(fits[["age-dependent"]]$ok)) NULL else {
-      a <- stats::anova(fits$none$fit, fits$additive$fit, fits[["age-dependent"]]$fit, test = "Chisq")
-      data.frame(Comparison = c("none vs additive", "additive vs age-dependent"), `Deviance difference` = a$Deviance[2:3],
-                 df = a$Df[2:3], P = a[[ncol(a)]][2:3], check.names = FALSE)
-    }
-  }, error = function(e) NULL)
-  list(ok = TRUE, table = tab, lrt = lrt)
+  out
 }
 
-# The proxy terms of one fitted model (parametric rows or smooth rows naming ALR, LS or AFR).
-gamm_proxy_terms <- function(r) {
-  tb <- gamm_tables(r)
-  p <- tb$parametric[tb$parametric$Term %in% c("ALR", "LS", "AFR"), , drop = FALSE]
-  sm <- tb$smooth[grepl("ALR|LS|AFR", tb$smooth$Smooth), , drop = FALSE]
-  list(parametric = p, smooth = sm)
+# Naive and corrected population curves on the same records: the curve without any proxy term (what a naive analysis
+# shows) against the fitted model's curve (proxy at its mean), to show how much selective disappearance moves it.
+gamm_naive_vs_corrected <- function(gd, r) {
+  s <- r$settings
+  if (identical(s$proxy, "none") && identical(r$afr_form, "none")) return(NULL)
+  rows <- rep(FALSE, nrow(gd))
+  key <- paste(gd$id, gd$age, gd$trait)
+  rows[key %in% paste(r$data$id, r$data$age, r$data$trait)] <- TRUE
+  naive <- gamm_fit(gd, s, method = r$method, structure = r$structure, proxy_form = "none", afr_form = "none", rows = rows)
+  if (!isTRUE(naive$ok)) return(NULL)
+  a <- gamm_curve(naive, by_proxy = FALSE); a$model <- "Without proxy terms (population curve)"
+  b <- gamm_curve(r, by_proxy = FALSE); b$model <- "With proxy terms (within-individual curve)"
+  rbind(a, b)
 }
 
-# Is a smooth needed? The same model with linear, quadratic and cubic age (fitted by ML with the same engine)
-# against the smooth. AIC of the smooth uses its effective degrees of freedom, so the comparison is approximate.
+# Is a smooth needed? The same model with linear, quadratic and cubic age against the smooth (ML, same records).
 gamm_parametric_reference <- function(gd, s) {
-  rows <- lapply(list(`Linear age` = 1L, `Quadratic age` = 2L, `Cubic age` = 3L, `Smooth of age` = 0L), function(p) {
-    r <- gamm_fit(gd, s, method = "ML", age_poly = p)
-    c(AIC = gamm_aic(r), edf = if (isTRUE(r$ok)) sum(r$fit$edf) else NA_real_)
-  })
-  tab <- data.frame(Model = names(rows), AIC = vapply(rows, `[[`, numeric(1), "AIC"), edf = vapply(rows, `[[`, numeric(1), "edf"),
-                    stringsAsFactors = FALSE, row.names = NULL)
-  tab$dAIC <- tab$AIC - min(tab$AIC, na.rm = TRUE)
-  tab[order(tab$AIC), c("Model", "AIC", "dAIC", "edf")]
+  s <- utils::modifyList(gamm_defaults(), s)
+  polys <- list(`Linear age` = 1L, `Quadratic age` = 2L, `Cubic age` = 3L, `Smooth of age` = 0L)
+  rows <- gamm_common_rows(gd, lapply(polys, function(p) gamm_formula(s, gd, age_poly = p)), s$family)
+  fits <- lapply(polys, function(p) gamm_fit(gd, s, method = "ML", age_poly = p, rows = rows))
+  tab <- gamm_compare_table(fits, names(polys))
+  tab[order(tab$AIC), c("Model", "AIC", "dAIC", "Weight", "edf"), drop = FALSE]
 }
 
 # Random-effect standard deviations (mgcv::gam.vcomp).
 gamm_vcomp <- function(r) {
-  if (!is.null(r$mer)) {
-    vc <- as.data.frame(lme4::VarCorr(r$mer))
-    return(data.frame(Term = paste(vc$grp, vc$var1), SD = vc$sdcor, Lower = NA_real_, Upper = NA_real_, stringsAsFactors = FALSE))
-  }
-  vc <- tryCatch(mgcv::gam.vcomp(r$fit, rescale = FALSE), error = function(e) NULL)
+  vc <- NULL
+  utils::capture.output(vc <- tryCatch(suppressWarnings(mgcv::gam.vcomp(r$fit, rescale = FALSE)), error = function(e) NULL))
   if (is.null(vc)) return(data.frame())
   m <- if (is.list(vc)) vc$all else vc
   if (is.null(dim(m))) return(data.frame(Term = names(m), SD = as.numeric(m), Lower = NA_real_, Upper = NA_real_))
-  data.frame(Term = rownames(m), SD = m[, 1], Lower = if (ncol(m) >= 3) m[, 2] else NA_real_, Upper = if (ncol(m) >= 3) m[, 3] else NA_real_,
-             stringsAsFactors = FALSE, row.names = NULL)
+  out <- data.frame(Term = rownames(m), SD = m[, 1], Lower = if (ncol(m) >= 3) m[, 2] else NA_real_,
+                    Upper = if (ncol(m) >= 3) m[, 3] else NA_real_, stringsAsFactors = FALSE, row.names = NULL)
+  out[grepl("id|re_|scale", out$Term), , drop = FALSE]
 }
 
 # Individual trajectories predicted with every term (random effects included) for a sample of individuals.
@@ -509,54 +749,164 @@ gamm_individual_curves <- function(r, n_ind = 12, seed = 1L) {
     di <- dd[dd$id == i, , drop = FALSE]
     ages <- seq(min(di$age), max(di$age), length.out = 30)
     nd <- di[rep(1, length(ages)), , drop = FALSE]
-    nd$age <- ages
+    nd$age <- ages; nd$.age_c <- ages - r$age_mean
+    if (".terminal" %in% names(nd)) nd$.terminal <- factor("no", levels = levels(dd$.terminal))
     p <- tryCatch(stats::predict(r$fit, newdata = nd, type = "response"), error = function(e) rep(NA_real_, length(ages)))
     if (is.matrix(p)) p <- p[, 1]
     data.frame(id = i, age = ages, fit = as.numeric(p), stringsAsFactors = FALSE)
   }))
 }
 
-# Residuals for the diagnostic figures (deviance residuals against fitted values, and their quantiles).
-gamm_residuals <- function(r) {
-  f <- stats::fitted(r$fit)
-  if (is.matrix(f)) f <- f[, 1]
-  data.frame(fitted = as.numeric(f), residual = as.numeric(stats::residuals(r$fit, type = "deviance")))
-}
-
-# Automatic cautions for the fitted model (short, one line each).
-gamm_cautions <- function(r, kc = gamm_kcheck(r), cc = gamm_concurvity(r)) {
-  out <- character(0)
-  if (nrow(kc) && any(kc$Flag != "")) out <- c(out, sprintf("Basis too small for %s: raise k and refit.", paste(kc$Smooth[kc$Flag != ""], collapse = ", ")))
-  if (nrow(cc) && any(cc$Flag != "")) out <- c(out, sprintf("High concurvity (> 0.8) for %s: these terms can mimic each other, so their separate effects are poorly identified.", paste(cc$Term[cc$Flag != ""], collapse = ", ")))
-  dd <- r$data
-  old <- stats::quantile(dd$age, 0.9)
-  n_old <- length(unique(dd$id[dd$age >= old]))
-  if (n_old < 20) out <- c(out, sprintf("Only %d individuals above age %s: the smooth is weakly constrained at old ages.", n_old, format_num(old)))
-  if (identical(r$settings$individual, "none")) out <- c(out, "No individual random effect: repeated records are treated as independent, so intervals are too narrow.")
-  if (identical(r$settings$proxy_form %||% "none", "none") && identical(r$settings$afr_form %||% "none", "none"))
-    out <- c(out, "No lifespan or AFR term: the smooth is the population trajectory, which selective disappearance can distort.")
-  if (length(r$notes)) out <- c(out, paste("Fitting notes:", paste(utils::head(r$notes, 3), collapse = "; ")))
+# Simulated responses from the fitted model (conditional on the random effects), for quantile residuals.
+gamm_simulate <- function(r, nsim = 250, seed = 1L) {
+  fit <- r$fit; fam <- r$settings$family
+  set.seed(seed)
+  mu <- stats::fitted(fit)
+  if (is.matrix(mu)) mu <- mu[, 1]
+  n <- length(mu)
+  wt <- fit$prior.weights
+  sim1 <- switch(fam,
+    gaussian = function() stats::rnorm(n, mu, sqrt(fit$sig2 / wt)),
+    Gamma = function() { shp <- 1 / fit$sig2; stats::rgamma(n, shape = shp, rate = shp / mu) },
+    poisson = function() stats::rpois(n, mu),
+    binomial = function() { w <- pmax(round(wt), 1); stats::rbinom(n, w, mu) / w },
+    NULL)
+  if (is.null(sim1) && is.function(fit$family$rd)) {
+    sim1 <- function() fit$family$rd(mu = stats::fitted(fit), wt = wt, scale = fit$sig2)
+  }
+  if (is.null(sim1)) return(NULL)
+  out <- tryCatch(replicate(nsim, as.numeric(sim1())), error = function(e) NULL)
+  if (is.null(out) || !is.matrix(out) || nrow(out) != n) return(NULL)
   out
 }
 
-# R code that refits the model with mgcv (or gamm4).
-gamm_code <- function(r) {
+# Randomised quantile residuals from simulation (as in DHARMa; Dunn and Smyth 1996): uniform on 0-1 when the model fits.
+# Also returns tests of uniformity (Kolmogorov-Smirnov) and dispersion (simulated vs observed variance of residuals).
+gamm_quantile_residuals <- function(r, nsim = 250, seed = 1L) {
+  sims <- gamm_simulate(r, nsim, seed)
+  if (is.null(sims)) return(NULL)
+  y <- r$fit$y
+  set.seed(seed + 1)
+  lo <- rowMeans(sims < y); hi <- rowMeans(sims <= y)
+  u <- lo + stats::runif(length(y)) * (hi - lo)
+  u <- pmin(pmax(u, 1 / (2 * nsim)), 1 - 1 / (2 * nsim))
+  mu <- stats::fitted(r$fit); if (is.matrix(mu)) mu <- mu[, 1]
+  obs_disp <- sum((y - mu)^2); sim_disp <- colSums((sims - mu)^2)
+  disp_ratio <- obs_disp / mean(sim_disp)
+  disp_p <- 2 * min(mean(sim_disp >= obs_disp), mean(sim_disp <= obs_disp))
+  ks <- suppressWarnings(stats::ks.test(u, "punif"))
+  list(u = u, fitted = mu, age = r$data$age, ks_p = ks$p.value, dispersion = disp_ratio, dispersion_p = min(1, disp_p))
+}
+
+# Residual diagnostics: deviance residuals against fitted values and age, and lag-1 autocorrelation within individuals.
+gamm_residuals <- function(r) {
+  f <- stats::fitted(r$fit)
+  if (is.matrix(f)) f <- f[, 1]
+  res <- as.numeric(stats::residuals(r$fit, type = "deviance"))
+  data.frame(fitted = as.numeric(f), residual = res, age = r$data$age, id = r$data$id)
+}
+
+# Automatic cautions for the fitted model (short, one line each).
+gamm_cautions <- function(r, kc = gamm_kcheck(r), cc = gamm_concurvity(r), qr = NULL, gd = NULL) {
+  out <- character(0)
   s <- r$settings
-  fam <- switch(s$family, gaussian = "gaussian()", gaulss = "gaulss()", Gamma = "Gamma(link = \"log\")", betar = "betar(link = \"logit\")",
-                poisson = "poisson()", nb = "nb()", ziP = "ziP()", tw = "tw()", binomial = "binomial()", "gaussian()")
-  f <- if (identical(s$family, "gaulss")) sprintf("list(%s, ~ %s)", r$formula, gamm_age_smooth(s)) else r$formula
-  wt <- if (identical(s$family, "binomial") && ".trials" %in% names(r$data)) ", weights = .trials" else ""
-  kn <- gamm_knots(s)
-  knt <- if (!is.null(kn)) sprintf(", knots = list(age = c(%s))", paste(kn$age, collapse = ", ")) else ""
-  fitline <- switch(s$engine,
-    bam = sprintf("fit <- bam(%s, family = %s, data = gd, method = \"%s\", discrete = %s%s%s)", f, fam, if (identical(r$method, "ML")) "ML" else "fREML",
-                  if (identical(r$method, "ML")) "FALSE" else "TRUE", wt, knt),
-    gamm4 = sprintf("g4 <- gamm4::gamm4(%s, random = %s, family = %s, data = gd%s%s); fit <- g4$gam", f,
-                    paste(deparse(gamm_random_formula(s, r$data)), collapse = ""), fam, wt, knt),
-    sprintf("fit <- gam(%s, family = %s, data = gd, method = \"%s\", select = %s%s%s)", f, fam, r$method, if (isTRUE(s$select)) "TRUE" else "FALSE", wt, knt))
-  c("library(mgcv)",
-    "# gd: one row per record with columns id (factor), age, trait, ALR, LS and AFR (one value per individual),",
-    "# covariates (cv_*) and random-effect columns (re_*), as built by disappR's gamm_data(dat, meta).",
-    fitline, "summary(fit)", "k.check(fit)                     # basis dimension check", "concurvity(fit, full = TRUE)",
-    "plot(fit, pages = 1, shade = TRUE, seWithMean = TRUE)")
+  dd <- r$data
+  if (nrow(kc) && any(kc$Flag != "")) out <- c(out, sprintf("Basis may be too small for %s: raise k and refit.", paste(kc$Smooth[kc$Flag != ""], collapse = ", ")))
+  if (nrow(cc) && any(cc$Flag != "")) out <- c(out, sprintf("High concurvity (> 0.8) of %s: these terms can mimic each other, so their separate effects are poorly identified.", paste(sprintf("%s with %s", cc$Term, cc[["Most similar term"]])[cc$Flag != ""], collapse = "; ")))
+  old <- stats::quantile(dd$age, 0.9)
+  n_old <- length(unique(dd$id[dd$age >= old]))
+  if (n_old < 20) out <- c(out, sprintf("Only %d individuals have records at or above age %s: the curve is weakly constrained at the oldest ages.", n_old, format_num(old)))
+  if (identical(s$individual, "none")) out <- c(out, "No individual random effect: repeated records are treated as independent, so the intervals are too narrow.")
+  if (identical(s$individual, "fs") && stats::median(table(dd$id)) < 4) out <- c(out, "A random smooth per individual needs several records per individual; most individuals have fewer than 4, so consider a random intercept and slope.")
+  if (identical(s$proxy %||% "none", "none") && identical(r$afr_form %||% "none", "none"))
+    out <- c(out, "No lifespan or AFR term: the curve is the population trajectory, which selective disappearance and appearance can distort.")
+  if (identical(s$proxy, "LS") && !is.null(gd)) {
+    n_unk <- length(unique(gd$id[!is.finite(gd$LS)]))
+    if (n_unk > 0) out <- c(out, sprintf("%d individual(s) without a known lifespan (for example still alive) were left out. If they differ from the rest, this biases the curve; ALR keeps everyone.", n_unk))
+  }
+  if (isTRUE(s$terminal) && !is.null(gd) && (attr(gd, "n_dead_known") %||% 0) < length(unique(gd$id)))
+    out <- c(out, "The terminal-record term treats the last record of individuals not known to be dead as non-terminal: map lifespan or censoring for a clean terminal effect.")
+  if (nzchar(s$group %||% "")) {
+    nind <- tapply(dd$id, dd[[s$group]], function(z) length(unique(z)))
+    if (any(nind < 15)) out <- c(out, sprintf("Some groups have few individuals (%s): their curves are uncertain.", paste(names(nind), nind, sep = " ", collapse = ", ")))
+  }
+  lag1 <- gamm_lag1(stats::residuals(r$fit, type = "deviance"), dd$id)
+  if (is.finite(lag1) && lag1 > 0.3 && !(isTRUE(s$ar1) && r$rho > 0))
+    out <- c(out, sprintf("Residuals of consecutive records of the same individual are correlated (lag-1 r = %s): consider a random smooth per individual or, for a Gaussian trait, AR1 errors.", format_num(lag1, 2)))
+  # Overdispersion only, and only for count and proportion families: simulation conditional on the fitted random effects
+  # makes even a correct model look slightly underdispersed, and dispersion is undefined for 0/1 data.
+  binary <- all(dd$trait %in% c(0, 1)) && !(".trials" %in% names(dd) && any(dd$.trials > 1, na.rm = TRUE))
+  if (!is.null(qr) && s$family %in% c("poisson", "binomial") && !binary && is.finite(qr$dispersion_p) && qr$dispersion_p < 0.05 && qr$dispersion > 1)
+    out <- c(out, sprintf("Simulated residuals suggest overdispersion (ratio %s): try the %s family.", format_num(qr$dispersion, 2), if (s$family == "poisson") "negative binomial or Tweedie" else "beta"))
+  if (!isTRUE(r$converged)) out <- c(out, "The fit did not report full convergence: simplify the model (smaller k, fewer random terms) and refit.")
+  other <- setdiff(r$notes, grep("left out|lowered|do not vary|one level", r$notes, value = TRUE))
+  if (length(other)) out <- c(out, paste("Fitting notes:", paste(utils::head(other, 3), collapse = "; ")))
+  out
+}
+
+# Plain-language reading of the fitted model (one sentence per point), for the top of the results.
+gamm_reading <- function(r, dv, po) {
+  tb <- gamm_tables(r)
+  st <- tb$smooth
+  age_rows <- st[grepl("^s\\(age\\)|^s\\(age\\):", st$Smooth), , drop = FALSE]
+  out <- character(0)
+  for (i in seq_len(nrow(age_rows))) {
+    e <- age_rows$edf[[i]]
+    lab <- if (nrow(age_rows) > 1) sub("^s\\(age\\):", "", age_rows$Smooth[[i]]) else ""
+    out <- c(out, sprintf("The age smooth%s has %s effective degrees of freedom, so it %s, and it %s.", if (nzchar(lab)) paste0(" for ", lab) else "",
+                          format_num(e, 3),
+                          if (e < 1.5) "is close to a straight line" else if (e < 3) "is gently curved" else "is clearly non-linear",
+                          if (is.finite(age_rows$P[[i]]) && age_rows$P[[i]] < 0.05) "differs significantly from flat" else "does not differ significantly from flat"))
+  }
+  pr <- gamm_periods(dv, simultaneous = TRUE)
+  if (nrow(pr)) {
+    out <- c(out, paste0("Significant change (simultaneous 95% intervals): ",
+                         paste(sprintf("%s%s from %s to %s", ifelse(pr$Group == "All", "", paste0(pr$Group, ": ")), pr$Change,
+                                       vapply(pr$From, format_num, character(1)), vapply(pr$To, format_num, character(1))), collapse = "; "), "."))
+  } else out <- c(out, "No period of significant change with simultaneous 95% intervals.")
+  out <- c(out, sprintf("Deviance explained: %.1f%%.", 100 * tb$dev_expl))
+  out
+}
+
+# ---------------------------------------------------------------------------
+# R code
+# ---------------------------------------------------------------------------
+
+# R code that refits the model with mgcv on the downloaded GAMM data, with checks and derivatives (gratia).
+gamm_code <- function(r, file = "disappR_gamm_data.csv") {
+  s <- r$settings
+  f <- if (identical(s$family, "gaulss")) sprintf("list(%s, ~ %s)", r$formula, gamm_age_smooth(s, k = min(s$k, 6L))) else r$formula
+  wt <- if (identical(s$family, "binomial") && ".trials" %in% names(r$data) && all(is.finite(r$data$.trials))) ", weights = .trials" else ""
+  fam <- gamm_family_code(s$family)
+  facs <- names(r$data)[vapply(r$data, is.factor, logical(1))]
+  fitline <- if (identical(r$engine, "bam")) {
+    sprintf("fit <- bam(%s,\n           family = %s, data = gd, method = \"%s\", discrete = %s%s%s)", f, fam,
+            if (identical(r$method, "ML")) "ML" else "fREML", if (identical(r$method, "ML")) "FALSE" else "TRUE", wt,
+            if (isTRUE(r$rho > 0)) sprintf(", rho = %s, AR.start = !duplicated(gd$id)", format_num(r$rho, 4)) else "")
+  } else {
+    sprintf("fit <- gam(%s,\n           family = %s, data = gd, method = \"%s\", select = %s%s)", f, fam, r$method,
+            if (isTRUE(s$select)) "TRUE" else "FALSE", wt)
+  }
+  c("# GAMM of ageing, as fitted in disappR (step 7). Packages: mgcv; gratia for derivatives and plots (optional).",
+    "library(mgcv)",
+    sprintf("gd <- read.csv(\"%s\")   # downloaded from the GAMM tab: the records this model used", file),
+    "gd <- gd[order(gd$id, gd$age), ]",
+    if (length(facs)) sprintf("for (v in c(%s)) gd[[v]] <- factor(gd[[v]])", paste0("\"", facs, "\"", collapse = ", ")),
+    if (".terminal" %in% facs) "gd$.terminal <- factor(gd$.terminal, levels = c(\"no\", \"yes\"))",
+    if (grepl(".age_c", r$formula, fixed = TRUE)) "gd$.age_c <- gd$age - mean(gd$age)   # centred age for the random slope",
+    fitline,
+    "summary(fit)",
+    "k.check(fit)                       # basis dimension: k-index well below 1 with a small p-value means k is too low",
+    "concurvity(fit, full = TRUE)",
+    "plot(fit, pages = 1, shade = TRUE, seWithMean = TRUE)",
+    "",
+    "# Optional: derivatives of the age smooth with simultaneous intervals, and model checks (gratia)",
+    "if (requireNamespace(\"gratia\", quietly = TRUE)) {",
+    "  d1 <- gratia::derivatives(fit, select = \"s(age)\", interval = \"simultaneous\", unconditional = TRUE)",
+    "  print(gratia::draw(d1))",
+    "  print(gratia::appraise(fit))",
+    "}",
+    "# Note: disappR's population curve sets random effects to zero and other terms to reference values",
+    "# (numeric covariates and proxies at their mean, factors at their commonest level); gratia's partial",
+    "# effect of s(age) differs from it only by a constant for additive models.")
 }
