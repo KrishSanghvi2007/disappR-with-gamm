@@ -665,6 +665,7 @@ methods_text <- function(entries) {
                     fs = "a penalised random smooth of age for each individual (factor-smooth interaction)",
                     none = "no individual random effect", "individual random intercepts")
       prox <- function(p, form) switch(form %||% "none", linear = paste(p, "as a linear term"), smooth = paste(p, "as a smooth term"),
+                                       vc = paste0(p, " as an age-varying coefficient, s(age, by = ", p, "), so that the age trajectory changes linearly with ", p),
                                        ti = paste0(p, " as a smooth term plus a tensor-product interaction with age, ti(age, ", p, ")"), NULL)
       px <- c(if (!identical(g$proxy %||% "none", "none")) prox(g$proxy, g$proxy_form), prox("AFR", g$afr_form))
       grp <- if (nzchar(g$group %||% "")) paste0(" Group-specific trajectories (", sub("^cv_", "", g$group), ") were modelled as structure ", g$structure_used,

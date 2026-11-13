@@ -518,3 +518,39 @@ observeEvent(list(input$data_source, input$example_id), disappr_guard("gamm exam
   if (!is.null(g$afr_form)) updateSelectInput(session, "gamm_afr_form", selected = g$afr_form)
   if (!is.null(g$individual)) updateSelectInput(session, "gamm_individual", selected = g$individual)
 }), ignoreInit = TRUE)
+
+# ---- guidance: a hint for the proxy settings, and suggested next steps after a fit ---------------------------------
+output$gamm_proxy_hint <- renderUI({
+  pr <- input$gamm_proxy %||% "ALR"; fm <- input$gamm_proxy_form %||% "linear"
+  txt <- c(switch(pr, ALR = "ALR: each individual's age at its last record (or the mapped ALR); keeps every individual.",
+                  LS = "Known lifespan: leaves out individuals whose lifespan is unknown (for example still alive).",
+                  none = "No proxy: the curve is the population trajectory, which selective disappearance can distort."),
+           if (!identical(pr, "none")) switch(fm,
+             linear = "Linear: longer- and shorter-lived individuals differ by the same amount at every age (age-independent selective disappearance).",
+             smooth = "Smooth: as linear, but the difference can change non-linearly with the proxy.",
+             vc = "Age-dependent, linear in the proxy: the age curve tilts with the proxy (the smooth analogue of Model 4).",
+             ti = "Age-dependent, smooth in both: the age curve can change shape with the proxy; needs plenty of data and mgcv."))
+  p(class = "small-note", paste(txt, collapse = " "))
+})
+output$gamm_next_ui <- renderUI({
+  r <- safe_get(gamm_res()); if (is.null(r)) return(NULL)
+  s <- r$settings; dd <- r$data; nxt <- character(0)
+  kc <- safe_get(gamm_kc()) %||% data.frame()
+  if (nrow(kc) && any(kc$Flag != "")) nxt <- c(nxt, sprintf("Raise k (now %s) and refit: the basis check says the age smooth may be too stiff.", s$k))
+  lag1 <- gamm_lag1(gamm_resid(r), dd$id)
+  per <- table(dd$id)
+  if (is.finite(lag1) && lag1 > 0.3 && identical(s$individual, "ri"))
+    nxt <- c(nxt, if (stats::median(per) >= 5) "Try 'Random smooth per individual' or 'Random intercept and slope': residuals of the same individual are correlated, so individuals seem to age differently."
+                  else "Try 'Random intercept and slope': residuals of the same individual are correlated, so individuals seem to age at different rates.")
+  if (!identical(s$proxy, "none") && is.null(gamm_proxy_store()))
+    nxt <- c(nxt, "Open the Selective disappearance tab and press 'Compare proxy forms': it tests whether the proxy matters, and whether its effect changes with age.")
+  if (identical(s$proxy, "none")) nxt <- c(nxt, "Choose ALR (or known lifespan) as a proxy: without one the curve can be distorted by selective disappearance.")
+  ch <- safe_get(gamm_group_choices(meta(), gamm_gd())) %||% character(0)
+  if (length(ch) && !nzchar(s$group %||% "")) nxt <- c(nxt, sprintf("Your data have a grouping variable (%s): choose it under 'Separate curves for a group' to ask whether groups age differently.", paste(names(ch), collapse = ", ")))
+  if (nzchar(s$group %||% "") && is.null(gamm_groups_store())) nxt <- c(nxt, "Open the Groups tab and press 'Compare group structures'.")
+  if (is.null(gamm_poly_store())) nxt <- c(nxt, "On the Checks tab, compare the smooth with linear, quadratic and cubic age: if a polynomial fits as well, the models of step 5 describe the shape.")
+  nxt <- c(nxt, "Read the Ageing rate tab for where the trait changes significantly with age, and save the results you will report.")
+  div(class = "diagnosis-card", style = "border-left: 5px solid #7C8060;",
+      div(class = "diagnosis-title", "Suggested next steps"),
+      lapply(utils::head(nxt, 4), function(x) div(class = "diagnosis-detail", x)))
+})

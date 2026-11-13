@@ -57,7 +57,7 @@ compare_one <- function(b, sh = NULL) {
   pc <- gamm_proxy_comparison(gd, s)
   tab <- pc$tables$ALR
   ag <- stats::setNames(tab$AIC, c("M1", "M2", "M2s", "M4"))[c("M1", "M2", "M4")]
-  rg <- gamm_fit(gd, s)
+  rg <- gamm_fit(gd, utils::modifyList(s, list(engine = if (isTRUE(pc$fast)) "gamm4" else "auto")))
   out$GAMM <- c(best = best_of(ag), agedep = isTRUE(ag[["M2"]] - ag[["M4"]] > 2),
                 err = if (isTRUE(rg$ok) && !is.null(sh)) shape_err(gamm_curve(rg, n = 60, by_proxy = FALSE), sh) else NA_real_)
   out

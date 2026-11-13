@@ -148,6 +148,27 @@ test_that("the gamm4 engine fits what it can, and comparisons use one engine for
   # ti() needs mgcv: the fit falls back to bam with a note
   rt <- gamm_fit(gd, utils::modifyList(gamm_defaults(), list(engine = "gamm4", proxy_form = "ti")))
   expect_identical(rt$engine, "bam"); expect_true(any(grepl("gamm4 cannot fit", rt$notes)))
-  # the proxy comparison includes ti, so every model uses bam
-  expect_identical(gamm_proxy_comparison(gd, utils::modifyList(gamm_defaults(), list(engine = "gamm4")))$engine, "bam")
+  # with gamm4 the proxy comparison uses the varying-coefficient form, which gamm4 can fit, for every model
+  pc <- gamm_proxy_comparison(gd, utils::modifyList(gamm_defaults(), list(engine = "gamm4")))
+  expect_identical(pc$engine, "gamm4"); expect_true(pc$fast)
+  expect_true(any(grepl("s(age, by = ALR)", pc$tables$ALR$Model, fixed = TRUE)))
+  expect_true(all(is.finite(pc$tables$ALR$AIC)))
+  # and the group comparison fits G, GI and I, and says why GS and S were not fitted
+  gc <- gamm_group_comparison(gd, utils::modifyList(gamm_defaults(), list(engine = "gamm4", group = "cv_sex")))
+  expect_true(gc$fast)
+  expect_true(all(is.finite(gc$table$AIC[gc$table$Model %in% c("G", "GI", "I")])))
+  expect_true(all(grepl("not fitted", gc$table$Status[gc$table$Model %in% c("GS", "S")])))
+})
+
+test_that("the varying-coefficient proxy form fits with mgcv and gamm4 and draws curves by proxy value", {
+  skip_if_not_installed("mgcv")
+  gd <- gamm_gd_of(gamm_toy(n_id = 80, two_groups = FALSE), covars = character(0))
+  r <- gamm_fit(gd, utils::modifyList(gamm_defaults(), list(proxy_form = "vc")))
+  expect_true(r$ok); expect_match(r$formula, "s(age, by = .ALR_c", fixed = TRUE)
+  expect_equal(length(unique(gamm_curve(r)$proxy)), 3)
+  expect_true(is.finite(r$centres$ALR))
+  skip_if_not_installed("gamm4")
+  r4 <- gamm_fit(gd, utils::modifyList(gamm_defaults(), list(proxy_form = "vc", engine = "gamm4")))
+  expect_true(r4$ok); expect_identical(r4$engine, "gamm4")
+  expect_equal(length(unique(gamm_curve(r4)$proxy)), 3)
 })

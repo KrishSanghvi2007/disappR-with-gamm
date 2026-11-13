@@ -21,7 +21,7 @@ touch <- function(output_env, names) {
 
 # outputs the server defines (0.24.6: five names of removed outputs dropped; audit Part H checks this list)
 # step 7 (GAMM) outputs, defined in inst/app/gamm_server.R
-gamm_outputs <- c("gamm_data_note", "gamm_family_hint", "gamm_individual_note", "gamm_group_ui", "gamm_truth_ui", "gamm_formula_ui",
+gamm_outputs <- c("gamm_data_note", "gamm_proxy_hint", "gamm_next_ui", "gamm_family_hint", "gamm_individual_note", "gamm_group_ui", "gamm_truth_ui", "gamm_formula_ui",
                   "gamm_reading_ui", "gamm_cautions_ui", "gamm_curve_plot", "gamm_support_plot", "gamm_deriv_plot", "gamm_periods_table",
                   "gamm_peak_table", "gamm_fit_stats", "gamm_smooth_table", "gamm_param_table", "gamm_kcheck_table", "gamm_concurvity_table",
                   "gamm_resid_note", "gamm_resid_plot", "gamm_poly_table", "gamm_proxy_terms_table", "gamm_proxy_verdict", "gamm_proxy_tables",

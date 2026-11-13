@@ -40,11 +40,13 @@ GAMM_INDIVIDUAL <- c("Random intercept" = "ri",
                      "Random smooth per individual (fs)" = "fs",
                      "None (not recommended)" = "none")
 GAMM_PROXY_FORMS <- c("None" = "none", "Linear" = "linear", "Smooth" = "smooth",
-                      "Age-dependent: smooth + ti(age, proxy)" = "ti")
+                      "Age-dependent, linear in the proxy: s(age, by = proxy)" = "vc",
+                      "Age-dependent, smooth in both: smooth + ti(age, proxy)" = "ti")
 GAMM_ENGINES <- c("Automatic (gam; bam or gamm4 for large data)" = "auto", "mgcv::gam" = "gam", "mgcv::bam (many records)" = "bam",
                   "gamm4 (lme4; thousands of individuals)" = "gamm4")
 GAMM_BAM_ROWS <- 6000      # automatic engine: bam above this many records ...
 GAMM_BAM_IND <- 400        # ... or this many individuals (gam slows sharply with many random-effect levels)
+GAMM_FAST_LEVELS <- 300    # comparisons (ML) switch to gamm4 above this many random-effect levels, when the models allow it
 GAMM_G4_IND <- 1500        # gamm4 (sparse lme4 random effects) above this many individuals, when the model allows it:
                            # mgcv stores each individual as a dense column, so time and memory grow with its square
 
@@ -191,6 +193,7 @@ gamm_formula <- function(s, gd, structure = s$structure, proxy_form = s$proxy_fo
     if (length(unique(gd[[p]][is.finite(gd[[p]])])) < 3 && !identical(form, "linear")) form <- "linear"
     kp <- gamm_proxy_k(gd, p)
     switch(form, linear = p, smooth = sprintf("s(%s, k = %d)", p, kp),
+           vc = sprintf("s(age, by = .%s_c, k = %d)", p, min(5L, k)),      # f(age) x centred proxy; includes the linear proxy term
            ti = c(sprintf("s(%s, k = %d)", p, kp), sprintf("ti(age, %s, k = c(%d, %d))", p, min(5L, k), min(5L, kp))),
            character(0))
   }
@@ -218,7 +221,10 @@ gamm_formula <- function(s, gd, structure = s$structure, proxy_form = s$proxy_fo
 # The variables a formula needs from the data (for complete-case rows).
 gamm_formula_vars <- function(f_str, gd) {
   v <- intersect(all.vars(stats::as.formula(f_str)), names(gd))
-  if (".age_c" %in% all.vars(stats::as.formula(f_str))) v <- c(v, "age")
+  av <- all.vars(stats::as.formula(f_str))
+  if (".age_c" %in% av) v <- c(v, "age")
+  cp <- grep("^\\.(ALR|LS|AFR)_c$", av, value = TRUE)
+  v <- c(v, intersect(sub("^\\.(.*)_c$", "\\1", cp), names(gd)))
   unique(v)
 }
 
@@ -254,7 +260,7 @@ gamm_family_problem <- function(y, fam, trials = NULL) {
 # smooths that lme4 can represent: not ti() interactions, factor-smooth (sz, fs) or linked (id = ) group smooths.
 gamm_g4_compatible <- function(s, structure = s$structure, proxy_form = s$proxy_form, afr_form = s$afr_form) {
   gamm_has_gamm4() && s$family %in% c("gaussian", "poisson", "binomial", "Gamma") && (s$individual %||% "ri") %in% c("ri", "rs", "none") &&
-    !"ti" %in% c(proxy_form, afr_form) && structure %in% c("G", "I") && !isTRUE(s$ar1) && !isTRUE(s$select) &&
+    !"ti" %in% c(proxy_form, afr_form) && structure %in% c("G", "GI", "I") && !isTRUE(s$ar1) && !isTRUE(s$select) &&
     !length(s$cov_age %||% character(0))
 }
 
@@ -268,8 +274,18 @@ gamm_engine_for <- function(s, n, n_ind, structure = s$structure, proxy_form = s
   e
 }
 
+# Random-effect levels of a model on its complete records: individuals plus the levels of mapped random intercepts. With
+# many levels, ML fits in mgcv are slow (no discretisation under ML, dense random-effect columns).
+gamm_re_levels <- function(gd, s) {
+  keep <- tryCatch(gamm_common_rows(gd, list(gamm_formula(s, gd)), s$family), error = function(e) rep(TRUE, nrow(gd)))
+  ut <- gamm_usable_terms(gd[keep, , drop = FALSE], s)
+  length(unique(gd$id[keep])) + sum(vapply(ut$re, function(v) length(unique(gd[[v]][keep])), numeric(1)))
+}
+
 # One engine for every model of a comparison, so that their AICs are comparable: gamm4 only if all the models allow it.
-gamm_set_engine <- function(gd, s, specs) {
+# fast_ok: comparisons (fitted by ML) use gamm4 from GAMM_FAST_LEVELS random-effect levels, not only from GAMM_G4_IND
+# individuals.
+gamm_set_engine <- function(gd, s, specs, fast_ok = FALSE) {
   # count records and individuals as a single fit would: those complete for the model's variables
   keep <- tryCatch(gamm_common_rows(gd, list(gamm_formula(s, gd)), s$family), error = function(e) rep(TRUE, nrow(gd)))
   n <- sum(keep); n_ind <- length(unique(gd$id[keep]))
@@ -277,7 +293,11 @@ gamm_set_engine <- function(gd, s, specs) {
                                                             x$afr_form %||% s$afr_form), logical(1)))
   e <- s$engine %||% "auto"
   if (identical(e, "gamm4") && !all_g4) return("bam")
-  if (identical(e, "auto")) return(if (n_ind > GAMM_G4_IND && all_g4) "gamm4" else if (n > GAMM_BAM_ROWS || n_ind > GAMM_BAM_IND) "bam" else "gam")
+  if (identical(e, "auto")) {
+    fast_at <- suppressWarnings(as.numeric(Sys.getenv("DISAPPR_GAMM_FAST_LEVELS", GAMM_FAST_LEVELS)))   # for validation runs
+    if (all_g4 && (n_ind > GAMM_G4_IND || (isTRUE(fast_ok) && gamm_re_levels(gd, s) > fast_at))) return("gamm4")
+    return(if (n > GAMM_BAM_ROWS || n_ind > GAMM_BAM_IND) "bam" else "gam")
+  }
   e
 }
 
@@ -353,6 +373,13 @@ gamm_fit <- function(gd, s, method = s$method, structure = s$structure, proxy_fo
   ut <- gamm_usable_terms(dd, s)
   if (length(ut$dropped)) notes <- c(notes, paste("left out because they do not vary in these records:", paste(ut$dropped, collapse = ", ")))
   dd$.age_c <- dd$age - mean(dd$age)
+  # proxies centred on their mean over individuals, for the varying-coefficient (vc) form
+  centres <- list()
+  for (pp in intersect(c("ALR", "LS", "AFR"), names(dd))) {
+    v1 <- dd[[pp]][!duplicated(dd$id)]
+    centres[[pp]] <- if (any(is.finite(v1))) mean(v1, na.rm = TRUE) else 0
+    dd[[paste0(".", pp, "_c")]] <- dd[[pp]] - centres[[pp]]
+  }
   wts <- if (identical(fam, "binomial") && ".trials" %in% names(dd) && all(is.finite(dd$.trials))) dd$.trials else NULL
   n_ind <- nlevels(dd$id)
   engine <- gamm_engine_for(s, nrow(dd), n_ind, structure, proxy_form, afr_form)
@@ -410,7 +437,7 @@ gamm_fit <- function(gd, s, method = s$method, structure = s$structure, proxy_fo
   if (!conv) notes <- c(notes, "the smoothing-parameter optimisation did not report full convergence")
   list(ok = TRUE, fit = fit, mer = mer, formula = f_str, data = dd, settings = s, method = method, structure = structure,
        proxy_form = proxy_form, afr_form = afr_form, engine = engine, rho = rho, converged = conv,
-       notes = unique(notes), n = nrow(dd), n_ind = n_ind, age_mean = mean(dd$age),
+       notes = unique(notes), n = nrow(dd), n_ind = n_ind, age_mean = mean(dd$age), centres = centres,
        n_dropped = sum(!keep), seconds = proc.time()[["elapsed"]] - t0)
 }
 
@@ -510,6 +537,7 @@ gamm_newdata <- function(r, ages, level = NULL, at = list()) {
   if (nzchar(grp) && grp %in% names(dd) && !is.null(level)) nd[[grp]] <- factor(level, levels = levels(dd[[grp]]))
   if (".grp_o" %in% names(dd) && !is.null(level)) nd$.grp_o <- factor(level, levels = levels(dd$.grp_o), ordered = TRUE)
   for (v in names(at)) nd[[v]] <- at[[v]]
+  for (pp in names(r$centres %||% list())) if (pp %in% names(nd)) nd[[paste0(".", pp, "_c")]] <- nd[[pp]] - r$centres[[pp]]
   nd
 }
 
@@ -548,7 +576,7 @@ gamm_age_grid <- function(r, n = 150) seq(min(r$data$age), max(r$data$age), leng
 # individuals (age-dependent models, where the curve's shape depends on the proxy).
 gamm_proxy_values <- function(r) {
   p <- r$settings$proxy %||% "none"
-  if (identical(p, "none") || !identical(r$proxy_form, "ti") || !p %in% names(r$data)) return(NULL)
+  if (identical(p, "none") || !r$proxy_form %in% c("ti", "vc") || !p %in% names(r$data)) return(NULL)
   ind <- r$data[!duplicated(r$data$id), , drop = FALSE]
   q <- stats::quantile(ind[[p]], c(0.1, 0.5, 0.9), na.rm = TRUE, names = FALSE)
   stats::setNames(q, paste0(p, " = ", vapply(q, format_num, character(1)), c(" (short-lived)", " (median)", " (long-lived)")))
@@ -693,6 +721,10 @@ gamm_compare_table <- function(fits, labels) {
 
 gamm_lrt <- function(a, b, label) {
   if (!isTRUE(a$ok) || !isTRUE(b$ok)) return(NULL)
+  if (!is.null(a$mer) && !is.null(b$mer)) return(tryCatch({          # gamm4: likelihood-ratio test of the ML lme4 fits
+    x <- suppressMessages(stats::anova(a$mer, b$mer, refit = FALSE))
+    data.frame(Comparison = label, `Deviance difference` = abs(diff(x$deviance)), df = abs(diff(x$npar)), P = x[[ncol(x)]][[2]], check.names = FALSE)
+  }, error = function(e) NULL))
   tryCatch({
     x <- stats::anova(a$fit, b$fit, test = "Chisq")
     data.frame(Comparison = label, `Deviance difference` = x$Deviance[[2]], df = x$Df[[2]], P = x[[ncol(x)]][[2]], check.names = FALSE)
@@ -706,12 +738,16 @@ gamm_group_comparison <- function(gd, s, progress = NULL) {
   s <- utils::modifyList(gamm_defaults(), s)
   if (!nzchar(s$group %||% "") || !s$group %in% names(gd)) return(list(ok = FALSE, message = "Choose a grouping variable first."))
   structs <- GAMM_STRUCTURES
-  s$engine <- gamm_set_engine(gd, s, c(lapply(structs, function(st) list(structure = st)), list(list(structure = "I"))))
+  # with many random-effect levels, G, GI and I are fitted with gamm4 (fast); GS and S need mgcv (sz and linked smooths)
+  fast <- identical(gamm_set_engine(gd, s, lapply(c("G", "GI", "I"), function(st) list(structure = st)), fast_ok = TRUE), "gamm4")
+  s$engine <- if (fast) "gamm4" else gamm_set_engine(gd, s, c(lapply(structs, function(st) list(structure = st)), list(list(structure = "I"))))
   rows <- gamm_common_rows(gd, lapply(structs, function(st) gamm_formula(s, gd, structure = st)), s$family)
   fits <- list()
   for (i in seq_along(structs)) {
     if (is.function(progress)) progress(i, length(structs) + 1, names(structs)[[i]])
-    fits[[structs[[i]]]] <- gamm_fit(gd, s, method = "ML", structure = structs[[i]], rows = rows)
+    fits[[structs[[i]]]] <- if (fast && structs[[i]] %in% c("GS", "S"))
+      list(ok = FALSE, message = "not fitted: with many random-effect levels the comparison uses gamm4, which cannot fit this structure (choose the bam engine in Advanced options to include it)")
+    else gamm_fit(gd, s, method = "ML", structure = structs[[i]], rows = rows)
   }
   tab <- gamm_compare_table(fits, names(structs))
   tab$Model <- unname(structs)
@@ -730,7 +766,7 @@ gamm_group_comparison <- function(gd, s, progress = NULL) {
              else if ("G" %in% close) sprintf("%s is best supported, but G (one curve) is within 2 AIC: weak evidence that the groups age differently.", best)
              else sprintf("%s is best supported and G is more than 2 AIC worse: the groups appear to age differently.", best)
   list(ok = TRUE, table = tab, differences = diff_tab, reference = if (isTRUE(od$ok)) levels(od$data$.grp_o)[[1]] else "",
-       lrt = gamm_lrt(fits$G, fits$I, "G (one shape) vs I (a curve per group)"), verdict = verdict, n = sum(rows))
+       lrt = gamm_lrt(fits$G, fits$I, "G (one shape) vs I (a curve per group)"), verdict = verdict, n = sum(rows), engine = s$engine, fast = fast)
 }
 
 # Selective disappearance and appearance: ML comparison, on the same records, of no proxy, a linear, a smooth and an
@@ -742,14 +778,16 @@ gamm_proxy_comparison <- function(gd, s, progress = NULL) {
   if (!identical(s$proxy, "none")) sets[[s$proxy]] <- "proxy"
   if (any(is.finite(gd$AFR)) && length(unique(gd$AFR[is.finite(gd$AFR)])) >= 3) sets[["AFR"]] <- "afr"
   if (!length(sets)) return(list(ok = FALSE, message = "Choose ALR or lifespan as the proxy first (or map AFR on the Data tab)."))
-  forms <- c("none", "linear", "smooth", "ti")
-  # With thousands of individuals the age-dependent (ti) model needs mgcv, whose dense random effects take several GB of
-  # memory: it is left out of the comparison (and said so), and the other forms are fitted with gamm4.
-  keep0 <- tryCatch(gamm_common_rows(gd, list(gamm_formula(s, gd)), s$family), error = function(e) rep(TRUE, nrow(gd)))
-  big <- length(unique(gd$id[keep0])) > GAMM_G4_IND && identical(s$engine %||% "auto", "auto") && gamm_g4_compatible(utils::modifyList(s, list(proxy_form = "linear", afr_form = "none")))
-  if (big) forms <- c("none", "linear", "smooth")
-  s$engine <- gamm_set_engine(gd, s, c(lapply(forms, function(fm) list(proxy_form = fm)), lapply(forms, function(fm) list(afr_form = fm))))
+  # Comparisons are fitted by ML, where mgcv cannot discretise and stores random effects as dense columns, so with many
+  # random-effect levels they are fitted with gamm4 (lme4's sparse random effects). gamm4 cannot fit ti(), so the
+  # age-dependent form is then the varying-coefficient smooth s(age, by = proxy) (vc), which is linear in the proxy.
+  vc_specs <- lapply(c("none", "linear", "smooth", "vc"), function(fm) list(proxy_form = fm, afr_form = fm))
+  eng_fast <- gamm_set_engine(gd, s, vc_specs, fast_ok = TRUE)
+  fast <- identical(eng_fast, "gamm4")
+  forms <- c("none", "linear", "smooth", if (fast) "vc" else "ti")
+  s$engine <- if (fast) "gamm4" else gamm_set_engine(gd, s, c(lapply(forms, function(fm) list(proxy_form = fm)), lapply(forms, function(fm) list(afr_form = fm))))
   out$engine <- s$engine
+  out$fast <- fast
   step <- 0; total <- length(sets) * length(forms)
   for (p in names(sets)) {
     args_for <- function(form) if (identical(sets[[p]], "proxy")) list(proxy_form = form, afr_form = s$afr_form) else list(proxy_form = s$proxy_form, afr_form = form)
@@ -761,16 +799,15 @@ gamm_proxy_comparison <- function(gd, s, progress = NULL) {
       do.call(gamm_fit, c(list(gd = gd, s = s, method = "ML", rows = rows), args_for(fm)))
     })
     names(fits) <- forms
-    labs <- c(paste("No", p, "term"), paste("Linear", p), paste("Smooth", p), paste0("Age-dependent ", p, ": ti(age, ", p, ")"))
-    if (big) fits$ti <- list(ok = FALSE, message = sprintf("not fitted: with more than %s individuals this model needs mgcv and several GB of memory (fit it on the Fit tab if your computer allows)", format(GAMM_G4_IND, big.mark = ",")))
+    labs <- c(paste("No", p, "term"), paste("Linear", p), paste("Smooth", p),
+              if (fast) paste0("Age-dependent ", p, ": s(age, by = ", p, ")") else paste0("Age-dependent ", p, ": ti(age, ", p, ")"))
     tab <- gamm_compare_table(fits, labs)
     tab$Records <- sum(rows)
     out$tables[[p]] <- tab
     out$fits[[p]] <- lapply(fits, function(r) if (isTRUE(r$ok)) tryCatch(gamm_tables(r)$smooth, error = function(e) NULL) else NULL)
-    d <- stats::setNames(tab$dAIC, forms)
-    v <- if (big) { if (is.finite(d[["none"]]) && d[["none"]] >= 2) "age_independent" else if (is.finite(d[["none"]])) "none" else "caution" }
-         else if (!is.finite(d[["ti"]]) || !is.finite(d[["none"]])) "caution"
-         else if (d[["ti"]] == 0 && min(d[c("none", "linear", "smooth")], na.rm = TRUE) >= 2) "age_dependent"
+    d <- stats::setNames(tab$dAIC, c("none", "linear", "smooth", "ad"))
+    v <- if (!is.finite(d[["ad"]]) || !is.finite(d[["none"]])) "caution"
+         else if (d[["ad"]] == 0 && min(d[c("none", "linear", "smooth")], na.rm = TRUE) >= 2) "age_dependent"
          else if (d[["none"]] >= 2) "age_independent" else "none"
     out$verdicts[[p]] <- v
     out$texts[[p]] <- switch(v,
@@ -778,7 +815,7 @@ gamm_proxy_comparison <- function(gd, s, progress = NULL) {
       age_independent = sprintf("A %s term is supported (no-%s model at least 2 AIC worse), but not an age-dependent one: consistent with age-independent selective %s.", p, p, if (p == "AFR") "appearance" else "disappearance"),
       none = sprintf("The model without %s is within 2 AIC of the best: no clear evidence of selective %s through %s.", p, if (p == "AFR") "appearance" else "disappearance", p),
       sprintf("The %s comparison could not be completed.", p))
-    if (big) out$texts[[p]] <- sub("but not an age-dependent one: ", "", paste(out$texts[[p]], "The age-dependent form was not tested (too many individuals for the mgcv model)."))
+    if (fast) out$texts[[p]] <- paste(out$texts[[p]], sprintf("(Fitted with gamm4 because of the many random-effect levels; the age-dependent form is s(age, by = %s), linear in %s.)", p, p))
   }
   out
 }
@@ -803,7 +840,7 @@ gamm_naive_vs_corrected <- function(gd, r) {
 gamm_parametric_reference <- function(gd, s) {
   s <- utils::modifyList(gamm_defaults(), s)
   polys <- list(`Linear age` = 1L, `Quadratic age` = 2L, `Cubic age` = 3L, `Smooth of age` = 0L)
-  s$engine <- gamm_set_engine(gd, s, list(list()))
+  s$engine <- gamm_set_engine(gd, s, list(list()), fast_ok = TRUE)
   rows <- gamm_common_rows(gd, lapply(polys, function(p) gamm_formula(s, gd, age_poly = p)), s$family)
   fits <- lapply(polys, function(p) gamm_fit(gd, s, method = "ML", age_poly = p, rows = rows))
   tab <- gamm_compare_table(fits, names(polys))
