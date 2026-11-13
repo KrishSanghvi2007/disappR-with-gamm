@@ -1,3 +1,8 @@
 disappR 0.25.0 starting from /home/user/disappR-with-gamm
 
 == Empirical examples (Gaussian traits)
+  bichet                 GLMM quadratic: M4 (age-dependent) | GLMM Logarithmic: M1 | GAMM: M4 (age-dependent)
+  moullec_swift          GLMM quadratic: M4 (age-dependent) | GLMM Cubic: M4 (age-dependent) | GAMM: M1
+  pasztor_apollo         GLMM quadratic: M4 (age-dependent) | GLMM Cubic: M4 (age-dependent) | GAMM: M4 (age-dependent)
+  wynn                   GLMM quadratic: M1 | GLMM Asymptotic exponential: M1 | GAMM: M2
+EMPIRICAL EXIT 137
