@@ -66,7 +66,7 @@ for (key in names(EXAMPLES)) {
   s <- utils::modifyList(gamm_defaults(), c(list(family = fam, cov_pairs = b$meta$cov_pairs, cov_age = b$meta$cov_age), ex$gamm %||% list()))
   if (isTRUE(b$meta$has_trials) && fam == "binomial") s$family <- "binomial"
   r <- try_fit(sprintf("%s [%s]", key, fam), gd, s)
-  if (!is.null(r) && key %in% c("brown_haematocrit", "szejnersigal_activity")) comparisons(key, gd, s)
+  if (!is.null(r) && key %in% c("szejnersigal_activity")) comparisons(key, gd, s)
 }
 
 # ---- 2. out-of-sample stress datasets -----------------------------------------------------------------------------
