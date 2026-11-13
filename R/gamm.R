@@ -416,7 +416,7 @@ gamm_aic <- function(r) {
 # ---------------------------------------------------------------------------
 
 gamm_tables <- function(r) {
-  sm <- summary(r$fit)
+  sm <- summary(r$fit, re.test = FALSE)
   pt <- as.data.frame(sm$p.table)
   pt <- data.frame(Term = rownames(pt), Estimate = pt[[1]], SE = pt[[2]], Statistic = pt[[3]], P = pt[[4]], stringsAsFactors = FALSE)
   st <- if (!is.null(sm$s.table) && nrow(sm$s.table)) {
@@ -672,7 +672,7 @@ gamm_difference <- function(r, n = 150) {
 gamm_compare_table <- function(fits, labels) {
   tab <- data.frame(Model = labels, AIC = vapply(fits, gamm_aic, numeric(1)),
                     edf = vapply(fits, function(r) if (isTRUE(r$ok)) sum(r$fit$edf) else NA_real_, numeric(1)),
-                    `Deviance explained (%)` = vapply(fits, function(r) if (isTRUE(r$ok)) tryCatch(100 * summary(r$fit)$dev.expl, error = function(e) NA_real_) else NA_real_, numeric(1)),
+                    `Deviance explained (%)` = vapply(fits, function(r) if (isTRUE(r$ok)) tryCatch(100 * summary(r$fit, re.test = FALSE)$dev.expl, error = function(e) NA_real_) else NA_real_, numeric(1)),
                     Status = vapply(fits, function(r) if (isTRUE(r$ok)) "fitted" else r$message %||% "failed", character(1)),
                     check.names = FALSE, stringsAsFactors = FALSE, row.names = NULL)
   tab$dAIC <- tab$AIC - suppressWarnings(min(tab$AIC, na.rm = TRUE))
