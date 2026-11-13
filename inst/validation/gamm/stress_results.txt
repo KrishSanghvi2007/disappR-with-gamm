@@ -185,3 +185,8 @@
   group_tiny_level                                           ok    0.1s  gam, 267 rec, 60 ind, s(age) edf 8.14 
   group_missing_values                                       ok    0.1s  gam, 255 rec, 52 ind, s(age) edf 8.18 
   all_na_lifespan                                            message: Known lifespan (LS) is not mapped or is missing for everyone: choose ALR, or map a lifespa 
+  many_individuals                                           ok    5.0s  bam, 5910 rec, 1500 ind, s(age) edf 3.97 
+  nonexistent_group                                          ok    0.1s  gam, 211 rec, 40 ind, s(age) edf 4.69 
+
+142 fits succeeded, 42 returned a message.
+No errors escaped the GAMM engine.

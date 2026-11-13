@@ -246,6 +246,7 @@ gamm_family_problem <- function(y, fam, trials = NULL) {
     if (is.null(trials) && any(y > 0 & y < 1)) return("Proportions need a trials column (map it on the Data or Modelling tab); without one the binomial family takes only 0/1 values.")
   }
   if (length(unique(y)) < 2) return("The trait does not vary, so there is nothing to model.")
+  if (max(abs(y)) > 1e12 || (max(abs(y)) > 0 && max(abs(y)) < 1e-12)) return("The trait's values are extremely large or small: rescale it (for example to other units, or z-scores) and fit again.")
   NULL
 }
 
@@ -331,6 +332,7 @@ gamm_fit <- function(gd, s, method = s$method, structure = s$structure, proxy_fo
   dd <- droplevels(gd[keep, , drop = FALSE])
   if (sum(!keep)) notes <- c(notes, sprintf("%d record(s) with missing values in the model's variables were left out", sum(!keep)))
   if (nrow(dd) < 20) return(fail("Too few complete records (fewer than 20) for this model."))
+  if (nlevels(droplevels(dd$id)) < 3) return(fail("At least 3 individuals are needed: individual differences cannot be separated from ageing with fewer."))
   if (nzchar(s$group) && nlevels(droplevels(factor(dd[[s$group]]))) < 2) {
     structure <- "G"; notes <- c(notes, "the grouping variable has one level in these records, so one curve was fitted")
     s$group <- ""
@@ -387,7 +389,11 @@ gamm_fit <- function(gd, s, method = s$method, structure = s$structure, proxy_fo
     }
   }
   res <- tryCatch(withCallingHandlers({
-    fit <- do_fit(0)
+    fit <- if (identical(engine, "bam")) tryCatch(do_fit(0), error = function(e) {
+      # bam's discretised fit fails on some small data sets with random effects (an mgcv quirk): use gam instead
+      if (nrow(dd) > GAMM_BAM_ROWS || n_ind > GAMM_BAM_IND || isTRUE(s$ar1)) stop(e)
+      notes <<- c(notes, "bam could not fit these data, so gam was used"); engine <<- "gam"; do_fit(0)
+    }) else do_fit(0)
     if (isTRUE(s$ar1) && identical(fam, "gaussian") && identical(engine, "bam") && age_poly == 0) {
       rho <- gamm_lag1(stats::residuals(fit, type = "response"), dd$id)
       if (is.finite(rho) && rho > 0.05) { rho <- min(rho, 0.95); fit <- do_fit(rho) } else rho <- 0
