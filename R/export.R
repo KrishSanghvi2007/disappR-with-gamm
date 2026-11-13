@@ -669,7 +669,8 @@ methods_text <- function(entries) {
       px <- c(if (!identical(g$proxy %||% "none", "none")) prox(g$proxy, g$proxy_form), prox("AFR", g$afr_form))
       grp <- if (nzchar(g$group %||% "")) paste0(" Group-specific trajectories (", sub("^cv_", "", g$group), ") were modelled as structure ", g$structure_used,
                                                    if (has("GAMM group comparison")) ", after structures G, GS, GI, S and I (each with a group main effect) were compared by AIC under maximum likelihood on the same records (Pedersen et al. 2019)" else "", ".") else ""
-      eng <- if (identical(g$engine_used, "bam")) "mgcv::bam with discretised covariates (Wood et al. 2017)" else "mgcv::gam"
+      eng <- switch(g$engine_used %||% "gam", bam = "mgcv::bam with discretised covariates (Wood et al. 2017)",
+                    gamm4 = "gamm4 (Wood and Scheipl 2020), which fits the smooths as lme4 random effects", "mgcv::gam")
       paras <- c(paras, paste0(
         "As a complementary, non-parametric analysis we fitted generalized additive mixed models (GAMMs) with ", eng, " (Wood 2017): a penalised ",
         g$bs, " regression spline of age (basis dimension ", g$k, ") with ", ind, if (isTRUE(g$random)) " and the mapped random intercepts" else "",

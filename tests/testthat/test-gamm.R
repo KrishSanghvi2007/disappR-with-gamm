@@ -134,3 +134,20 @@ test_that("non-Gaussian families fit and unsuitable data are refused with a mess
   expect_false(isTRUE(gamm_fit(gd[1:10, ], gamm_defaults())$ok))
   expect_false(isTRUE(gamm_fit(gd, utils::modifyList(gamm_defaults(), list(proxy = "LS")))$ok))   # no lifespan mapped
 })
+
+test_that("the gamm4 engine fits what it can, and comparisons use one engine for every model", {
+  skip_if_not_installed("mgcv"); skip_if_not_installed("gamm4")
+  gd <- gamm_gd_of(gamm_toy(n_id = 80), life = "lifespan")
+  r <- gamm_fit(gd, utils::modifyList(gamm_defaults(), list(engine = "gamm4", individual = "rs")))
+  expect_true(r$ok); expect_identical(r$engine, "gamm4"); expect_false(is.null(r$mer))
+  expect_true(is.finite(gamm_aic(r)))
+  expect_s3_class(gamm_curve(r), "data.frame")
+  expect_true(any(grepl("slope of age", gamm_vcomp(r)$Term)))
+  expect_gt(nrow(gamm_individual_curves(r)), 0)
+  expect_true(any(grepl("gamm4::gamm4", gamm_code(r), fixed = TRUE)))
+  # ti() needs mgcv: the fit falls back to bam with a note
+  rt <- gamm_fit(gd, utils::modifyList(gamm_defaults(), list(engine = "gamm4", proxy_form = "ti")))
+  expect_identical(rt$engine, "bam"); expect_true(any(grepl("gamm4 cannot fit", rt$notes)))
+  # the proxy comparison includes ti, so every model uses bam
+  expect_identical(gamm_proxy_comparison(gd, utils::modifyList(gamm_defaults(), list(engine = "gamm4")))$engine, "bam")
+})

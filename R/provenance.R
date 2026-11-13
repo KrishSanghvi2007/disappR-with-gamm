@@ -11,7 +11,8 @@ OPTIONAL_PACKAGES <- c(
   performance = "performance-based model checks",
   see = "plots for the performance checks",
   codetools = "complete helper functions in exported code",
-  mgcv = "generalized additive mixed models (step 7: GAMMs)")
+  mgcv = "generalized additive mixed models (step 7: GAMMs)",
+  gamm4 = "GAMMs with thousands of individuals (step 7)")
 
 package_version_or_na <- function(p) {
   if (!nzchar(system.file(package = p))) return(NA_character_)

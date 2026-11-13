@@ -149,7 +149,7 @@ output$gamm_formula_ui <- renderUI({
     if (isTRUE(gamm_stale())) div(class = "caution-box", style = "margin-top:8px;", "Data or settings changed since this fit: press 'Fit GAMM' again."),
     if (isTRUE(r$ok)) div(class = "small-note", style = "margin-top:8px;",
       p(sprintf("%s records, %s individuals; %s, %s; %.1f s%s.", format(r$n, big.mark = ","), format(r$n_ind, big.mark = ","),
-                if (identical(r$engine, "bam")) "mgcv::bam" else "mgcv::gam", r$method, r$seconds,
+                switch(r$engine, bam = "mgcv::bam", gamm4 = "gamm4", "mgcv::gam"), r$method, r$seconds,
                 if (isTRUE(r$rho > 0)) sprintf("; AR1 rho = %s", format_num(r$rho, 2)) else "")),
       tags$code(gamm_pretty(r$formula)),
       if (length(grep("left out|lowered|do not vary|one level", r$notes, value = TRUE)))
@@ -271,7 +271,7 @@ output$gamm_concurvity_table <- renderTable({
 }, striped = TRUE, spacing = "xs")
 output$gamm_resid_note <- renderUI({
   r <- gamm_res(); qr <- safe_get(gamm_qr())
-  lag1 <- gamm_lag1(stats::residuals(r$fit, type = "deviance"), r$data$id)
+  lag1 <- gamm_lag1(gamm_resid(r), r$data$id)
   p(class = "small-note", paste0(
     sprintf("Lag-1 correlation of residuals within individuals: %s. ", if (is.finite(lag1)) format_num(lag1, 2) else "not available"),
     if (!is.null(qr)) sprintf("Simulated residuals: uniformity test p = %s; dispersion ratio %s (p = %s).", format_p(qr$ks_p), format_num(qr$dispersion, 2), format_p(qr$dispersion_p))

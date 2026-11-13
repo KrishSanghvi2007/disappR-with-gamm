@@ -16,6 +16,7 @@
 # ---------------------------------------------------------------------------
 
 gamm_has_mgcv <- function() requireNamespace("mgcv", quietly = TRUE)
+gamm_has_gamm4 <- function() requireNamespace("gamm4", quietly = TRUE)
 
 GAMM_FAMILIES <- c("Gaussian" = "gaussian",
                    "Gaussian, variance changing with age (gaulss)" = "gaulss",
@@ -40,9 +41,12 @@ GAMM_INDIVIDUAL <- c("Random intercept" = "ri",
                      "None (not recommended)" = "none")
 GAMM_PROXY_FORMS <- c("None" = "none", "Linear" = "linear", "Smooth" = "smooth",
                       "Age-dependent: smooth + ti(age, proxy)" = "ti")
-GAMM_ENGINES <- c("Automatic (gam; bam for large data)" = "auto", "mgcv::gam" = "gam", "mgcv::bam (large data)" = "bam")
+GAMM_ENGINES <- c("Automatic (gam; bam or gamm4 for large data)" = "auto", "mgcv::gam" = "gam", "mgcv::bam (many records)" = "bam",
+                  "gamm4 (lme4; thousands of individuals)" = "gamm4")
 GAMM_BAM_ROWS <- 6000      # automatic engine: bam above this many records ...
 GAMM_BAM_IND <- 400        # ... or this many individuals (gam slows sharply with many random-effect levels)
+GAMM_G4_IND <- 1500        # gamm4 (sparse lme4 random effects) above this many individuals, when the model allows it:
+                           # mgcv stores each individual as a dense column, so time and memory grow with its square
 
 gamm_defaults <- function() {
   list(engine = "auto", method = "REML", family = "gaussian", bs = "tp", k = 10, select = FALSE,
@@ -245,12 +249,54 @@ gamm_family_problem <- function(y, fam, trials = NULL) {
   NULL
 }
 
-gamm_engine_for <- function(s, n, n_ind) {
+# Can gamm4 fit this model? It takes the standard families, individual random intercepts and slopes as lme4 terms, and
+# smooths that lme4 can represent: not ti() interactions, factor-smooth (sz, fs) or linked (id = ) group smooths.
+gamm_g4_compatible <- function(s, structure = s$structure, proxy_form = s$proxy_form, afr_form = s$afr_form) {
+  gamm_has_gamm4() && s$family %in% c("gaussian", "poisson", "binomial", "Gamma") && (s$individual %||% "ri") %in% c("ri", "rs", "none") &&
+    !"ti" %in% c(proxy_form, afr_form) && structure %in% c("G", "I") && !isTRUE(s$ar1) && !isTRUE(s$select) &&
+    !length(s$cov_age %||% character(0))
+}
+
+gamm_engine_for <- function(s, n, n_ind, structure = s$structure, proxy_form = s$proxy_form, afr_form = s$afr_form) {
   e <- s$engine %||% "auto"
   if (identical(s$family, "gaulss")) return("gam")                     # location-scale families: gam only
   if (isTRUE(s$ar1) && identical(s$family, "gaussian")) return("bam")  # AR1 errors: bam only
-  if (identical(e, "auto")) return(if (n > GAMM_BAM_ROWS || n_ind > GAMM_BAM_IND) "bam" else "gam")
+  g4 <- gamm_g4_compatible(s, structure, proxy_form, afr_form)
+  if (identical(e, "gamm4") && !g4) e <- "bam"
+  if (identical(e, "auto")) return(if (n_ind > GAMM_G4_IND && g4) "gamm4" else if (n > GAMM_BAM_ROWS || n_ind > GAMM_BAM_IND) "bam" else "gam")
   e
+}
+
+# One engine for every model of a comparison, so that their AICs are comparable: gamm4 only if all the models allow it.
+gamm_set_engine <- function(gd, s, specs) {
+  n <- nrow(gd); n_ind <- length(unique(gd$id))
+  all_g4 <- all(vapply(specs, function(x) gamm_g4_compatible(s, x$structure %||% s$structure, x$proxy_form %||% s$proxy_form,
+                                                            x$afr_form %||% s$afr_form), logical(1)))
+  e <- s$engine %||% "auto"
+  if (identical(e, "gamm4") && !all_g4) return("bam")
+  if (identical(e, "auto")) return(if (n_ind > GAMM_G4_IND && all_g4) "gamm4" else if (n > GAMM_BAM_ROWS || n_ind > GAMM_BAM_IND) "bam" else "gam")
+  e
+}
+
+# lme4 random-effect formula for gamm4: individual intercept (and uncorrelated slope of centred age, as in mgcv), and
+# the mapped random intercepts.
+gamm_g4_random <- function(s, re_terms) {
+  re <- switch(s$individual %||% "ri", rs = c("(1 | id)", "(0 + .age_c | id)"), none = character(0), "(1 | id)")
+  re <- c(re, sprintf("(1 | %s)", re_terms))
+  if (!length(re)) return(NULL)
+  stats::as.formula(paste("~", paste(re, collapse = " + ")))
+}
+
+# Fitted values (response scale, random effects included) and residuals, whichever engine fitted the model.
+gamm_fitted <- function(r) {
+  f <- if (!is.null(r$mer)) stats::fitted(r$mer) else stats::fitted(r$fit)
+  if (is.matrix(f)) f <- f[, 1]
+  as.numeric(f)
+}
+gamm_resid <- function(r, type = "deviance") {
+  x <- if (!is.null(r$mer)) tryCatch(stats::residuals(r$mer, type = type), error = function(e) stats::residuals(r$mer))
+       else stats::residuals(r$fit, type = type)
+  as.numeric(x)
 }
 
 # Lag-1 autocorrelation of residuals between consecutive records of the same individual.
@@ -305,16 +351,29 @@ gamm_fit <- function(gd, s, method = s$method, structure = s$structure, proxy_fo
   dd$.age_c <- dd$age - mean(dd$age)
   wts <- if (identical(fam, "binomial") && ".trials" %in% names(dd) && all(is.finite(dd$.trials))) dd$.trials else NULL
   n_ind <- nlevels(dd$id)
-  engine <- gamm_engine_for(s, nrow(dd), n_ind)
+  engine <- gamm_engine_for(s, nrow(dd), n_ind, structure, proxy_form, afr_form)
+  if (identical(s$engine, "gamm4") && !identical(engine, "gamm4")) notes <- c(notes, "this model needs mgcv (gamm4 cannot fit it), so bam was used")
   if (identical(engine, "bam") && fam %in% c("gaulss")) engine <- "gam"
   f <- stats::as.formula(f_str)
   famobj <- gamm_family_obj(fam)
   if (identical(fam, "gaulss")) f <- list(f, stats::as.formula(paste("~", gamm_age_smooth(s, k = min(s$k, 6L)))))
   rho <- 0
-  fit <- NULL; err <- NULL
+  fit <- NULL; mer <- NULL; err <- NULL
+  if (identical(engine, "gamm4")) {
+    f_g4 <- gamm_formula(utils::modifyList(s, list(individual = "none", random = FALSE)), dd, structure, proxy_form, afr_form, age_poly, ordered_by)
+    rf <- gamm_g4_random(s, ut$re)
+    f_str <- paste0(f_g4, "; random = ", paste(deparse(rf), collapse = ""))
+  }
   t0 <- proc.time()[["elapsed"]]
   # do.call passes values rather than names, so mgcv never has to find weights or AR.start in a calling frame
   do_fit <- function(rho) {
+    if (identical(engine, "gamm4")) {
+      args <- list(formula = stats::as.formula(f_g4), random = rf, family = famobj, data = dd, REML = !identical(method, "ML"))
+      if (!is.null(wts)) args$weights <- wts
+      g4 <- do.call(gamm4::gamm4, args)
+      mer <<- g4$mer
+      return(g4$gam)
+    }
     args <- list(formula = f, family = famobj, data = dd, select = isTRUE(s$select))
     if (!is.null(wts)) args$weights <- wts
     if (identical(engine, "bam")) {
@@ -337,10 +396,11 @@ gamm_fit <- function(gd, s, method = s$method, structure = s$structure, proxy_fo
   }, warning = function(w) { notes <<- c(notes, conditionMessage(w)); invokeRestart("muffleWarning") }),
   error = function(e) { err <<- conditionMessage(e); FALSE })
   if (!isTRUE(res) || is.null(fit)) return(fail(paste("The GAMM could not be fitted:", err %||% "unknown error")))
-  conv <- tryCatch(isTRUE(fit$converged) && (is.null(fit$outer.info$conv) || identical(fit$outer.info$conv, "full convergence")),
-                   error = function(e) TRUE)
+  conv <- if (!is.null(mer)) tryCatch(!length(mer@optinfo$conv$lme4$messages), error = function(e) TRUE) else
+    tryCatch(isTRUE(fit$converged) && (is.null(fit$outer.info$conv) || identical(fit$outer.info$conv, "full convergence")),
+             error = function(e) TRUE)
   if (!conv) notes <- c(notes, "the smoothing-parameter optimisation did not report full convergence")
-  list(ok = TRUE, fit = fit, formula = f_str, data = dd, settings = s, method = method, structure = structure,
+  list(ok = TRUE, fit = fit, mer = mer, formula = f_str, data = dd, settings = s, method = method, structure = structure,
        proxy_form = proxy_form, afr_form = afr_form, engine = engine, rho = rho, converged = conv,
        notes = unique(notes), n = nrow(dd), n_ind = n_ind, age_mean = mean(dd$age),
        n_dropped = sum(!keep), seconds = proc.time()[["elapsed"]] - t0)
@@ -348,7 +408,7 @@ gamm_fit <- function(gd, s, method = s$method, structure = s$structure, proxy_fo
 
 gamm_aic <- function(r) {
   if (!isTRUE(r$ok)) return(NA_real_)
-  tryCatch(stats::AIC(r$fit), error = function(e) NA_real_)
+  tryCatch(stats::AIC(if (!is.null(r$mer)) r$mer else r$fit), error = function(e) NA_real_)
 }
 
 # ---------------------------------------------------------------------------
@@ -635,6 +695,7 @@ gamm_group_comparison <- function(gd, s, progress = NULL) {
   s <- utils::modifyList(gamm_defaults(), s)
   if (!nzchar(s$group %||% "") || !s$group %in% names(gd)) return(list(ok = FALSE, message = "Choose a grouping variable first."))
   structs <- GAMM_STRUCTURES
+  s$engine <- gamm_set_engine(gd, s, c(lapply(structs, function(st) list(structure = st)), list(list(structure = "I"))))
   rows <- gamm_common_rows(gd, lapply(structs, function(st) gamm_formula(s, gd, structure = st)), s$family)
   fits <- list()
   for (i in seq_along(structs)) {
@@ -671,6 +732,12 @@ gamm_proxy_comparison <- function(gd, s, progress = NULL) {
   if (any(is.finite(gd$AFR)) && length(unique(gd$AFR[is.finite(gd$AFR)])) >= 3) sets[["AFR"]] <- "afr"
   if (!length(sets)) return(list(ok = FALSE, message = "Choose ALR or lifespan as the proxy first (or map AFR on the Data tab)."))
   forms <- c("none", "linear", "smooth", "ti")
+  # With thousands of individuals the age-dependent (ti) model needs mgcv, whose dense random effects take several GB of
+  # memory: it is left out of the comparison (and said so), and the other forms are fitted with gamm4.
+  big <- length(unique(gd$id)) > GAMM_G4_IND && identical(s$engine %||% "auto", "auto") && gamm_g4_compatible(utils::modifyList(s, list(proxy_form = "linear", afr_form = "none")))
+  if (big) forms <- c("none", "linear", "smooth")
+  s$engine <- gamm_set_engine(gd, s, c(lapply(forms, function(fm) list(proxy_form = fm)), lapply(forms, function(fm) list(afr_form = fm))))
+  out$engine <- s$engine
   step <- 0; total <- length(sets) * length(forms)
   for (p in names(sets)) {
     args_for <- function(form) if (identical(sets[[p]], "proxy")) list(proxy_form = form, afr_form = s$afr_form) else list(proxy_form = s$proxy_form, afr_form = form)
@@ -683,12 +750,14 @@ gamm_proxy_comparison <- function(gd, s, progress = NULL) {
     })
     names(fits) <- forms
     labs <- c(paste("No", p, "term"), paste("Linear", p), paste("Smooth", p), paste0("Age-dependent ", p, ": ti(age, ", p, ")"))
+    if (big) fits$ti <- list(ok = FALSE, message = sprintf("not fitted: with more than %s individuals this model needs mgcv and several GB of memory (fit it on the Fit tab if your computer allows)", format(GAMM_G4_IND, big.mark = ",")))
     tab <- gamm_compare_table(fits, labs)
     tab$Records <- sum(rows)
     out$tables[[p]] <- tab
     out$fits[[p]] <- lapply(fits, function(r) if (isTRUE(r$ok)) gamm_tables(r)$smooth else NULL)
     d <- stats::setNames(tab$dAIC, forms)
-    v <- if (!is.finite(d[["ti"]]) || !is.finite(d[["none"]])) "caution"
+    v <- if (big) { if (is.finite(d[["none"]]) && d[["none"]] >= 2) "age_independent" else if (is.finite(d[["none"]])) "none" else "caution" }
+         else if (!is.finite(d[["ti"]]) || !is.finite(d[["none"]])) "caution"
          else if (d[["ti"]] == 0 && min(d[c("none", "linear", "smooth")], na.rm = TRUE) >= 2) "age_dependent"
          else if (d[["none"]] >= 2) "age_independent" else "none"
     out$verdicts[[p]] <- v
@@ -697,6 +766,7 @@ gamm_proxy_comparison <- function(gd, s, progress = NULL) {
       age_independent = sprintf("A %s term is supported (no-%s model at least 2 AIC worse), but not an age-dependent one: consistent with age-independent selective %s.", p, p, if (p == "AFR") "appearance" else "disappearance"),
       none = sprintf("The model without %s is within 2 AIC of the best: no clear evidence of selective %s through %s.", p, if (p == "AFR") "appearance" else "disappearance", p),
       sprintf("The %s comparison could not be completed.", p))
+    if (big) out$texts[[p]] <- sub("but not an age-dependent one: ", "", paste(out$texts[[p]], "The age-dependent form was not tested (too many individuals for the mgcv model)."))
   }
   out
 }
@@ -709,6 +779,7 @@ gamm_naive_vs_corrected <- function(gd, r) {
   rows <- rep(FALSE, nrow(gd))
   key <- paste(gd$id, gd$age, gd$trait)
   rows[key %in% paste(r$data$id, r$data$age, r$data$trait)] <- TRUE
+  s$engine <- r$engine
   naive <- gamm_fit(gd, s, method = r$method, structure = r$structure, proxy_form = "none", afr_form = "none", rows = rows)
   if (!isTRUE(naive$ok)) return(NULL)
   a <- gamm_curve(naive, by_proxy = FALSE); a$model <- "Without proxy terms (population curve)"
@@ -720,6 +791,7 @@ gamm_naive_vs_corrected <- function(gd, r) {
 gamm_parametric_reference <- function(gd, s) {
   s <- utils::modifyList(gamm_defaults(), s)
   polys <- list(`Linear age` = 1L, `Quadratic age` = 2L, `Cubic age` = 3L, `Smooth of age` = 0L)
+  s$engine <- gamm_set_engine(gd, s, list(list()))
   rows <- gamm_common_rows(gd, lapply(polys, function(p) gamm_formula(s, gd, age_poly = p)), s$family)
   fits <- lapply(polys, function(p) gamm_fit(gd, s, method = "ML", age_poly = p, rows = rows))
   tab <- gamm_compare_table(fits, names(polys))
@@ -728,6 +800,13 @@ gamm_parametric_reference <- function(gd, s) {
 
 # Random-effect standard deviations (mgcv::gam.vcomp).
 gamm_vcomp <- function(r) {
+  if (!is.null(r$mer)) {
+    vc <- as.data.frame(lme4::VarCorr(r$mer))
+    vc <- vc[!grepl("^Xr", vc$grp), , drop = FALSE]                        # gamm4's smooth penalties are not random effects of the data
+    grp <- sub("\\.[0-9]+$", "", vc$grp)
+    return(data.frame(Term = ifelse(vc$grp == "Residual", "scale", paste(grp, ifelse(vc$var1 == ".age_c", "slope of age", "intercept"))), SD = vc$sdcor, Lower = NA_real_, Upper = NA_real_,
+                      stringsAsFactors = FALSE))
+  }
   vc <- NULL
   utils::capture.output(vc <- tryCatch(suppressWarnings(mgcv::gam.vcomp(r$fit, rescale = FALSE)), error = function(e) NULL))
   if (is.null(vc)) return(data.frame())
@@ -752,7 +831,17 @@ gamm_individual_curves <- function(r, n_ind = 12, seed = 1L) {
     nd <- di[rep(1, length(ages)), , drop = FALSE]
     nd$age <- ages; nd$.age_c <- ages - r$age_mean
     if (".terminal" %in% names(nd)) nd$.terminal <- factor("no", levels = levels(dd$.terminal))
-    p <- tryCatch(stats::predict(r$fit, newdata = nd, type = "response"), error = function(e) rep(NA_real_, length(ages)))
+    p <- if (!is.null(r$mer)) tryCatch({
+      eta <- as.numeric(stats::predict(r$fit, newdata = nd, type = "link"))
+      re <- lme4::ranef(r$mer)
+      for (nm in grep("^id(\\.|$)", names(re), value = TRUE)) {
+        b <- re[[nm]][i, , drop = FALSE]
+        if ("(Intercept)" %in% names(b)) eta <- eta + b[["(Intercept)"]]
+        if (".age_c" %in% names(b)) eta <- eta + b[[".age_c"]] * nd$.age_c
+      }
+      gamm_linkinv(r$fit)(eta)
+    }, error = function(e) rep(NA_real_, length(ages))) else
+      tryCatch(stats::predict(r$fit, newdata = nd, type = "response"), error = function(e) rep(NA_real_, length(ages)))
     if (is.matrix(p)) p <- p[, 1]
     data.frame(id = i, age = ages, fit = as.numeric(p), stringsAsFactors = FALSE)
   }))
@@ -762,10 +851,10 @@ gamm_individual_curves <- function(r, n_ind = 12, seed = 1L) {
 gamm_simulate <- function(r, nsim = 250, seed = 1L) {
   fit <- r$fit; fam <- r$settings$family
   set.seed(seed)
-  mu <- stats::fitted(fit)
-  if (is.matrix(mu)) mu <- mu[, 1]
+  mu <- gamm_fitted(r)
   n <- length(mu)
-  wt <- fit$prior.weights
+  wt <- if (!is.null(r$mer)) { w <- r$data$.trials; if (is.null(w) || !all(is.finite(w))) rep(1, n) else w } else fit$prior.weights
+  if (!is.null(r$mer)) fit$sig2 <- stats::sigma(r$mer)^2
   sim1 <- switch(fam,
     gaussian = function() stats::rnorm(n, mu, sqrt(fit$sig2 / wt)),
     Gamma = function() { shp <- 1 / fit$sig2; stats::rgamma(n, shape = shp, rate = shp / mu) },
@@ -786,12 +875,12 @@ gamm_simulate <- function(r, nsim = 250, seed = 1L) {
 gamm_quantile_residuals <- function(r, nsim = 250, seed = 1L) {
   sims <- gamm_simulate(r, nsim, seed)
   if (is.null(sims)) return(NULL)
-  y <- r$fit$y
+  y <- r$data$trait
   set.seed(seed + 1)
   lo <- rowMeans(sims < y); hi <- rowMeans(sims <= y)
   u <- lo + stats::runif(length(y)) * (hi - lo)
   u <- pmin(pmax(u, 1 / (2 * nsim)), 1 - 1 / (2 * nsim))
-  mu <- stats::fitted(r$fit); if (is.matrix(mu)) mu <- mu[, 1]
+  mu <- gamm_fitted(r)
   obs_disp <- sum((y - mu)^2); sim_disp <- colSums((sims - mu)^2)
   disp_ratio <- obs_disp / mean(sim_disp)
   disp_p <- 2 * min(mean(sim_disp >= obs_disp), mean(sim_disp <= obs_disp))
@@ -801,10 +890,7 @@ gamm_quantile_residuals <- function(r, nsim = 250, seed = 1L) {
 
 # Residual diagnostics: deviance residuals against fitted values and age, and lag-1 autocorrelation within individuals.
 gamm_residuals <- function(r) {
-  f <- stats::fitted(r$fit)
-  if (is.matrix(f)) f <- f[, 1]
-  res <- as.numeric(stats::residuals(r$fit, type = "deviance"))
-  data.frame(fitted = as.numeric(f), residual = res, age = r$data$age, id = r$data$id)
+  data.frame(fitted = gamm_fitted(r), residual = gamm_resid(r), age = r$data$age, id = r$data$id)
 }
 
 # Automatic cautions for the fitted model (short, one line each).
@@ -831,7 +917,7 @@ gamm_cautions <- function(r, kc = gamm_kcheck(r), cc = gamm_concurvity(r), qr = 
     nind <- tapply(dd$id, dd[[s$group]], function(z) length(unique(z)))
     if (any(nind < 15)) out <- c(out, sprintf("Some groups have few individuals (%s): their curves are uncertain.", paste(names(nind), nind, sep = " ", collapse = ", ")))
   }
-  lag1 <- gamm_lag1(stats::residuals(r$fit, type = "deviance"), dd$id)
+  lag1 <- gamm_lag1(gamm_resid(r), dd$id)
   if (is.finite(lag1) && lag1 > 0.3 && !(isTRUE(s$ar1) && r$rho > 0))
     out <- c(out, sprintf("Residuals of consecutive records of the same individual are correlated (lag-1 r = %s): consider a random smooth per individual or, for a Gaussian trait, AR1 errors.", format_num(lag1, 2)))
   # Overdispersion only, and only for count and proportion families: simulation conditional on the fitted random effects
@@ -880,7 +966,11 @@ gamm_code <- function(r, file = "disappR_gamm_data.csv") {
   wt <- if (identical(s$family, "binomial") && ".trials" %in% names(r$data) && all(is.finite(r$data$.trials))) ", weights = .trials" else ""
   fam <- gamm_family_code(s$family)
   facs <- names(r$data)[vapply(r$data, is.factor, logical(1))]
-  fitline <- if (identical(r$engine, "bam")) {
+  fitline <- if (identical(r$engine, "gamm4")) {
+    parts <- strsplit(r$formula, "; random = ", fixed = TRUE)[[1]]
+    sprintf("g4 <- gamm4::gamm4(%s,\n                    random = %s, family = %s, data = gd, REML = %s%s)\nfit <- g4$gam   # the smooth part; g4$mer holds the random effects",
+            parts[[1]], parts[[2]], fam, if (identical(r$method, "ML")) "FALSE" else "TRUE", wt)
+  } else if (identical(r$engine, "bam")) {
     sprintf("fit <- bam(%s,\n           family = %s, data = gd, method = \"%s\", discrete = %s%s%s)", f, fam,
             if (identical(r$method, "ML")) "ML" else "fREML", if (identical(r$method, "ML")) "FALSE" else "TRUE", wt,
             if (isTRUE(r$rho > 0)) sprintf(", rho = %s, AR.start = !duplicated(gd$id)", format_num(r$rho, 4)) else "")
