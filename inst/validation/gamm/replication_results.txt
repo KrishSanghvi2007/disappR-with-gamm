@@ -16,3 +16,6 @@ model choice among G, GS and S by AIC (delta < 4). Authors' code: model1.R (Zeno
    the engine chose mgcv::bam because there are more than 400 birds)
   cautions: 
 (a) Authors' G / GS / S formulas (bam fREML) by AIC: G 4.3, GS 4.5, S 0.0
+(b) disappR group structures by ML AIC (dAIC): S 0.0, GS 2.0, I 3.7, G 5.7, GI 12.3
+  S is best supported and G is more than 2 AIC worse: the groups appear to age differently.
+  (a) authors' style (bam): ti(age_year, newlifespan) edf   2.26   stat    2.30   p 0.056

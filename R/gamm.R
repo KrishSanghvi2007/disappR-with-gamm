@@ -414,6 +414,9 @@ gamm_fit <- function(gd, s, method = s$method, structure = s$structure, proxy_fo
        n_dropped = sum(!keep), seconds = proc.time()[["elapsed"]] - t0)
 }
 
+# One number, or NA when a summary has none (gamm4 reports deviance explained as numeric(0)).
+gamm_num1 <- function(x) if (length(x) && is.finite(x[[1]])) as.numeric(x[[1]]) else NA_real_
+
 gamm_aic <- function(r) {
   if (!isTRUE(r$ok)) return(NA_real_)
   tryCatch(stats::AIC(if (!is.null(r$mer)) r$mer else r$fit), error = function(e) NA_real_)
@@ -431,7 +434,7 @@ gamm_tables <- function(r) {
     x <- as.data.frame(sm$s.table)
     data.frame(Smooth = rownames(x), edf = x[[1]], Ref.df = x[[2]], Statistic = x[[3]], P = x[[4]], stringsAsFactors = FALSE)
   } else data.frame()
-  list(parametric = pt, smooth = st, dev_expl = sm$dev.expl %||% NA_real_, r_sq = sm$r.sq %||% NA_real_, n = sm$n %||% nrow(r$data),
+  list(parametric = pt, smooth = st, dev_expl = gamm_num1(sm$dev.expl), r_sq = gamm_num1(sm$r.sq), n = sm$n %||% nrow(r$data),
        aic = gamm_aic(r), stat_name = if (isTRUE(sm$residual.df > 0) && identical(r$fit$family$family, "gaussian")) "F" else "Chi.sq")
 }
 
@@ -680,7 +683,7 @@ gamm_difference <- function(r, n = 150) {
 gamm_compare_table <- function(fits, labels) {
   tab <- data.frame(Model = labels, AIC = vapply(fits, gamm_aic, numeric(1)),
                     edf = vapply(fits, function(r) if (isTRUE(r$ok)) sum(r$fit$edf) else NA_real_, numeric(1)),
-                    `Deviance explained (%)` = vapply(fits, function(r) if (isTRUE(r$ok)) tryCatch(100 * (summary(r$fit, re.test = FALSE)$dev.expl %||% NA_real_), error = function(e) NA_real_) else NA_real_, numeric(1)),
+                    `Deviance explained (%)` = vapply(fits, function(r) if (isTRUE(r$ok)) tryCatch(100 * gamm_num1(summary(r$fit, re.test = FALSE)$dev.expl), error = function(e) NA_real_) else NA_real_, numeric(1)),
                     Status = vapply(fits, function(r) if (isTRUE(r$ok)) "fitted" else r$message %||% "failed", character(1)),
                     check.names = FALSE, stringsAsFactors = FALSE, row.names = NULL)
   tab$dAIC <- tab$AIC - suppressWarnings(min(tab$AIC, na.rm = TRUE))
