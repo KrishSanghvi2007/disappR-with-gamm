@@ -16,3 +16,22 @@ model choice among G, GS and S by AIC (delta < 4). Authors' code: model1.R (Zeno
    the engine chose mgcv::bam because there are more than 400 birds)
   cautions: 
 (a) Authors' G / GS / S formulas (bam fREML) by AIC: G 4.3, GS 4.5, S 0.0
+(b) disappR group structures by ML AIC (dAIC): S 0.0, GS 2.0, I 3.7, G 5.7, GI 12.3
+  S is best supported and G is more than 2 AIC worse: the groups appear to age differently.
+  (a) authors' style (bam): ti(age_year, newlifespan) edf   2.26   stat    2.30   p 0.056
+Warning message:
+In gam.side(sm, X, tol = .Machine$double.eps^0.5) :
+  model has repeated 1-d smooths of same variable.
+
+==== 2. Brown et al. 2021, Ecology and Evolution: Seychelles warbler haematocrit ====
+Published (Table 1, gamm4): age smooth edf = 7.805, F = 16.73, p < .001; N = 1379 records, 730 birds, 747 breed groups,
+14 catch years; fixed effects sex, status, catch time and sex x status; peak at about 1.5 years (Section 3.1).
+  bundled data: 1379 records, 730 birds, 747 breed groups, 14 catch years
+  (a) authors' specification with gamm4: s(AgeYears) edf   7.81   stat   17.48   p <0.001
+  (a') same model in mgcv::gam REML: s(AgeYears) edf   7.81   stat   15.52   p <0.001
+(b) disappR engine, as published (no lifespan term): 1379 records, 730 birds
+  formula: trait ~ s(age, bs = "tp", k = 10) + cv_Sex + cv_Status + cv_DecimalCatchTime + cv_Sex:cv_Status + s(id, bs = "re") + s(re_BreedGroupID, bs = "re") + s(re_CatchYear, bs = "re")
+  s(age)                                         edf   7.81   stat   15.52   p <0.001
+  periods of significant change (95% intervals) simultaneous: increase 0.0411-1.36; decline 2.1400-2.32 | pointwise: increase 0.0411-1.36; decline 1.9700-2.58; decline 6.8800-7.58
+  peak 1.62 [1.44–1.88]
+(b') adding ALR (age last seen) as a linear term: ALR -0.0003 (SE 0.0003), p 0.449; s(age) edf 7.80
