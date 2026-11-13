@@ -49,13 +49,20 @@ output$gamm_data_note <- renderUI({
       if (isTRUE(m$alr_mapped)) "from its column" else "is each individual's last recorded age",
       if (all(!is.finite(gd$LS))) "not mapped" else if (n_unk) sprintf("mapped, unknown for %d individual(s)", n_unk) else "mapped for everyone",
       if (isTRUE(m$entry_mapped)) "from its column" else "is each individual's first recorded age",
-      if (isTRUE(m$has_trials)) sprintf(" Binomial trials: column %s.", m$trials_col) else "")))
+      if (isTRUE(m$has_trials)) sprintf(" Binomial trials: column %s.", m$trials_col) else "")),
+    if (nlevels(gd$id) > GAMM_G4_IND) div(class = "caution-box", sprintf(paste(
+      "%s individuals: GAMMs are fitted with gamm4 when the model allows it (Gaussian, Poisson, binomial or Gamma family; random",
+      "intercept or slope; one curve or a separate curve per group; no age-dependent proxy). Other models need mgcv::bam, which",
+      "with this many individuals can take many minutes and several GB of memory.%s"), format(nlevels(gd$id), big.mark = ","),
+      if (gamm_has_gamm4()) "" else " The gamm4 package is not installed: install.packages(\"gamm4\").")))
 })
 # Suggest the error family (from the data-integrity check of step 1) and the individual random effects when the data
 # change; the user can override both. As on the Modelling tab (0.24.8), random slopes are the default only when the data
 # support them well; bundled examples keep their published settings (see the end of this file).
 observeEvent(data_sig(), disappr_guard("gamm family suggestion", {
-  fam <- safe_get(integrity()$family$family)
+  # bundled examples use the family of their published analysis; other data the family suggested for the trait
+  ex_fam <- if (identical(input$data_source, "example")) safe_get(current_example()$family) else NULL
+  fam <- ex_fam %||% safe_get(integrity()$family$family)
   if (!is.null(fam)) updateSelectInput(session, "gamm_family", selected = gamm_suggest_family(fam))
   if (!identical(input$data_source, "example")) {
     rs <- safe_get(default_random_structure(dat()))

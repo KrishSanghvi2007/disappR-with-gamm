@@ -672,7 +672,7 @@ gamm_difference <- function(r, n = 150) {
 gamm_compare_table <- function(fits, labels) {
   tab <- data.frame(Model = labels, AIC = vapply(fits, gamm_aic, numeric(1)),
                     edf = vapply(fits, function(r) if (isTRUE(r$ok)) sum(r$fit$edf) else NA_real_, numeric(1)),
-                    `Deviance explained (%)` = vapply(fits, function(r) if (isTRUE(r$ok)) 100 * summary(r$fit)$dev.expl else NA_real_, numeric(1)),
+                    `Deviance explained (%)` = vapply(fits, function(r) if (isTRUE(r$ok)) tryCatch(100 * summary(r$fit)$dev.expl, error = function(e) NA_real_) else NA_real_, numeric(1)),
                     Status = vapply(fits, function(r) if (isTRUE(r$ok)) "fitted" else r$message %||% "failed", character(1)),
                     check.names = FALSE, stringsAsFactors = FALSE, row.names = NULL)
   tab$dAIC <- tab$AIC - suppressWarnings(min(tab$AIC, na.rm = TRUE))
@@ -708,10 +708,10 @@ gamm_group_comparison <- function(gd, s, progress = NULL) {
   tab <- tab[order(tab$AIC), c("Model", "Description", "AIC", "dAIC", "Weight", "edf", "Deviance explained (%)", "Status")]
   if (is.function(progress)) progress(length(structs) + 1, length(structs) + 1, "difference smooths")
   od <- gamm_fit(gd, s, method = s$method, structure = "I", ordered_by = TRUE, rows = rows)
-  diff_tab <- if (isTRUE(od$ok)) {
+  diff_tab <- if (isTRUE(od$ok)) tryCatch({
     st <- gamm_tables(od)$smooth
     st[grepl(".grp_o", st$Smooth, fixed = TRUE), , drop = FALSE]
-  } else data.frame()
+  }, error = function(e) data.frame()) else data.frame()
   if (nrow(diff_tab)) diff_tab$Smooth <- sub("s(age):.grp_o", "shape difference: ", diff_tab$Smooth, fixed = TRUE)
   best <- tab$Model[[1]]
   close <- tab$Model[is.finite(tab$dAIC) & tab$dAIC < 2]
@@ -754,7 +754,7 @@ gamm_proxy_comparison <- function(gd, s, progress = NULL) {
     tab <- gamm_compare_table(fits, labs)
     tab$Records <- sum(rows)
     out$tables[[p]] <- tab
-    out$fits[[p]] <- lapply(fits, function(r) if (isTRUE(r$ok)) gamm_tables(r)$smooth else NULL)
+    out$fits[[p]] <- lapply(fits, function(r) if (isTRUE(r$ok)) tryCatch(gamm_tables(r)$smooth, error = function(e) NULL) else NULL)
     d <- stats::setNames(tab$dAIC, forms)
     v <- if (big) { if (is.finite(d[["none"]]) && d[["none"]] >= 2) "age_independent" else if (is.finite(d[["none"]])) "none" else "caution" }
          else if (!is.finite(d[["ti"]]) || !is.finite(d[["none"]])) "caution"

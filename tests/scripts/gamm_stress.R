@@ -54,7 +54,7 @@ comparisons <- function(label, gd, s) {
 }
 
 # ---- 1. bundled examples ------------------------------------------------------------------------------------------
-cat("== 1. Bundled examples (suggested family; published GAMM settings where the example gives them)\n")
+cat("== 1. Bundled examples (published family; published GAMM settings where the example gives them)\n")
 for (key in names(EXAMPLES)) {
   ex <- EXAMPLES[[key]]
   d <- load_example_file(ex$file)
@@ -62,7 +62,7 @@ for (key in names(EXAMPLES)) {
   if (inherits(b, "error")) { errors <- c(errors, paste(key, "| prepare:", conditionMessage(b))); next }
   if (!is.null(ex$subset)) { keep <- as.character(d[[ex$subset$var]]) %in% ex$subset$levels; b <- standardise_data(d[keep, , drop = FALSE], ex$mapping) }
   gd <- gamm_data(b$data, b$meta)
-  fam <- gamm_suggest_family(tryCatch(data_integrity(b$data, b$meta)$family$family, error = function(e) ex$family))
+  fam <- gamm_suggest_family(ex$family %||% tryCatch(data_integrity(b$data, b$meta)$family$family, error = function(e) "gaussian"))   # as the app does
   s <- utils::modifyList(gamm_defaults(), c(list(family = fam, cov_pairs = b$meta$cov_pairs, cov_age = b$meta$cov_age), ex$gamm %||% list()))
   if (isTRUE(b$meta$has_trials) && fam == "binomial") s$family <- "binomial"
   r <- try_fit(sprintf("%s [%s]", key, fam), gd, s)
