@@ -116,7 +116,10 @@ shiny::testServer(app, {
     if (inherits(tryCatch(parse(text = gcode), error = function(e) e), "error")) problems <<- c(problems, "GAMM R code does not parse")
     # fast mode (gamm4) for comparisons, forced here: the notes and the disclaimer must render, and the results say so
     Sys.setenv(DISAPPR_GAMM_FAST_LEVELS = "0")
-    session$setInputs(gamm_structure = "I")
+    session$setInputs(gamm_structure = "I", gamm_proxy_form = "ti")
+    if (!grepl("needs mgcv", paste(capture.output(print(output$gamm_engine_note_groups)), collapse = " ")))
+      problems <<- c(problems, "fast mode: no note that a ti model needs mgcv")
+    session$setInputs(gamm_proxy_form = "vc")                         # gamm4 can fit every model of the comparisons
     touch(output, c("gamm_engine_note_proxy", "gamm_engine_note_groups", "gamm_engine_note_poly"))
     session$setInputs(gamm_run_proxy = 2, gamm_run_groups = 2, gamm_run_poly = 2, gamm_fast_more = 1)
     touch(output, c("gamm_proxy_verdict", "gamm_proxy_tables", "gamm_groups_verdict", "gamm_groups_table", "gamm_engine_note_poly", "gamm_poly_table"))

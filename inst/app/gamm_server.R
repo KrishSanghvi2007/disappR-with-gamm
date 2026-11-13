@@ -578,7 +578,20 @@ gamm_fast_plan <- reactive({
        poly = identical(safe_get(gamm_set_engine(gd, s, list(list()), fast_ok = TRUE)), "gamm4"))
 })
 gamm_engine_note <- function(which) {
-  pl <- safe_get(gamm_fast_plan()); if (is.null(pl) || !isTRUE(pl[[which]])) return(NULL)
+  pl <- safe_get(gamm_fast_plan()); if (is.null(pl)) return(NULL)
+  if (!isTRUE(pl[[which]]) && is.finite(pl$levels) && pl$levels > GAMM_FAST_LEVELS && identical(gamm_settings()$engine, "auto")) {
+    s <- gamm_settings()
+    why <- c(if (identical(s$proxy_form, "ti") || identical(s$afr_form, "ti")) "an age-dependent proxy smooth in both (ti)",
+             if (s$individual %in% c("fs")) "a random smooth per individual",
+             if (!s$family %in% c("gaussian", "poisson", "binomial", "Gamma")) "this error family",
+             if (which == "groups" && nzchar(s$group) && !s$structure %in% c("G", "GI", "I")) NULL,
+             if (isTRUE(s$ar1)) "AR1 errors", if (isTRUE(s$select)) "shrinkage selection")
+    if (which == "groups" && !nzchar(s$group)) return(NULL)
+    return(p(class = "small-note", style = "color:#B35806;", icon("hourglass-half"),
+      sprintf(" %s random-effect levels: this comparison needs mgcv because the model has %s, and may take a long time. For a fast comparison (gamm4), use 'Age-dependent, linear in the proxy' and a random intercept or slope.",
+              format(pl$levels, big.mark = ","), if (length(why)) paste(why, collapse = " and ") else "terms gamm4 cannot fit")))
+  }
+  if (!isTRUE(pl[[which]])) return(NULL)
   p(class = "small-note", style = "color:#B35806;", icon("bolt"),
     sprintf(" %s random-effect levels: this comparison will be fitted with gamm4, a faster method for many random-effect levels. Results can differ from mgcv; see the note that appears with the results.",
             format(pl$levels, big.mark = ",")))
