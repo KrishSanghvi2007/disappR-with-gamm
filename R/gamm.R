@@ -258,17 +258,19 @@ gamm_family_problem <- function(y, fam, trials = NULL) {
 
 # Can gamm4 fit this model? It takes the standard families, individual random intercepts and slopes as lme4 terms, and
 # smooths that lme4 can represent: not ti() interactions, factor-smooth (sz, fs) or linked (id = ) group smooths.
-gamm_g4_compatible <- function(s, structure = s$structure, proxy_form = s$proxy_form, afr_form = s$afr_form) {
+gamm_g4_compatible <- function(s, structure = s$structure, proxy_form = s$proxy_form, afr_form = s$afr_form, gd = NULL) {
+  # covariate x age interactions become ti() only for numeric covariates (categorical ones are handled by group curves)
+  ca <- s$cov_age %||% character(0)
+  if (!is.null(gd)) ca <- ca[vapply(ca, function(v) v %in% names(gd) && is.numeric(gd[[v]]) && length(unique(gd[[v]])) >= 5, logical(1))]
   gamm_has_gamm4() && s$family %in% c("gaussian", "poisson", "binomial", "Gamma") && (s$individual %||% "ri") %in% c("ri", "rs", "none") &&
-    !"ti" %in% c(proxy_form, afr_form) && structure %in% c("G", "GI", "I") && !isTRUE(s$ar1) && !isTRUE(s$select) &&
-    !length(s$cov_age %||% character(0))
+    !"ti" %in% c(proxy_form, afr_form) && structure %in% c("G", "GI", "I") && !isTRUE(s$ar1) && !isTRUE(s$select) && !length(ca)
 }
 
-gamm_engine_for <- function(s, n, n_ind, structure = s$structure, proxy_form = s$proxy_form, afr_form = s$afr_form) {
+gamm_engine_for <- function(s, n, n_ind, structure = s$structure, proxy_form = s$proxy_form, afr_form = s$afr_form, gd = NULL) {
   e <- s$engine %||% "auto"
   if (identical(s$family, "gaulss")) return("gam")                     # location-scale families: gam only
   if (isTRUE(s$ar1) && identical(s$family, "gaussian")) return("bam")  # AR1 errors: bam only
-  g4 <- gamm_g4_compatible(s, structure, proxy_form, afr_form)
+  g4 <- gamm_g4_compatible(s, structure, proxy_form, afr_form, gd = gd)
   if (identical(e, "gamm4") && !g4) e <- "bam"
   if (identical(e, "auto")) return(if (n_ind > GAMM_G4_IND && g4) "gamm4" else if (n > GAMM_BAM_ROWS || n_ind > GAMM_BAM_IND) "bam" else "gam")
   e
@@ -290,7 +292,7 @@ gamm_set_engine <- function(gd, s, specs, fast_ok = FALSE) {
   keep <- tryCatch(gamm_common_rows(gd, list(gamm_formula(s, gd)), s$family), error = function(e) rep(TRUE, nrow(gd)))
   n <- sum(keep); n_ind <- length(unique(gd$id[keep]))
   all_g4 <- all(vapply(specs, function(x) gamm_g4_compatible(s, x$structure %||% s$structure, x$proxy_form %||% s$proxy_form,
-                                                            x$afr_form %||% s$afr_form), logical(1)))
+                                                            x$afr_form %||% s$afr_form, gd = gd), logical(1)))
   e <- s$engine %||% "auto"
   if (identical(e, "gamm4") && !all_g4) return("bam")
   if (identical(e, "auto")) {
@@ -382,7 +384,7 @@ gamm_fit <- function(gd, s, method = s$method, structure = s$structure, proxy_fo
   }
   wts <- if (identical(fam, "binomial") && ".trials" %in% names(dd) && all(is.finite(dd$.trials))) dd$.trials else NULL
   n_ind <- nlevels(dd$id)
-  engine <- gamm_engine_for(s, nrow(dd), n_ind, structure, proxy_form, afr_form)
+  engine <- gamm_engine_for(s, nrow(dd), n_ind, structure, proxy_form, afr_form, gd = dd)
   if (identical(s$engine, "gamm4") && !identical(engine, "gamm4")) notes <- c(notes, "this model needs mgcv (gamm4 cannot fit it), so bam was used")
   if (identical(engine, "bam") && fam %in% c("gaulss")) engine <- "gam"
   f <- stats::as.formula(f_str)
