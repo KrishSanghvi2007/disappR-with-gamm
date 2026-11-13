@@ -270,7 +270,9 @@ gamm_engine_for <- function(s, n, n_ind, structure = s$structure, proxy_form = s
 
 # One engine for every model of a comparison, so that their AICs are comparable: gamm4 only if all the models allow it.
 gamm_set_engine <- function(gd, s, specs) {
-  n <- nrow(gd); n_ind <- length(unique(gd$id))
+  # count records and individuals as a single fit would: those complete for the model's variables
+  keep <- tryCatch(gamm_common_rows(gd, list(gamm_formula(s, gd)), s$family), error = function(e) rep(TRUE, nrow(gd)))
+  n <- sum(keep); n_ind <- length(unique(gd$id[keep]))
   all_g4 <- all(vapply(specs, function(x) gamm_g4_compatible(s, x$structure %||% s$structure, x$proxy_form %||% s$proxy_form,
                                                             x$afr_form %||% s$afr_form), logical(1)))
   e <- s$engine %||% "auto"
@@ -429,7 +431,7 @@ gamm_tables <- function(r) {
     x <- as.data.frame(sm$s.table)
     data.frame(Smooth = rownames(x), edf = x[[1]], Ref.df = x[[2]], Statistic = x[[3]], P = x[[4]], stringsAsFactors = FALSE)
   } else data.frame()
-  list(parametric = pt, smooth = st, dev_expl = sm$dev.expl, r_sq = sm$r.sq, n = sm$n,
+  list(parametric = pt, smooth = st, dev_expl = sm$dev.expl %||% NA_real_, r_sq = sm$r.sq %||% NA_real_, n = sm$n %||% nrow(r$data),
        aic = gamm_aic(r), stat_name = if (isTRUE(sm$residual.df > 0) && identical(r$fit$family$family, "gaussian")) "F" else "Chi.sq")
 }
 
@@ -678,7 +680,7 @@ gamm_difference <- function(r, n = 150) {
 gamm_compare_table <- function(fits, labels) {
   tab <- data.frame(Model = labels, AIC = vapply(fits, gamm_aic, numeric(1)),
                     edf = vapply(fits, function(r) if (isTRUE(r$ok)) sum(r$fit$edf) else NA_real_, numeric(1)),
-                    `Deviance explained (%)` = vapply(fits, function(r) if (isTRUE(r$ok)) tryCatch(100 * summary(r$fit, re.test = FALSE)$dev.expl, error = function(e) NA_real_) else NA_real_, numeric(1)),
+                    `Deviance explained (%)` = vapply(fits, function(r) if (isTRUE(r$ok)) tryCatch(100 * (summary(r$fit, re.test = FALSE)$dev.expl %||% NA_real_), error = function(e) NA_real_) else NA_real_, numeric(1)),
                     Status = vapply(fits, function(r) if (isTRUE(r$ok)) "fitted" else r$message %||% "failed", character(1)),
                     check.names = FALSE, stringsAsFactors = FALSE, row.names = NULL)
   tab$dAIC <- tab$AIC - suppressWarnings(min(tab$AIC, na.rm = TRUE))
@@ -957,7 +959,7 @@ gamm_reading <- function(r, dv, po) {
                          paste(sprintf("%s%s from %s to %s", ifelse(pr$Group == "All", "", paste0(pr$Group, ": ")), pr$Change,
                                        vapply(pr$From, format_num, character(1)), vapply(pr$To, format_num, character(1))), collapse = "; "), "."))
   } else out <- c(out, "No period of significant change with simultaneous 95% intervals.")
-  out <- c(out, sprintf("Deviance explained: %.1f%%.", 100 * tb$dev_expl))
+  if (is.finite(tb$dev_expl)) out <- c(out, sprintf("Deviance explained: %.1f%%.", 100 * tb$dev_expl))
   out
 }
 

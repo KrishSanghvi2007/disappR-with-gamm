@@ -257,7 +257,7 @@ output$gamm_peak_table <- renderTable(gamm_peak_df(), striped = TRUE, spacing = 
 gamm_tabs <- reactive(gamm_tables(gamm_res()))
 output$gamm_fit_stats <- renderUI({
   tb <- gamm_tabs()
-  p(class = "small-note", sprintf("Deviance explained %.1f%%; adjusted R² %s; AIC %s; %s records.", 100 * tb$dev_expl,
+  p(class = "small-note", sprintf("Deviance explained %s; adjusted R² %s; AIC %s; %s records.", if (is.finite(tb$dev_expl)) sprintf("%.1f%%", 100 * tb$dev_expl) else "not available (gamm4)",
                                   format_num(tb$r_sq %||% NA_real_), format_num(tb$aic), format(tb$n, big.mark = ",")))
 })
 output$gamm_smooth_table <- renderTable({
