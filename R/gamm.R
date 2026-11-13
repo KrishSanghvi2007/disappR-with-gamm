@@ -745,7 +745,8 @@ gamm_proxy_comparison <- function(gd, s, progress = NULL) {
   forms <- c("none", "linear", "smooth", "ti")
   # With thousands of individuals the age-dependent (ti) model needs mgcv, whose dense random effects take several GB of
   # memory: it is left out of the comparison (and said so), and the other forms are fitted with gamm4.
-  big <- length(unique(gd$id)) > GAMM_G4_IND && identical(s$engine %||% "auto", "auto") && gamm_g4_compatible(utils::modifyList(s, list(proxy_form = "linear", afr_form = "none")))
+  keep0 <- tryCatch(gamm_common_rows(gd, list(gamm_formula(s, gd)), s$family), error = function(e) rep(TRUE, nrow(gd)))
+  big <- length(unique(gd$id[keep0])) > GAMM_G4_IND && identical(s$engine %||% "auto", "auto") && gamm_g4_compatible(utils::modifyList(s, list(proxy_form = "linear", afr_form = "none")))
   if (big) forms <- c("none", "linear", "smooth")
   s$engine <- gamm_set_engine(gd, s, c(lapply(forms, function(fm) list(proxy_form = fm)), lapply(forms, function(fm) list(afr_form = fm))))
   out$engine <- s$engine
