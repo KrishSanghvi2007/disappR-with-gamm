@@ -30,3 +30,163 @@
   mammal_irregular_days / bam [gaussian]                     ok    0.2s  bam, 8855 rec, 250 ind, s(age) edf 8.67 
   ages_from_dates / default [gaussian]                       ok    1.7s  gam, 1399 rec, 299 ind, s(age) edf 8.66 
   ages_from_dates / ti [gaussian]                            ok    4.3s  gam, 1399 rec, 299 ind, s(age) edf 8.65 
+  ages_from_dates / fs [gaussian]                            ok  150.4s  gam, 1399 rec, 299 ind, s(age) edf 8.66 
+  ages_from_dates / LS [gaussian]                            message: Known lifespan (LS) is not mapped or is missing for everyone: choose ALR, or map a lifespa 
+  ages_from_dates / terminal [gaussian]                      ok    1.5s  gam, 1399 rec, 299 ind, s(age) edf 8.66 
+  ages_from_dates / bam [gaussian]                           ok    0.1s  bam, 1399 rec, 299 ind, s(age) edf 8.62 
+  staggered_cohorts / default [nb]                           ok    6.5s  gam, 1569 rec, 400 ind, s(age) edf 3.40 
+  staggered_cohorts / ti [nb]                                ok    9.4s  gam, 1569 rec, 400 ind, s(age) edf 3.30 
+  staggered_cohorts / LS [nb]                                ok    7.9s  gam, 1569 rec, 400 ind, s(age) edf 3.40 
+  staggered_cohorts / terminal [nb]                          ok    7.0s  gam, 1569 rec, 400 ind, s(age) edf 3.46 
+  staggered_cohorts / bam [nb]                               ok    0.9s  bam, 1569 rec, 400 ind, s(age) edf 3.38 
+  staggered_cohorts / groups [nb]                            ok   42.0s  gam, 1569 rec, 400 ind, s(age) edf 6.07 
+  few_individuals / default [gaussian]                       ok    0.0s  gam, 30 rec, 7 ind, s(age) edf 1.00 
+  few_individuals / ti [gaussian]                            ok    0.0s  gam, 30 rec, 7 ind, s(age) edf 1.00 
+  few_individuals / fs [gaussian]                            ok    0.0s  gam, 30 rec, 7 ind, s(age) edf 1.00 
+  few_individuals / LS [gaussian]                            ok    0.0s  gam, 30 rec, 7 ind, s(age) edf 1.00 
+  few_individuals / terminal [gaussian]                      ok    0.0s  gam, 30 rec, 7 ind, s(age) edf 1.00 
+  few_individuals / bam [gaussian]                           ok    0.0s  bam, 30 rec, 7 ind, s(age) edf 1.00 
+  single_records / default [gaussian]                        ok    5.0s  gam, 697 rec, 400 ind, s(age) edf 4.53 
+  single_records / ti [gaussian]                             ok   11.9s  gam, 697 rec, 400 ind, s(age) edf 3.38 
+  single_records / LS [gaussian]                             ok    4.5s  gam, 697 rec, 400 ind, s(age) edf 4.56 
+  single_records / terminal [gaussian]                       ok    4.4s  gam, 697 rec, 400 ind, s(age) edf 4.55 
+  single_records / bam [gaussian]                            ok    0.3s  bam, 697 rec, 400 ind, s(age) edf 4.53 
+  messy_csv / default [gaussian]                             ok    0.4s  gam, 670 rec, 120 ind, s(age) edf 1.00 
+  messy_csv / ti [gaussian]                                  ok    0.6s  gam, 670 rec, 120 ind, s(age) edf 1.00 
+  messy_csv / fs [gaussian]                                  ok   12.0s  gam, 670 rec, 120 ind, s(age) edf 1.00 
+  messy_csv / LS [gaussian]                                  ok    0.4s  gam, 670 rec, 120 ind, s(age) edf 1.00 
+  messy_csv / terminal [gaussian]                            ok    0.4s  gam, 670 rec, 120 ind, s(age) edf 1.00 
+  messy_csv / bam [gaussian]                                 ok    0.1s  bam, 670 rec, 120 ind, s(age) edf 1.00 
+  messy_csv / groups [gaussian]                              ok    1.3s  gam, 670 rec, 120 ind, s(age) edf 3.00 
+  covariate_edges / default [gaussian]                       ok    0.4s  gam, 521 rec, 150 ind, s(age) edf 1.00 
+  covariate_edges / ti [gaussian]                            ok    0.5s  gam, 521 rec, 150 ind, s(age) edf 1.00 
+  covariate_edges / fs [gaussian]                            ok   10.9s  gam, 521 rec, 150 ind, s(age) edf 1.00 
+  covariate_edges / LS [gaussian]                            ok    0.5s  gam, 521 rec, 150 ind, s(age) edf 1.00 
+  covariate_edges / terminal [gaussian]                      ok    0.5s  gam, 521 rec, 150 ind, s(age) edf 1.00 
+  covariate_edges / bam [gaussian]                           ok    0.1s  bam, 521 rec, 150 ind, s(age) edf 1.00 
+  covariate_edges / groups [gaussian]                        ok    1.4s  gam, 521 rec, 150 ind, s(age) edf 3.00 
+  age_edges / default [gaussian]                             ok    0.2s  gam, 524 rec, 90 ind, s(age) edf 1.55 
+  age_edges / ti [gaussian]                                  ok    0.5s  gam, 524 rec, 90 ind, s(age) edf 1.63 
+  age_edges / fs [gaussian]                                  ok    4.1s  gam, 524 rec, 90 ind, s(age) edf 1.51 
+  age_edges / LS [gaussian]                                  ok    0.2s  gam, 524 rec, 90 ind, s(age) edf 1.61 
+  age_edges / terminal [gaussian]                            ok    0.3s  gam, 524 rec, 90 ind, s(age) edf 2.14 
+  age_edges / bam [gaussian]                                 ok    0.0s  bam, 524 rec, 90 ind, s(age) edf 1.55 
+  count_edges / default [nb]                                 ok    3.4s  gam, 806 rec, 200 ind, s(age) edf 1.00 
+  count_edges / ti [nb]                                      ok    2.5s  gam, 806 rec, 200 ind, s(age) edf 1.00 
+  count_edges / fs [nb]                                      ok   73.4s  gam, 806 rec, 200 ind, s(age) edf 1.00 
+  count_edges / LS [nb]                                      message: Known lifespan (LS) is not mapped or is missing for everyone: choose ALR, or map a lifespa 
+  count_edges / terminal [nb]                                ok    3.1s  gam, 806 rec, 200 ind, s(age) edf 1.00 
+  count_edges / bam [nb]                                     ok    0.5s  bam, 806 rec, 200 ind, s(age) edf 1.00 
+  two_ages / default [gaussian]                              message: A smooth of age needs at least 4 distinct ages. 
+  two_ages / ti [gaussian]                                   message: A smooth of age needs at least 4 distinct ages. 
+  two_ages / fs [gaussian]                                   message: A smooth of age needs at least 4 distinct ages. 
+  two_ages / LS [gaussian]                                   message: A smooth of age needs at least 4 distinct ages. 
+  two_ages / terminal [gaussian]                             message: A smooth of age needs at least 4 distinct ages. 
+  two_ages / bam [gaussian]                                  message: A smooth of age needs at least 4 distinct ages. 
+  one_age / default [gaussian]                               message: A smooth of age needs at least 4 distinct ages. 
+  one_age / ti [gaussian]                                    message: A smooth of age needs at least 4 distinct ages. 
+  one_age / fs [gaussian]                                    message: A smooth of age needs at least 4 distinct ages. 
+  one_age / LS [gaussian]                                    message: A smooth of age needs at least 4 distinct ages. 
+  one_age / terminal [gaussian]                              message: A smooth of age needs at least 4 distinct ages. 
+  one_age / bam [gaussian]                                   message: A smooth of age needs at least 4 distinct ages. 
+  grouping_edges / default [gaussian]                        ok    0.2s  gam, 496 rec, 92 ind, s(age) edf 1.00 
+  grouping_edges / ti [gaussian]                             ok    0.6s  gam, 496 rec, 92 ind, s(age) edf 1.00 
+  grouping_edges / fs [gaussian]                             ok    4.7s  gam, 496 rec, 92 ind, s(age) edf 1.00 
+  grouping_edges / LS [gaussian]                             ok    0.2s  gam, 451 rec, 84 ind, s(age) edf 1.00 
+  grouping_edges / terminal [gaussian]                       ok    0.3s  gam, 496 rec, 92 ind, s(age) edf 1.00 
+  grouping_edges / bam [gaussian]                            ok    0.0s  bam, 496 rec, 92 ind, s(age) edf 1.00 
+  latin1 / default [gaussian]                                ok    0.1s  gam, 80 rec, 20 ind, s(age) edf 1.23 
+  latin1 / ti [gaussian]                                     ok    0.1s  gam, 80 rec, 20 ind, s(age) edf 1.23 
+  latin1 / fs [gaussian]                                     ok    0.3s  gam, 80 rec, 20 ind, s(age) edf 1.12 
+  latin1 / LS [gaussian]                                     message: Known lifespan (LS) is not mapped or is missing for everyone: choose ALR, or map a lifespa 
+  latin1 / terminal [gaussian]                               ok    0.1s  gam, 80 rec, 20 ind, s(age) edf 1.23 
+  latin1 / bam [gaussian]                                    ok    0.1s  gam, 80 rec, 20 ind, s(age) edf 1.23 
+  tab_quotes / default [gaussian]                            ok    0.0s  gam, 60 rec, 15 ind, s(age) edf 1.00 
+  tab_quotes / ti [gaussian]                                 ok    0.1s  gam, 60 rec, 15 ind, s(age) edf 1.00 
+  tab_quotes / fs [gaussian]                                 ok    0.0s  gam, 60 rec, 15 ind, s(age) edf 1.00 
+  tab_quotes / LS [gaussian]                                 message: Known lifespan (LS) is not mapped or is missing for everyone: choose ALR, or map a lifespa 
+  tab_quotes / terminal [gaussian]                           ok    0.1s  gam, 60 rec, 15 ind, s(age) edf 1.00 
+  tab_quotes / bam [gaussian]                                ok    0.0s  bam, 60 rec, 15 ind, s(age) edf 1.00 
+  leading_zero_ids / default [gaussian]                      ok    0.1s  gam, 27 rec, 7 ind, s(age) edf 1.01 
+  leading_zero_ids / ti [gaussian]                           ok    0.1s  gam, 27 rec, 7 ind, s(age) edf 1.01 
+  leading_zero_ids / fs [gaussian]                           ok    0.2s  gam, 27 rec, 7 ind, s(age) edf 1.01 
+  leading_zero_ids / LS [gaussian]                           message: Known lifespan (LS) is not mapped or is missing for everyone: choose ALR, or map a lifespa 
+  leading_zero_ids / terminal [gaussian]                     ok    0.1s  gam, 27 rec, 7 ind, s(age) edf 1.01 
+  leading_zero_ids / bam [gaussian]                          ok    0.1s  gam, 27 rec, 7 ind, s(age) edf 1.01 
+  blank_headers / default [gaussian]                         message: At least 20 records are needed to fit a GAMM. 
+  blank_headers / ti [gaussian]                              message: At least 20 records are needed to fit a GAMM. 
+  blank_headers / fs [gaussian]                              message: At least 20 records are needed to fit a GAMM. 
+  blank_headers / LS [gaussian]                              message: At least 20 records are needed to fit a GAMM. 
+  blank_headers / terminal [gaussian]                        message: At least 20 records are needed to fit a GAMM. 
+  blank_headers / bam [gaussian]                             message: At least 20 records are needed to fit a GAMM. 
+  inf_huge / default [gaussian]                              message: The trait's values are extremely large or small: rescale it (for example to other units, o 
+  inf_huge / ti [gaussian]                                   message: The trait's values are extremely large or small: rescale it (for example to other units, o 
+  inf_huge / fs [gaussian]                                   message: The trait's values are extremely large or small: rescale it (for example to other units, o 
+  inf_huge / LS [gaussian]                                   message: Known lifespan (LS) is not mapped or is missing for everyone: choose ALR, or map a lifespa 
+  inf_huge / terminal [gaussian]                             message: The trait's values are extremely large or small: rescale it (for example to other units, o 
+  inf_huge / bam [gaussian]                                  message: The trait's values are extremely large or small: rescale it (for example to other units, o 
+  all_na_covariate / default [gaussian]                      ok    0.2s  gam, 60 rec, 12 ind, s(age) edf 1.00 
+  all_na_covariate / ti [gaussian]                           ok    0.2s  gam, 60 rec, 12 ind, s(age) edf 1.00 
+  all_na_covariate / fs [gaussian]                           ok    0.2s  gam, 60 rec, 12 ind, s(age) edf 1.00 
+  all_na_covariate / LS [gaussian]                           message: Known lifespan (LS) is not mapped or is missing for everyone: choose ALR, or map a lifespa 
+  all_na_covariate / terminal [gaussian]                     ok    0.1s  gam, 60 rec, 12 ind, s(age) edf 1.00 
+  all_na_covariate / bam [gaussian]                          ok    0.1s  bam, 60 rec, 12 ind, s(age) edf 1.00 
+  a4_selection_censored / default [gaussian]                 ok    2.2s  gam, 1883 rec, 300 ind, s(age) edf 1.00 
+  a4_selection_censored / ti [gaussian]                      ok    6.6s  gam, 1883 rec, 300 ind, s(age) edf 1.08 
+  a4_selection_censored / fs [gaussian]                      ok   83.9s  gam, 1883 rec, 300 ind, s(age) edf 1.00 
+  a4_selection_censored / LS [gaussian]                      ok    0.8s  gam, 826 rec, 189 ind, s(age) edf 1.00 
+  a4_selection_censored / terminal [gaussian]                ok    2.5s  gam, 1883 rec, 300 ind, s(age) edf 1.00 
+  a4_selection_censored / bam [gaussian]                     ok    0.1s  bam, 1883 rec, 300 ind, s(age) edf 1.00 
+  a4_age_dependent / default [gaussian]                      ok    4.5s  gam, 2788 rec, 400 ind, s(age) edf 1.01 
+  a4_age_dependent / ti [gaussian]                           ok   12.2s  gam, 2788 rec, 400 ind, s(age) edf 1.00 
+  a4_age_dependent / LS [gaussian]                           ok    2.1s  gam, 1396 rec, 284 ind, s(age) edf 1.59 
+  a4_age_dependent / terminal [gaussian]                     ok    4.7s  gam, 2788 rec, 400 ind, s(age) edf 1.01 
+  a4_age_dependent / bam [gaussian]                          ok    0.3s  bam, 2788 rec, 400 ind, s(age) edf 1.00 
+  terminal_decline / default [gaussian]                      ok    2.0s  gam, 2137 rec, 300 ind, s(age) edf 3.27 
+  terminal_decline / ti [gaussian]                           ok   19.4s  gam, 2137 rec, 300 ind, s(age) edf 6.88 
+  terminal_decline / fs [gaussian]                           ok   84.1s  gam, 2137 rec, 300 ind, s(age) edf 3.14 
+  terminal_decline / LS [gaussian]                           ok    1.4s  gam, 1069 rec, 211 ind, s(age) edf 3.67 
+  terminal_decline / terminal [gaussian]                     ok    2.3s  gam, 2137 rec, 300 ind, s(age) edf 1.02 
+  terminal_decline / bam [gaussian]                          ok    0.1s  bam, 2137 rec, 300 ind, s(age) edf 3.27 
+  rising_hazard / default [gaussian]                         ok    1.7s  gam, 1324 rec, 300 ind, s(age) edf 1.00 
+  rising_hazard / ti [gaussian]                              ok    2.9s  gam, 1324 rec, 300 ind, s(age) edf 1.17 
+  rising_hazard / fs [gaussian]                              ok   91.6s  gam, 1324 rec, 300 ind, s(age) edf 1.00 
+  rising_hazard / LS [gaussian]                              ok    1.6s  gam, 1324 rec, 300 ind, s(age) edf 1.00 
+  rising_hazard / terminal [gaussian]                        ok    1.7s  gam, 1324 rec, 300 ind, s(age) edf 1.00 
+  rising_hazard / bam [gaussian]                             ok    0.1s  bam, 1324 rec, 300 ind, s(age) edf 1.00 
+
+== 3. Awkward data (each must fit or return a message)
+  constant_trait                                             message: The trait does not vary, so there is nothing to model. 
+  two_ages                                                   message: A smooth of age needs at least 4 distinct ages. 
+  three_ages                                                 message: A smooth of age needs at least 4 distinct ages. 
+  one_individual                                             message: At least 3 individuals are needed: individual differences cannot be separated from ageing  
+  huge_values                                                ok    0.0s  gam, 200 rec, 40 ind, s(age) edf 4.87 
+  tiny_values                                                ok    0.0s  gam, 199 rec, 40 ind, s(age) edf 4.65 
+  negative_for_gamma                                         message: The Gamma family needs strictly positive values: choose Gaussian or Tweedie. 
+  non_integer_for_poisson                                    message: Count families need non-negative whole numbers. 
+  all_zero_counts                                            message: The trait does not vary, so there is nothing to model. 
+  binary_all_ones                                            message: The trait does not vary, so there is nothing to model. 
+  binary                                                     ok    0.0s  gam, 217 rec, 40 ind, s(age) edf 3.28 
+  proportion_without_trials                                  message: Proportions need a trials column (map it on the Data or Modelling tab); without one the bi 
+  beta_with_bounds                                           ok    0.1s  gam, 185 rec, 40 ind, s(age) edf 4.71 
+  beta_inside                                                ok    0.1s  gam, 196 rec, 40 ind, s(age) edf 4.80 
+  k_too_large                                                ok    0.0s  gam, 206 rec, 40 ind, s(age) edf 4.83 
+  k_minimum                                                  ok    0.0s  gam, 204 rec, 40 ind, s(age) edf 1.99 
+  continuous_ages                                            ok    0.0s  gam, 198 rec, 40 ind, s(age) edf 5.30 
+  gaulss                                                     ok    0.2s  gam, 190 rec, 40 ind, s(age) edf 4.14 
+  shrinkage_select                                           ok    0.0s  gam, 195 rec, 40 ind, s(age) edf 4.38 
+  adaptive_basis                                             ok    0.3s  gam, 604 rec, 80 ind, s(age) edf 7.17 
+  cr_basis_fs                                                ok    0.7s  gam, 200 rec, 40 ind, s(age) edf 4.68 
+  ar1_non_gaussian                                           ok    0.0s  gam, 202 rec, 40 ind, s(age) edf 3.44 
+  no_individual_effect                                       ok    0.0s  gam, 201 rec, 40 ind, s(age) edf 4.00 
+  afr_all_same                                               ok    0.0s  gam, 192 rec, 40 ind, s(age) edf 4.56 
+  ti_constant_alr                                            ok    0.1s  gam, 198 rec, 40 ind, s(age) edf 4.80 
+  group_one_level                                            ok    0.0s  gam, 173 rec, 40 ind, s(age) edf 4.55 
+  group_tiny_level                                           ok    0.1s  gam, 267 rec, 60 ind, s(age) edf 8.14 
+  group_missing_values                                       ok    0.1s  gam, 255 rec, 52 ind, s(age) edf 8.18 
+  all_na_lifespan                                            message: Known lifespan (LS) is not mapped or is missing for everyone: choose ALR, or map a lifespa 
+  many_individuals                                           ok    4.6s  bam, 5910 rec, 1500 ind, s(age) edf 3.97 
+  nonexistent_group                                          ok    0.0s  gam, 211 rec, 40 ind, s(age) edf 4.69 
+
+144 fits succeeded, 40 returned a message.
+No errors escaped the GAMM engine.
