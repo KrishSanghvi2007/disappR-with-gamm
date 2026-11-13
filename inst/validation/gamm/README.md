@@ -104,3 +104,32 @@ The break tests found and fixed these engine bugs:
   comparison, because gamm4 cannot fit `ti()`.
 - **False positives.** The rule that ΔAIC > 2 declares age-dependent selective disappearance gives about 11% false
   positives in the simulations.
+
+## Fast comparisons (gamm4) against mgcv
+
+Above 300 random-effect levels, comparisons are fitted with gamm4. gamm4 uses lme4's sparse random effects and the
+marginal likelihood, and its age-dependent form is `s(age, by = proxy)`. On the haematocrit example (1,491 levels)
+the proxy comparison went from about 30 minutes to 10 s, polynomials to 1 s and sex groups to 6 s.
+
+The same simulations in fast mode (`fast/`, forced with `DISAPPR_GAMM_FAST_LEVELS=0`):
+
+| Approach | Falsely age-dependent | Power |
+|---|---|---|
+| GAMM, mgcv `ti()` (conditional AIC) | 11% | 100% |
+| GAMM, gamm4 `s(age, by = ALR)` (marginal likelihood) | 1.9% | 100% |
+
+The simulated age-dependence is linear in ALR, which matches the `s(age, by = ALR)` form, so this design favours it.
+
+Group comparison, 10 replicates per scenario:
+
+- Both engines detect groups that truly age differently 10 times out of 10.
+- When groups differ only in level, gamm4 never declares a difference in shape; mgcv does so once in 10.
+
+Fast mode can change conclusions on real data. On the Tsui body-mass data:
+
+| Comparison | mgcv | gamm4 (fast mode) |
+|---|---|---|
+| Lifespan | linear best; `ti` +8.5 AIC | `s(age, by = LS)` best; linear +3.0 AIC |
+| Sex | S best; G +5.7 | G best; GI +4.0 |
+
+The gamm4 lifespan result agrees with the paper's reported age × lifespan effect.
