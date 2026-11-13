@@ -1,0 +1,3 @@
+disappR 0.25.0 starting from /home/user/disappR-with-gamm
+
+== Empirical examples (Gaussian traits)

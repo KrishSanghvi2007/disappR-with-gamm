@@ -1,2 +1,9 @@
 == 1. Bundled examples (suggested family; published GAMM settings where the example gives them)
   fly [nb]                                                   ok    8.9s  bam, 1901 rec, 648 ind, s(age) edf 2.83 
+  bichet [gaussian]                                          ok    7.7s  gam, 1023 rec, 396 ind, s(age) edf 1.00 
+  bichet_marmot [nb]                                         ok    0.2s  gam, 169 rec, 52 ind, s(age) edf 2.60 
+  moullec_swift [nb]                                         ok    3.1s  bam, 2069 rec, 542 ind, s(age) edf 7.03 
+  pasztor_apollo [gaussian]                                  ok    4.4s  bam, 3150 rec, 1179 ind, s(age) edf 7.21 
+  wynn [gaussian]                                            ok    5.0s  gam, 2689 rec, 77 ind, s(age) edf 1.01 
+  sanghvi_female [nb]                                        ok    2.9s  bam, 5997 rec, 637 ind, s(age) edf 6.37 
+  allain [poisson]                                           ok    0.6s  gam, 481 rec, 194 ind, s(age) edf 4.81 

@@ -62,6 +62,7 @@ compare_one <- function(b, sh = NULL) {
                 err = if (isTRUE(rg$ok) && !is.null(sh)) shape_err(gamm_curve(rg, n = 60, by_proxy = FALSE), sh) else NA_real_)
   out
 }
+if (reps > 0) {
 cat("== Simulations (", reps, " replicates per scenario)\n", sep = "")
 grid <- expand.grid(k = seq_len(reps), sel = c("none", "age-independent", "age-dependent"), sh = names(shapes), stringsAsFactors = FALSE)
 one_row <- function(i) {
@@ -88,11 +89,13 @@ ov$`power, age-dependent (%)` <- stats::aggregate(100 * agedep ~ approach, data 
 ov$`mean shape error` <- stats::aggregate(err ~ approach, data = R, FUN = mean, na.action = na.omit)[[2]]
 print(ov, row.names = FALSE)
 utils::write.csv(R, file.path(Sys.getenv("DISAPPR_GVG_OUT", tempdir()), "gamm_vs_glmm_replicates.csv"), row.names = FALSE)
+}
 cat("\n== Empirical examples (Gaussian traits)\n")
 for (key in c("bichet", "moullec_swift", "pasztor_apollo", "wynn", "bouwhuis", "warner", "mckennaell_weight", "szejnersigal_activity")) {
-  ex <- tryCatch(disappr_example(key), error = function(e) NULL)
-  if (is.null(ex)) { errors <- c(errors, paste(key, "not loaded")); next }
-  b <- tryCatch(standardise_data(ex$data, utils::modifyList(ex$mapping, list(covars = character(0), random = character(0)))), error = function(e) NULL)
+  ex <- EXAMPLES[[key]]
+  d <- if (is.null(ex)) NULL else load_example_file(ex$file)
+  if (is.null(d)) { errors <- c(errors, paste(key, "not loaded")); next }
+  b <- tryCatch(standardise_data(d, utils::modifyList(ex$mapping, list(covars = character(0), cov_factor = character(0), cov_int = character(0), random = character(0)))), error = function(e) NULL)
   if (is.null(b)) { errors <- c(errors, paste(key, "not prepared")); next }
   res <- tryCatch(compare_one(b, NULL), error = function(e) { errors <<- c(errors, paste(key, conditionMessage(e))); NULL })
   if (is.null(res)) next

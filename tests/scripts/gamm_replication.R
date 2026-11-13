@@ -67,20 +67,24 @@ if (!is.null(bt)) {
   } else if (!is.null(r)) errors <- c(errors, paste("Tsui app fit:", r$message))
   # sex: the authors' G, GS and S (factor-smooth 'fs' for sex) compared by REML AIC, against the app's five structures by ML
   if (!is.null(bm_g)) {
-    bm_gs <- safe("Tsui GS", gam(BodyMass_z ~ s(age_year, k = 15) + newlifespan + RightTarsus_z + newstat + s(age_year, SexEstimate, k = 15, bs = "fs") + CatchTime_mins + avg_invert +
-                                   s(birthyear, bs = "re") + s(Observer, bs = "re") + s(BirdID, bs = "re"), data = a, method = "REML"))
-    bm_s <- safe("Tsui S", gam(BodyMass_z ~ s(age_year, SexEstimate, k = 15, bs = "fs") + newlifespan + RightTarsus_z + newstat + CatchTime_mins + avg_invert +
-                                 s(birthyear, bs = "re") + s(Observer, bs = "re") + s(BirdID, bs = "re"), data = a, method = "REML"))
-    if (!is.null(bm_gs) && !is.null(bm_s)) { ai <- AIC(bm_g, bm_gs, bm_s); line("(a) Authors' G / GS / S by REML AIC: ", paste(sprintf("%s %.1f", c("G", "GS", "S"), ai$AIC - min(ai$AIC)), collapse = ", ")) }
+    # the authors' formulas for GS, S and age x lifespan, fitted with bam (fREML, discretised) for speed: gam takes tens of
+    # minutes per model here with ~1,170 birds' random effects
+    bm_gs <- safe("Tsui GS", bam(BodyMass_z ~ s(age_year, k = 15) + newlifespan + RightTarsus_z + newstat + s(age_year, SexEstimate, k = 15, bs = "fs") + CatchTime_mins + avg_invert +
+                                   s(birthyear, bs = "re") + s(Observer, bs = "re") + s(BirdID, bs = "re"), data = a, method = "fREML", discrete = TRUE))
+    bm_s <- safe("Tsui S", bam(BodyMass_z ~ s(age_year, SexEstimate, k = 15, bs = "fs") + newlifespan + RightTarsus_z + newstat + CatchTime_mins + avg_invert +
+                                 s(birthyear, bs = "re") + s(Observer, bs = "re") + s(BirdID, bs = "re"), data = a, method = "fREML", discrete = TRUE))
+    bm_gb <- safe("Tsui G bam", bam(BodyMass_z ~ s(age_year, k = 15) + newlifespan + RightTarsus_z + newstat + SexEstimate + CatchTime_mins + avg_invert +
+                                      s(birthyear, bs = "re") + s(Observer, bs = "re") + s(BirdID, bs = "re"), data = a, method = "fREML", discrete = TRUE))
+    if (!is.null(bm_gs) && !is.null(bm_s)) { ai <- AIC(bm_gb, bm_gs, bm_s); line("(a) Authors' G / GS / S formulas (bam fREML) by AIC: ", paste(sprintf("%s %.1f", c("G", "GS", "S"), ai$AIC - min(ai$AIC)), collapse = ", ")) }
   }
   sg <- utils::modifyList(s, list(group = "cv_SexEstimate", structure = "I"))
   gc <- safe("Tsui app groups", gamm_group_comparison(gd, sg))
   if (isTRUE(gc$ok)) { line("(b) disappR group structures by ML AIC (dAIC): ", paste(sprintf("%s %.1f", gc$table$Model, gc$table$dAIC), collapse = ", ")); line("  ", gc$verdict) }
   # age x lifespan
   if (!is.null(bm_g)) {
-    bm_ti <- safe("Tsui ti", gam(BodyMass_z ~ s(age_year, k = 15) + newlifespan + ti(age_year, newlifespan) + RightTarsus_z + newstat + SexEstimate + CatchTime_mins + avg_invert +
-                                   s(birthyear, bs = "re") + s(Observer, bs = "re") + s(BirdID, bs = "re"), data = a, method = "REML"))
-    if (!is.null(bm_ti)) show_smooth("(a) authors' style: ti(age_year, newlifespan)", bm_ti, "ti(age_year,newlifespan)")
+    bm_ti <- safe("Tsui ti", bam(BodyMass_z ~ s(age_year, k = 15) + newlifespan + ti(age_year, newlifespan) + RightTarsus_z + newstat + SexEstimate + CatchTime_mins + avg_invert +
+                                   s(birthyear, bs = "re") + s(Observer, bs = "re") + s(BirdID, bs = "re"), data = a, method = "fREML", discrete = TRUE))
+    if (!is.null(bm_ti)) show_smooth("(a) authors' style (bam): ti(age_year, newlifespan)", bm_ti, "ti(age_year,newlifespan)")
   }
   pc <- safe("Tsui app proxy", gamm_proxy_comparison(gd, s))
   if (isTRUE(pc$ok)) { print(pc$tables$LS[, c("Model", "AIC", "dAIC", "Weight", "Records")], row.names = FALSE); line("  ", pc$texts[["LS"]]) }
