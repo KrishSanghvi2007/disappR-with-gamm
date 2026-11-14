@@ -13,3 +13,32 @@
   mckennaell_weight [gaussian]                               ok    1.1s  bam, 2317 rec, 649 ind, s(age) edf 2.92 
   szejnersigal_activity [gaussian]                           ok    0.2s  gam, 414 rec, 77 ind, s(age) edf 6.50 
   tsui_mass [gaussian]                                       ok    5.4s  bam, 2559 rec, 1172 ind, s(age) edf 3.03 
+  brown_haematocrit [gaussian]                               ok    5.7s  bam, 1379 rec, 730 ind, s(age) edf 7.81 
+  cooper_wren_females [poisson]                              ok    9.9s  gamm4, 1361 rec, 603 ind, s(age) edf 4.24 
+  cooper_wren_males [poisson]                                ok   59.3s  gamm4, 2310 rec, 780 ind, s(age) edf 3.08 
+  lalande_elephants [gaussian]                               ok    0.4s  bam, 3886 rec, 493 ind, s(age) edf 7.92 
+
+== 2. Out-of-sample datasets (tests/stress_data)
+  wild_bird_annual / default [poisson]                       ok    3.2s  bam, 2124 rec, 736 ind, s(age) edf 4.05 
+  wild_bird_annual / ti [poisson]                            ok    4.3s  bam, 2124 rec, 736 ind, s(age) edf 3.65 
+  wild_bird_annual / LS [poisson]                            ok    2.4s  bam, 1914 rec, 671 ind, s(age) edf 3.87 
+  wild_bird_annual / terminal [poisson]                      ok    3.0s  bam, 2124 rec, 736 ind, s(age) edf 4.01 
+  wild_bird_annual / bam [poisson]                           ok    3.0s  bam, 2124 rec, 736 ind, s(age) edf 4.05 
+  wild_bird_annual / groups [poisson]                        ok    3.5s  bam, 2124 rec, 736 ind, s(age) edf 6.04 
+  mammal_irregular_days / default [gaussian]                 ok    0.1s  bam, 8855 rec, 250 ind, s(age) edf 8.67 
+  mammal_irregular_days / ti [gaussian]                      ok    0.2s  bam, 8855 rec, 250 ind, s(age) edf 8.66 
+  mammal_irregular_days / fs [gaussian]                      ok    6.3s  bam, 8855 rec, 250 ind, s(age) edf 8.67 
+  mammal_irregular_days / LS [gaussian]                      ok    0.1s  bam, 7545 rec, 207 ind, s(age) edf 8.65 
+  mammal_irregular_days / terminal [gaussian]                ok    0.2s  bam, 8855 rec, 250 ind, s(age) edf 8.67 
+  mammal_irregular_days / bam [gaussian]                     ok    0.1s  bam, 8855 rec, 250 ind, s(age) edf 8.67 
+  ages_from_dates / default [gaussian]                       ok    1.9s  gam, 1399 rec, 299 ind, s(age) edf 8.66 
+  ages_from_dates / ti [gaussian]                            ok    6.0s  gam, 1399 rec, 299 ind, s(age) edf 8.65 
+  ages_from_dates / fs [gaussian]                            ok  216.1s  gam, 1399 rec, 299 ind, s(age) edf 8.66 
+  ages_from_dates / LS [gaussian]                            message: Known lifespan (LS) is not mapped or is missing for everyone: choose ALR, or map a lifespa 
+  ages_from_dates / terminal [gaussian]                      ok    2.0s  gam, 1399 rec, 299 ind, s(age) edf 8.66 
+  ages_from_dates / bam [gaussian]                           ok    0.1s  bam, 1399 rec, 299 ind, s(age) edf 8.62 
+  staggered_cohorts / default [nb]                           ok   10.6s  gam, 1569 rec, 400 ind, s(age) edf 3.40 
+  staggered_cohorts / ti [nb]                                ok   15.0s  gam, 1569 rec, 400 ind, s(age) edf 3.30 
+  staggered_cohorts / LS [nb]                                ok   10.0s  gam, 1569 rec, 400 ind, s(age) edf 3.40 
+  staggered_cohorts / terminal [nb]                          ok   10.2s  gam, 1569 rec, 400 ind, s(age) edf 3.46 
+  staggered_cohorts / bam [nb]                               ok    0.8s  bam, 1569 rec, 400 ind, s(age) edf 3.38 
