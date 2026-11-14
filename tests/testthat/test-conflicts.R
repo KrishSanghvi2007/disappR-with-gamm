@@ -51,7 +51,8 @@ test_that("the mean of conflicting values can be impossible: the swift's would f
 
 test_that("every bundled example loads, and only the documented individuals are excluded", {
   skip_if_not(nzchar(system.file("app", "data", package = "disappR")), "package data not installed")
-  documented <- list(moullec_swift = "Frontiers_000304", allain = c("D037", "D114", "D165"))
+  documented <- list(moullec_swift = "Frontiers_000304", allain = c("D037", "D114", "D165"),
+                     cooper_wren_females = c("725573-RBM", "898242-gbAN", "982725-rgNN"))   # three females with two recorded longevities (PROVENANCE.md)
   for (k in names(EXAMPLES)) {
     ex <- disappr_example(k)
     x <- disappr_prepare(ex$data, ex$mapping)

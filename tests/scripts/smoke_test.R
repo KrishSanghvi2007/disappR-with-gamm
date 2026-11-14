@@ -278,6 +278,10 @@ raw0 <- simulate_toy_data(list(n_id = 40, seed = 9))
 b0 <- check("standardise_data without covariates", standardise_data(raw0, utils::modifyList(toy_mapping(raw0),
                 list(covars = character(0), cov_factor = character(0), cov_int = "x|||age"))))
 if (!is.null(b0)) expect("no covariates: empty covariate metadata", length(b0$meta$covars) == 0 && length(b0$meta$cov_pairs) == 0)
+# a continuous and a categorical covariate with their interaction (b3), used by the equation checks below and later
+raw$temp <- round(stats::rnorm(nrow(raw), 20, 2), 1)
+mp3 <- utils::modifyList(toy_mapping(raw), list(covars = c("diet", "temp"), cov_factor = "diet", cov_int = "diet|||temp"))
+b3 <- standardise_data(raw, mp3)
 # exact model equations: every model (Gaussian), and interaction models under count families and random slopes
 lv3 <- list()
 for (cv in b3$meta$covars[b3$meta$cov_types[b3$meta$covars] == "categorical"]) lv3[[cv]] <- sort(unique(as.character(stats::na.omit(b3$data[[cv]]))))
@@ -327,9 +331,6 @@ mp2 <- utils::modifyList(toy_mapping(raw), list(cov_factor = "diet", cov_int = c
 b2m <- standardise_data(raw, mp2)$meta
 expect("categorical covariate typed as categorical", identical(unname(b2m$cov_types[[b2m$covars[[1]]]]), "categorical"))
 expect("diet x age interaction recorded", identical(b2m$cov_age, b2m$covars[[1]]))
-raw$temp <- round(stats::rnorm(nrow(raw), 20, 2), 1)
-mp3 <- utils::modifyList(toy_mapping(raw), list(covars = c("diet", "temp"), cov_factor = "diet", cov_int = "diet|||temp"))
-b3 <- standardise_data(raw, mp3)
 expect("continuous covariate stays numeric", is.numeric(b3$data[[b3$meta$covars[b3$meta$cov_labels == "temp"]]]))
 expect("covariate pair recorded as an interaction", length(b3$meta$cov_pairs) == 1)
 fs3 <- model_formula_strings(c("f1", "f2"), b3$meta$covars, "linear", character(0), b3$meta$cov_pairs)
