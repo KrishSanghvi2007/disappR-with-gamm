@@ -4,6 +4,11 @@
 reads the data mapped on the Data tab and changes nothing in steps 1-6. It returns the GAMM layer held back in 0.24.0,
 rebuilt and corrected.
 
+* **Model output tab.** The counterpart of step 5's Model output: model statistics (family, engine, records,
+  individuals, edf, REML/ML score, log-likelihood, AIC, deviance explained, adjusted R², scale); fixed smooth terms
+  (edf, Ref.df, F or chi-squared, p, shape) and parametric terms (estimate, SE, t or z, p), each with a plain
+  description; random effects with SD, variance and 95% limits (mgcv) and a flag for SDs near zero; optional mgcv
+  random-effect tests; a plain reading and a "Save to summary" button. The estimates moved here from the Checks tab.
 * **What it does.**
   - A penalised smooth of age, with individual random intercepts, uncorrelated intercepts and slopes (centred age),
     or a random smooth per individual. Mapped random intercepts (year, cohort, observer) and covariates are included,
