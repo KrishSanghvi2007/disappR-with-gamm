@@ -85,6 +85,33 @@ GAMMs with many individuals are much faster with an optimised BLAS (for example
 OpenBLAS on Linux, or the Accelerate BLAS that R for macOS can use). The app
 switches to `mgcv::bam` automatically for large data.
 
+## Step 8: Bayesian models (brms), optional
+
+An optional eighth step refits one of the step-5 models (Models 1-10) with `brms` and
+Stan, on the same records and with the same formula, so the Bayesian and frequentist
+answers can be read side by side. It is built as a guided introduction to the
+Bayesian workflow:
+
+- **Set up:** checks that `brms`, `rstan` and a C++ compiler are available, with
+  plain instructions when they are not (Rtools, Xcode command-line tools,
+  build-essential).
+- **Priors:** weakly informative, autoscaled priors with a choice of widths, and a
+  prior predictive check that draws the ageing curves the priors allow, instantly.
+- **Fit and convergence:** a draft or full run in a separate R process; R-hat, bulk
+  and tail ESS, divergences, tree depth and E-BFMI as traffic lights with what to do;
+  trace plots.
+- **Results:** posterior medians, credible intervals and the probability of
+  direction beside the step-5 estimates; the population curve with its credible band;
+  peak age and onset from the posterior.
+- **Posterior checks:** replicated data against the observed distribution, the mean
+  at each age and summary statistics.
+- **Reporting:** brms code with the priors written out, and a methods paragraph that
+  follows the Bayesian reporting guidelines (Kruschke 2021).
+
+This version covers Gaussian, Poisson and binomial traits with a constant residual
+variance. The first fit of a model compiles it (one to two minutes); refits with other
+priors, run lengths or data re-use the compiled model.
+
 ## Installation
 
 disappR is not on CRAN. Install the development version from GitHub:

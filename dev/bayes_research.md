@@ -82,6 +82,18 @@ Worthwhile as an optional, clearly guided step, not as a core step. Its value is
 intervals for derived quantities (peak age, onset, the within-individual ageing rate, selective-disappearance terms),
 side by side with step 5. Main costs: the C++ toolchain (Rtools / Xcode) and run times of minutes.
 
-## 7. Draft plan (for discussion)
+## 7. Agreed plan (14 Nov 2026)
 
-See the chat message of 14 Nov 2026; the agreed plan will be recorded here once settled.
+Decisions: brms with a compiler check (not rstanarm); refit the step-5 model chosen by the user, preselecting the
+best-ranked one, with an optional comparison set later.
+
+- **Phase 1 (done on this branch):** set-up check; model choice; priors with instant prior predictive curves;
+  draft/full fit in a callr process with a cached compiled model; convergence traffic lights and traces; posterior
+  against step 5, curve, peak and onset; posterior predictive checks; code, methods, saves. Gaussian, Poisson and
+  binomial families. Files: `R/bayes.R`, `inst/app/bayes_ui.R`, `inst/app/bayes_server.R`,
+  `tests/testthat/test-bayes.R`, `tests/scripts/bayes_app_test.R`.
+- **Phase 2:** the other families (Gamma, lognormal, beta, nbinom2, ZIP, ZINB, beta-binomial; nbinom1 needs a custom
+  family), age-dependent variance (distributional `sigma ~`), an optional set of models compared by LOO (elpd with SE,
+  Pareto k), a prior sensitivity refit (narrow and wide side by side).
+- **Phase 3:** validation (credible-interval coverage on simulations with a known answer; agreement with step 5 on the
+  bundled examples; stress tests), documentation and R CMD check.

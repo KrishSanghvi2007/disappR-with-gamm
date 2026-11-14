@@ -1,3 +1,22 @@
+# disappR 0.26.0 (in development, branch bayes-ageing)
+
+**Step 8: Bayesian models (brms), phase 1.** An optional step that refits one step-5 model with brms and Stan on the
+same records, as a guided introduction to the Bayesian workflow. It reads the step-5 fit and changes nothing in steps
+1-7.
+
+* Set-up check of brms, rstan and the C++ compiler, with instructions per operating system.
+* Autoscaled weakly informative priors (four widths) passed to Stan as data, so changing them, the run or the data
+  re-uses the compiled model (cached by the hash of the Stan code).
+* Prior predictive curves simulated from the priors without Stan, with a plain reading of how plausible they are.
+* Draft and full runs in a separate R process; convergence traffic lights (R-hat, bulk and tail ESS, divergences,
+  tree depth, E-BFMI) with advice; trace plots.
+* Posterior summaries beside the step-5 estimates, the shift in step-5 standard errors, the probability of direction,
+  the population curve with its credible band, and the peak age and onset from the posterior draws.
+* Posterior predictive checks: distribution, mean by age and summary statistics.
+* brms code, a methods paragraph (BARG), four "Save to summary" results and a paragraph in the methods draft.
+* Gaussian, Poisson and binomial (Bernoulli or trials) families. Other families, LOO comparison of a model set and
+  prior sensitivity refits are planned for phase 2.
+
 # disappR 0.25.0
 
 **Step 7: GAMMs.** Generalized additive mixed models of ageing (mgcv), as a new, optional step after the summary. It
