@@ -257,7 +257,9 @@ bayes_prior_reading <- function(pc, spec, pv) {
     sprintf("%s of the curves leave a generous band around the observed values (%s to %s): %s", pct(pc$share_outside),
             format_num(pc$limits[1], 3), format_num(pc$limits[2], 3),
             if (pc$share_outside > 0.5) {
-              paste0("the priors allow many implausible trajectories, mostly through the curvature terms. That is typical of weakly informative priors, which rule out only absurd values",
+              paste0("the priors allow many implausible trajectories",
+                     if (pv$w >= 10) ": priors this wide are close to flat and treat absurd curves as just as plausible as realistic ones. They are not 'neutral': with little information in the data they can pull estimates towards extreme values"
+                     else ", mostly through the curvature terms. That is typical of weakly informative priors, which rule out only absurd values",
                      if (isTRUE(spec$n_ind >= 100)) sprintf("; with %s individuals the data will dominate, which you can confirm by refitting with the narrow width and seeing whether the results change.", format(spec$n_ind, big.mark = ","))
                      else sprintf(". With only %d individuals the priors can matter: compare a fit with the narrow width.", spec$n_ind))
             } else if (pc$share_outside < 0.02 && pv$w <= 1) "the priors are fairly tight. Check that they do not rule out trajectories you consider plausible; if they do, the posterior will be pulled towards no effect."
