@@ -3,7 +3,8 @@
 # run_with_progress, add_saved, nothing_to_save, step4_child). It reads nothing else from steps 1-6 and writes only
 # its own outputs (gamm_*), downloads (download_gamm_*) and saved results (section "7 GAMM").
 
-GAMM_TIMEOUT <- 300   # seconds before a GAMM fit or comparison running in a separate R process is stopped
+GAMM_TIMEOUT <- 300           # seconds before a single GAMM fit running in a separate R process is stopped
+GAMM_COMPARE_TIMEOUT <- 3600  # comparisons fit several models by ML: they get an hour, with the elapsed time shown
 
 gamm_gd <- reactive(gamm_data(dat(), meta()))
 gamm_pretty <- function(x) {
@@ -18,19 +19,24 @@ gamm_col <- function(n) if (n <= 1) "#35637A" else distinct_colours(n)
 
 # Runs an engine function in a separate R process (as step 4 does), so a slow or crashing fit cannot stop the app;
 # in the same process when callr is not installed or under testServer().
-gamm_run <- function(what, args) {
+gamm_run <- function(what, args, timeout = GAMM_TIMEOUT, message = NULL) {
   if (!isTRUE(step4_isolated) || !is.function(session$sendProgress)) return(do.call(get(what), args))
   p <- callr::r_bg(step4_child, args = list(engine_dir = step4_engine_dir, files = DISAPPR_ENGINE_FILES, what = what,
                                            args = args, progress_file = ""), supervise = TRUE)
   t0 <- Sys.time()
-  while (p$is_alive()) {
-    p$wait(250)
-    if (as.numeric(difftime(Sys.time(), t0, units = "secs")) > GAMM_TIMEOUT) {
-      p$kill()
-      return(list(ok = FALSE, message = sprintf("Stopped after %d seconds. Simplify the model (smaller k, a random intercept instead of individual smooths, no ti term) or choose the bam engine.", GAMM_TIMEOUT)))
+  wait <- function() {
+    while (p$is_alive()) {
+      p$wait(500)
+      el <- as.numeric(difftime(Sys.time(), t0, units = "secs"))
+      if (!is.null(message)) setProgress(value = min(0.95, 0.1 + el / 300), detail = sprintf("%d s elapsed; large data can take several minutes.", round(el)))
+      if (el > timeout) {
+        p$kill()
+        return(list(ok = FALSE, message = sprintf("Stopped after %d minutes. Simplify the model (smaller k, a random intercept instead of individual smooths, a linear instead of a ti proxy term) or choose the bam engine.", round(timeout / 60))))
+      }
     }
+    tryCatch(p$get_result(), error = function(e) list(ok = FALSE, message = paste("The separate R process stopped:", conditionMessage(e))))
   }
-  tryCatch(p$get_result(), error = function(e) list(ok = FALSE, message = paste("The separate R process stopped:", conditionMessage(e))))
+  if (is.null(message)) wait() else withProgress(message = message, value = 0.1, wait())
 }
 
 # ---- data note and suggestions ------------------------------------------------------------------------------------
@@ -298,11 +304,20 @@ output$gamm_out_smooth <- renderTable(gamm_out_smooth_df(), striped = TRUE, spac
 output$gamm_out_random <- renderTable(gamm_out_random_df(), striped = TRUE, spacing = "xs")
 output$gamm_out_formula <- renderUI(tagList(strong("Formula: "), code(gamm_pretty(gamm_res()$formula))))
 output$gamm_output_reading <- renderUI(tags$ul(class = "small-note", lapply(gamm_pretty(gamm_output_reading(gamm_out())), tags$li)))
+output$gamm_guide_ui <- renderUI({
+  r <- gamm_res(); o <- gamm_out()
+  fresh <- function(z, sig = if (is.data.frame(z)) attr(z, "signature") else z$signature) if (!is.null(z) && identical(sig, gamm_sig())) z else NULL
+  g <- gamm_guide(r, o, poly = fresh(gamm_poly_store()), groups = fresh(gamm_groups_store()), proxy = fresh(gamm_proxy_store()))
+  tagList(lapply(g, function(x) div(class = "diagnosis-card", style = "border-left: 5px solid #35637A; margin-bottom: 8px;",
+    div(class = "diagnosis-title", x$question),
+    div(class = "diagnosis-detail", gamm_pretty(x$answer)),
+    if (nzchar(x$next_step)) div(class = "diagnosis-detail small-note", em(x$next_step)))))
+})
 gamm_re_test_store <- reactiveVal(NULL)
 observeEvent(input$gamm_run_re_test, disappr_guard("input$gamm_run_re_test", {
   r <- safe_get(gamm_res())
   if (is.null(r)) { notify("Fit a GAMM first.", type = "warning"); return(invisible(NULL)) }
-  z <- withProgress(message = "Testing the random effects", value = 0.4, gamm_run("gamm_re_test", list(r = r)))
+  z <- gamm_run("gamm_re_test", list(r = r), GAMM_COMPARE_TIMEOUT, "Testing the random effects")
   z$signature <- gamm_sig()
   gamm_re_test_store(z)
 }))
@@ -320,6 +335,20 @@ output$gamm_re_test_table <- renderTable({
 }, striped = TRUE, spacing = "xs")
 
 # ---- checks -------------------------------------------------------------------------------------------------------
+gamm_check_df <- reactive(gamm_check_summary(gamm_res(), safe_get(gamm_kc()) %||% data.frame(), safe_get(gamm_cc()) %||% data.frame(), safe_get(gamm_qr())))
+output$gamm_check_overall <- renderUI({
+  ov <- attr(gamm_check_df(), "overall")
+  div(class = if (identical(ov, "good")) "prefit-box" else "caution-box",
+      strong(switch(ov, good = "No problems found. ", caution = "Check. ", "Problem. ")),
+      switch(ov, good = "The basis is large enough, terms are separable, and the residuals show no structure the model misses.",
+             caution = "Some checks need attention: see 'What to do'. The results can still be read, with the stated care.",
+             "At least one check failed: fix it (see 'What to do') before interpreting the results."))
+})
+output$gamm_check_summary <- renderTable({
+  d <- gamm_check_df()
+  d$Status <- c(good = "\u2714 good", caution = "\u26a0 check", problem = "\u2716 problem")[d$Status]
+  gamm_pretty(d)
+}, striped = TRUE, spacing = "xs")
 output$gamm_kcheck_table <- renderTable({
   kc <- gamm_kc()
   if (!nrow(kc)) return(data.frame(Note = "No basis check available for this model."))
@@ -360,17 +389,23 @@ output$gamm_resid_plot <- renderPlot({
 observeEvent(input$gamm_run_poly, disappr_guard("input$gamm_run_poly", {
   gd <- safe_get(gamm_gd())
   if (is.null(gd)) return(invisible(NULL))
-  res <- withProgress(message = "Fitting linear, quadratic and cubic age", value = 0.3, gamm_run("gamm_parametric_reference", list(gd = gd, s = gamm_settings())))
+  res <- gamm_run("gamm_parametric_reference", list(gd = gd, s = gamm_settings()), GAMM_COMPARE_TIMEOUT, "Fitting no age, linear, quadratic, cubic and smooth age (ML)")
   if (is.data.frame(res)) attr(res, "signature") <- gamm_sig()
   gamm_poly_store(res)
   if (is.data.frame(res) && identical(attr(res, "engine"), "gamm4")) gamm_fast_disclaimer()
 }))
 output$gamm_poly_table <- renderTable({
   z <- gamm_poly_store()
-  shiny::validate(shiny::need(!is.null(z), "Press the button to compare the smooth with polynomial age (ML, same records)."))
+  shiny::validate(shiny::need(!is.null(z), "Press the button to compare models with no age term, linear, quadratic and cubic age and the smooth (ML, same records)."))
   shiny::validate(shiny::need(is.data.frame(z), z$message %||% "The comparison could not be run."))
   z
 }, striped = TRUE, spacing = "xs")
+output$gamm_poly_reading <- renderUI({
+  z <- gamm_poly_store()
+  if (!is.data.frame(z)) return(NULL)
+  if (!identical(attr(z, "signature"), gamm_sig())) return(div(class = "caution-box", "Settings changed since this comparison: run it again."))
+  tags$ul(lapply(gamm_poly_reading(z), tags$li))
+})
 output$gamm_engine_note_poly <- renderUI({
   z <- gamm_poly_store()
   if (is.data.frame(z) && identical(attr(z, "engine"), "gamm4") && identical(attr(z, "signature"), gamm_sig())) return(gamm_fast_box())
@@ -390,7 +425,7 @@ output$gamm_proxy_terms_table <- renderTable({
 observeEvent(input$gamm_run_proxy, disappr_guard("input$gamm_run_proxy", {
   gd <- safe_get(gamm_gd()); s <- gamm_settings()
   if (is.null(gd)) return(invisible(NULL))
-  res <- withProgress(message = "Comparing proxy forms (up to 8 models)", value = 0.3, gamm_run("gamm_proxy_comparison", list(gd = gd, s = s)))
+  res <- gamm_run("gamm_proxy_comparison", list(gd = gd, s = s), GAMM_COMPARE_TIMEOUT, "Comparing proxy forms (up to 8 models, ML)")
   res$signature <- gamm_sig()
   gamm_proxy_store(res)
   if (!isTRUE(res$ok)) notify(res$message, type = "warning", duration = 8)
@@ -445,7 +480,7 @@ output$gamm_groups_note <- renderUI({
 observeEvent(input$gamm_run_groups, disappr_guard("input$gamm_run_groups", {
   gd <- safe_get(gamm_gd()); s <- gamm_settings()
   if (is.null(gd) || !nzchar(s$group)) { notify("Choose a grouping variable on the Fit tab first.", type = "warning"); return(invisible(NULL)) }
-  res <- withProgress(message = "Comparing group structures (6 models)", value = 0.3, gamm_run("gamm_group_comparison", list(gd = gd, s = s)))
+  res <- gamm_run("gamm_group_comparison", list(gd = gd, s = s), GAMM_COMPARE_TIMEOUT, "Comparing group structures (6 models, ML)")
   res$signature <- gamm_sig()
   gamm_groups_store(res)
   if (!isTRUE(res$ok)) notify(res$message, type = "warning", duration = 8)
@@ -483,20 +518,6 @@ gamm_diff_obj <- reactive({
     facet_wrap(~pair) + labs(x = "Age", y = "Difference between group curves (link scale)") + theme_disappR(12)
 })
 output$gamm_diff_plot <- renderPlot(gamm_diff_obj())
-
-# ---- individuals --------------------------------------------------------------------------------------------------
-output$gamm_vcomp_table <- renderTable({
-  vc <- gamm_vcomp(gamm_res())
-  if (!nrow(vc)) return(data.frame(Note = "No random-effect variances for this model."))
-  vc$Term <- gamm_pretty(sub("^scale$", "residual", vc$Term)); vc
-}, striped = TRUE, spacing = "xs")
-output$gamm_indiv_plot <- renderPlot({
-  r <- gamm_res(); ic <- gamm_individual_curves(r)
-  shiny::validate(shiny::need(nrow(ic) > 0, "No individual has three or more records: individual curves need more records per individual."))
-  pts <- r$data[as.character(r$data$id) %in% unique(ic$id), , drop = FALSE]
-  ggplot(ic, aes(age, fit)) + geom_point(data = pts, aes(age, trait), inherit.aes = FALSE, alpha = 0.6, size = 1, colour = "#35637A") +
-    geom_line(colour = "black") + facet_wrap(~id) + labs(x = "Age", y = "Trait (fitted for the individual)") + theme_disappR(11)
-})
 
 # ---- code and downloads -------------------------------------------------------------------------------------------
 output$gamm_code <- renderText(paste(gamm_code(gamm_res()), collapse = "\n"))
@@ -556,8 +577,10 @@ observeEvent(input$save_gamm_check, disappr_guard("input$save_gamm_check", {
   if (is.null(r)) return(nothing_to_save("Fit a GAMM first."))
   if (!gamm_check_fresh()) return(invisible(NULL))
   cau <- safe_get(gamm_cautions_now()) %||% character(0)
+  cs <- safe_get(gamm_check_df())
   add_saved("7 GAMM", "GAMM checks", text = c(gamm_desc(r), gamm_pretty(cau)),
-            tables = list(`Basis dimension check` = gamm_fmt(gamm_kc()), Concurvity = gamm_cc()),
+            tables = Filter(Negate(is.null), list(`Model checks` = if (is.data.frame(cs)) cs[, c("Check", "Result", "Status")] else NULL,
+                          `Basis dimension check` = gamm_fmt(gamm_kc()), Concurvity = gamm_cc())),
             verdict = if (length(cau)) "caution" else "context")
 }))
 observeEvent(input$save_gamm_groups, disappr_guard("input$save_gamm_groups", {
@@ -578,7 +601,7 @@ observeEvent(input$save_gamm_proxy, disappr_guard("input$save_gamm_proxy", {
 observeEvent(input$save_gamm_poly, disappr_guard("input$save_gamm_poly", {
   z <- gamm_poly_store()
   if (!is.data.frame(z)) return(nothing_to_save("Compare with polynomial age first."))
-  add_saved("7 GAMM", "GAMM against polynomials", tables = list(`Smooth against polynomial age (ML)` = z), verdict = "context")
+  add_saved("7 GAMM", "GAMM against polynomials", text = gamm_poly_reading(z), tables = list(`No age, polynomial and smooth age (ML)` = z), verdict = "context")
 }))
 
 # ---- bundled examples with a published GAMM: set its settings when the example is chosen --------------------------
@@ -601,10 +624,10 @@ output$gamm_proxy_hint <- renderUI({
                   LS = "Known lifespan: leaves out individuals whose lifespan is unknown (for example still alive).",
                   none = "No proxy: the curve is the population trajectory, which selective disappearance can distort."),
            if (!identical(pr, "none")) switch(fm,
-             linear = "Linear: longer- and shorter-lived individuals differ by the same amount at every age (age-independent selective disappearance).",
-             smooth = "Smooth: as linear, but the difference can change non-linearly with the proxy.",
-             vc = "Age-dependent, linear in the proxy: the age curve tilts with the proxy (the smooth analogue of Model 4).",
-             ti = "Age-dependent, smooth in both: the age curve can change shape with the proxy; needs plenty of data and mgcv."))
+             linear = "Linear (like Model 2 of step 5): one number, the difference in the trait per year of the proxy, the same at every age. Age-independent selective disappearance: it shifts the curve's level, not its shape.",
+             smooth = "Smooth s(proxy): the trait may depend on the proxy non-linearly (for example only the shortest-lived differ), but still by the same amount at every age. Age-independent, like linear, only more flexible.",
+             vc = "Age-dependent, linear in the proxy, s(age, by = proxy): at any given age the trait changes linearly with the proxy, but the size of that change is a smooth function of age. The smooth analogue of Model 4 (age \u00d7 ALR): selection that grows or shrinks with age.",
+             ti = "Age-dependent, smooth in both, s(proxy) + ti(age, proxy): the proxy's effect may be non-linear and may change with age in any smooth way, a fully flexible age \u00d7 proxy surface. The most general form: needs plenty of data, is fitted with mgcv only, and can overfit."))
   p(class = "small-note", paste(txt, collapse = " "))
 })
 output$gamm_next_ui <- renderUI({
@@ -623,7 +646,7 @@ output$gamm_next_ui <- renderUI({
   ch <- safe_get(gamm_group_choices(meta(), gamm_gd())) %||% character(0)
   if (length(ch) && !nzchar(s$group %||% "")) nxt <- c(nxt, sprintf("Your data have a grouping variable (%s): choose it under 'Separate curves for a group' to ask whether groups age differently.", paste(names(ch), collapse = ", ")))
   if (nzchar(s$group %||% "") && is.null(gamm_groups_store())) nxt <- c(nxt, "Open the Groups tab and press 'Compare group structures'.")
-  if (is.null(gamm_poly_store())) nxt <- c(nxt, "On the Checks tab, compare the smooth with linear, quadratic and cubic age: if a polynomial fits as well, the models of step 5 describe the shape.")
+  if (is.null(gamm_poly_store())) nxt <- c(nxt, "On the Model output tab, read the step-by-step guide and press 'Is a smooth needed?': it compares no age, linear, quadratic and cubic age with the smooth.")
   nxt <- c(nxt, "Read the Ageing rate tab for where the trait changes significantly with age, and save the results you will report.")
   div(class = "diagnosis-card", style = "border-left: 5px solid #7C8060;",
       div(class = "diagnosis-title", "Suggested next steps"),

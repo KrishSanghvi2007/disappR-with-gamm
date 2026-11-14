@@ -88,8 +88,11 @@ test_that("comparisons use the same records even when lifespan is unknown for so
   r <- gamm_fit(gd, utils::modifyList(gamm_defaults(), list(proxy = "LS")))
   expect_true(any(grepl("without a known lifespan", gamm_cautions(r, gd = gd))))
   pr <- gamm_parametric_reference(gd, gamm_defaults())
-  expect_setequal(pr$Model, c("Linear age", "Quadratic age", "Cubic age", "Smooth of age"))
+  expect_setequal(pr$Model, c("No age effect", "Linear age", "Quadratic age", "Cubic age", "Smooth of age"))
   expect_true(all(is.finite(pr$AIC)))
+  rd <- gamm_poly_reading(pr)
+  expect_match(rd[1], "Age matters")
+  expect_match(paste(rd, collapse = " "), "smooth fits better than the best polynomial")
 })
 
 test_that("a covariate with one level, or constant random terms, do not break the fit", {
@@ -223,4 +226,24 @@ test_that("gamm4 fits report lme4's variance components and decline the mgcv ran
   expect_true("Individual random intercepts" %in% o$random$Description)
   expect_match(o$stats$Value[o$stats$Statistic == "Fitting engine"], "gamm4")
   expect_false(gamm_re_test(r)$ok)
+})
+
+test_that("the guided reading and the check summary answer for the fitted model", {
+  gd <- gamm_gd_of(gamm_toy(n_id = 60))
+  r <- gamm_fit(gd, utils::modifyList(gamm_defaults(), list(k = 6, group = "cv_sex", structure = "GI")))
+  o <- gamm_output(r)
+  g <- gamm_guide(r, o)
+  qs <- vapply(g, `[[`, "", "question")
+  expect_true(all(c("1. Does the trait change with age at all?", "2. Is a curve needed, or would a straight line or polynomial do?",
+                    "3. Do the groups age differently, and which group structure fits?", "4. Does selective disappearance or appearance shape the curve?",
+                    "5. What is the pattern of ageing?") %in% qs))
+  expect_match(g[[3]]$answer, "structure GI")
+  expect_match(g[[1]]$next_step, "Is a smooth needed")
+  pr <- gamm_parametric_reference(gd, utils::modifyList(gamm_defaults(), list(k = 6)))
+  g2 <- gamm_guide(r, o, poly = pr)
+  expect_identical(g2[[1]]$next_step, "")
+  cs <- gamm_check_summary(r, gamm_kcheck(r), gamm_concurvity(r), NULL)
+  expect_true(all(c("Basis size (k)", "Concurvity", "Correlation within individuals", "Data at old ages", "Convergence") %in% cs$Check))
+  expect_true(attr(cs, "overall") %in% c("good", "caution", "problem"))
+  expect_true(all(nzchar(cs[["What to do"]])))
 })

@@ -166,7 +166,7 @@ gamm_proxy_k <- function(gd, p) {
 }
 
 # The model formula (a string) for the settings. structure, proxy_form and afr_form can be overridden for comparisons;
-# age_poly > 0 replaces the smooth with a polynomial; ordered_by fits group difference smooths against a reference.
+# age_poly > 0 replaces the smooth with a polynomial, age_poly < 0 leaves age out (the 'no age effect' model); ordered_by fits group difference smooths against a reference.
 gamm_formula <- function(s, gd, structure = s$structure, proxy_form = s$proxy_form, afr_form = s$afr_form,
                          age_poly = 0L, ordered_by = FALSE) {
   grp <- if (nzchar(s$group %||% "") && s$group %in% names(gd)) s$group else ""
@@ -175,7 +175,9 @@ gamm_formula <- function(s, gd, structure = s$structure, proxy_form = s$proxy_fo
   ut <- gamm_usable_terms(gd, s)
   terms <- character(0)
   if (nzchar(grp)) terms <- c(terms, if (isTRUE(ordered_by)) ".grp_o" else grp)       # the group main effect, always
-  if (age_poly > 0) {
+  if (age_poly < 0) {
+    # no age term: the null model of the shape comparison
+  } else if (age_poly > 0) {
     terms <- c(terms, if (age_poly == 1) "age" else sprintf("poly(age, %d, raw = TRUE)", as.integer(age_poly)))
   } else if (isTRUE(ordered_by)) {
     terms <- c(terms, gamm_age_smooth(s), gamm_age_smooth(s, by = ".grp_o"))
@@ -622,6 +624,118 @@ gamm_re_test <- function(r) {
 
 gamm_p_words <- function(p) { f <- format_p(p); if (startsWith(f, "<")) sub("^<", "< ", f) else paste("=", f) }
 
+# A guided reading of the fitted GAMM, question by question, for readers who know parametric models. Each item has a
+# question, the answer for this fit, and what to do next. comp: optional results of the shape (poly), group and proxy
+# comparisons, used when they have been run.
+gamm_guide <- function(r, o, poly = NULL, groups = NULL, proxy = NULL) {
+  s <- r$settings
+  sm <- o$smooth; pr <- o$parametric
+  item <- function(q, a, nxt = "") list(question = q, answer = a, next_step = nxt)
+  out <- list()
+  # 1. is there an age effect at all?
+  age <- sm[grepl("^s\\(age\\)", sm$Smooth) & !grepl("ALR|LS|AFR|grp_o", sm$Smooth), , drop = FALSE]
+  if (nrow(age)) {
+    sig <- is.finite(age$P) & age$P < 0.05
+    a <- if (nrow(age) == 1) {
+      if (sig) sprintf("Yes. The smooth of age differs from a flat line (%s = %s, p %s): the trait changes with age.", attr(sm, "stat"), format_num(age$Statistic, 3), gamm_p_words(age$P))
+      else sprintf("Not clearly. The smooth of age does not differ significantly from a flat line (p %s). This is absence of evidence: with few old individuals a real decline can be missed.", gamm_p_words(age$P))
+    } else sprintf("Group by group: %s. Each p-value tests whether that group's curve (or deviation) differs from a flat line.",
+                   paste(sprintf("%s p %s", age$Description, vapply(age$P, gamm_p_words, "")), collapse = "; "))
+    pc <- if (is.data.frame(poly) && nrow(poly)) paste(" Formal comparison:", gamm_poly_reading(poly)[1]) else ""
+    out[[length(out) + 1]] <- item("1. Does the trait change with age at all?", paste0(a, pc),
+      if (is.null(poly)) "Run 'Is a smooth needed?' below: it compares models with no age term, linear, quadratic and cubic age, and the smooth." else "")
+  }
+  # 2. is a curve needed, or would a straight line or polynomial do?
+  if (nrow(age)) {
+    e <- age$edf
+    a <- paste0(sprintf("The effective degrees of freedom (edf) measure how wiggly the smooth is: about 1 is a straight line, 2\u20133 a gentle curve such as a single peak, above 3 a more complex shape. Here: %s.",
+                        paste(sprintf("%s edf %s (%s)", if (nrow(age) > 1) age$Description else "age", format_num(e, 3), age$Shape), collapse = "; ")),
+                if (any(e < 1.5)) " An edf near 1 means a linear age effect would do." else "")
+    if (is.data.frame(poly) && nrow(poly)) a <- paste(a, paste(gamm_poly_reading(poly)[-1], collapse = " "))
+    out[[length(out) + 1]] <- item("2. Is a curve needed, or would a straight line or polynomial do?", a,
+      "A significant smooth tells you there is an age effect, not that it is curved: the edf and the comparison with polynomials answer that.")
+  }
+  # 3. groups
+  if (nzchar(s$group %||% "")) {
+    st <- r$structure
+    desc <- switch(st, G = "one common curve, groups differing only in level", GS = "a common curve plus group deviations that share one wiggliness",
+                   GI = "a common curve plus group deviations, each with its own wiggliness", S = "a separate curve per group, sharing one wiggliness",
+                   I = "a separate curve per group, each with its own wiggliness")
+    gm <- pr[startsWith(pr$Term, s$group), , drop = FALSE]
+    lvl <- if (nrow(gm)) sprintf(" Groups differ in overall level by %s (p %s).", paste(sprintf("%s %s", gm$Description, format_num(gm$Estimate, 3)), collapse = "; "), gamm_p_words(min(gm$P))) else ""
+    a <- paste0(sprintf("This fit uses structure %s: %s.", st, desc), lvl,
+                if (st %in% c("GS", "GI")) " With GS and GI the group rows of the smooth table test whether each group's deviation from the common curve is flat: a significant deviation means that group's shape differs." else "",
+                if (st %in% c("S", "I")) " With S and I each group has its own curve; its p-value tests whether that group's trait changes with age, not whether the groups differ. Whether the groups age differently is answered by comparing structures." else "")
+    if (is.list(groups) && isTRUE(groups$ok)) a <- paste(a, "Comparison:", groups$verdict)
+    out[[length(out) + 1]] <- item("3. Do the groups age differently, and which group structure fits?", a,
+      if (is.null(groups)) "Open the Groups tab and press 'Compare group structures': if G (one shared curve) is within 2 AIC of the best, there is no clear evidence that the groups age differently." else "")
+  }
+  # 4. selective disappearance and appearance
+  pf <- r$proxy_form %||% "none"; prox <- s$proxy %||% "none"
+  if (!identical(prox, "none") || !identical(r$afr_form %||% "none", "none")) {
+    lin <- pr[pr$Term %in% c("ALR", "LS", "AFR"), , drop = FALSE]
+    sml <- sm[grepl("ALR|LS|AFR", sm$Smooth), , drop = FALSE]
+    bits <- c(
+      if (nrow(lin)) paste(vapply(seq_len(nrow(lin)), function(i) sprintf("%s: %s per year (p %s), %s", lin$Term[i], format_num(lin$Estimate[i], 3), gamm_p_words(lin$P[i]),
+        if (is.finite(lin$P[i]) && lin$P[i] < 0.05) sprintf("so individuals with a later %s differ in trait level by the same amount at every age (age-independent selective %s)", lin$Term[i], if (lin$Term[i] == "AFR") "appearance" else "disappearance")
+        else "no clear age-independent effect"), ""), collapse = "; "),
+      if (nrow(sml)) paste(vapply(seq_len(nrow(sml)), function(i) sprintf("%s: p %s, %s", sml$Description[i], gamm_p_words(sml$P[i]),
+        if (grepl("^ti\\(|:\\.(ALR|LS|AFR)_c$", sml$Smooth[i])) { if (is.finite(sml$P[i]) && sml$P[i] < 0.05) "so the proxy's effect changes with age (age-dependent selection: the naive curve is distorted in shape)" else "no clear evidence that the proxy's effect changes with age" }
+        else { if (is.finite(sml$P[i]) && sml$P[i] < 0.05) "a non-linear but age-independent effect" else "no clear effect" }), ""), collapse = "; "))
+    out[[length(out) + 1]] <- item("4. Does selective disappearance or appearance shape the curve?",
+      paste0(paste(bits[nzchar(bits)], collapse = ". "), "."),
+      if (is.null(proxy)) "Open the Selective disappearance tab and press 'Compare proxy forms': it compares no proxy, linear, smooth and age-dependent forms on the same records." else paste("Comparison:", paste(unlist(proxy$texts), collapse = " ")))
+  }
+  # 5. the pattern
+  out[[length(out) + 1]] <- item("5. What is the pattern of ageing?",
+    "The curve on the Fit tab shows the shape. The Ageing rate tab says where the trait changes significantly (the first derivative with simultaneous intervals), the peak age and the onset of the final decline.",
+    "Describe the pattern from where the derivative's interval excludes zero, not from wiggles in the curve, especially at old ages where few individuals remain.")
+  out
+}
+
+# Model adequacy, as traffic lights with what each check means and what to do (the GAMM counterpart of step 5's
+# fit diagnostics).
+gamm_check_summary <- function(r, kc, cc, qr = NULL) {
+  s <- r$settings; dd <- r$data
+  row <- function(check, result, status, meaning, todo) data.frame(Check = check, Result = result, Status = status, `What it tells you` = meaning,
+                                                                   `What to do` = todo, check.names = FALSE, stringsAsFactors = FALSE)
+  rows <- list()
+  bad_k <- if (nrow(kc)) kc$Smooth[kc$Flag != ""] else character(0)
+  rows[[1]] <- row("Basis size (k)", if (!nrow(kc)) "not available" else if (length(bad_k)) paste("may be too small for", paste(bad_k, collapse = ", ")) else sprintf("adequate for %d smooth(s)", nrow(kc)),
+    if (length(bad_k)) "caution" else "good",
+    "k sets the maximum wiggliness a smooth may have; the penalty then chooses how much is used. The check asks whether the residuals still contain pattern along the term (k-index below 1 with a small p-value) while the edf is close to the maximum.",
+    if (length(bad_k)) sprintf("Raise k (now %s) and refit. If the edf barely changes, the original k was fine.", s$k) else "Nothing: a larger k would not change the curve.")
+  hi <- if (nrow(cc)) cc[cc$Flag != "", , drop = FALSE] else data.frame()
+  rows[[2]] <- row("Concurvity", if (!nrow(cc)) "only one fixed smooth" else if (nrow(hi)) paste("high for", paste(sprintf("%s with %s (%s)", hi$Term, hi[["Most similar term"]], hi$Estimate), collapse = "; ")) else sprintf("largest %s", format_num(max(cc$Estimate), 2)),
+    if (nrow(hi)) "caution" else "good",
+    "The smooth version of collinearity: how far one term's curve can be reproduced by the other terms. Above 0.8, their separate effects are poorly identified (for example age and ALR when most individuals die young).",
+    if (nrow(hi)) "Interpret the terms jointly, not separately; their combined prediction is still fine. Consider a simpler form for one of them (linear instead of smooth)." else "Nothing.")
+  binary <- all(dd$trait %in% c(0, 1)) && !(".trials" %in% names(dd) && any(dd$.trials > 1, na.rm = TRUE))
+  if (s$family %in% c("poisson", "binomial") && !binary) {
+    disp <- if (is.list(qr)) qr$dispersion else NA_real_
+    over <- is.list(qr) && is.finite(qr$dispersion_p) && qr$dispersion_p < 0.05 && disp > 1
+    rows[[3]] <- row("Dispersion", if (is.finite(disp)) sprintf("ratio %s (p %s)", format_num(disp, 3), gamm_p_words(qr$dispersion_p)) else "not available",
+      if (over) "problem" else "good",
+      sprintf("Whether the data vary more than the %s family allows. Overdispersion makes intervals too narrow and p-values too small.", s$family),
+      if (over) sprintf("Tick 'Observation-level random effect' on the Fit tab, or choose the %s family.", if (s$family == "poisson") "negative binomial" else "beta") else "Nothing.")
+  }
+  lag1 <- gamm_lag1(gamm_resid(r), dd$id)
+  ac <- is.finite(lag1) && lag1 > 0.3 && !(isTRUE(s$ar1) && r$rho > 0)
+  rows[[length(rows) + 1]] <- row("Correlation within individuals", if (is.finite(lag1)) sprintf("lag-1 r = %s", format_num(lag1, 2)) else "not available",
+    if (ac) "caution" else "good",
+    "Whether residuals of the same individual's consecutive records are still correlated after the random effects. If so, individuals age differently and the intervals are too narrow.",
+    if (ac) "Use 'Random intercept and slope' or 'Random smooth per individual'; for a Gaussian trait, AR1 errors (Advanced)." else "Nothing.")
+  old <- stats::quantile(dd$age, 0.9); n_old <- length(unique(dd$id[dd$age >= old]))
+  rows[[length(rows) + 1]] <- row("Data at old ages", sprintf("%d individuals at or above age %s", n_old, format_num(old)), if (n_old < 20) "caution" else "good",
+    "How many individuals inform the oldest tenth of the age range. The smooth is least certain where data are sparse.",
+    if (n_old < 20) "Do not interpret wiggles or late declines at the oldest ages; the support bars under the curve show where data thin out." else "Nothing.")
+  rows[[length(rows) + 1]] <- row("Convergence", if (isTRUE(r$converged)) "converged" else "not fully converged", if (isTRUE(r$converged)) "good" else "problem",
+    "Whether the fitting algorithm found the best smoothing parameters.", if (isTRUE(r$converged)) "Nothing." else "Simplify the model (smaller k, fewer random terms, a linear instead of a smooth proxy) and refit.")
+  out <- do.call(rbind, rows)
+  attr(out, "overall") <- if (any(out$Status == "problem")) "problem" else if (any(out$Status == "caution")) "caution" else "good"
+  out
+}
+
 # Plain reading of the model output: which terms matter, and how curved the age smooth is.
 gamm_output_reading <- function(o) {
   out <- character(0)
@@ -1056,7 +1170,7 @@ gamm_naive_vs_corrected <- function(gd, r) {
 # Is a smooth needed? The same model with linear, quadratic and cubic age against the smooth (ML, same records).
 gamm_parametric_reference <- function(gd, s) {
   s <- utils::modifyList(gamm_defaults(), s)
-  polys <- list(`Linear age` = 1L, `Quadratic age` = 2L, `Cubic age` = 3L, `Smooth of age` = 0L)
+  polys <- list(`No age effect` = -1L, `Linear age` = 1L, `Quadratic age` = 2L, `Cubic age` = 3L, `Smooth of age` = 0L)
   s$engine <- gamm_set_engine(gd, s, list(list()), fast_ok = TRUE)
   rows <- gamm_common_rows(gd, lapply(polys, function(p) gamm_formula(s, gd, age_poly = p)), s$family)
   fits <- lapply(polys, function(p) gamm_fit(gd, s, method = "ML", age_poly = p, rows = rows))
@@ -1064,6 +1178,29 @@ gamm_parametric_reference <- function(gd, s) {
   out <- tab[order(tab$AIC), c("Model", "AIC", "dAIC", "Weight", "edf"), drop = FALSE]
   attr(out, "engine") <- s$engine
   out
+}
+
+# What the shape comparison says, in the order a reader needs it: is there an age effect at all, is it curved, and
+# does the smooth describe it better than a polynomial (the functions of step 5).
+gamm_poly_reading <- function(tab) {
+  if (!is.data.frame(tab) || !nrow(tab) || !all(c("Model", "AIC") %in% names(tab))) return("The comparison could not be fitted.")
+  a <- stats::setNames(tab$AIC, tab$Model)
+  best <- tab$Model[which.min(tab$AIC)]
+  d <- function(m) if (m %in% names(a)) a[[m]] - min(a, na.rm = TRUE) else NA_real_
+  out <- character(0)
+  if (is.finite(d("No age effect"))) {
+    out <- c(out, if (d("No age effect") > 2) sprintf("Age matters: the model without any age term is %s AIC worse than the best.", format_num(d("No age effect"), 3))
+                  else "No clear age effect: the model without an age term is within 2 AIC of the best, so these data give little evidence that the trait changes with age.")
+  }
+  polys <- intersect(c("Linear age", "Quadratic age", "Cubic age"), names(a))
+  bp <- polys[which.min(a[polys])]
+  if (length(bp) && is.finite(d("Smooth of age"))) {
+    gap <- a[[bp]] - a[["Smooth of age"]]
+    out <- c(out, if (gap > 2) sprintf("The smooth fits better than the best polynomial (%s) by %s AIC: the ageing shape has features a simple function misses, so describe it with the GAMM (and read the step-5 models' shape with caution).", tolower(bp), format_num(gap, 3))
+                  else if (gap < -2) sprintf("%s fits better than the smooth by %s AIC: a simple function describes the shape, so the parametric models of step 5 are adequate for it.", bp, format_num(-gap, 3))
+                  else sprintf("The smooth and %s fit about equally well (within 2 AIC): the simpler function describes the shape adequately, and the two approaches should agree.", tolower(bp)))
+  }
+  c(out, sprintf("Best supported: %s. All models were fitted by maximum likelihood to the same records; a difference of less than 2 AIC is not a meaningful difference.", best))
 }
 
 # Random-effect standard deviations (mgcv::gam.vcomp).

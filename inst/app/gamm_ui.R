@@ -9,7 +9,7 @@ gamm_tab_ui <- function() {
       start_with = "the settings on the Fit tab (the defaults suit most data) and press Fit GAMM. Read the curve, the plain-language summary and any cautions above it.",
       then = "read the estimates and p-values of every term on Model output, then open Ageing rate (where the trait changes significantly with age, the peak and the onset of decline), Selective disappearance (do ALR, lifespan or AFR terms matter, and how far do they move the curve?), Groups (do the sexes or treatments age differently?) and Checks (basis size, concurvity, residuals).",
       tip = "Save results to the summary as you go: each saved GAMM result is described in the methods draft of step 6.",
-      further = "compare the smooth with linear, quadratic and cubic age (Checks), fit a random smooth per individual, or add a terminal-record effect."),
+      further = "ask whether a smooth is needed at all (no age, linear, quadratic or cubic age against the smooth, on Model output), fit a random smooth per individual, or add a terminal-record effect."),
     fluidRow(box(width = 12, status = "info", solidHeader = FALSE, uiOutput("gamm_data_note"))),
     tabBox(width = 12, id = "gamm_tabs",
       # ------------------------------------------------------------------ Fit
@@ -63,6 +63,11 @@ gamm_tab_ui <- function() {
       # ------------------------------------------------------------------ Model output
       tabPanel("Model output", icon = icon("table-list"),
         fluidRow(
+          box(width = 12, title = info_title("Reading this GAMM, step by step", "gamm_guide"), status = "primary", solidHeader = TRUE,
+            p(class = "small-note", "The questions to ask of a GAMM, in order, answered for this fit. Each points to the table, comparison or tab that answers it in full."),
+            uiOutput("gamm_guide_ui"))
+        ),
+        fluidRow(
           box(width = 12, title = info_title("What does each term of the GAMM estimate?", "gamm_output"), status = "primary", solidHeader = TRUE,
             uiOutput("gamm_output_reading"),
             fluidRow(
@@ -72,6 +77,15 @@ gamm_tab_ui <- function() {
                 h5(strong("Parametric terms (fixed)")), tableOutput("gamm_out_param"))),
             p(class = "small-note", uiOutput("gamm_out_formula", inline = TRUE)),
             save_button("save_gamm_output"))
+        ),
+        fluidRow(
+          box(width = 12, title = info_title("Is a smooth needed? No age, straight line, polynomial or smooth", "gamm_poly"), status = "primary", solidHeader = TRUE,
+            p(class = "small-note", "Refits the model with no age term, with linear, quadratic and cubic age (the functions of step 5) and with the smooth, all by maximum likelihood on the same records, and compares them by AIC. With many individuals the fits use gamm4 and take seconds to minutes; the progress bar shows the elapsed time."),
+            actionButton("gamm_run_poly", "Compare: no age, linear, quadratic, cubic and smooth", class = "btn-default", icon = icon("scale-balanced")),
+            uiOutput("gamm_engine_note_poly"),
+            uiOutput("gamm_poly_reading"),
+            tableOutput("gamm_poly_table"),
+            save_button("save_gamm_poly"))
         ),
         fluidRow(
           box(width = 12, title = info_title("Random effects", "gamm_random"), status = "primary", solidHeader = TRUE,
@@ -115,6 +129,18 @@ gamm_tab_ui <- function() {
         fluidRow(
           box(width = 12, title = info_title("Do groups age differently?", "gamm_groups"), status = "info", solidHeader = TRUE,
             uiOutput("gamm_groups_note"),
+            tags$details(class = "info-more", open = NA, tags$summary("Which group structure? G, GS, GI, S and I explained"),
+              div(class = "info-more-body", tags$table(class = "table table-condensed small-note",
+                tags$thead(tags$tr(tags$th("Structure"), tags$th("What it assumes"), tags$th("In mgcv"), tags$th("Choose it when"))),
+                tags$tbody(
+                  tags$tr(tags$td(strong("G")), tags$td("One ageing curve for all groups; groups differ only in overall level."), tags$td(code("group + s(age)")), tags$td("The groups age the same way (the parametric analogue: group as an additive term).")),
+                  tags$tr(tags$td(strong("GS")), tags$td("A common curve plus a deviation for each group; all deviations share one wiggliness."), tags$td(code("s(age) + s(age, group, bs = "sz")")), tags$td("Groups share a basic pattern and differ in similar, modest ways. The deviations are shrunk towards the common curve, which helps with small groups.")),
+                  tags$tr(tags$td(strong("GI")), tags$td("A common curve plus a deviation for each group, each deviation with its own wiggliness."), tags$td(code("s(age) + s(age, by = group, m = 1)")), tags$td("Groups share a pattern, but one group departs from it in a more complex way than another.")),
+                  tags$tr(tags$td(strong("S")), tags$td("A separate curve per group, no common curve, all with the same wiggliness."), tags$td(code("s(age, by = group, id = 1)")), tags$td("No shared pattern is expected, but the curves should be similarly smooth.")),
+                  tags$tr(tags$td(strong("I")), tags$td("Fully separate curves, each with its own wiggliness."), tags$td(code("s(age, by = group)")), tags$td("Groups may age in completely different ways (the parametric analogue: age \u00d7 group with every term interacting)."))
+                )),
+                p(class = "small-note", "How to decide: compare all five (button below). If G is within 2 AIC of the best, there is no clear evidence that the groups age differently: report one curve. Otherwise the best structure says how they differ: GS or GI, around a shared pattern; S or I, independently. Within 2 AIC, prefer the simpler structure (G, then GS, S, GI, I). In every structure the group main effect is included, so the curves can differ in level as well.")
+              )),
             actionButton("gamm_run_groups", "Compare group structures (ML, same records)", class = "btn-default", icon = icon("layer-group")),
             uiOutput("gamm_engine_note_groups"),
             uiOutput("gamm_groups_verdict"),
@@ -129,28 +155,22 @@ gamm_tab_ui <- function() {
       # ------------------------------------------------------------------ Checks
       tabPanel("Checks", icon = icon("stethoscope"),
         fluidRow(
-          box(width = 6, title = info_title("Is the smooth well specified?", "gamm_check"), status = "info", solidHeader = TRUE,
+          box(width = 6, title = info_title("Is the model adequate?", "gamm_check"), status = "info", solidHeader = TRUE,
+            uiOutput("gamm_check_overall"),
+            tableOutput("gamm_check_summary"),
+            tags$details(class = "info-more", tags$summary("Details: basis dimension (k) check"),
+              div(class = "info-more-body",
+                p(class = "small-note", "For each smooth: k' (the largest edf allowed), the edf used, the k-index (below 1 suggests pattern left in the residuals along that term) and its p-value. 'k may be too low' needs all three: a small p-value, a k-index below 1 and an edf close to k'."),
+                tableOutput("gamm_kcheck_table"))),
+            tags$details(class = "info-more", tags$summary("Details: concurvity between fixed terms"),
+              div(class = "info-more-body",
+                p(class = "small-note", "For each smooth, how far it can be reproduced by the most similar other fixed term (0 = not at all, 1 = completely). 'Estimate' is the typical value, 'Worst' the worst case. Above 0.8 the two terms' separate effects are poorly identified."),
+                tableOutput("gamm_concurvity_table"))),
             p(class = "small-note", "The estimates, test statistics and p-values of every term are on the Model output tab."),
-            h5(strong("Basis dimension (k) check")), tableOutput("gamm_kcheck_table"),
-            h5(strong("Concurvity between fixed terms")), tableOutput("gamm_concurvity_table"),
             save_button("save_gamm_check")),
           box(width = 6, title = info_title("Do the residuals look right?", "gamm_resid"), status = "info", solidHeader = TRUE,
             uiOutput("gamm_resid_note"),
             plotOutput("gamm_resid_plot", height = 520))
-        ),
-        fluidRow(
-          box(width = 12, title = info_title("Is a smooth better than a polynomial?", "gamm_poly"), status = "info", solidHeader = TRUE,
-            actionButton("gamm_run_poly", "Compare with linear, quadratic and cubic age", class = "btn-default"),
-            uiOutput("gamm_engine_note_poly"),
-            tableOutput("gamm_poly_table"),
-            save_button("save_gamm_poly"))
-        )
-      ),
-      # ------------------------------------------------------------------ Individuals
-      tabPanel("Individuals", icon = icon("user"),
-        fluidRow(
-          box(width = 12, title = info_title("How much do individuals differ?", "gamm_indiv"), status = "info", solidHeader = TRUE,
-            fluidRow(column(4, tableOutput("gamm_vcomp_table")), column(8, plotOutput("gamm_indiv_plot", height = 380))))
         )
       ),
       # ------------------------------------------------------------------ Code

@@ -26,7 +26,7 @@ gamm_outputs <- c("gamm_data_note", "gamm_scale_ui", "gamm_engine_note_proxy", "
                   "gamm_peak_table", "gamm_out_stats", "gamm_out_param", "gamm_out_smooth", "gamm_out_random", "gamm_out_formula", "gamm_output_reading", "gamm_re_test_note", "gamm_kcheck_table", "gamm_concurvity_table",
                   "gamm_resid_note", "gamm_resid_plot", "gamm_poly_table", "gamm_proxy_terms_table", "gamm_proxy_verdict", "gamm_proxy_tables",
                   "gamm_naive_plot", "gamm_groups_note", "gamm_groups_verdict", "gamm_groups_table", "gamm_diff_test_table", "gamm_lrt_table",
-                  "gamm_diff_plot", "gamm_vcomp_table", "gamm_indiv_plot", "gamm_code")
+                  "gamm_diff_plot", "gamm_guide_ui", "gamm_check_overall", "gamm_check_summary", "gamm_poly_reading", "gamm_code")
 all_outputs <- c(gamm_outputs, "store_plot_pick_ui", "store_pred_plot", "trait_ages_note", "toy_status", "mapping_ui", "censor_value_ui", "data_metrics", "integrity_table",
                  "visual_scale_advice", "a3_cap_warning", "model_rowset_warning", "coef_re_flags",
                  "integrity_extra", "dist_var_ui", "dist_plot", "data_preview",
@@ -138,7 +138,7 @@ shiny::testServer(app, {
     for (ind in c("rs", "fs")) {
       session$setInputs(gamm_individual = ind, gamm_group = "", gamm_proxy_form = "linear", gamm_terminal = FALSE, gamm_fit = 10 + match(ind, c("rs", "fs")))
       if (!isTRUE(gamm_store()$ok)) problems <<- c(problems, paste("GAMM individual", ind, ":", gamm_store()$message))
-      touch(output, c("gamm_curve_plot", "gamm_indiv_plot", "gamm_vcomp_table", "gamm_cautions_ui", "gamm_diff_plot"))
+      touch(output, c("gamm_curve_plot", "gamm_out_random", "gamm_guide_ui", "gamm_check_summary", "gamm_cautions_ui", "gamm_diff_plot"))
     }
     session$setInputs(gamm_individual = "ri", gamm_proxy = "LS", gamm_ar1 = TRUE, gamm_fit = 20)
     if (!isTRUE(gamm_store()$ok)) problems <<- c(problems, paste("GAMM AR1/LS:", gamm_store()$message))
