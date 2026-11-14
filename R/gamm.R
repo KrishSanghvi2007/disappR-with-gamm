@@ -1352,11 +1352,17 @@ gamm_reading <- function(r, dv, po) {
   tb <- gamm_tables(r)
   st <- tb$smooth
   age_rows <- st[grepl("^s\\(age\\)|^s\\(age\\):", st$Smooth), , drop = FALSE]
+  covs <- grep("^cv_", names(r$data), value = TRUE)
+  covs <- covs[!vapply(r$data[covs], is.numeric, logical(1))]
+  desc <- gamm_term_description(age_rows$Smooth, covs)
   out <- character(0)
   for (i in seq_len(nrow(age_rows))) {
     e <- age_rows$edf[[i]]
-    lab <- if (nrow(age_rows) > 1) sub("^s\\(age\\):", "", age_rows$Smooth[[i]]) else ""
-    out <- c(out, sprintf("The age smooth%s has %s effective degrees of freedom, so it %s, and it %s.", if (nzchar(lab)) paste0(" for ", lab) else "",
+    d <- desc[[i]]
+    lead <- if (nrow(age_rows) == 1 || grepl("population ageing curve", d)) "The smooth of age"
+            else if (startsWith(d, "Smooth of age for ")) paste("The smooth of age for", sub("^Smooth of age for ", "", d))
+            else paste0("The ", tolower(substr(d, 1, 1)), substring(d, 2))
+    out <- c(out, sprintf("%s has %s effective degrees of freedom, so it %s, and it %s.", sub(":.*$", "", lead),
                           format_num(e, 3),
                           if (e < 1.5) "is close to a straight line" else if (e < 3) "is gently curved" else "is clearly non-linear",
                           if (is.finite(age_rows$P[[i]]) && age_rows$P[[i]] < 0.05) "differs significantly from flat" else "does not differ significantly from flat"))

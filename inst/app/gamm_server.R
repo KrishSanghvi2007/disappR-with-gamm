@@ -260,7 +260,7 @@ gamm_curve_obj <- reactive({
     if (length(tc) == length(ages)) p <- p + geom_line(data = data.frame(age = ages, fit = tc), aes(age, fit), inherit.aes = FALSE, linetype = "longdash", colour = "black", linewidth = 0.8)
   }
   p + labs(x = "Age", y = "Trait (population curve)") +
-    theme_disappR(13) + theme(legend.position = "bottom", legend.box = "vertical")
+    theme_disappR(13) + theme(legend.position = "bottom", legend.box = "vertical", legend.key.width = grid::unit(3, "lines"))
 })
 output$gamm_curve_plot <- renderPlot(gamm_curve_obj())
 output$gamm_curve_note <- renderUI({
