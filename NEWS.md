@@ -1,3 +1,10 @@
+# disappR 0.25.1
+
+* **Engine and app must match.** The engine carries a build stamp, and the app refuses to start, with instructions,
+  when it finds an engine of another build: for example an older disappR 0.25.0 still installed or loaded in R. Such
+  a mismatch gave errors like "unused argument (n_proxy = ...)" in the GAMM step.
+* `launch_app.R` and `run_app()` also offer gamm4.
+
 # disappR 0.25.0
 
 **Step 7: GAMMs.** Generalized additive mixed models of ageing (mgcv), as a new, optional step after the summary. It

@@ -1,6 +1,6 @@
 Package: disappR
 Title: Diagnose and Model Selective Disappearance and Appearance in Longitudinal Ageing Data
-Version: 0.25.0
+Version: 0.25.1
 Authors@R: c(
     person("Krish", "Sanghvi", role = "aut",
            comment = c(ORCID = "0000-0002-5125-2983")),

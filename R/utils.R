@@ -3,6 +3,10 @@
 
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
+# Build stamp of the engine. The app (inst/app/global.R) carries the same stamp and refuses to start with an engine
+# whose stamp differs, for example an older installed disappR with the same version number still loaded in R.
+DISAPPR_BUILD <- "0.25.1-gamm-2026-11-14"
+
 AGE_FUNCTIONS <- c("Linear", "Quadratic", "Cubic", "Logarithmic", "Asymptotic exponential")
 
 # A3 only: a function that is non-linear in its parameters, a * exp(b * age), fitted by nls per individual
