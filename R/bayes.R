@@ -498,6 +498,10 @@ bayes_ppc_reading <- function(ppc) {
     else " Mean, spread and maximum of the data are all within the range the model reproduces.")
 }
 
+# Numbers for display: three significant digits each, without the common-width padding of format() on a vector.
+bayes_fmt <- function(x, digits = 3) vapply(x, function(v) if (is.finite(v)) format_num(v, digits) else "", character(1), USE.NAMES = FALSE)
+bayes_ci <- function(lo, hi) ifelse(is.finite(lo) & is.finite(hi), paste(bayes_fmt(lo), "to", bayes_fmt(hi)), "")
+
 # Fixed effects of the Bayesian fit side by side with the step-5 estimates.
 bayes_compare_table <- function(z, spec) {
   e <- z$estimates[grepl("^b_", z$estimates$Raw), , drop = FALSE]
@@ -508,9 +512,9 @@ bayes_compare_table <- function(z, spec) {
   fse <- if (length(mi)) fc$SE[mi] else NA_real_
   dirn <- ifelse(e$Median >= 0, "> 0", "< 0")
   data.frame(Term = e$Parameter,
-             `Posterior median` = signif(e$Median, 4), `95% credible interval` = sprintf("%s to %s", format_num(e$Lower, 3), format_num(e$Upper, 3)),
+             `Posterior median` = bayes_fmt(e$Median), `95% credible interval` = bayes_ci(e$Lower, e$Upper),
              `P(direction)` = sprintf("%.3f (%s)", e$PD, dirn),
-             `Step 5 estimate` = signif(fe, 4), `Step 5 95% CI` = ifelse(is.finite(fse), sprintf("%s to %s", format_num(fe - 1.96 * fse, 3), format_num(fe + 1.96 * fse, 3)), ""),
+             `Step 5 estimate` = bayes_fmt(fe), `Step 5 95% CI` = bayes_ci(fe - 1.96 * fse, fe + 1.96 * fse),
              `Shift (step-5 SEs)` = ifelse(is.finite(fse) & fse > 0, sprintf("%+.2f", (e$Median - fe) / fse), ""),
              check.names = FALSE, stringsAsFactors = FALSE)
 }
@@ -518,14 +522,13 @@ bayes_compare_table <- function(z, spec) {
 bayes_variance_table <- function(z, spec) {
   e <- z$estimates[!grepl("^b_", z$estimates$Raw), , drop = FALSE]
   if (!nrow(e)) return(data.frame())
-  data.frame(Parameter = e$Parameter, `Posterior median` = signif(e$Median, 4),
-             `95% credible interval` = sprintf("%s to %s", format_num(e$Lower, 3), format_num(e$Upper, 3)),
+  data.frame(Parameter = e$Parameter, `Posterior median` = bayes_fmt(e$Median), `95% credible interval` = bayes_ci(e$Lower, e$Upper),
              check.names = FALSE, stringsAsFactors = FALSE)
 }
 
 bayes_peak_table <- function(z) {
   t <- z$turning
-  ci <- function(x) if (length(x) >= 20) paste(format_num(stats::quantile(x, c(0.025, 0.975)), 3), collapse = " to ") else "not estimable"
+  ci <- function(x) if (length(x) >= 20) paste(bayes_fmt(stats::quantile(x, c(0.025, 0.975))), collapse = " to ") else "not estimable"
   data.frame(Feature = c("Peak age", "Onset of the final decline"),
              `Median curve` = c(format_num(t$median_curve$peak, 3), if (is.finite(t$median_curve$onset)) format_num(t$median_curve$onset, 3) else "none"),
              `95% credible interval` = c(ci(t$peak), ci(t$onset)),

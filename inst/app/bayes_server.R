@@ -58,7 +58,7 @@ output$bayes_status_note <- renderUI({
       metric_card("Step-5 models fitted", length(r$fits)),
       metric_card("Records", format(nrow(r$data), big.mark = ",")),
       metric_card("Individuals", format(length(unique(r$data$id)), big.mark = ",")),
-      metric_card("Family", family_label(r$family))),
+      metric_card("Family", sub(" \\(lme4\\)$", "", family_label(r$family)))),
     if (isTRUE(bayes_r5_stale())) div(class = "caution-box", "The data or step-5 settings changed since the step-5 fit: refit on the Modelling tab so that both steps use the same model."))
 })
 
