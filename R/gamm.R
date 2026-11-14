@@ -662,7 +662,7 @@ gamm_guide <- function(r, o, poly = NULL, groups = NULL, proxy = NULL) {
                    GI = "a common curve plus group deviations, each with its own wiggliness", S = "a separate curve per group, sharing one wiggliness",
                    I = "a separate curve per group, each with its own wiggliness")
     gm <- pr[startsWith(pr$Term, s$group), , drop = FALSE]
-    lvl <- if (nrow(gm)) sprintf(" Groups differ in overall level by %s (p %s).", paste(sprintf("%s %s", gm$Description, format_num(gm$Estimate, 3)), collapse = "; "), gamm_p_words(min(gm$P))) else ""
+    lvl <- if (nrow(gm)) paste0(" Overall level: ", paste(sprintf("%s by %s (p %s)", sub(", against the reference level$", " differs from the reference level", gm$Description), format_num(gm$Estimate, 3), vapply(gm$P, gamm_p_words, "")), collapse = "; "), ".") else ""
     a <- paste0(sprintf("This fit uses structure %s: %s.", st, desc), lvl,
                 if (st %in% c("GS", "GI")) " With GS and GI the group rows of the smooth table test whether each group's deviation from the common curve is flat: a significant deviation means that group's shape differs." else "",
                 if (st %in% c("S", "I")) " With S and I each group has its own curve; its p-value tests whether that group's trait changes with age, not whether the groups differ. Whether the groups age differently is answered by comparing structures." else "")
@@ -1076,7 +1076,7 @@ gamm_group_comparison <- function(gd, s, progress = NULL) {
   for (i in seq_along(structs)) {
     if (is.function(progress)) progress(i, length(structs) + 1, names(structs)[[i]])
     fits[[structs[[i]]]] <- if (fast && structs[[i]] %in% c("GS", "S"))
-      list(ok = FALSE, message = "not fitted: with many random-effect levels the comparison uses gamm4, which cannot fit this structure (choose the bam engine in Advanced options to include it)")
+      list(ok = FALSE, message = "not fitted (gamm4 cannot fit it; choose the bam engine to include it)")
     else gamm_fit(gd, s, method = "ML", structure = structs[[i]], rows = rows)
   }
   tab <- gamm_compare_table(fits, names(structs))
@@ -1170,6 +1170,9 @@ gamm_naive_vs_corrected <- function(gd, r) {
 # Is a smooth needed? The same model with linear, quadratic and cubic age against the smooth (ML, same records).
 gamm_parametric_reference <- function(gd, s) {
   s <- utils::modifyList(gamm_defaults(), s)
+  # one common age effect for every model (structure G: the group main effect stays), so the smooth is compared with the
+  # polynomials like for like; whether groups need their own curves is the Groups comparison
+  s$structure <- "G"
   polys <- list(`No age effect` = -1L, `Linear age` = 1L, `Quadratic age` = 2L, `Cubic age` = 3L, `Smooth of age` = 0L)
   s$engine <- gamm_set_engine(gd, s, list(list()), fast_ok = TRUE)
   rows <- gamm_common_rows(gd, lapply(polys, function(p) gamm_formula(s, gd, age_poly = p)), s$family)
@@ -1200,7 +1203,7 @@ gamm_poly_reading <- function(tab) {
                   else if (gap < -2) sprintf("%s fits better than the smooth by %s AIC: a simple function describes the shape, so the parametric models of step 5 are adequate for it.", bp, format_num(-gap, 3))
                   else sprintf("The smooth and %s fit about equally well (within 2 AIC): the simpler function describes the shape adequately, and the two approaches should agree.", tolower(bp)))
   }
-  c(out, sprintf("Best supported: %s. All models were fitted by maximum likelihood to the same records; a difference of less than 2 AIC is not a meaningful difference.", best))
+  c(out, sprintf("Best supported: %s. All models were fitted by maximum likelihood to the same records, with one age effect shared by all groups; a difference of less than 2 AIC is not a meaningful difference.", best))
 }
 
 # Random-effect standard deviations (mgcv::gam.vcomp).

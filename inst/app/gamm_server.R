@@ -346,8 +346,9 @@ output$gamm_check_overall <- renderUI({
 })
 output$gamm_check_summary <- renderTable({
   d <- gamm_check_df()
-  d$Status <- c(good = "\u2714 good", caution = "\u26a0 check", problem = "\u2716 problem")[d$Status]
-  gamm_pretty(d)
+  d$Status <- unname(c(good = "\u2714 good", caution = "\u26a0 check", problem = "\u2716 problem")[d$Status])
+  d$Result <- gamm_pretty(d$Result)
+  d
 }, striped = TRUE, spacing = "xs")
 output$gamm_kcheck_table <- renderTable({
   kc <- gamm_kc()
@@ -498,7 +499,11 @@ output$gamm_groups_verdict <- renderUI({
           if (isTRUE(z$fast)) gamm_fast_box(),
           div(class = "diagnosis-card", style = "border-left: 5px solid #35637A; margin-top:8px;", div(class = "diagnosis-detail", z$verdict)))
 })
-output$gamm_groups_table <- renderTable(gamm_groups_res()$table, striped = TRUE, spacing = "xs")
+output$gamm_groups_table <- renderTable({
+  x <- gamm_groups_res()$table
+  x <- x[, vapply(x, function(v) !all(is.na(v)), logical(1)), drop = FALSE]     # e.g. deviance explained, which gamm4 does not report
+  gamm_num_cols(x, 4)
+}, striped = TRUE, spacing = "xs")
 output$gamm_diff_test_table <- renderTable({
   z <- gamm_groups_res()
   if (!nrow(z$differences)) return(data.frame(Note = "Difference smooths could not be fitted."))
