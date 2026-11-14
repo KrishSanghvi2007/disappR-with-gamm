@@ -8,12 +8,12 @@ bibentry(
                        meta$Version, ".")
 )
 bibentry(
-  bibtype = "Misc",
-  title = "A comparison of methods to assess selective disappearance and quantify ageing",
+  bibtype = "Article",
+  title = "Biases in common methods used to quantify ageing and selective disappearance: a guide",
   author = c(person("K.", "Sanghvi"), person(c("E.", "R."), "Ivimey-Cook"), person("S.", "Bouwhuis"), person("I.", "Sepil"),
              person("M.", "van de Pol")),
   year = "2026",
-  howpublished = "EcoEvoRxiv preprint",
+  journal = "Methods in Ecology and Evolution",
   textVersion = paste("Sanghvi, K., Ivimey-Cook, E.R., Bouwhuis, S., Sepil, I. and van de Pol, M., 2026.",
-                      "A comparison of methods to assess selective disappearance and quantify ageing. EcoEvoRxiv.")
+                      "Biases in common methods used to quantify ageing and selective disappearance: a guide. Methods in Ecology and Evolution.")
 )

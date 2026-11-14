@@ -367,8 +367,8 @@ If disappR helps with your work, please cite:
 and the paper describing the methods:
 
 > Sanghvi, K., Ivimey-Cook, E. R., Bouwhuis, S., Sepil, I., & van de Pol, M.
-> (2026). A comparison of methods to assess selective disappearance and
-> quantify ageing. *EcoEvoRxiv*.
+> (2026). Biases in common methods used to quantify ageing and selective
+> disappearance: a guide. *Methods in Ecology and Evolution*.
 
 Data, code and supplementary material for the paper are on
 [OSF](https://osf.io/kevnm/). `citation("disappR")` gives both references, and a
