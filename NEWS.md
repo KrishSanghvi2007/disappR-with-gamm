@@ -4,6 +4,15 @@
 reads the data mapped on the Data tab and changes nothing in steps 1-6. It returns the GAMM layer held back in 0.24.0,
 rebuilt and corrected.
 
+* **Guidance for users of parametric models.** Model output opens with a step-by-step reading of the fit: does the
+  trait change with age at all, is a curve needed or would a straight line or polynomial do, do groups age differently
+  and which structure fits (with a prompt to refit when the comparison prefers another), do the proxies matter and
+  does their effect change with age, and what is the pattern. "Is a smooth needed?" compares no age term, linear,
+  quadratic and cubic age and the smooth (one shared age effect, ML, same records). Checks are traffic lights (basis
+  size, concurvity, dispersion, residual correlation within individuals, data at old ages, convergence) with what each
+  means and what to do. The Groups tab explains G, GS, GI, S and I. The proxy settings say what linear, smooth,
+  s(age, by = proxy) and ti(age, proxy) mean. Comparisons now run for up to an hour with the elapsed time shown,
+  instead of stopping at 300 s. The Individuals tab was removed: its variance components are on Model output.
 * **Model output tab.** The counterpart of step 5's Model output: model statistics (family, engine, records,
   individuals, edf, REML/ML score, log-likelihood, AIC, deviance explained, adjusted R², scale); fixed smooth terms
   (edf, Ref.df, F or chi-squared, p, shape) and parametric terms (estimate, SE, t or z, p), each with a plain
