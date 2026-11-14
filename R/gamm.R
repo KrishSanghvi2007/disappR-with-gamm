@@ -53,7 +53,7 @@ GAMM_G4_IND <- 1500        # gamm4 (sparse lme4 random effects) above this many 
 gamm_defaults <- function() {
   list(engine = "auto", method = "REML", family = "gaussian", bs = "tp", k = 10, select = FALSE,
        individual = "ri", group = "", structure = "G", proxy = "ALR", proxy_form = "linear", afr_form = "none",
-       terminal = FALSE, covars = TRUE, cov_smooth = FALSE, random = TRUE, ar1 = FALSE,
+       terminal = FALSE, covars = TRUE, cov_smooth = FALSE, random = TRUE, ar1 = FALSE, olre = FALSE,
        cov_pairs = character(0), cov_age = character(0))
 }
 
@@ -215,6 +215,7 @@ gamm_formula <- function(s, gd, structure = s$structure, proxy_form = s$proxy_fo
                                         if (s$bs %in% c("cr", "cs")) "cr" else "tp"),
                            character(0)))
   for (rt in ut$re) terms <- c(terms, sprintf("s(%s, bs = \"re\")", rt))
+  if (gamm_olre_on(s)) terms <- c(terms, "s(.obs, bs = \"re\")")       # observation-level random effect (overdispersion)
   paste("trait ~", paste(unique(terms), collapse = " + "))
 }
 
@@ -272,7 +273,7 @@ gamm_engine_for <- function(s, n, n_ind, structure = s$structure, proxy_form = s
   if (isTRUE(s$ar1) && identical(s$family, "gaussian")) return("bam")  # AR1 errors: bam only
   g4 <- gamm_g4_compatible(s, structure, proxy_form, afr_form, gd = gd)
   if (identical(e, "gamm4") && !g4) e <- "bam"
-  if (identical(e, "auto")) return(if (n_ind > GAMM_G4_IND && g4) "gamm4" else if (n > GAMM_BAM_ROWS || n_ind > GAMM_BAM_IND) "bam" else "gam")
+  if (identical(e, "auto")) return(if ((n_ind > GAMM_G4_IND || gamm_olre_on(s)) && g4) "gamm4" else if (n > GAMM_BAM_ROWS || n_ind > GAMM_BAM_IND || gamm_olre_on(s)) "bam" else "gam")
   e
 }
 
@@ -303,7 +304,7 @@ gamm_set_engine <- function(gd, s, specs, fast_ok = FALSE) {
   e <- s$engine %||% "auto"
   if (identical(e, "gamm4") && !all_g4) return("bam")
   if (identical(e, "auto")) {
-    if (all_g4 && (n_ind > GAMM_G4_IND || (isTRUE(fast_ok) && gamm_re_levels(gd, s) > gamm_fast_threshold()))) return("gamm4")
+    if (all_g4 && (n_ind > GAMM_G4_IND || gamm_olre_on(s) || (isTRUE(fast_ok) && gamm_re_levels(gd, s) > gamm_fast_threshold()))) return("gamm4")
     return(if (n > GAMM_BAM_ROWS || n_ind > GAMM_BAM_IND) "bam" else "gam")
   }
   e
@@ -311,9 +312,13 @@ gamm_set_engine <- function(gd, s, specs, fast_ok = FALSE) {
 
 # lme4 random-effect formula for gamm4: individual intercept (and uncorrelated slope of centred age, as in mgcv), and
 # the mapped random intercepts.
+# An observation-level random effect (one random intercept per record) absorbs overdispersion in Poisson counts and
+# binomial proportions (Harrison 2014). It applies to those two families only: the others model dispersion themselves.
+gamm_olre_on <- function(s) isTRUE(s$olre) && (s$family %||% "gaussian") %in% c("poisson", "binomial")
+
 gamm_g4_random <- function(s, re_terms) {
   re <- switch(s$individual %||% "ri", rs = c("(1 | id)", "(0 + .age_c | id)"), none = character(0), "(1 | id)")
-  re <- c(re, sprintf("(1 | %s)", re_terms))
+  re <- c(re, sprintf("(1 | %s)", re_terms), if (gamm_olre_on(s)) "(1 | .obs)")
   if (!length(re)) return(NULL)
   stats::as.formula(paste("~", paste(re, collapse = " + ")))
 }
@@ -381,6 +386,8 @@ gamm_fit <- function(gd, s, method = s$method, structure = s$structure, proxy_fo
   ut <- gamm_usable_terms(dd, s)
   if (length(ut$dropped)) notes <- c(notes, paste("left out because they do not vary in these records:", paste(ut$dropped, collapse = ", ")))
   dd$.age_c <- dd$age - mean(dd$age)
+  if (gamm_olre_on(s)) dd$.obs <- factor(seq_len(nrow(dd)))
+  if (isTRUE(s$olre) && !gamm_olre_on(s)) notes <- c(notes, "the observation-level random effect applies to Poisson and binomial families only, so it was left out")
   # proxies centred on their mean over individuals, for the varying-coefficient (vc) form
   centres <- list()
   for (pp in intersect(c("ALR", "LS", "AFR"), names(dd))) {
@@ -399,7 +406,7 @@ gamm_fit <- function(gd, s, method = s$method, structure = s$structure, proxy_fo
   rho <- 0
   fit <- NULL; mer <- NULL; err <- NULL
   if (identical(engine, "gamm4")) {
-    f_g4 <- gamm_formula(utils::modifyList(s, list(individual = "none", random = FALSE)), dd, structure, proxy_form, afr_form, age_poly, ordered_by)
+    f_g4 <- gamm_formula(utils::modifyList(s, list(individual = "none", random = FALSE, olre = FALSE)), dd, structure, proxy_form, afr_form, age_poly, ordered_by)
     rf <- gamm_g4_random(s, ut$re)
     f_str <- paste0(f_g4, "; random = ", paste(deparse(rf), collapse = ""))
   }
@@ -514,7 +521,7 @@ gamm_concurvity <- function(r) {
 gamm_random_smooths <- function(fit) {
   sm <- fit$smooth
   if (!length(sm)) return(list(labels = character(0), cols = integer(0)))
-  is_re <- vapply(sm, function(x) any(x$term %in% c("id", ".age_c")) || any(grepl("^re_", x$term)), logical(1))
+  is_re <- vapply(sm, function(x) any(x$term %in% c("id", ".age_c", ".obs")) || any(grepl("^re_", x$term)), logical(1))
   labs <- vapply(sm[is_re], function(x) x$label, character(1))
   cols <- unlist(lapply(sm[is_re], function(x) seq(x$first.para, x$last.para)))
   list(labels = labs, cols = as.integer(cols))
@@ -901,7 +908,8 @@ gamm_individual_curves <- function(r, n_ind = 12, seed = 1L) {
       }
       gamm_linkinv(r$fit)(eta)
     }, error = function(e) rep(NA_real_, length(ages))) else
-      tryCatch(stats::predict(r$fit, newdata = nd, type = "response"), error = function(e) rep(NA_real_, length(ages)))
+      tryCatch(stats::predict(r$fit, newdata = nd, type = "response", exclude = if (".obs" %in% names(nd)) "s(.obs)" else NULL),
+               error = function(e) rep(NA_real_, length(ages)))
     if (is.matrix(p)) p <- p[, 1]
     data.frame(id = i, age = ages, fit = as.numeric(p), stringsAsFactors = FALSE)
   }))
@@ -984,7 +992,7 @@ gamm_cautions <- function(r, kc = gamm_kcheck(r), cc = gamm_concurvity(r), qr = 
   # makes even a correct model look slightly underdispersed, and dispersion is undefined for 0/1 data.
   binary <- all(dd$trait %in% c(0, 1)) && !(".trials" %in% names(dd) && any(dd$.trials > 1, na.rm = TRUE))
   if (!is.null(qr) && s$family %in% c("poisson", "binomial") && !binary && is.finite(qr$dispersion_p) && qr$dispersion_p < 0.05 && qr$dispersion > 1)
-    out <- c(out, sprintf("Simulated residuals suggest overdispersion (ratio %s): try the %s family.", format_num(qr$dispersion, 2), if (s$family == "poisson") "negative binomial or Tweedie" else "beta"))
+    out <- c(out, sprintf("Simulated residuals suggest overdispersion (ratio %s): add an observation-level random effect, or try the %s family.", format_num(qr$dispersion, 2), if (s$family == "poisson") "negative binomial or Tweedie" else "beta"))
   if (!isTRUE(r$converged)) out <- c(out, "The fit did not report full convergence: simplify the model (smaller k, fewer random terms) and refit.")
   other <- setdiff(r$notes, grep("left out|lowered|do not vary|one level", r$notes, value = TRUE))
   if (length(other)) out <- c(out, paste("Fitting notes:", paste(utils::head(other, 3), collapse = "; ")))
@@ -1045,6 +1053,7 @@ gamm_code <- function(r, file = "disappR_gamm_data.csv") {
     if (length(facs)) sprintf("for (v in c(%s)) gd[[v]] <- factor(gd[[v]])", paste0("\"", facs, "\"", collapse = ", ")),
     if (".terminal" %in% facs) "gd$.terminal <- factor(gd$.terminal, levels = c(\"no\", \"yes\"))",
     if (grepl(".age_c", r$formula, fixed = TRUE)) "gd$.age_c <- gd$age - mean(gd$age)   # centred age for the random slope",
+    if (grepl(".obs", r$formula, fixed = TRUE)) "gd$.obs <- factor(seq_len(nrow(gd)))   # one level per record: observation-level random effect",
     fitline,
     "summary(fit)",
     "k.check(fit)                       # basis dimension: k-index well below 1 with a small p-value means k is too low",

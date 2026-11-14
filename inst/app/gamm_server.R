@@ -119,6 +119,7 @@ gamm_settings <- reactive({
   s$cov_smooth <- isTRUE(input$gamm_cov_smooth)
   s$random <- !identical(input$gamm_random, FALSE)
   s$ar1 <- isTRUE(input$gamm_ar1)
+  s$olre <- isTRUE(input$gamm_olre)
   m <- safe_get(meta())
   s$cov_pairs <- m$cov_pairs %||% character(0)        # interactions mapped on the Data tab
   s$cov_age <- m$cov_age %||% character(0)
@@ -527,6 +528,7 @@ observeEvent(list(input$data_source, input$example_id), disappr_guard("gamm exam
   if (!is.null(g$proxy_form)) updateSelectInput(session, "gamm_proxy_form", selected = g$proxy_form)
   if (!is.null(g$afr_form)) updateSelectInput(session, "gamm_afr_form", selected = g$afr_form)
   if (!is.null(g$individual)) updateSelectInput(session, "gamm_individual", selected = g$individual)
+  updateCheckboxInput(session, "gamm_olre", value = isTRUE(g$olre))
 }), ignoreInit = TRUE)
 
 # ---- guidance: a hint for the proxy settings, and suggested next steps after a fit ---------------------------------

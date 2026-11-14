@@ -517,6 +517,7 @@ script_header <- function(entries, packages = "ggplot2") {
 # ---------------------------------------------------------------------------
 METHODS_REFS <- c(
   wood2017 = "Wood, S. N. 2017. Generalized additive models: an introduction with R, 2nd edn. Chapman and Hall/CRC.",
+  harrison2014 = "Harrison, X. A. 2014. Using observation-level random effects to model overdispersion in count data in ecology and evolution. PeerJ 2: e616.",
   woodscheipl2020 = "Wood, S. and Scheipl, F. 2020. gamm4: generalized additive mixed models using mgcv and lme4. R package.",
   simpson2018 = "Simpson, G. L. 2018. Modelling palaeoecological time series using generalised additive models. Frontiers in Ecology and Evolution 6: 149.",
   pedersen2019 = "Pedersen, E. J., Miller, D. L., Simpson, G. L. and Ross, N. 2019. Hierarchical generalized additive models in ecology: an introduction with mgcv. PeerJ 7: e6876.",
@@ -679,6 +680,7 @@ methods_text <- function(entries) {
         ", a ", gamm_family_label(g$family), " error distribution and smoothing parameters estimated by ", g$method_used, ".",
         if (length(px)) paste0(" Selective disappearance and appearance were modelled through ", and_list(px), ".") else "",
         if (isTRUE(g$terminal)) " A terminal-record effect (the last record before death) was included." else "",
+        if (isTRUE(g$olre) && (g$family %||% "") %in% c("poisson", "binomial")) " An observation-level random effect accounted for overdispersion (Harrison 2014)." else "",
         if (isTRUE(g$ar1) && isTRUE(g$rho > 0)) sprintf(" Residuals followed a first-order autoregressive process within individuals (rho = %s).", format_num(g$rho, 2)) else "",
         grp,
         if (has("GAMM selective disappearance")) " Forms of each proxy (none, linear, smooth and age-dependent) were compared by AIC under maximum likelihood on the same records." else "",
@@ -688,6 +690,7 @@ methods_text <- function(entries) {
         if (any(grepl("gamm4", unlist(lapply(pick("GAMM"), function(x) x$text)), fixed = TRUE)))
           " Because the data had more than 300 random-effect levels, model comparisons were fitted with gamm4 (Wood and Scheipl 2020), which compares models by the marginal likelihood of the lme4 representation; the age-dependent proxy form was then a varying-coefficient smooth, s(age, by = proxy), and group structures GS and S were not fitted." else ""))
       refs <- c(refs, "wood2017", if (nzchar(g$group %||% "")) "pedersen2019", if (has("GAMM derivatives")) "simpson2018",
+                if (isTRUE(g$olre) && (g$family %||% "") %in% c("poisson", "binomial")) "harrison2014",
                 if (identical(g$engine_used, "gamm4") || any(grepl("gamm4", unlist(lapply(pick("GAMM"), function(x) x$text)), fixed = TRUE))) "woodscheipl2020")
     }
   }

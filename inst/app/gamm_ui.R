@@ -18,6 +18,8 @@ gamm_tab_ui <- function() {
           box(width = 4, title = info_title("GAMM settings", "gamm_settings"), status = "primary", solidHeader = TRUE,
             selectInput("gamm_family", "Error family", GAMM_FAMILIES, "gaussian"),
             uiOutput("gamm_family_hint"),
+            conditionalPanel("input.gamm_family == 'poisson' || input.gamm_family == 'binomial'",
+              checkboxInput("gamm_olre", "Observation-level random effect (for overdispersed counts or proportions)", FALSE)),
             numericInput("gamm_k", "Basis size k for age (upper limit on wiggliness)", 10, min = 3, max = 40, step = 1),
             selectInput("gamm_individual", "Differences between individuals", GAMM_INDIVIDUAL, "ri"),
             uiOutput("gamm_individual_note"),

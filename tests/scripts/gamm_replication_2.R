@@ -53,17 +53,18 @@ for (tr in c("offspring", "offspring_EG", "offspring_WG")) {
 }
 gd <- gamm_data(fw$b$data, fw$b$meta)
 app_fit("female independent offspring (Poisson, longevity linear)", gd,
-        list(family = "poisson", k = 8, proxy = "LS", proxy_form = "linear", cov_pairs = fw$b$meta$cov_pairs))
+        list(family = "poisson", k = 8, proxy = "LS", proxy_form = "linear", olre = TRUE, cov_pairs = fw$b$meta$cov_pairs))
 bs <- standardise_data(fw$d, utils::modifyList(fw$ex$mapping, list(trait = "survived", life = "", covars = character(0), cov_factor = character(0))))
 app_fit("female survival (binomial, no proxy)", gamm_data(bs$data, bs$meta),
         list(family = "binomial", k = 8, proxy = "none", proxy_form = "none"))
 gdm <- gamm_data(fm$b$data, fm$b$meta)
 for (tr in c("offspring", "offspring_EG", "offspring_WG")) {
   bm <- standardise_data(fm$d, utils::modifyList(fm$ex$mapping, list(trait = tr)))
-  app_fit(paste("male", tr, "(Poisson, longevity linear)"), gamm_data(bm$data, bm$meta), list(family = "poisson", k = 10, proxy = "LS", proxy_form = "linear"))
+  app_fit(paste("male", tr, "(Poisson, longevity linear, observation-level random effect)"), gamm_data(bm$data, bm$meta),
+          list(family = "poisson", k = 10, proxy = "LS", proxy_form = "linear", olre = TRUE))
 }
-line("  note: the app has no observation-level random effect; for overdispersed counts choose the negative binomial family.")
-pc <- safe("wren female proxy comparison", gamm_proxy_comparison(gd, list(family = "poisson", k = 8, proxy = "LS", proxy_form = "linear")))
+line("  note: the app's Poisson fits include an observation-level random effect, as published (fitted with gamm4).")
+pc <- safe("wren female proxy comparison", gamm_proxy_comparison(gd, list(family = "poisson", k = 8, proxy = "LS", proxy_form = "linear", olre = TRUE)))
 if (isTRUE(pc$ok)) { print(pc$tables$LS[, c("Model", "AIC", "dAIC", "Weight", "Records")], row.names = FALSE); line("  ", pc$texts[["LS"]]) }
 
 # =====================================================================================================================
