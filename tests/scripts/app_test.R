@@ -95,7 +95,7 @@ shiny::testServer(app, {
     gr <- gamm_store()
     if (!isTRUE(gr$ok)) problems <<- c(problems, paste("GAMM fit:", gr$message)) else cat("GAMM fitted:", gr$formula, "\n")
     touch(output, gamm_outputs)
-    for (sd in c("bins", "means", "none")) { session$setInputs(gamm_show_data = sd, gamm_age_bins = 5, gamm_n_proxy = 5); touch(output, c("gamm_curve_plot", "gamm_n_proxy_ui")) }
+    for (sd in c("bins", "means", "none")) { session$setInputs(gamm_show_data = sd, gamm_age_bins = 5, gamm_n_proxy = 5); touch(output, c("gamm_curve_plot", "gamm_curve_note", "gamm_n_proxy_ui")) }
     session$setInputs(gamm_run_proxy = 1, gamm_run_groups = 1, gamm_run_poly = 1)
     touch(output, c("gamm_proxy_verdict", "gamm_proxy_tables", "gamm_groups_verdict", "gamm_groups_table", "gamm_diff_test_table",
                     "gamm_lrt_table", "gamm_poly_table", "gamm_naive_plot"))

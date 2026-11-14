@@ -229,11 +229,12 @@ gamm_curve_obj <- reactive({
   if (show %in% c("means", "bins")) {
     if (identical(show, "bins")) {
       nb <- max(3L, min(25L, as.integer(num_input(input$gamm_age_bins, 8))))
-      br <- unique(stats::quantile(dd$age, seq(0, 1, length.out = nb + 1), names = FALSE))
+      br <- seq(min(dd$age), max(dd$age), length.out = nb + 1)                  # equal-width age bins
       dd$abin <- cut(dd$age, br, include.lowest = TRUE)
       om <- stats::aggregate(cbind(trait, age) ~ abin + level, data = dd, FUN = mean)
       om$n <- stats::aggregate(trait ~ abin + level, data = dd, FUN = length)$trait
       om$se <- stats::aggregate(trait ~ abin + level, data = dd, FUN = function(v) stats::sd(v) / sqrt(length(v)))$trait
+      om <- om[om$n >= 3, , drop = FALSE]
       p <- p + geom_errorbar(data = om, aes(x = age, ymin = trait - 1.96 * se, ymax = trait + 1.96 * se, colour = level), inherit.aes = FALSE, width = 0, alpha = 0.6)
     } else {
       om <- stats::aggregate(trait ~ age + level, data = dd, FUN = mean)
@@ -244,7 +245,9 @@ gamm_curve_obj <- reactive({
       scale_size_area(max_size = 3.5, guide = "none") +
       scale_shape_manual(values = rep(c(16, 17, 15, 18, 1, 2, 0, 5), length.out = length(levs)), name = grp_lab, guide = if (by_group) "legend" else "none")
   }
-  p <- p + geom_ribbon(aes(ymin = lo, ymax = hi, fill = level, group = series), alpha = 0.10, colour = NA)
+  # one interval band per group (for the middle proxy value when there are several), so the bands do not pile up
+  band <- if (by_proxy) cv[cv$proxy == levels(cv$proxy)[ceiling(nlevels(cv$proxy) / 2)], , drop = FALSE] else cv
+  p <- p + geom_ribbon(data = band, aes(ymin = lo, ymax = hi, fill = level, group = series), alpha = 0.12, colour = NA)
   p <- if (by_proxy) p + geom_line(aes(colour = level, linetype = proxy, group = series), linewidth = 1.1) +
                        scale_linetype_manual(values = c("dotted", "solid", "dashed", "dotdash", "longdash")[seq_len(nlevels(cv$proxy))], name = r$settings$proxy)
        else p + geom_line(aes(colour = level, group = series), linewidth = 1.2)
@@ -256,13 +259,20 @@ gamm_curve_obj <- reactive({
     tc <- safe_get(toy_true_curve(tr, ages))
     if (length(tc) == length(ages)) p <- p + geom_line(data = data.frame(age = ages, fit = tc), aes(age, fit), inherit.aes = FALSE, linetype = "longdash", colour = "black", linewidth = 0.8)
   }
-  p + labs(x = "Age", y = "Trait (population curve)",
-           subtitle = paste0("Lines: fitted curve", if (by_group) " per group (colour)" else "", if (by_proxy) sprintf(" at %d %s values (line type)", nlevels(cv$proxy), r$settings$proxy) else "",
-                             "; shaded: simultaneous 95% interval", switch(show, means = "; points: observed means (size = records)", bins = "; points: observed means in age bins with 95% CI", points = "; points: records", ""),
-                             if (!is.null(tr)) "; black long-dash: true curve" else "")) +
+  p + labs(x = "Age", y = "Trait (population curve)") +
     theme_disappR(13) + theme(legend.position = "bottom", legend.box = "vertical")
 })
 output$gamm_curve_plot <- renderPlot(gamm_curve_obj())
+output$gamm_curve_note <- renderUI({
+  r <- safe_get(gamm_res()); cv <- safe_get(gamm_curve_df())
+  if (is.null(r) || is.null(cv)) return(NULL)
+  by_group <- length(unique(cv$level)) > 1; by_proxy <- any(nzchar(cv$proxy)); show <- input$gamm_show_data %||% "means"
+  p(class = "small-note", paste0("Lines: the fitted curve", if (by_group) " for each group (colour)" else "",
+    if (by_proxy) sprintf(" at %d values of %s (line type)", length(unique(cv$proxy)), r$settings$proxy) else "",
+    ". Shaded: simultaneous 95% interval", if (by_proxy) " of the middle curve" else "",
+    switch(show, means = ". Points: observed means at ages with 3 or more records (size = number of records)",
+           bins = ". Points: observed means in equal-width age bins with their 95% intervals", points = ". Points: individual records", ""), "."))
+})
 output$gamm_support_plot <- renderPlot({
   r <- gamm_res(); sp <- gamm_support(r)
   ggplot(sp, aes(age, individuals)) + geom_col(fill = "#9DB4C0", width = if (nrow(sp) > 1) 0.8 * min(diff(sp$age)) else 0.8) +

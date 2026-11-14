@@ -51,7 +51,8 @@ gamm_tab_ui <- function() {
               column(3, uiOutput("gamm_n_proxy_ui")),
               column(2, uiOutput("gamm_truth_ui"))),
             uiOutput("gamm_scale_ui"),
-            plotOutput("gamm_curve_plot", height = 400),
+            plotOutput("gamm_curve_plot", height = 460),
+            uiOutput("gamm_curve_note"),
             plotOutput("gamm_support_plot", height = 120),
             look_for("the overall shape and where the interval is narrow; ignore wiggles where few individuals remain (the bars)."),
             save_button("save_gamm_curve"))
