@@ -55,7 +55,7 @@ exported as R code.
   reports, the analysis data, and a reproducibility bundle of every setting used.
 - **Runs locally.** Your data never leave your machine.
 
-## Step 7: GAMMs (smooth models of ageing)
+## Step 7: GAMMs (beta version)
 
 An optional seventh step fits generalized additive mixed models (GAMMs, with
 `mgcv`) to the same data. The ageing trajectory is a smooth curve whose shape the

@@ -18,7 +18,7 @@ ui <- dashboardPage(
       menuItem("4 \u00b7 Trajectories", tabName = "individual", icon = icon("chart-line")),
       menuItem("5 \u00b7 Modelling", tabName = "models", icon = icon("layer-group")),
       menuItem("6 \u00b7 Summary and report", tabName = "summary", icon = icon("square-check")),
-      menuItem("7 \u00b7 GAMMs (smooth models)", tabName = "gamm", icon = icon("wave-square")),
+      menuItem("7 \u00b7 GAMMs (beta version)", tabName = "gamm", icon = icon("wave-square")),
       menuItem("8 \u00b7 Bayesian models (brms)", tabName = "bayes", icon = icon("dice"))
     ),
     tags$hr(),
@@ -312,7 +312,7 @@ ui <- dashboardPage(
                 div(class = "step-card", div(class = "step-kicker", "6 \u00b7 Summary and report"),
                     div(class = "step-title", "Collect and export results"),
                     div(class = "step-text", "Every 'Save to summary' result is gathered here with an automatic, cautious overview, and exported as an HTML or text report.")),
-                div(class = "step-card", div(class = "step-kicker", "7 \u00b7 GAMMs (optional)"),
+                div(class = "step-card", div(class = "step-kicker", "7 \u00b7 GAMMs (beta version, optional)"),
                     div(class = "step-title", "Let the data choose the shape of ageing"),
                     div(class = "step-text", "Generalized additive mixed models: a smooth curve of age with individual random effects and ALR, lifespan or AFR terms; where the trait rises and falls, whether groups age differently, and whether the smooth agrees with the parametric models. Needs the mgcv package.")),
                 div(class = "step-card", div(class = "step-kicker", "8 \u00b7 Bayesian models (optional)"),
