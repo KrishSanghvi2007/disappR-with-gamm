@@ -47,7 +47,12 @@ rebuilt and corrected.
 * **New examples.**
   - Tsui et al. 2026 (Seychelles warbler body mass; Zenodo, CC BY 4.0).
   - Brown et al. 2021 (Seychelles warbler haematocrit; Dryad, CC0).
-  - Both carry their published GAMM settings, applied on the GAMM tab when the example is chosen.
+  - Cooper et al. 2021 (superb fairy-wren females: offspring and survival; males: offspring sired; Dryad, CC0).
+    These are the first non-Gaussian GAMM examples.
+  - Lalande et al. 2022 (Asian elephant body mass by sex; Dryad, CC0).
+  - Each carries its published GAMM settings, applied on the GAMM tab when the example is chosen.
+  - `dev/prepare_gamm_examples.R` rebuilds the files from the deposits.
+  - `dev/gamm_literature_scoping.md` records the search that found the studies.
 * **Validation** (`inst/validation/gamm/`):
   - replication of both studies from the authors' code;
   - GAMMs against GLMMs on simulated data through the real engines (`tests/scripts/gamm_vs_glmm.R`, tier 10);
