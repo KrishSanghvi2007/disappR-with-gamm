@@ -23,7 +23,7 @@ touch <- function(output_env, names) {
 # step 7 (GAMM) outputs, defined in inst/app/gamm_server.R
 gamm_outputs <- c("gamm_data_note", "gamm_scale_ui", "gamm_engine_note_proxy", "gamm_engine_note_groups", "gamm_engine_note_poly", "gamm_proxy_hint", "gamm_next_ui", "gamm_family_hint", "gamm_individual_note", "gamm_group_ui", "gamm_truth_ui", "gamm_formula_ui",
                   "gamm_reading_ui", "gamm_cautions_ui", "gamm_curve_plot", "gamm_support_plot", "gamm_deriv_plot", "gamm_periods_table",
-                  "gamm_peak_table", "gamm_out_stats", "gamm_out_param", "gamm_out_smooth", "gamm_out_random", "gamm_out_formula", "gamm_output_reading", "gamm_re_test_note", "gamm_kcheck_table", "gamm_concurvity_table",
+                  "gamm_peak_table", "gamm_n_proxy_ui", "gamm_out_stats", "gamm_out_param", "gamm_out_smooth", "gamm_out_random", "gamm_out_formula", "gamm_output_reading", "gamm_re_test_note", "gamm_kcheck_table", "gamm_concurvity_table",
                   "gamm_resid_note", "gamm_resid_plot", "gamm_poly_table", "gamm_proxy_terms_table", "gamm_proxy_verdict", "gamm_proxy_tables",
                   "gamm_naive_plot", "gamm_groups_note", "gamm_groups_verdict", "gamm_groups_table", "gamm_diff_test_table", "gamm_lrt_table",
                   "gamm_diff_plot", "gamm_guide_ui", "gamm_check_overall", "gamm_check_summary", "gamm_poly_reading", "gamm_code")
@@ -90,11 +90,12 @@ shiny::testServer(app, {
     n_saved1 <- length(saved_results())
     session$setInputs(gamm_family = "gaussian", gamm_k = 8, gamm_individual = "ri", gamm_proxy = "ALR", gamm_proxy_form = "ti",
                       gamm_afr_form = "linear", gamm_terminal = TRUE, gamm_group = "cv_diet", gamm_structure = "GS",
-                      gamm_interval = "simultaneous", gamm_show_points = TRUE, gamm_show_truth = TRUE)
+                      gamm_show_data = "points", gamm_show_truth = TRUE)
     session$setInputs(gamm_fit = 1)
     gr <- gamm_store()
     if (!isTRUE(gr$ok)) problems <<- c(problems, paste("GAMM fit:", gr$message)) else cat("GAMM fitted:", gr$formula, "\n")
     touch(output, gamm_outputs)
+    for (sd in c("bins", "means", "none")) { session$setInputs(gamm_show_data = sd, gamm_age_bins = 5, gamm_n_proxy = 5); touch(output, c("gamm_curve_plot", "gamm_n_proxy_ui")) }
     session$setInputs(gamm_run_proxy = 1, gamm_run_groups = 1, gamm_run_poly = 1)
     touch(output, c("gamm_proxy_verdict", "gamm_proxy_tables", "gamm_groups_verdict", "gamm_groups_table", "gamm_diff_test_table",
                     "gamm_lrt_table", "gamm_poly_table", "gamm_naive_plot"))

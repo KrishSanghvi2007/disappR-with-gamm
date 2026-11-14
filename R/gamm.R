@@ -876,12 +876,15 @@ gamm_age_grid <- function(r, n = 150) seq(min(r$data$age), max(r$data$age), leng
 
 # Proxy values at which to draw curves: the mean (additive models) or the 10th, 50th and 90th percentiles over
 # individuals (age-dependent models, where the curve's shape depends on the proxy).
-gamm_proxy_values <- function(r) {
+gamm_proxy_values <- function(r, n = 3) {
   p <- r$settings$proxy %||% "none"
   if (identical(p, "none") || !r$proxy_form %in% c("ti", "vc") || !p %in% names(r$data)) return(NULL)
   ind <- r$data[!duplicated(r$data$id), , drop = FALSE]
-  q <- stats::quantile(ind[[p]], c(0.1, 0.5, 0.9), na.rm = TRUE, names = FALSE)
-  stats::setNames(q, paste0(p, " = ", vapply(q, format_num, character(1)), c(" (short-lived)", " (median)", " (long-lived)")))
+  n <- max(2L, min(5L, as.integer(n %||% 3L)))
+  pr <- seq(0.1, 0.9, length.out = n)
+  q <- stats::quantile(ind[[p]], pr, na.rm = TRUE, names = FALSE)
+  tag <- ifelse(pr == 0.1, " (short-lived)", ifelse(pr == 0.9, " (long-lived)", ifelse(abs(pr - 0.5) < 1e-9, " (median)", sprintf(" (%.0fth percentile)", 100 * pr))))
+  stats::setNames(q, paste0(p, " = ", vapply(q, format_num, character(1)), tag))
 }
 
 # Population curve(s) with pointwise and simultaneous 95% intervals, on the response scale. One curve per group level;
@@ -918,10 +921,10 @@ gamm_curve_linkinv <- function(r, scale = "typical") {
   function(eta) vapply(eta, function(e) mean(inv(e + u)), numeric(1))
 }
 
-gamm_curve <- function(r, n = 150, by_proxy = TRUE, scale = "typical") {
+gamm_curve <- function(r, n = 150, by_proxy = TRUE, scale = "typical", n_proxy = 3) {
   ages <- gamm_age_grid(r, n)
   linkinv <- gamm_curve_linkinv(r, scale)
-  pv <- if (by_proxy) gamm_proxy_values(r) else NULL
+  pv <- if (by_proxy) gamm_proxy_values(r, n_proxy) else NULL
   p <- r$settings$proxy %||% "none"
   combos <- expand.grid(lv = seq_along(gamm_levels(r)), pv = if (is.null(pv)) NA else seq_along(pv))
   levs <- gamm_levels(r)

@@ -109,11 +109,11 @@ output$gamm_truth_ui <- renderUI(if (isTRUE(is_toy())) checkboxInput("gamm_show_
 gamm_settings <- reactive({
   s <- gamm_defaults()
   s$engine <- input$gamm_engine %||% s$engine
-  s$method <- input$gamm_method %||% "REML"
+  s$method <- "REML"
   s$family <- input$gamm_family %||% "gaussian"
-  s$bs <- input$gamm_bs %||% "tp"
+  s$bs <- "tp"
   s$k <- max(3, min(40, round(num_input(input$gamm_k, 10))))
-  s$select <- isTRUE(input$gamm_select)
+  s$select <- FALSE
   s$individual <- input$gamm_individual %||% "ri"
   s$group <- input$gamm_group %||% ""
   s$structure <- if (nzchar(s$group)) input$gamm_structure %||% "I" else "G"
@@ -172,11 +172,16 @@ output$gamm_formula_ui <- renderUI({
 })
 
 # ---- trajectory ---------------------------------------------------------------------------------------------------
-gamm_sim <- reactive(!identical(input$gamm_interval, "pointwise"))
+gamm_sim <- reactive(TRUE)   # simultaneous intervals throughout (Simpson 2018): they support statements about the whole curve
 gamm_kc <- reactive(gamm_kcheck(gamm_res()))
 gamm_cc <- reactive(gamm_concurvity(gamm_res()))
 gamm_qr <- reactive(gamm_quantile_residuals(gamm_res()))
-gamm_curve_df <- reactive(gamm_curve(gamm_res(), scale = input$gamm_curve_scale %||% "typical"))
+gamm_curve_df <- reactive(gamm_curve(gamm_res(), scale = input$gamm_curve_scale %||% "typical", n_proxy = as.integer(input$gamm_n_proxy %||% 3)))
+output$gamm_n_proxy_ui <- renderUI({
+  r <- safe_get(gamm_res())
+  if (is.null(r) || is.null(gamm_proxy_values(r))) return(NULL)
+  selectInput("gamm_n_proxy", sprintf("Curves at how many %s values", r$settings$proxy), c("2" = 2, "3" = 3, "5" = 5), isolate(input$gamm_n_proxy) %||% 3)
+})
 output$gamm_scale_ui <- renderUI({
   r <- safe_get(gamm_res()); if (is.null(r)) return(NULL)
   lk <- tryCatch(r$fit$family$link %||% r$fit$family$linfo[[1]]$link, error = function(e) "identity")
@@ -208,33 +213,54 @@ gamm_level_of <- function(r) {
   if (nzchar(grp) && !identical(r$structure, "G") && grp %in% names(r$data)) as.character(r$data[[grp]]) else rep("All", nrow(r$data))
 }
 gamm_curve_obj <- reactive({
-  r <- gamm_res(); cv <- gamm_curve_df(); sim <- gamm_sim()
-  cv$lo <- if (sim) cv$lower_sim else cv$lower
-  cv$hi <- if (sim) cv$upper_sim else cv$upper
+  r <- gamm_res(); cv <- gamm_curve_df()
+  cv$lo <- cv$lower_sim; cv$hi <- cv$upper_sim
   dd <- r$data; dd$level <- gamm_level_of(r)
+  grp_lab <- if (nzchar(r$settings$group %||% "")) gamm_pretty(r$settings$group) else NULL
+  by_group <- length(unique(cv$level)) > 1
   by_proxy <- any(nzchar(cv$proxy))
-  cv$series <- if (by_proxy) ifelse(cv$level == "All", cv$proxy, paste(cv$level, cv$proxy, sep = ", ")) else cv$level
-  n_series <- length(unique(cv$series))
-  cols <- stats::setNames(gamm_col(n_series), unique(cv$series))
+  levs <- unique(cv$level)
+  cols <- stats::setNames(if (by_group) gamm_col(length(levs)) else "#35637A", levs)
+  if (by_proxy) cv$proxy <- factor(cv$proxy, levels = unique(cv$proxy))
+  cv$series <- interaction(cv$level, if (by_proxy) cv$proxy else "", drop = TRUE)
   p <- ggplot(cv, aes(age, fit))
-  if (isTRUE(input$gamm_show_points)) p <- p + geom_point(data = dd, aes(age, trait), inherit.aes = FALSE, alpha = 0.12, size = 0.8, colour = "grey40")
-  if (isTRUE(input$gamm_show_means)) {
-    om <- stats::aggregate(trait ~ age + level, data = dd, FUN = mean)
-    om$n <- stats::aggregate(trait ~ age + level, data = dd, FUN = length)$trait
-    p <- p + geom_point(data = om[om$n >= 3, , drop = FALSE], aes(age, trait, shape = level), inherit.aes = FALSE, colour = "grey30", size = 1.8) +
-      scale_shape_manual(values = rep(c(1, 2, 0, 5, 6, 3, 4, 8), length.out = length(unique(om$level))), name = NULL, guide = if (length(unique(om$level)) > 1) "legend" else "none")
+  show <- input$gamm_show_data %||% "means"
+  if (identical(show, "points")) p <- p + geom_point(data = dd, aes(age, trait, colour = level), inherit.aes = FALSE, alpha = 0.15, size = 0.8)
+  if (show %in% c("means", "bins")) {
+    if (identical(show, "bins")) {
+      nb <- max(3L, min(25L, as.integer(num_input(input$gamm_age_bins, 8))))
+      br <- unique(stats::quantile(dd$age, seq(0, 1, length.out = nb + 1), names = FALSE))
+      dd$abin <- cut(dd$age, br, include.lowest = TRUE)
+      om <- stats::aggregate(cbind(trait, age) ~ abin + level, data = dd, FUN = mean)
+      om$n <- stats::aggregate(trait ~ abin + level, data = dd, FUN = length)$trait
+      om$se <- stats::aggregate(trait ~ abin + level, data = dd, FUN = function(v) stats::sd(v) / sqrt(length(v)))$trait
+      p <- p + geom_errorbar(data = om, aes(x = age, ymin = trait - 1.96 * se, ymax = trait + 1.96 * se, colour = level), inherit.aes = FALSE, width = 0, alpha = 0.6)
+    } else {
+      om <- stats::aggregate(trait ~ age + level, data = dd, FUN = mean)
+      om$n <- stats::aggregate(trait ~ age + level, data = dd, FUN = length)$trait
+      om <- om[om$n >= 3, , drop = FALSE]
+    }
+    p <- p + geom_point(data = om, aes(age, trait, colour = level, shape = level, size = n), inherit.aes = FALSE, alpha = 0.75) +
+      scale_size_area(max_size = 3.5, guide = "none") +
+      scale_shape_manual(values = rep(c(16, 17, 15, 18, 1, 2, 0, 5), length.out = length(levs)), name = grp_lab, guide = if (by_group) "legend" else "none")
   }
-  p <- p + geom_ribbon(aes(ymin = lo, ymax = hi, fill = series), alpha = 0.18) + geom_line(aes(colour = series), linewidth = 1.1) +
-    scale_colour_manual(values = cols, name = NULL) + scale_fill_manual(values = cols, name = NULL)
+  p <- p + geom_ribbon(aes(ymin = lo, ymax = hi, fill = level, group = series), alpha = 0.10, colour = NA)
+  p <- if (by_proxy) p + geom_line(aes(colour = level, linetype = proxy, group = series), linewidth = 1.1) +
+                       scale_linetype_manual(values = c("dotted", "solid", "dashed", "dotdash", "longdash")[seq_len(nlevels(cv$proxy))], name = r$settings$proxy)
+       else p + geom_line(aes(colour = level, group = series), linewidth = 1.2)
+  p <- p + scale_colour_manual(values = cols, name = grp_lab, guide = if (by_group) "legend" else "none") +
+    scale_fill_manual(values = cols, guide = "none")
   tr <- if (isTRUE(is_toy()) && isTRUE(input$gamm_show_truth)) safe_get(truth()) else NULL
   if (!is.null(tr)) {
     ages <- sort(unique(cv$age))
     tc <- safe_get(toy_true_curve(tr, ages))
-    if (length(tc) == length(ages)) p <- p + geom_line(data = data.frame(age = ages, fit = tc), aes(age, fit), inherit.aes = FALSE, linetype = 2, colour = "black", linewidth = 0.9)
+    if (length(tc) == length(ages)) p <- p + geom_line(data = data.frame(age = ages, fit = tc), aes(age, fit), inherit.aes = FALSE, linetype = "longdash", colour = "black", linewidth = 0.8)
   }
-  p <- p + labs(x = "Age", y = "Trait (population curve)") + theme_disappR(13)
-  if (n_series == 1) p <- p + guides(colour = "none", fill = "none")
-  p
+  p + labs(x = "Age", y = "Trait (population curve)",
+           subtitle = paste0("Lines: fitted curve", if (by_group) " per group (colour)" else "", if (by_proxy) sprintf(" at %d %s values (line type)", nlevels(cv$proxy), r$settings$proxy) else "",
+                             "; shaded: simultaneous 95% interval", switch(show, means = "; points: observed means (size = records)", bins = "; points: observed means in age bins with 95% CI", points = "; points: records", ""),
+                             if (!is.null(tr)) "; black long-dash: true curve" else "")) +
+    theme_disappR(13) + theme(legend.position = "bottom", legend.box = "vertical")
 })
 output$gamm_curve_plot <- renderPlot(gamm_curve_obj())
 output$gamm_support_plot <- renderPlot({
@@ -262,7 +288,7 @@ gamm_deriv_obj <- reactive({
 output$gamm_deriv_plot <- renderPlot(gamm_deriv_obj())
 gamm_periods_df <- reactive({
   pr <- gamm_periods(gamm_deriv_df(), simultaneous = gamm_sim())
-  if (!nrow(pr)) return(data.frame(Note = sprintf("No period of significant change (%s intervals).", if (gamm_sim()) "simultaneous" else "pointwise")))
+  if (!nrow(pr)) return(data.frame(Note = "No period of significant change (simultaneous 95% intervals)."))
   pr
 })
 output$gamm_periods_table <- renderTable(gamm_periods_df(), striped = TRUE, spacing = "xs")
@@ -560,7 +586,7 @@ observeEvent(input$save_gamm_deriv, disappr_guard("input$save_gamm_deriv", {
   r <- safe_get(gamm_res()); pl <- safe_get(gamm_deriv_obj())
   if (is.null(r) || is.null(pl)) return(nothing_to_save("Fit a GAMM first."))
   if (!gamm_check_fresh()) return(invisible(NULL))
-  add_saved("7 GAMM", "GAMM derivatives, peak and onset", text = c(gamm_desc(r), paste("Intervals:", if (gamm_sim()) "simultaneous 95%" else "pointwise 95%")),
+  add_saved("7 GAMM", "GAMM derivatives, peak and onset", text = c(gamm_desc(r), "Intervals: simultaneous 95%."),
             tables = list(`Periods of significant change` = safe_get(gamm_periods_df()), `Peak and onset` = safe_get(gamm_peak_df())),
             plots = list(pl), verdict = "context")
 }))
