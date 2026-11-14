@@ -525,7 +525,7 @@ METHODS_REFS <- c(
   woodscheipl2020 = "Wood, S. and Scheipl, F. 2020. gamm4: generalized additive mixed models using mgcv and lme4. R package.",
   simpson2018 = "Simpson, G. L. 2018. Modelling palaeoecological time series using generalised additive models. Frontiers in Ecology and Evolution 6: 149.",
   pedersen2019 = "Pedersen, E. J., Miller, D. L., Simpson, G. L. and Ross, N. 2019. Hierarchical generalized additive models in ecology: an introduction with mgcv. PeerJ 7: e6876.",
-  sanghvi = "Sanghvi, K., Ivimey-Cook, E. R., Bouwhuis, S., Sepil, I. and van de Pol, M. 2026. A comparison of methods to assess selective disappearance and quantify ageing. EcoEvoRxiv.",
+  sanghvi = "Sanghvi, K., Ivimey-Cook, E. R., Bouwhuis, S., Sepil, I. and van de Pol, M. 2026. Biases in common methods used to quantify ageing and selective disappearance: a guide. Methods in Ecology and Evolution.",
   disappr = "Sanghvi, K. and Ivimey-Cook, E. R. 2026. disappR: a shiny app to model ageing and selective [dis]appearance. R package.",
   vdpv = "van de Pol, M. and Verhulst, S. 2006. Age-dependent traits: a new statistical model to separate within- and between-individual effects. American Naturalist 167: 766-773.",
   vdpw = "van de Pol, M. and Wright, J. 2009. A simple method for distinguishing within- versus between-subject effects using mixed models. Animal Behaviour 77: 753-758.",
