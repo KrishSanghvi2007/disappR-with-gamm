@@ -24,6 +24,8 @@ without restriction. Cite the paper and the dataset when you use an example.
 | szejnersigal_2025_bee_activity.csv | Szejner-Sigal et al. 2025, *Proc. R. Soc. B* (10.1098/rspb.2024.2637) | Dryad 10.5061/dryad.j9kd51cq3 | CC0 1.0 |
 | tsui_2026_warbler_body_mass.csv | Tsui, Briga, Komdeur, Burke, Richardson & Dugdale 2026, *Evol. Lett.* 10: 506-520 (10.1093/evlett/qrag029) | Zenodo 10.5281/zenodo.21101620 (physio_28_5.csv; columns selected, lifespan also given in years) | CC BY 4.0 (attribution: cite the paper and the dataset) |
 | brown_2021_warbler_haematocrit.csv | Brown et al. 2021, *Ecol. Evol.* 11: 214-226 (10.1002/ece3.7015) | Dryad 10.5061/dryad.7wm37pvrp (Zenodo mirror 10.5281/zenodo.5605034; converted from xlsx; catch year and age last seen derived from the dates) | CC0 1.0 |
+| cooper_2021_fairywren_females.csv, cooper_2021_fairywren_males.csv | Cooper, Bonnet, Osmond, Cockburn & Kruuk 2021, *Am. Nat.* 197: 111-127 (10.1086/711755) | Dryad 10.5061/dryad.2547d7wnq (Zenodo mirror 3997828); female survival and reproduction files merged by bird and year, survival derived from age and longevity, one duplicated bird-year kept once; male ID taken from ID.yr (dev/prepare_gamm_examples.R) | CC0 1.0 |
+| lalande_2022_elephant_body_mass.csv | Lalande, Lummaa, Aung, Htut, Nyein, Berger & Briga 2022, *J. Evol. Biol.* (preprint 10.1101/2020.12.17.423208) | Dryad 10.5061/dryad.5dv41ns59 (Zenodo mirror 6462306); log body mass added, lifespan derived for elephants that died, sex recoded A = F, B = M (dev/prepare_gamm_examples.R) | CC0 1.0 |
 
 Three entries still need the authors' input before a public release: the fly data (licence and DOI), the great tit
 data (written permission, or a public deposit), and the swift file's source.

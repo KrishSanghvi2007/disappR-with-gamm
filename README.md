@@ -49,7 +49,7 @@ exported as R code.
 - **Teaching simulations.** Generate data with a known true trajectory, choosing
   the ageing shape, the sampling design and the type and strength of selection,
   and see how close each model gets to the truth.
-- **15 published datasets** from 14 studies of laboratory and wild populations,
+- **18 published datasets** from 16 studies of laboratory and wild populations,
   each set up to follow its paper (the great tit data open on laying date).
 - **Reproducible output.** Downloadable R code for every section, HTML and text
   reports, the analysis data, and a reproducibility bundle of every setting used.
