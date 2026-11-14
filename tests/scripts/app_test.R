@@ -23,7 +23,7 @@ touch <- function(output_env, names) {
 # step 7 (GAMM) outputs, defined in inst/app/gamm_server.R
 gamm_outputs <- c("gamm_data_note", "gamm_scale_ui", "gamm_engine_note_proxy", "gamm_engine_note_groups", "gamm_engine_note_poly", "gamm_proxy_hint", "gamm_next_ui", "gamm_family_hint", "gamm_individual_note", "gamm_group_ui", "gamm_truth_ui", "gamm_formula_ui",
                   "gamm_reading_ui", "gamm_cautions_ui", "gamm_curve_plot", "gamm_support_plot", "gamm_deriv_plot", "gamm_periods_table",
-                  "gamm_peak_table", "gamm_fit_stats", "gamm_smooth_table", "gamm_param_table", "gamm_kcheck_table", "gamm_concurvity_table",
+                  "gamm_peak_table", "gamm_out_stats", "gamm_out_param", "gamm_out_smooth", "gamm_out_random", "gamm_out_formula", "gamm_output_reading", "gamm_re_test_note", "gamm_kcheck_table", "gamm_concurvity_table",
                   "gamm_resid_note", "gamm_resid_plot", "gamm_poly_table", "gamm_proxy_terms_table", "gamm_proxy_verdict", "gamm_proxy_tables",
                   "gamm_naive_plot", "gamm_groups_note", "gamm_groups_verdict", "gamm_groups_table", "gamm_diff_test_table", "gamm_lrt_table",
                   "gamm_diff_plot", "gamm_vcomp_table", "gamm_indiv_plot", "gamm_code")
@@ -101,10 +101,13 @@ shiny::testServer(app, {
     if (!isTRUE(gamm_proxy_store()$ok)) problems <<- c(problems, "GAMM proxy comparison failed")
     if (!isTRUE(gamm_groups_store()$ok)) problems <<- c(problems, "GAMM group comparison failed")
     if (!is.data.frame(gamm_poly_store())) problems <<- c(problems, "GAMM polynomial comparison failed")
-    for (sid in c("save_gamm_curve", "save_gamm_deriv", "save_gamm_check", "save_gamm_groups", "save_gamm_proxy", "save_gamm_poly"))
+    session$setInputs(gamm_run_re_test = 1)
+    touch(output, c("gamm_re_test_note", "gamm_re_test_table"))
+    if (!isTRUE(gamm_re_test_store()$ok)) problems <<- c(problems, paste("GAMM random-effect test:", gamm_re_test_store()$message))
+    for (sid in c("save_gamm_curve", "save_gamm_output", "save_gamm_deriv", "save_gamm_check", "save_gamm_groups", "save_gamm_proxy", "save_gamm_poly"))
       do.call(session$setInputs, stats::setNames(list(1), sid))
     n_saved2 <- length(saved_results())
-    if (n_saved2 - n_saved1 != 6) problems <<- c(problems, sprintf("GAMM saves: %d of 6 saved", n_saved2 - n_saved1))
+    if (n_saved2 - n_saved1 != 7) problems <<- c(problems, sprintf("GAMM saves: %d of 7 saved", n_saved2 - n_saved1))
     # changing a GAMM setting must not make a step 1-6 result look new (the settings fingerprint is scoped by step)
     session$setInputs(gamm_k = 12)
     session$setInputs(save_models = 2)

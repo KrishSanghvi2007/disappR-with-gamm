@@ -3399,6 +3399,7 @@ server <- function(input, output, session) {
     "Peak age and onset",
     "Among-individual covariance",
     "GAMM trajectory",
+    "GAMM model output",
     "GAMM derivatives",
     "GAMM checks",
     "GAMM group comparison",

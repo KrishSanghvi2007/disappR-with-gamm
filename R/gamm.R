@@ -487,6 +487,154 @@ gamm_tables <- function(r) {
        aic = gamm_aic(r), stat_name = if (isTRUE(sm$residual.df > 0) && identical(r$fit$family$family, "gaussian")) "F" else "Chi.sq")
 }
 
+# ---------------------------------------------------------------------------
+# Model output (the GAMM counterpart of step 5's Model output tab): model statistics, parametric terms, fixed smooth
+# terms and random effects, each with a plain description of what the term is.
+# ---------------------------------------------------------------------------
+
+gamm_is_random_label <- function(x) grepl("^s\\((id|re_|\\.obs)|,id\\)$|\\.age_c", x)
+
+# What a term of the fitted GAMM is, in words.
+gamm_term_description <- function(x, covs = character(0)) {
+  v <- function(z) sub("^cv_", "", sub("^re_", "", z))
+  # a factor covariate and its level, from a coefficient name such as cv_sexM (the longest matching covariate wins)
+  split_level <- function(z) {
+    hit <- covs[startsWith(z, covs) & nchar(z) > nchar(covs)]
+    if (!length(hit)) return(NULL)
+    h <- hit[which.max(nchar(hit))]
+    c(h, substring(z, nchar(h) + 1))
+  }
+  vapply(x, function(t) {
+    if (identical(t, "(Intercept)")) return("Mean trait at the reference levels (link scale)")
+    if (t %in% c("ALR", "LS", "AFR")) return(sprintf("Linear effect of %s, per unit (selective %s)", t, if (t == "AFR") "appearance" else "disappearance"))
+    if (grepl("^\\.terminal", t)) return("Terminal-record effect: last record before death against earlier records")
+    if (identical(t, "age")) return("Linear effect of age")
+    if (grepl("^poly\\(age", t)) return("Polynomial term of age")
+    if (grepl("^s\\(age\\)$", t)) return("Smooth of age (the population ageing curve)")
+    if (startsWith(t, "s(age):cv_")) {
+      sl <- split_level(sub("^s\\(age\\):", "", t))
+      if (!is.null(sl)) return(sprintf("Smooth of age for %s = %s", v(sl[1]), sl[2]))
+    }
+    m <- regmatches(t, regexec("^s\\(age\\):\\.grp_o(.*)$", t))[[1]]
+    if (length(m) == 2) return(sprintf("Difference of group %s's curve from the reference curve", m[2]))
+    m <- regmatches(t, regexec("^s\\(age\\):\\.(ALR|LS|AFR)_c$", t))[[1]]
+    if (length(m) == 2) return(sprintf("Age-dependent effect of %s: how its effect changes with age (varying coefficient)", m[2]))
+    m <- regmatches(t, regexec("^s\\(age,(cv_[^)]+)\\)$", t))[[1]]
+    if (length(m) == 2) return(sprintf("Deviations of each %s level's curve from the common curve", v(m[2])))
+    m <- regmatches(t, regexec("^ti\\(age,(ALR|LS|AFR)\\)$", t))[[1]]
+    if (length(m) == 2) return(sprintf("Age \u00d7 %s interaction: age-dependent selective %s", m[2], if (m[2] == "AFR") "appearance" else "disappearance"))
+    m <- regmatches(t, regexec("^ti\\(age,(cv_[^)]+)\\)$", t))[[1]]
+    if (length(m) == 2) return(sprintf("Age \u00d7 %s interaction", v(m[2])))
+    m <- regmatches(t, regexec("^s\\((ALR|LS|AFR)\\)$", t))[[1]]
+    if (length(m) == 2) return(sprintf("Smooth (non-linear) effect of %s", m[2]))
+    m <- regmatches(t, regexec("^s\\((cv_[^)]+)\\)$", t))[[1]]
+    if (length(m) == 2) return(sprintf("Smooth effect of %s", v(m[2])))
+    if (grepl("^s\\(id\\)$|^id intercept$", t)) return("Individual random intercepts")
+    if (identical(t, "id slope of age")) return("Individual random slopes of age")
+    if (identical(t, ".obs intercept")) return("Observation-level random effect (overdispersion)")
+    m <- regmatches(t, regexec("^(re_[^ ]+) intercept$", t))[[1]]
+    if (length(m) == 2) return(sprintf("Random intercepts for %s", v(m[2])))
+    if (grepl("^s\\(id,\\.age_c\\)$", t)) return("Individual random slopes of age")
+    if (grepl("^s\\(age,id\\)$", t)) return("Individual random smooths of age")
+    if (grepl("^s\\(\\.obs\\)$", t)) return("Observation-level random effect (overdispersion)")
+    m <- regmatches(t, regexec("^s\\((re_[^)]+)\\)$", t))[[1]]
+    if (length(m) == 2) return(sprintf("Random intercepts for %s", v(m[2])))
+    if (grepl("^cv_", t) && !grepl(":", t)) {
+      sl <- split_level(t)
+      if (!is.null(sl)) return(sprintf("%s = %s, against the reference level", v(sl[1]), sl[2]))
+    }
+    if (grepl("^cv_", t) && !grepl(":", t)) return(sprintf("Linear effect of %s, per unit", v(t)))
+    if (grepl(":", t)) return("Interaction between covariates")
+    ""
+  }, character(1), USE.NAMES = FALSE)
+}
+
+# Model statistics, parametric terms, fixed smooths and random effects of a fitted GAMM.
+gamm_output <- function(r) {
+  sm <- summary(r$fit, re.test = FALSE)
+  covs <- grep("^cv_", names(r$data), value = TRUE)
+  covs <- covs[!vapply(r$data[covs], is.numeric, logical(1))]
+  fam <- r$fit$family
+  pt <- as.data.frame(sm$p.table)
+  stat_p <- sub(" value$", "", colnames(pt)[3])
+  par <- data.frame(Term = rownames(pt), Description = gamm_term_description(rownames(pt), covs), Estimate = pt[[1]], SE = pt[[2]],
+                    Statistic = pt[[3]], P = pt[[4]], stringsAsFactors = FALSE, row.names = NULL)
+  attr(par, "stat") <- stat_p
+  smt <- if (!is.null(sm$s.table) && nrow(sm$s.table)) {
+    x <- as.data.frame(sm$s.table)
+    data.frame(Smooth = rownames(x), Description = gamm_term_description(rownames(x), covs), edf = x[[1]], Ref.df = x[[2]],
+               Statistic = x[[3]], P = x[[4]], stringsAsFactors = FALSE, row.names = NULL)
+  } else data.frame()
+  stat_s <- if (grepl("Chi", colnames(sm$s.table)[3] %||% "")) "Chi.sq" else "F"
+  if (nrow(smt)) {
+    smt <- smt[!gamm_is_random_label(smt$Smooth), , drop = FALSE]
+    smt$Shape <- ifelse(smt$edf < 1.5, "close to a straight line", ifelse(smt$edf < 3, "gently curved", "clearly curved"))
+    rownames(smt) <- NULL
+  }
+  attr(smt, "stat") <- stat_s
+  vc <- tryCatch(gamm_vcomp(r), error = function(e) data.frame())
+  if (nrow(vc)) {
+    vc$Description <- ifelse(vc$Term == "scale", if (identical(fam$family, "gaussian")) "Residual (within-individual) variation" else "Dispersion (scale) parameter",
+                             gamm_term_description(vc$Term))
+    vc$Description[!nzchar(vc$Description)] <- "Random effect"
+    vc$Variance <- vc$SD^2
+    vc <- vc[, c("Term", "Description", "SD", "Variance", "Lower", "Upper")]
+    names(vc)[names(vc) %in% c("Lower", "Upper")] <- c("SD lower 95%", "SD upper 95%")
+    ref <- if (any(vc$Term == "scale")) vc$SD[vc$Term == "scale"][1] else NA_real_
+    vc$Flag <- ifelse(vc$Term != "scale" & is.finite(vc$SD) & (vc$SD < 1e-4 | (is.finite(ref) & vc$SD < 0.01 * ref)), "\u26a0 explains (next to) no variance", "")
+  }
+  ll <- tryCatch(stats::logLik(if (!is.null(r$mer)) r$mer else r$fit), error = function(e) NA)
+  crit_name <- if (!is.null(r$mer)) "REML/ML criterion (lme4)" else paste0(r$method %||% "REML", " score")
+  crit <- if (!is.null(r$mer)) tryCatch(as.numeric(lme4::REMLcrit(r$mer)), error = function(e) tryCatch(stats::deviance(r$mer), error = function(e) NA_real_)) else gamm_num1(r$fit$gcv.ubre)
+  stats <- data.frame(Statistic = c("Family (link)", "Fitting engine", "Smoothing parameters estimated by", "Records", "Individuals",
+                                    "Effective degrees of freedom (total)", crit_name, "Log-likelihood", "AIC", "Deviance explained",
+                                    "Adjusted R\u00b2", if (identical(fam$family, "gaussian")) "Residual variance" else "Scale (dispersion)"),
+                      Value = c(sprintf("%s (%s)", fam$family, fam$link), r$engine %||% "", r$method %||% "", format(r$n, big.mark = ","),
+                                format(r$n_ind, big.mark = ","), format_num(sum(r$fit$edf), 4), format_num(crit, 6),
+                                if (inherits(ll, "logLik")) format_num(as.numeric(ll), 6) else "", format_num(gamm_aic(r), 6),
+                                if (is.finite(gamm_num1(sm$dev.expl))) sprintf("%.1f%%", 100 * gamm_num1(sm$dev.expl)) else "not reported (gamm4)",
+                                format_num(gamm_num1(sm$r.sq), 3), format_num(gamm_num1(sm$scale), 4)),
+                      stringsAsFactors = FALSE)
+  list(stats = stats, parametric = par, smooth = smt, random = vc, formula = r$formula, family = fam$family, link = fam$link)
+}
+
+# Tests of the random effects. mgcv tests each random-effect smooth against zero (Wood 2013; summary re.test = TRUE),
+# which can be slow with many levels; gamm4 fits have no such test.
+gamm_re_test <- function(r) {
+  if (!is.null(r$mer)) return(list(ok = FALSE, message = "This model was fitted with gamm4 (lme4's random effects), for which mgcv's random-effect tests are not available. Read the variance components instead."))
+  sm <- tryCatch(suppressWarnings(summary(r$fit, re.test = TRUE)), error = function(e) e)
+  if (inherits(sm, "error")) return(list(ok = FALSE, message = paste("The random-effect tests failed:", conditionMessage(sm))))
+  x <- as.data.frame(sm$s.table)
+  keep <- gamm_is_random_label(rownames(x))
+  if (!any(keep)) return(list(ok = FALSE, message = "The model has no random-effect smooths to test."))
+  x <- x[keep, , drop = FALSE]
+  list(ok = TRUE, table = data.frame(Term = rownames(x), Description = gamm_term_description(rownames(x)), edf = x[[1]],
+                                     Statistic = x[[3]], P = x[[4]], stringsAsFactors = FALSE, row.names = NULL))
+}
+
+# Plain reading of the model output: which terms matter, and how curved the age smooth is.
+gamm_output_reading <- function(o) {
+  out <- character(0)
+  sm <- o$smooth
+  if (nrow(sm)) {
+    age <- sm[grepl("^s\\(age\\)", sm$Smooth) & !grepl("ALR|LS|AFR|grp_o", sm$Smooth), , drop = FALSE]
+    for (i in seq_len(nrow(age))) {
+      out <- c(out, sprintf("%s: edf %s (%s), %s = %s, p %s.", age$Description[i], format_num(age$edf[i], 3), age$Shape[i], attr(sm, "stat"),
+                            format_num(age$Statistic[i], 3), gsub("^([0-9])", "= \\1", format_p(age$P[i]))))
+    }
+  }
+  pr <- o$parametric
+  prox <- pr[pr$Term %in% c("ALR", "LS", "AFR"), , drop = FALSE]
+  for (i in seq_len(nrow(prox))) {
+    out <- c(out, sprintf("%s: %s per unit (SE %s), p %s: %s.", prox$Term[i], format_num(prox$Estimate[i], 3), format_num(prox$SE[i], 3),
+                          gsub("^([0-9])", "= \\1", format_p(prox$P[i])),
+                          if (is.finite(prox$P[i]) && prox$P[i] < 0.05) sprintf("individuals with a %s %s have %s trait values at a given age", if (prox$Estimate[i] > 0) "longer" else "shorter",
+                                                                                if (prox$Term[i] == "AFR") "AFR" else "lifespan proxy", "higher")
+                          else "no clear evidence of age-independent selective (dis)appearance"))
+  }
+  c(out, "The p-values of smooth terms are approximate (Wood 2013): read them together with the curves, and treat values near 0.05 with caution. Estimates are on the link scale for non-Gaussian families.")
+}
+
 # Basis-dimension check: k', edf, k-index and its p-value per smooth (mgcv::k.check). A small p-value with a k-index
 # below 1 suggests k is too low, especially when edf is close to k'. Random-effect smooths are not checked.
 gamm_kcheck <- function(r) {

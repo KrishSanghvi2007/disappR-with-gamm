@@ -263,20 +263,63 @@ output$gamm_periods_table <- renderTable(gamm_periods_df(), striped = TRUE, spac
 gamm_peak_df <- reactive(gamm_peak_onset(gamm_res()))
 output$gamm_peak_table <- renderTable(gamm_peak_df(), striped = TRUE, spacing = "xs")
 
-# ---- checks -------------------------------------------------------------------------------------------------------
-gamm_tabs <- reactive(gamm_tables(gamm_res()))
-output$gamm_fit_stats <- renderUI({
-  tb <- gamm_tabs()
-  p(class = "small-note", sprintf("Deviance explained %s; adjusted R\u00b2 %s; AIC %s; %s records.", if (is.finite(tb$dev_expl)) sprintf("%.1f%%", 100 * tb$dev_expl) else "not available (gamm4)",
-                                  format_num(tb$r_sq %||% NA_real_), format_num(tb$aic), format(tb$n, big.mark = ",")))
+# ---- model output -------------------------------------------------------------------------------------------------
+gamm_out <- reactive(gamm_output(gamm_res()))
+gamm_num_cols <- function(x, digits = 4) {
+  for (cl in intersect(c("Estimate", "SE", "Statistic", "edf", "Ref.df", "SD", "Variance", "SD lower 95%", "SD upper 95%"), names(x)))
+    x[[cl]] <- vapply(x[[cl]], function(v) if (is.finite(v)) format_num(v, digits) else "", character(1))
+  if ("P" %in% names(x)) x$P <- vapply(x$P, format_p, character(1))
+  x
+}
+gamm_out_param_df <- reactive({
+  o <- gamm_out(); x <- o$parametric
+  x$Term <- gamm_pretty(x$Term); x <- gamm_num_cols(x)
+  names(x)[names(x) == "Statistic"] <- paste0(attr(o$parametric, "stat") %||% "t", " value")
+  x
 })
-output$gamm_smooth_table <- renderTable({
-  st <- gamm_tabs()$smooth
-  if (!nrow(st)) return(data.frame(Note = "No smooth terms."))
-  st$Smooth <- gamm_pretty(st$Smooth); names(st)[names(st) == "Statistic"] <- gamm_tabs()$stat_name
-  gamm_fmt(st)
+gamm_out_smooth_df <- reactive({
+  o <- gamm_out(); x <- o$smooth
+  if (!nrow(x)) return(data.frame(Note = "No fixed smooth terms."))
+  x$Smooth <- gamm_pretty(x$Smooth); x <- gamm_num_cols(x, 3)
+  names(x)[names(x) == "Statistic"] <- attr(o$smooth, "stat") %||% "F"
+  x
+})
+gamm_out_random_df <- reactive({
+  x <- gamm_out()$random
+  if (!nrow(x)) return(data.frame(Note = "No random effects in this model."))
+  x$Term <- gamm_pretty(sub("^scale$", "residual", x$Term)); x <- gamm_num_cols(x)
+  if (all(!nzchar(x[["SD lower 95%"]]))) x[["SD lower 95%"]] <- x[["SD upper 95%"]] <- NULL
+  if (!any(nzchar(x$Flag))) x$Flag <- NULL
+  x
+})
+output$gamm_out_stats <- renderTable(gamm_out()$stats, striped = TRUE, spacing = "xs")
+output$gamm_out_param <- renderTable(gamm_out_param_df(), striped = TRUE, spacing = "xs")
+output$gamm_out_smooth <- renderTable(gamm_out_smooth_df(), striped = TRUE, spacing = "xs")
+output$gamm_out_random <- renderTable(gamm_out_random_df(), striped = TRUE, spacing = "xs")
+output$gamm_out_formula <- renderUI(tagList(strong("Formula: "), code(gamm_pretty(gamm_res()$formula))))
+output$gamm_output_reading <- renderUI(tags$ul(class = "small-note", lapply(gamm_pretty(gamm_output_reading(gamm_out())), tags$li)))
+gamm_re_test_store <- reactiveVal(NULL)
+observeEvent(input$gamm_run_re_test, disappr_guard("input$gamm_run_re_test", {
+  r <- safe_get(gamm_res())
+  if (is.null(r)) { notify("Fit a GAMM first.", type = "warning"); return(invisible(NULL)) }
+  z <- withProgress(message = "Testing the random effects", value = 0.4, gamm_run("gamm_re_test", list(r = r)))
+  z$signature <- gamm_sig()
+  gamm_re_test_store(z)
+}))
+output$gamm_re_test_note <- renderUI({
+  z <- gamm_re_test_store()
+  if (is.null(z)) return(p(class = "small-note", style = "margin-top:8px;", "Optional: tests whether each random effect differs from zero (Wood 2013). The variance components above usually tell you enough."))
+  if (!identical(z$signature, gamm_sig())) return(div(class = "caution-box", "Settings changed since the test: run it again."))
+  if (!isTRUE(z$ok)) return(div(class = "caution-box", z$message))
+  p(class = "small-note", style = "margin-top:8px;", "A small p-value means the random effect explains variation in the trait. Tests of variances against zero are on the boundary of the parameter space, so the p-values are approximate (conservative).")
+})
+output$gamm_re_test_table <- renderTable({
+  z <- gamm_re_test_store()
+  if (is.null(z) || !isTRUE(z$ok) || !identical(z$signature, gamm_sig())) return(NULL)
+  x <- z$table; x$Term <- gamm_pretty(x$Term); x <- gamm_num_cols(x, 3); names(x)[names(x) == "Statistic"] <- "Chi.sq"; x
 }, striped = TRUE, spacing = "xs")
-output$gamm_param_table <- renderTable({ x <- gamm_tabs()$parametric; x$Term <- gamm_pretty(x$Term); gamm_fmt(x) }, striped = TRUE, spacing = "xs")
+
+# ---- checks -------------------------------------------------------------------------------------------------------
 output$gamm_kcheck_table <- renderTable({
   kc <- gamm_kc()
   if (!nrow(kc)) return(data.frame(Note = "No basis check available for this model."))
@@ -495,15 +538,26 @@ observeEvent(input$save_gamm_deriv, disappr_guard("input$save_gamm_deriv", {
             tables = list(`Periods of significant change` = safe_get(gamm_periods_df()), `Peak and onset` = safe_get(gamm_peak_df())),
             plots = list(pl), verdict = "context")
 }))
+observeEvent(input$save_gamm_output, disappr_guard("input$save_gamm_output", {
+  r <- safe_get(gamm_res())
+  if (is.null(r)) return(nothing_to_save("Fit a GAMM first."))
+  if (!gamm_check_fresh()) return(invisible(NULL))
+  o <- gamm_out()
+  z <- gamm_re_test_store()
+  re_tab <- if (is.list(z) && isTRUE(z$ok) && identical(z$signature, gamm_sig())) { x <- z$table; x$Term <- gamm_pretty(x$Term); gamm_num_cols(x, 3) } else NULL
+  add_saved("7 GAMM", "GAMM model output", text = c(gamm_desc(r), gamm_pretty(r$formula), gamm_pretty(gamm_output_reading(o))),
+            tables = Filter(Negate(is.null), list(`Model statistics` = o$stats, `Smooth terms` = safe_get(gamm_out_smooth_df()),
+                          `Parametric terms` = safe_get(gamm_out_param_df()), `Random effects` = safe_get(gamm_out_random_df()),
+                          `Random-effect tests` = re_tab)),
+            verdict = "context")
+}))
 observeEvent(input$save_gamm_check, disappr_guard("input$save_gamm_check", {
   r <- safe_get(gamm_res())
   if (is.null(r)) return(nothing_to_save("Fit a GAMM first."))
   if (!gamm_check_fresh()) return(invisible(NULL))
-  tb <- gamm_tabs(); cau <- safe_get(gamm_cautions_now()) %||% character(0)
-  st <- tb$smooth; st$Smooth <- gamm_pretty(st$Smooth)
+  cau <- safe_get(gamm_cautions_now()) %||% character(0)
   add_saved("7 GAMM", "GAMM checks", text = c(gamm_desc(r), gamm_pretty(cau)),
-            tables = list(`Smooth terms` = gamm_fmt(st), `Parametric terms` = gamm_fmt(tb$parametric),
-                          `Basis dimension check` = gamm_fmt(gamm_kc()), Concurvity = gamm_cc()),
+            tables = list(`Basis dimension check` = gamm_fmt(gamm_kc()), Concurvity = gamm_cc()),
             verdict = if (length(cau)) "caution" else "context")
 }))
 observeEvent(input$save_gamm_groups, disappr_guard("input$save_gamm_groups", {

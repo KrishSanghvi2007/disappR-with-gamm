@@ -7,7 +7,7 @@ gamm_tab_ui <- function() {
     guide_box("gamm",
       goal = "Fit generalized additive mixed models (GAMMs; mgcv): the ageing trajectory is a smooth curve whose shape the data choose, rather than a function you pick. Use them to describe the shape of ageing, to locate where the trait rises and falls, and to check the conclusions of the parametric models of step 5. This step reads the data of step 1 and changes nothing in steps 1\u20136.",
       start_with = "the settings on the Fit tab (the defaults suit most data) and press Fit GAMM. Read the curve, the plain-language summary and any cautions above it.",
-      then = "open Ageing rate (where the trait changes significantly with age, the peak and the onset of decline), Selective disappearance (do ALR, lifespan or AFR terms matter, and how far do they move the curve?), Groups (do the sexes or treatments age differently?) and Checks (basis size, concurvity, residuals).",
+      then = "read the estimates and p-values of every term on Model output, then open Ageing rate (where the trait changes significantly with age, the peak and the onset of decline), Selective disappearance (do ALR, lifespan or AFR terms matter, and how far do they move the curve?), Groups (do the sexes or treatments age differently?) and Checks (basis size, concurvity, residuals).",
       tip = "Save results to the summary as you go: each saved GAMM result is described in the methods draft of step 6.",
       further = "compare the smooth with linear, quadratic and cubic age (Checks), fit a random smooth per individual, or add a terminal-record effect."),
     fluidRow(box(width = 12, status = "info", solidHeader = FALSE, uiOutput("gamm_data_note"))),
@@ -60,6 +60,27 @@ gamm_tab_ui <- function() {
             save_button("save_gamm_curve"))
         )
       ),
+      # ------------------------------------------------------------------ Model output
+      tabPanel("Model output", icon = icon("table-list"),
+        fluidRow(
+          box(width = 12, title = info_title("What does each term of the GAMM estimate?", "gamm_output"), status = "primary", solidHeader = TRUE,
+            uiOutput("gamm_output_reading"),
+            fluidRow(
+              column(4, h5(strong("Model statistics")), tableOutput("gamm_out_stats")),
+              column(8,
+                h5(strong("Smooth terms (fixed)")), tableOutput("gamm_out_smooth"),
+                h5(strong("Parametric terms (fixed)")), tableOutput("gamm_out_param"))),
+            p(class = "small-note", uiOutput("gamm_out_formula", inline = TRUE)),
+            save_button("save_gamm_output"))
+        ),
+        fluidRow(
+          box(width = 12, title = info_title("Random effects", "gamm_random"), status = "primary", solidHeader = TRUE,
+            tableOutput("gamm_out_random"),
+            actionButton("gamm_run_re_test", "Test the random effects (mgcv; can take a while)", class = "btn-default", icon = icon("vial")),
+            uiOutput("gamm_re_test_note"),
+            tableOutput("gamm_re_test_table"))
+        )
+      ),
       # ------------------------------------------------------------------ Ageing rate
       tabPanel("Ageing rate", icon = icon("arrow-trend-down"),
         fluidRow(
@@ -109,9 +130,7 @@ gamm_tab_ui <- function() {
       tabPanel("Checks", icon = icon("stethoscope"),
         fluidRow(
           box(width = 6, title = info_title("Is the smooth well specified?", "gamm_check"), status = "info", solidHeader = TRUE,
-            uiOutput("gamm_fit_stats"),
-            h5(strong("Smooth terms")), tableOutput("gamm_smooth_table"),
-            h5(strong("Parametric terms")), tableOutput("gamm_param_table"),
+            p(class = "small-note", "The estimates, test statistics and p-values of every term are on the Model output tab."),
             h5(strong("Basis dimension (k) check")), tableOutput("gamm_kcheck_table"),
             h5(strong("Concurvity between fixed terms")), tableOutput("gamm_concurvity_table"),
             save_button("save_gamm_check")),
