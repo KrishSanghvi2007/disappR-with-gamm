@@ -573,9 +573,17 @@ gamm_output <- function(r) {
   }
   attr(smt, "stat") <- stat_s
   vc <- tryCatch(gamm_vcomp(r), error = function(e) data.frame())
+  if (nrow(vc) && !is.null(r$mer)) {
+    # lme4 names, written as the gamm4 random formula has them
+    g4 <- vc$Term != "scale"
+    desc <- gamm_term_description(vc$Term)
+    grp <- sub(" (intercept|slope of age)$", "", vc$Term)
+    vc$Term[g4] <- ifelse(grepl("slope of age$", vc$Term[g4]), sprintf("(0 + age | %s)", grp[g4]), sprintf("(1 | %s)", grp[g4]))
+    attr(vc, "desc") <- desc
+  }
   if (nrow(vc)) {
     vc$Description <- ifelse(vc$Term == "scale", if (identical(fam$family, "gaussian")) "Residual (within-individual) variation" else "Dispersion (scale) parameter",
-                             gamm_term_description(vc$Term))
+                             attr(vc, "desc") %||% gamm_term_description(vc$Term))
     vc$Description[!nzchar(vc$Description)] <- "Random effect"
     vc$Variance <- vc$SD^2
     vc <- vc[, c("Term", "Description", "SD", "Variance", "Lower", "Upper")]
@@ -587,13 +595,13 @@ gamm_output <- function(r) {
   crit_name <- if (!is.null(r$mer)) "REML/ML criterion (lme4)" else paste0(r$method %||% "REML", " score")
   crit <- if (!is.null(r$mer)) tryCatch(as.numeric(lme4::REMLcrit(r$mer)), error = function(e) tryCatch(stats::deviance(r$mer), error = function(e) NA_real_)) else gamm_num1(r$fit$gcv.ubre)
   stats <- data.frame(Statistic = c("Family (link)", "Fitting engine", "Smoothing parameters estimated by", "Records", "Individuals",
-                                    "Effective degrees of freedom (total)", crit_name, "Log-likelihood", "AIC", "Deviance explained",
+                                    if (is.null(r$mer)) "Effective degrees of freedom (all terms, random effects included)" else "Effective degrees of freedom (fixed terms; random effects in lme4)", crit_name, "Log-likelihood", "AIC", "Deviance explained",
                                     "Adjusted R\u00b2", if (identical(fam$family, "gaussian")) "Residual variance" else "Scale (dispersion)"),
                       Value = c(sprintf("%s (%s)", fam$family, fam$link), r$engine %||% "", r$method %||% "", format(r$n, big.mark = ","),
                                 format(r$n_ind, big.mark = ","), format_num(sum(r$fit$edf), 4), format_num(crit, 6),
                                 if (inherits(ll, "logLik")) format_num(as.numeric(ll), 6) else "", format_num(gamm_aic(r), 6),
                                 if (is.finite(gamm_num1(sm$dev.expl))) sprintf("%.1f%%", 100 * gamm_num1(sm$dev.expl)) else "not reported (gamm4)",
-                                format_num(gamm_num1(sm$r.sq), 3), format_num(gamm_num1(sm$scale), 4)),
+                                if (is.null(r$mer)) format_num(gamm_num1(sm$r.sq), 3) else "not reported (gamm4)", format_num(gamm_num1(sm$scale), 4)),
                       stringsAsFactors = FALSE)
   list(stats = stats, parametric = par, smooth = smt, random = vc, formula = r$formula, family = fam$family, link = fam$link)
 }
@@ -612,6 +620,8 @@ gamm_re_test <- function(r) {
                                      Statistic = x[[3]], P = x[[4]], stringsAsFactors = FALSE, row.names = NULL))
 }
 
+gamm_p_words <- function(p) { f <- format_p(p); if (startsWith(f, "<")) sub("^<", "< ", f) else paste("=", f) }
+
 # Plain reading of the model output: which terms matter, and how curved the age smooth is.
 gamm_output_reading <- function(o) {
   out <- character(0)
@@ -620,14 +630,14 @@ gamm_output_reading <- function(o) {
     age <- sm[grepl("^s\\(age\\)", sm$Smooth) & !grepl("ALR|LS|AFR|grp_o", sm$Smooth), , drop = FALSE]
     for (i in seq_len(nrow(age))) {
       out <- c(out, sprintf("%s: edf %s (%s), %s = %s, p %s.", age$Description[i], format_num(age$edf[i], 3), age$Shape[i], attr(sm, "stat"),
-                            format_num(age$Statistic[i], 3), gsub("^([0-9])", "= \\1", format_p(age$P[i]))))
+                            format_num(age$Statistic[i], 3), gamm_p_words(age$P[i])))
     }
   }
   pr <- o$parametric
   prox <- pr[pr$Term %in% c("ALR", "LS", "AFR"), , drop = FALSE]
   for (i in seq_len(nrow(prox))) {
     out <- c(out, sprintf("%s: %s per unit (SE %s), p %s: %s.", prox$Term[i], format_num(prox$Estimate[i], 3), format_num(prox$SE[i], 3),
-                          gsub("^([0-9])", "= \\1", format_p(prox$P[i])),
+                          gamm_p_words(prox$P[i]),
                           if (is.finite(prox$P[i]) && prox$P[i] < 0.05) sprintf("individuals with a %s %s have %s trait values at a given age", if (prox$Estimate[i] > 0) "longer" else "shorter",
                                                                                 if (prox$Term[i] == "AFR") "AFR" else "lifespan proxy", "higher")
                           else "no clear evidence of age-independent selective (dis)appearance"))
