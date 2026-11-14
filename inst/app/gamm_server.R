@@ -170,7 +170,16 @@ gamm_sim <- reactive(!identical(input$gamm_interval, "pointwise"))
 gamm_kc <- reactive(gamm_kcheck(gamm_res()))
 gamm_cc <- reactive(gamm_concurvity(gamm_res()))
 gamm_qr <- reactive(gamm_quantile_residuals(gamm_res()))
-gamm_curve_df <- reactive(gamm_curve(gamm_res()))
+gamm_curve_df <- reactive(gamm_curve(gamm_res(), scale = input$gamm_curve_scale %||% "typical"))
+output$gamm_scale_ui <- renderUI({
+  r <- safe_get(gamm_res()); if (is.null(r)) return(NULL)
+  lk <- tryCatch(r$fit$family$link %||% r$fit$family$linfo[[1]]$link, error = function(e) "identity")
+  if (identical(lk, "identity")) return(NULL)
+  tagList(radioButtons("gamm_curve_scale", NULL, c("Typical individual (random effects at zero)" = "typical",
+                                                   "Population average (comparable with the observed means)" = "average"),
+                       isolate(input$gamm_curve_scale) %||% "typical", inline = TRUE),
+          p(class = "small-note", "For counts and proportions the GAMM's curve is for a typical individual (and typical year). When individuals or years differ a lot it lies below the observed means; the population average averages the prediction over the estimated random effects of every record."))
+})
 gamm_deriv_df <- reactive(gamm_derivative(gamm_res()))
 gamm_cautions_now <- reactive(gamm_cautions(gamm_res(), safe_get(gamm_kc()) %||% data.frame(), safe_get(gamm_cc()) %||% data.frame(),
                                             safe_get(gamm_qr()), safe_get(gamm_gd())))

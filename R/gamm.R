@@ -446,13 +446,20 @@ gamm_fit <- function(gd, s, method = s$method, structure = s$structure, proxy_fo
   }, warning = function(w) { notes <<- c(notes, conditionMessage(w)); invokeRestart("muffleWarning") }),
   error = function(e) { err <<- conditionMessage(e); FALSE })
   if (!isTRUE(res) || is.null(fit)) return(fail(paste("The GAMM could not be fitted:", err %||% "unknown error")))
+  # Population curves average categorical covariates over their observed mix of levels (link scale) rather than fixing
+  # them at the commonest level, which can describe a minority of records (for example subordinate helpers).
+  cov_colmeans <- tryCatch({
+    pt <- intersect(c(ut$cv, Filter(function(pp) all(strsplit(pp, ":", fixed = TRUE)[[1]] %in% ut$cv), s$cov_pairs %||% character(0))),
+                    attr(stats::terms(fit$pterms %||% stats::as.formula("~ 1")), "term.labels"))
+    if (length(pt)) colMeans(stats::model.matrix(stats::as.formula(paste("~", paste(pt, collapse = " + "))), dd))[-1] else numeric(0)
+  }, error = function(e) numeric(0))
   conv <- if (!is.null(mer)) tryCatch(!length(mer@optinfo$conv$lme4$messages), error = function(e) TRUE) else
     tryCatch(isTRUE(fit$converged) && (is.null(fit$outer.info$conv) || identical(fit$outer.info$conv, "full convergence")),
              error = function(e) TRUE)
   if (!conv) notes <- c(notes, "the smoothing-parameter optimisation did not report full convergence")
   list(ok = TRUE, fit = fit, mer = mer, formula = f_str, data = dd, settings = s, method = method, structure = structure,
        proxy_form = proxy_form, afr_form = afr_form, engine = engine, rho = rho, converged = conv,
-       notes = unique(notes), n = nrow(dd), n_ind = n_ind, age_mean = mean(dd$age), centres = centres,
+       notes = unique(notes), n = nrow(dd), n_ind = n_ind, age_mean = mean(dd$age), centres = centres, cov_colmeans = cov_colmeans,
        n_dropped = sum(!keep), seconds = proc.time()[["elapsed"]] - t0)
 }
 
@@ -565,6 +572,10 @@ gamm_lp <- function(r, nd) {
   # Random-effect columns are zero on the population curve, so they are dropped rather than zeroed: the result is the
   # same, and draws from the covariance matrix no longer scale with the number of individuals (thousands of columns).
   cols <- setdiff(cols, gamm_random_smooths(r$fit)$cols)
+  cm <- r$cov_colmeans %||% numeric(0)
+  grp <- r$settings$group %||% ""
+  if (length(cm)) cm <- cm[names(cm) %in% colnames(X) & !(nzchar(grp) & startsWith(names(cm), grp))]   # the group is set per curve
+  for (nm in names(cm)) X[, nm] <- cm[[nm]]
   V <- gamm_vcov(r$fit)
   list(X = X[, cols, drop = FALSE], b = stats::coef(r$fit)[cols], V = V[cols, cols, drop = FALSE])
 }
@@ -599,9 +610,41 @@ gamm_proxy_values <- function(r) {
 
 # Population curve(s) with pointwise and simultaneous 95% intervals, on the response scale. One curve per group level;
 # for age-dependent proxy models, also one per proxy value (low, median and high).
-gamm_curve <- function(r, n = 150, by_proxy = TRUE) {
+# Each record's random-effect contribution on the link scale (individual, mapped random terms and, if fitted, the
+# observation-level effect): the full linear predictor minus its fixed part.
+gamm_re_offsets <- function(r) {
+  tryCatch({
+    if (!is.null(r$mer)) {
+      full <- stats::predict(r$mer, type = "link")
+      fixed <- as.numeric(stats::predict(r$fit, newdata = r$data, type = "link"))
+    } else {
+      X <- stats::predict(r$fit, newdata = r$data, type = "lpmatrix")
+      cols <- gamm_random_smooths(r$fit)$cols
+      b <- stats::coef(r$fit)
+      full <- as.numeric(X %*% b)
+      fixed <- as.numeric(X[, -cols, drop = FALSE] %*% b[-cols])
+    }
+    u <- as.numeric(full) - fixed
+    u[is.finite(u)]
+  }, error = function(e) 0)
+}
+
+# Inverse link for the curve. scale = "typical": random effects at zero (a typical individual, the GAMM's own curve).
+# scale = "average": at each age, the prediction averaged over every record's estimated random effects, so it is
+# comparable with observed means; it uses the fitted random effects themselves rather than assuming they are normal.
+# Identity links are unchanged.
+gamm_curve_linkinv <- function(r, scale = "typical") {
+  inv <- gamm_linkinv(r$fit)
+  lk <- tryCatch(r$fit$family$link %||% r$fit$family$linfo[[1]]$link, error = function(e) "identity")
+  if (!identical(scale, "average") || identical(lk, "identity")) return(inv)
+  u <- gamm_re_offsets(r)
+  if (!length(u) || all(u == 0)) return(inv)
+  function(eta) vapply(eta, function(e) mean(inv(e + u)), numeric(1))
+}
+
+gamm_curve <- function(r, n = 150, by_proxy = TRUE, scale = "typical") {
   ages <- gamm_age_grid(r, n)
-  linkinv <- gamm_linkinv(r$fit)
+  linkinv <- gamm_curve_linkinv(r, scale)
   pv <- if (by_proxy) gamm_proxy_values(r) else NULL
   p <- r$settings$proxy %||% "none"
   combos <- expand.grid(lv = seq_along(gamm_levels(r)), pv = if (is.null(pv)) NA else seq_along(pv))

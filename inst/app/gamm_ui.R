@@ -53,6 +53,7 @@ gamm_tab_ui <- function() {
               column(4, uiOutput("gamm_truth_ui"))),
             radioButtons("gamm_interval", NULL, c("Simultaneous 95% intervals" = "simultaneous", "Pointwise 95% intervals" = "pointwise"),
                          "simultaneous", inline = TRUE),
+            uiOutput("gamm_scale_ui"),
             plotOutput("gamm_curve_plot", height = 400),
             plotOutput("gamm_support_plot", height = 120),
             look_for("the overall shape and where the interval is narrow; ignore wiggles where few individuals remain (the bars)."),
