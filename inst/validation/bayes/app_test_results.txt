@@ -1,0 +1,8 @@
+disappR 0.25.0 starting from /home/user/disappR-with-gamm
+Step 5 best model: Model 4 
+Gaussian M4 refit: ok TRUE, 115 s (compiled TRUE)
+Largest shift from step 5 (SEs): 0.16 
+Refit with the narrow prior: ok TRUE, 19 s (compiled FALSE)
+Poisson M2 refit: ok TRUE
+Step 8 server test passed.
+EXIT 0
