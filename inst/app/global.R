@@ -18,7 +18,7 @@ suppressPackageStartupMessages({
 options(stringsAsFactors = FALSE)
 options(shiny.maxRequestSize = 50 * 1024^2)   # uploads up to 50 MB: the one place this limit is set
 
-DISAPPR_ENGINE_FILES <- c("utils.R", "provenance.R", "simulation.R", "import.R", "validation.R", "data-preparation.R", "formulas.R", "model-fit.R", "model-comparison.R", "diagnostics.R", "trajectories.R", "disappearance.R", "missingness.R", "interpretation.R", "effects.R", "evidence.R", "ui-helpers.R", "export.R", "gamm.R")
+DISAPPR_ENGINE_FILES <- c("utils.R", "provenance.R", "simulation.R", "import.R", "validation.R", "data-preparation.R", "formulas.R", "model-fit.R", "model-comparison.R", "diagnostics.R", "trajectories.R", "disappearance.R", "missingness.R", "interpretation.R", "effects.R", "evidence.R", "ui-helpers.R", "export.R", "gamm.R", "bayes.R")
 .disappr_app_env <- environment()
 .disappr_engine_dir <- if (all(file.exists(file.path("..", "..", "R", DISAPPR_ENGINE_FILES)))) {
   file.path("..", "..", "R")
@@ -53,6 +53,9 @@ if (nzchar(.disappr_engine_dir)) {
 .disappr_app_dir <- if (file.exists("gamm_ui.R")) "." else system.file("app", package = "disappR")
 source(file.path(.disappr_app_dir, "gamm_ui.R"), local = .disappr_app_env, encoding = "UTF-8")
 GAMM_SERVER_CODE <- parse(file.path(.disappr_app_dir, "gamm_server.R"), keep.source = FALSE, encoding = "UTF-8")
+# Step 8 (Bayesian refits of the step-5 models) is built the same way.
+source(file.path(.disappr_app_dir, "bayes_ui.R"), local = .disappr_app_env, encoding = "UTF-8")
+BAYES_SERVER_CODE <- parse(file.path(.disappr_app_dir, "bayes_server.R"), keep.source = FALSE, encoding = "UTF-8")
 
 if (any(!OPTIONAL_STATUS$Installed)) {
   message("disappR ", DISAPPR_VERSION, ": optional packages not installed: ",

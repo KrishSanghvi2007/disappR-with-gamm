@@ -3404,6 +3404,10 @@ server <- function(input, output, session) {
     "GAMM group comparison",
     "GAMM selective disappearance",
     "GAMM against polynomials",
+    "Bayesian convergence checks",
+    "Bayesian estimates",
+    "Bayesian trajectory",
+    "Bayesian posterior predictive checks",
     "Residual checks for",
     "performance checks for",
     "Error-family check with",
@@ -3472,8 +3476,9 @@ server <- function(input, output, session) {
     drop <- vapply(v, function(x) inherits(x, "shinyActionButtonValue"), logical(1)) |
             grepl("^(save_|info_|go_prev_|go_next_|saved_)", names(v)) |
             grepl("_(hover|click|dblclick|brush|rows_selected|rows_current|rows_all|state|search|cell_clicked)$", names(v)) |
-            names(v) %in% c("tabs", "model_tabs", "gamm_tabs", "sidebarCollapsed", "sidebarItemExpanded") |
-            (!startsWith(section, "7") & startsWith(names(v), "gamm_"))
+            names(v) %in% c("tabs", "model_tabs", "gamm_tabs", "bayes_tabs", "sidebarCollapsed", "sidebarItemExpanded") |
+            (!startsWith(section, "7") & startsWith(names(v), "gamm_")) |
+            (!startsWith(section, "8") & startsWith(names(v), "bayes_"))
     v <- v[!drop]
     v[order(names(v))]
   }
@@ -4175,6 +4180,9 @@ server <- function(input, output, session) {
     if (is.list(g) && isTRUE(g$ok)) ctx$gamm <- utils::modifyList(g$settings, list(method_used = g$method, structure_used = g$structure,
                                                                               proxy_form = g$proxy_form, afr_form = g$afr_form,
                                                                               engine_used = g$engine, rho = g$rho, n = g$n, n_ind = g$n_ind))
+    bz <- if (exists("bayes_store", inherits = TRUE)) bayes_store() else NULL
+    if (is.list(bz) && isTRUE(bz$ok)) ctx$bayes <- list(text = tryCatch(bayes_methods(bz, bz$spec), error = function(e) ""), model = bz$label,
+                                                         mode = bz$settings$mode, width = bz$settings$width)
     ctx
   }
   methods_seen <- new.env()
@@ -4230,4 +4238,7 @@ server <- function(input, output, session) {
   # steps 1-6 and writes only its own outputs (gamm_*) and saved results.
   # ======================================================================
   for (.gamm_expr in GAMM_SERVER_CODE) eval(.gamm_expr)
+  # Step 8: Bayesian refits of a step-5 model (bayes_server.R), evaluated the same way. It reads the step-5 fit and
+  # writes only its own outputs (bayes_*) and saved results.
+  for (.bayes_expr in BAYES_SERVER_CODE) eval(.bayes_expr)
 }

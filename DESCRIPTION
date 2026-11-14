@@ -35,6 +35,10 @@ Imports:
     tools,
     utils
 Suggests:
+    bayesplot,
+    brms,
+    posterior,
+    rstan,
     callr,
     DHARMa,
     glmmTMB,
@@ -68,6 +72,7 @@ Collate:
     'ui-helpers.R'
     'export.R'
     'gamm.R'
+    'bayes.R'
     'api.R'
     'run_app.R'
 Config/testthat/edition: 3

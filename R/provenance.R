@@ -12,7 +12,8 @@ OPTIONAL_PACKAGES <- c(
   see = "plots for the performance checks",
   codetools = "complete helper functions in exported code",
   mgcv = "generalized additive mixed models (step 7: GAMMs)",
-  gamm4 = "GAMMs with thousands of individuals (step 7)")
+  gamm4 = "GAMMs with thousands of individuals (step 7)",
+  brms = "Bayesian refits of the step-5 models with Stan (step 8; needs rstan and a C++ compiler)")
 
 package_version_or_na <- function(p) {
   if (!nzchar(system.file(package = p))) return(NA_character_)

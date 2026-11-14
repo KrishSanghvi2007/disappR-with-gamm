@@ -516,6 +516,10 @@ script_header <- function(entries, packages = "ggplot2") {
 # what was actually done; results saved under different data or settings are flagged as conflicts.
 # ---------------------------------------------------------------------------
 METHODS_REFS <- c(
+  burkner2017 = "B\u00fcrkner, P.-C. 2017. brms: an R package for Bayesian multilevel models using Stan. Journal of Statistical Software 80: 1-28.",
+  vehtari2021 = "Vehtari, A., Gelman, A., Simpson, D., Carpenter, B. and B\u00fcrkner, P.-C. 2021. Rank-normalization, folding, and localization: an improved R-hat for assessing convergence of MCMC. Bayesian Analysis 16: 667-718.",
+  gabry2019 = "Gabry, J., Simpson, D., Vehtari, A., Betancourt, M. and Gelman, A. 2019. Visualization in Bayesian workflow. Journal of the Royal Statistical Society A 182: 389-402.",
+  kruschke2021 = "Kruschke, J. K. 2021. Bayesian analysis reporting guidelines. Nature Human Behaviour 5: 1282-1291.",
   wood2017 = "Wood, S. N. 2017. Generalized additive models: an introduction with R, 2nd edn. Chapman and Hall/CRC.",
   harrison2014 = "Harrison, X. A. 2014. Using observation-level random effects to model overdispersion in count data in ecology and evolution. PeerJ 2: e616.",
   woodscheipl2020 = "Wood, S. and Scheipl, F. 2020. gamm4: generalized additive mixed models using mgcv and lme4. R package.",
@@ -692,6 +696,14 @@ methods_text <- function(entries) {
       refs <- c(refs, "wood2017", if (nzchar(g$group %||% "")) "pedersen2019", if (has("GAMM derivatives")) "simpson2018",
                 if (isTRUE(g$olre) && (g$family %||% "") %in% c("poisson", "binomial")) "harrison2014",
                 if (identical(g$engine_used, "gamm4") || any(grepl("gamm4", unlist(lapply(pick("GAMM"), function(x) x$text)), fixed = TRUE))) "woodscheipl2020")
+    }
+  }
+  # Step 8 (Bayesian refits): the paragraph written when the result was saved, with the settings then in force
+  if (has("Bayesian")) {
+    bz <- pick("Bayesian")[[1]]$methods$bayes
+    if (is.list(bz) && nzchar(bz$text %||% "")) {
+      paras <- c(paras, bz$text)
+      refs <- c(refs, "burkner2017", "vehtari2021", "gabry2019")
     }
   }
   checks <- c(if (has("Residual checks for")) "simulation-based residual checks (DHARMa; Hartig 2022)",
