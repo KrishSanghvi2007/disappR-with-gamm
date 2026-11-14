@@ -1,0 +1,4 @@
+==== 3. Cooper et al. 2021, American Naturalist: superb fairy-wren ====
+Published (Table 1, age smooth edf; ** P < .01): female survival 1.000**; female independent offspring 4.540**;
+male total offspring 3.567**; male extra-group 3.731**; male within-group 2.019 (n.s.). Poisson GAMMs (gamm4) with
+individual, year and observation-level random effects; longevity linear; final breeding season; male dominance.
