@@ -29,7 +29,7 @@ app_fit <- function(label, gd, s) {
                                                                                  format_num(pr$From, 3), format_num(pr$To, 3)), collapse = "; ") else "none")
   po <- gamm_peak_onset(r, n_draws = 500)
   line("  peak: ", paste(sprintf("%s %s [%s]", po$Group, po[["Peak age"]], po[["Peak 95% CI"]]), collapse = "; "))
-  r
+  invisible(r)
 }
 
 # =====================================================================================================================

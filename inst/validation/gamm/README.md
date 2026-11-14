@@ -133,3 +133,39 @@ Fast mode can change conclusions on real data. On the Tsui body-mass data:
 | Sex | S best; G +5.7 | G best; GI +4.0 |
 
 The gamm4 lifespan result agrees with the paper's reported age × lifespan effect.
+
+## Replication: superb fairy-wren and Asian elephant (`replication_results_2.txt`, `tests/scripts/gamm_replication_2.R`)
+
+### Cooper et al. 2021, *Am. Nat.*: superb fairy-wren
+
+Age-smooth edf. Significance stars: \*\* P < .01.
+
+| Trait | Paper (Table 1) | Authors' model refitted (gamm4) | disappR engine |
+|---|---|---|---|
+| Female independent offspring | 4.540\*\* | 4.21, p < .001 | 4.86, p < .001 |
+| Male total offspring | 3.567\*\* | 3.07, p < .001 | 4.51, p < .001 |
+| Male extra-group offspring | 3.731\*\* | 3.13, p < .001 | 4.77, p < .001 |
+| Male within-group offspring | 2.019, n.s. | 1.75, p = 0.26 | 2.66, p = 0.09 |
+| Female survival | 1.000\*\* | 2.80, p < .001 | 3.39, p < .001 |
+
+**Reproduction.** Every conclusion matches the paper: total and extra-group siring and female output change with age,
+and within-group siring does not. Peaks from the disappR curves are 5.2 years (male total) and 6.0 years (extra-group).
+The paper's break points were about 4.3 years (extra-group) and 5.7 years (within-group).
+
+**Why the edfs differ.** The app's edfs are somewhat higher because it has no observation-level random effect for
+counts. Choosing the negative binomial family is the app's alternative.
+
+**Survival.** This does not replicate. The paper found a straight-line decline (edf 1.000); both the refitted model and
+the app find a curve. The deposit has no survival column, so survival was derived from age and longevity. That coding
+is the likely cause, and it needs the authors' code to resolve.
+
+### Lalande et al. 2022, *J. Evol. Biol.*: Asian elephant body mass
+
+| Check | Paper | Authors' model refitted (gamm4, ML) | disappR engine |
+|---|---|---|---|
+| By-sex smooth vs common smooth | better by 65.7 AICc | better by 67.3 AIC | group comparison: GI best, G 19.2 AIC worse |
+| Female delta-age smooth edf | 6.899 | 7.07 | — |
+| Male delta-age smooth edf | 6.096 | 5.49 | — |
+
+The disappR group comparison ran in fast mode (gamm4), with GI best and I +1.3. Its fit uses a smooth of age per sex
+with ALR (k = 15). The rise to a peak is at 55 years in females and 60 in males.
