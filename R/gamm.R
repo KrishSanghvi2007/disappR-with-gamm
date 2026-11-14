@@ -667,8 +667,11 @@ gamm_guide <- function(r, o, poly = NULL, groups = NULL, proxy = NULL) {
                 if (st %in% c("GS", "GI")) " With GS and GI the group rows of the smooth table test whether each group's deviation from the common curve is flat: a significant deviation means that group's shape differs." else "",
                 if (st %in% c("S", "I")) " With S and I each group has its own curve; its p-value tests whether that group's trait changes with age, not whether the groups differ. Whether the groups age differently is answered by comparing structures." else "")
     if (is.list(groups) && isTRUE(groups$ok)) a <- paste(a, "Comparison:", groups$verdict)
+    best <- if (is.list(groups) && isTRUE(groups$ok) && is.data.frame(groups$table) && any(is.finite(groups$table$AIC))) groups$table$Model[which.min(groups$table$AIC)] else NA_character_
     out[[length(out) + 1]] <- item("3. Do the groups age differently, and which group structure fits?", a,
-      if (is.null(groups)) "Open the Groups tab and press 'Compare group structures': if G (one shared curve) is within 2 AIC of the best, there is no clear evidence that the groups age differently." else "")
+      if (is.null(groups)) "Open the Groups tab and press 'Compare group structures': if G (one shared curve) is within 2 AIC of the best, there is no clear evidence that the groups age differently."
+      else if (!is.na(best) && !identical(best, st)) sprintf("The comparison supports structure %s, not the %s fitted here: choose %s under 'Group curves' on the Fit tab and refit, so that the curves and tables describe the supported model.", best, st, best)
+      else "")
   }
   # 4. selective disappearance and appearance
   pf <- r$proxy_form %||% "none"; prox <- s$proxy %||% "none"
@@ -677,7 +680,8 @@ gamm_guide <- function(r, o, poly = NULL, groups = NULL, proxy = NULL) {
     sml <- sm[grepl("ALR|LS|AFR", sm$Smooth), , drop = FALSE]
     bits <- c(
       if (nrow(lin)) paste(vapply(seq_len(nrow(lin)), function(i) sprintf("%s: %s per year (p %s), %s", lin$Term[i], format_num(lin$Estimate[i], 3), gamm_p_words(lin$P[i]),
-        if (is.finite(lin$P[i]) && lin$P[i] < 0.05) sprintf("so individuals with a later %s differ in trait level by the same amount at every age (age-independent selective %s)", lin$Term[i], if (lin$Term[i] == "AFR") "appearance" else "disappearance")
+        if (is.finite(lin$P[i]) && lin$P[i] < 0.05) sprintf("so individuals with a %s differ in trait level by the same amount at every age (age-independent selective %s)",
+                                                            switch(lin$Term[i], AFR = "later AFR", LS = "longer lifespan", "later last record (ALR)"), if (lin$Term[i] == "AFR") "appearance" else "disappearance")
         else "no clear age-independent effect"), ""), collapse = "; "),
       if (nrow(sml)) paste(vapply(seq_len(nrow(sml)), function(i) sprintf("%s: p %s, %s", sml$Description[i], gamm_p_words(sml$P[i]),
         if (grepl("^ti\\(|:\\.(ALR|LS|AFR)_c$", sml$Smooth[i])) { if (is.finite(sml$P[i]) && sml$P[i] < 0.05) "so the proxy's effect changes with age (age-dependent selection: the naive curve is distorted in shape)" else "no clear evidence that the proxy's effect changes with age" }

@@ -155,7 +155,7 @@ gamm_tab_ui <- function() {
       # ------------------------------------------------------------------ Checks
       tabPanel("Checks", icon = icon("stethoscope"),
         fluidRow(
-          box(width = 6, title = info_title("Is the model adequate?", "gamm_check"), status = "info", solidHeader = TRUE,
+          box(width = 12, title = info_title("Is the model adequate?", "gamm_check"), status = "info", solidHeader = TRUE,
             uiOutput("gamm_check_overall"),
             tableOutput("gamm_check_summary"),
             tags$details(class = "info-more", tags$summary("Details: basis dimension (k) check"),
@@ -167,8 +167,10 @@ gamm_tab_ui <- function() {
                 p(class = "small-note", "For each smooth, how far it can be reproduced by the most similar other fixed term (0 = not at all, 1 = completely). 'Estimate' is the typical value, 'Worst' the worst case. Above 0.8 the two terms' separate effects are poorly identified."),
                 tableOutput("gamm_concurvity_table"))),
             p(class = "small-note", "The estimates, test statistics and p-values of every term are on the Model output tab."),
-            save_button("save_gamm_check")),
-          box(width = 6, title = info_title("Do the residuals look right?", "gamm_resid"), status = "info", solidHeader = TRUE,
+            save_button("save_gamm_check"))
+        ),
+        fluidRow(
+          box(width = 12, title = info_title("Do the residuals look right?", "gamm_resid"), status = "info", solidHeader = TRUE,
             uiOutput("gamm_resid_note"),
             plotOutput("gamm_resid_plot", height = 520))
         )
